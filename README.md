@@ -8,3 +8,12 @@ https://docs.google.com/document/d/1tx_gt9XSK2R4R9IA_bA71MSVaIR10lKXFEDmNeoQOD4/
 ### Charter Document
 
 https://docs.google.com/document/d/1EulJgTtqNE2kb4zPltSDRTXZDvub2RHAyxv1OXzHOlY/edit
+
+
+
+### Team Members
+- Project Manager: Noman Mohammed
+- Technical Lead: Taylor Siemens
+- Integration Lead: Mackenzie Salloum
+- Client Liaison: Herraj Luhano
+- Developer: Jaskaran Lidher
