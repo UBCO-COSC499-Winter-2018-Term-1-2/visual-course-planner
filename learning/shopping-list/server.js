@@ -9,15 +9,6 @@ const app = express();
 // Express Middleware
 app.use(express.json());
 
-// DB config
-const db = require('./keys/config.js').mongoURI;
-
-// DB Connection
-mongoose
-    .connect(db)
-    .then(() => console.log('MongoDB Connected.'))
-    .catch(err => console.log(err));
-
 // Use routes
 app.use('/api/items', items)
 
