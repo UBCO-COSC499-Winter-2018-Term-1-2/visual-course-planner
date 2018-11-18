@@ -1,16 +1,22 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const db = require('../dbconnection');
 
-// Create Schema
-const ItemSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    }
-});
+var Item = {
 
-module.exports = Item = mongoose.model('item', ItemSchema)
+  getAllItems: function(callback) {
+    return db.query('SELECT * FROM Item ORDER BY date DESC', callback);
+  },
+
+  getItemById: function(id, callback) {
+    return db.query('SELECT * FROM Item WHERE id = ?', [id], callback);
+  },
+
+  addItem: function(Item, callback) {
+    return db.query('INSERT INTO Item(name) VALUES(?)', [Item.name], callback);
+  },
+
+  deleteItem: function(id, callback) {
+    return db.query('DELETE FROM Item WHERE id = ?', [id], callback);
+  }
+}
+
+module.exports = Item;
