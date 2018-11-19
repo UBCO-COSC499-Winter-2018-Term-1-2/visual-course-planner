@@ -9,13 +9,17 @@ import {
     Label,
     Input
 } from 'reactstrap';
-import { connect } from 'react-redux';
-import { addItem } from '../actions/itemActions';
+import axios from 'axios';
+
 
 class ItemModal extends Component {
-    state = {
-        modal: false,
-        name: ''
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            modal: false,
+            name: ''
+        }
     }
 
     toggle = () => {
@@ -35,8 +39,14 @@ class ItemModal extends Component {
             name: this.state.name
         }
 
-        this.props.addItem(newItem);
+        this.addItem(newItem);
         this.toggle();
+    }
+
+    addItem = (newItem) => {
+        axios.post('/api/items', newItem).then(res => {
+            console.log("Item added: " + newItem);
+        })
     }
 
     render() {
@@ -67,7 +77,7 @@ class ItemModal extends Component {
                                 <Button
                                     color="dark"
                                     style={{marginTop: '2em'}}
-                                    >
+                                >
                                     Add Item
                                 </Button>
                             </FormGroup>
@@ -80,8 +90,4 @@ class ItemModal extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    item: state.item
-})
-
-export default connect(mapStateToProps, { addItem })(ItemModal);
+export default ItemModal;
