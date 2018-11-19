@@ -1,0 +1,87 @@
+
+/* Li = Login Interface  */
+
+body{
+
+    background-color: #262427;
+    font-family: Helvetica;
+}
+
+h1{
+    text-align: center;
+    color: #ffffff;
+   
+}
+
+.lMenu{
+    background-color: #201e21;
+    width: 50%;
+    padding: 12px 50px;
+    margin: 13em 13em;
+    display: inline-block; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 1em 0;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+}
+
+.loginbtn{
+    width: 50%;
+    padding: 9px 20px;
+    margin: 1em 8em;
+    box-sizing: border-box;
+    font-size: 1em;
+    text-align: center;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+
+}
+
+.loginbtn:hover {
+    background-color: #84bd00; 
+    color: black;
+}
+
+/* THIS BTN IS TO OPEN CREATE ACCOUNT MENU -- DOES NOT CREATE A NEW ACCOUNT FOR USER */
+.createAccountbtn{
+    background:none;
+    border:none;
+    margin: 0em 90%;
+    /* padding:0; */
+    cursor: pointer;
+    color: #84bd00;
+}
+
+.createAccountbtn:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+}
+
+/* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
+.createAccountbtn2{
+    background:none;
+    margin: 2em 31%;
+    border-color: #84bd00;
+    padding:0.5% 10%;
+    cursor: pointer;
+    color: #84bd00;
+    font-size: 13px;
+}
+
+.createAccountbtn2:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+    border-color: #afda77;
+}
