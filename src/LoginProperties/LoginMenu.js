@@ -11,7 +11,7 @@ const loginMenu = () => {
             <input type="text" name="email" placeholder="Email"/>
             <input type="text" name="pass" placeholder="Password"/>   
             <button className="loginbtn">Login</button> 
-            <button className="createAccountbtn">Create Account</button> 
+            <button className="openCreateAccountbtn">Create Account</button> 
             </form>        
         </div>
 

@@ -13,7 +13,7 @@ const CreateAccountMenu = () => {
             <input type="text" name="email" placeholder="* Email"/>
             <input type="text" name="pass" placeholder="* Password"/>   
             <input type="text" name="confirmPass" placeholder="* Confirm Password"/>
-            <button className="createAccountbtn2">Create Account</button> 
+            <button className="createAccountbtn">Create Account</button> 
             </form>
                  
 
