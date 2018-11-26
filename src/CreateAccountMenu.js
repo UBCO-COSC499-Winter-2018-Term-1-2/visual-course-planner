@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import React from 'react';
-import '../LoginInterface.css';
+import './LoginInterface.css';
 
 
 // const CreateAccountMenu = () => {
@@ -27,7 +27,7 @@ class CreateAccountMenu extends Component {
             </form> 
             {/* </section> */}
 
-            }
+            
 
         </div>
 

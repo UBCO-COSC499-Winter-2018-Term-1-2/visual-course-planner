@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 //import './App.css';
 import ReactDOM from 'react-dom';
 import './LoginInterface.css';
-import LoginMenu from './LoginProperties/LoginMenu'
-import CreateAccountMenu from './LoginProperties/CreateAccountMenu'
+import LoginMenu from './LoginMenu'
+import CreateAccountMenu from './CreateAccountMenu'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import ExtraStudentInfo from './ExtraStudentInfo'
