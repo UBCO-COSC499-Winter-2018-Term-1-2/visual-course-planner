@@ -13,11 +13,11 @@ h1{
    
 }
 
-.lMenu{
+.Menu{
     background-color: #201e21;
     width: 50%;
     padding: 12px 50px;
-    margin: 13em 13em;
+    margin: 20% 20%;
     display: inline-block; 
     flex-direction: column;
     align-items: center;
@@ -39,7 +39,7 @@ input[type=text] {
 .loginbtn{
     width: 50%;
     padding: 9px 20px;
-    margin: 1em 8em;
+    margin: 2em 10em;
     box-sizing: border-box;
     font-size: 1em;
     text-align: center;
@@ -58,10 +58,11 @@ input[type=text] {
 .openCreateAccountbtn{
     background:none;
     border:none;
-    margin: 0em 90%;
-    /* padding:0; */
+    margin: 0em 85%;
     cursor: pointer;
     color: #84bd00;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .openCreateAccountbtn:hover {
@@ -78,6 +79,8 @@ input[type=text] {
     cursor: pointer;
     color: #84bd00;
     font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .createAccountbtn:hover {
