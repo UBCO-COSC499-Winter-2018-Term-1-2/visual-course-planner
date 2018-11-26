@@ -1,0 +1,108 @@
+#main {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 1fr 3fr 2fr;
+  grid-template-areas: 
+    "student-info planner"
+    "plan-list planner"
+    "note-area planner";
+  background-color: lightgray;
+  position: relative;
+  color: #e4e4e4;
+}
+
+#planner-area {
+  grid-area: planner;
+  background-color: #262427;
+}
+
+#plan-list {
+  grid-area: plan-list;
+  background-color: #1a191b;
+}
+
+#student-info {
+  grid-area: student-info;
+  background-color: #1a191b;
+}
+
+#note-area {
+  grid-area: note-area;
+  background-color: #1a191b;
+}
+
+.sidebar-info-area {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 1em 0 1em;
+  padding: 1em 0 1em 0;
+  border-bottom: lightgrey 1px solid;
+  height: 100%;
+}
+
+.sidebar-info-area * {
+  min-width: 130px;
+  display: block;
+}
+
+.student-name {
+  margin: 0;
+  color: #e4e4e4;
+}
+
+.sidebar-info-area-end {
+  box-sizing: border-box;
+  margin: 0 1em 0 1em;
+  padding: 1em 0 1em 0;
+  height: 100%;
+}
+
+.sidebar-header {
+  color: #c5980f;
+}
+
+#plan-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-button {
+  text-align: left;
+  background:none;
+  border:none;
+  margin:0;
+  padding:0;
+  cursor: pointer;
+  color: #84bd00;
+  font-size: 1em;
+}
+
+.sidebar-button:hover {
+  color: #afda77;
+}
+
+.notes-text-area {
+  background-color: black;
+  color: #e4e4e4;
+  border: none;
+  border-radius: 3px;
+  height: 71%;
+  width: 100%;
+  resize: none;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+.notes-text-area:focus {
+  outline: none;
+  border: 2px solid #84bd00;
+}
+
+.student-buttons-container {
+  position: absolute;
+  min-width: 130px;
+  bottom: 1em;
+}
