@@ -1,27 +1,36 @@
 import React, { Component } from 'react';
 //import './App.css';
+import ReactDOM from 'react-dom';
 import './LoginInterface.css';
 import LoginMenu from './LoginProperties/LoginMenu'
 import CreateAccountMenu from './LoginProperties/CreateAccountMenu'
+import ExtraStudentInfo from './ExtraStudentInfo'
+
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = { showMenu: true};
-    this.toggleMenu = this.toggleMenu.bind(this);
-  }
+  // constructor(){
+  //   super();
+  //   this.state = { showMenu: true};
+  //   this.toggleMenu = this.toggleMenu.bind(this);
+  // }
 
-  toggleMenu = () => {
-    this.setState( {showMenu: !this.state.showMenu});
-  }
+  // toggleMenu = () => {
+  //   this.setState( {showMenu: !this.state.showMenu});
+  // }
 
   render() {
     return (
-        <div className="MenuBox">
-          <LoginMenu />
+        <div className="App">
+          <LoginMenu  /> 
+          {/* toggleMenu={this.toggleMenu} */}
           <CreateAccountMenu /> 
           {/* showMenu={this.state.showMenu} */}
+          <ExtraStudentInfo></ExtraStudentInfo>
         </div>
+       
+          
+        
+       
         
       
     );
@@ -29,3 +38,5 @@ class App extends Component {
 }
 
 export default App;
+
+// ReactDOM.render(<App />, document.getElementById('root'))
