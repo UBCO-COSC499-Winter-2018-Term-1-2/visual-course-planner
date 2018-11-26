@@ -42,7 +42,8 @@
   height: 100%;
 }
 
-.sidebar-info-area  * {
+.sidebar-info-area * {
+  min-width: 130px;
   display: block;
 }
 
@@ -69,6 +70,7 @@
 }
 
 .sidebar-button {
+  text-align: left;
   background:none;
   border:none;
   margin:0;
@@ -99,7 +101,8 @@
   border: 2px solid #84bd00;
 }
 
-.student-buttons {
+.student-buttons-container {
   position: absolute;
-  bottom: 0;
+  min-width: 130px;
+  bottom: 1em;
 }
