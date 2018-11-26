@@ -4,8 +4,12 @@ import ReactDOM from 'react-dom';
 import './LoginInterface.css';
 import LoginMenu from './LoginProperties/LoginMenu'
 import CreateAccountMenu from './LoginProperties/CreateAccountMenu'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import ExtraStudentInfo from './ExtraStudentInfo'
 
+// Font Awesome Icon Imports
+library.add(faSignOutAlt);
 
 class App extends Component {
   // constructor(){
