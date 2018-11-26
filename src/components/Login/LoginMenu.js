@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import './LoginInterface.css';
-import CreateAccountMenu from './CreateAccountMenu';
+import CreateAccountMenu from '../Signup/CreateAccountMenu';
 
 // const loginMenu = () => {
 class loginMenu extends Component {

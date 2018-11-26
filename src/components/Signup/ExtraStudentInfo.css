@@ -15,7 +15,7 @@ body{
     overflow-y:scroll;
 }
 
-.listLayout:hover {
+.listLayout li:hover {
     color: #afda77;
    
 }

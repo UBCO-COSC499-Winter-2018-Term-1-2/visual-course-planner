@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import PlannerArea from './PlannerArea';
-import StudentInfo from './StudentInfo';
-import PlanList from './PlanList';
+import PlannerArea from '../components/Planner/PlannerArea';
+import StudentInfo from '../components/StudentInfo/StudentInfo';
+import PlanList from '../components/PlanList/PlanList';
 import './Main.css';
-import NoteArea from './NoteArea';
+import NoteArea from '../components/Notes/NoteArea';
 
 class Main extends Component {
   constructor(props){
