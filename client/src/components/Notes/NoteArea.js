@@ -5,7 +5,7 @@ class NoteArea extends Component {
     super(props);
     this.state = {
       notes: "Great plan"
-    }
+    };
   }
 
   render() {

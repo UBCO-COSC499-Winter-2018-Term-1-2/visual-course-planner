@@ -7,7 +7,7 @@ class PlannerArea extends Component {
     this.state = {
       favourites: ["BA Major in Comp Sci"],
       plans: ["BSc Major in Comp Sci"]
-    }
+    };
   }
 
 
@@ -17,15 +17,15 @@ class PlannerArea extends Component {
     return (
       <div id="plan-list">
         <div className="sidebar-info-area">
-        <h3 className="sidebar-header">DEGREE PLANS</h3>
-        <h4 className="sidebar-header">Favourites</h4>
-        <ul>
-          {listFavourites}
-        </ul>
-        <h4 className="sidebar-header">Plans</h4>
-        <ul>
-          {listPlans}
-        </ul>
+          <h3 className="sidebar-header">DEGREE PLANS</h3>
+          <h4 className="sidebar-header">Favourites</h4>
+          <ul>
+            {listFavourites}
+          </ul>
+          <h4 className="sidebar-header">Plans</h4>
+          <ul>
+            {listPlans}
+          </ul>
         </div>
       </div>
     );

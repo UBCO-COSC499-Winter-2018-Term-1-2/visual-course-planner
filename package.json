@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "i": "^0.3.6",
-    "npm": "^6.4.1"
+    "npm": "^6.4.1",
+    "prop-types": "^15.6.2"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint client/**/*.js server/**/*.js"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -17,9 +20,12 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@ljharb/eslint-config": "^13.0.0",
     "babel-eslint": "^9.x",
+    "babel-plugin-macros": "^2.4.2",
     "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-dev": "^2.0.0",
     "eslint-config-react-app": "^3.0.5",
     "eslint-plugin-flowtype": "^2.x",
     "eslint-plugin-import": "^2.14.0",
