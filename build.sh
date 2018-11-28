@@ -14,4 +14,6 @@ cd client
 
 nvm use
 
+npm ci
+
 npm test
