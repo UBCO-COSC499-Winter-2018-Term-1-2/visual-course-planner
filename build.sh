@@ -10,8 +10,6 @@ nvm install $NODE_VERSION
 
 nvm use $NODE_VERSION
 
-npm ci
-
 npm run lint
 
 cd client
