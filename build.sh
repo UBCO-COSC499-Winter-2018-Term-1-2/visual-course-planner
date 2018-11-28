@@ -1,7 +1,6 @@
 #!/bin/bash
 
 NODE_VERSION="v10.12.0"
-cd $TRAVIS_BUILD_DIR/learning/shopping-list/
 
 source $NVM_DIR/nvm.sh
 
