@@ -13,4 +13,4 @@ npm install
 
 npm run lint
 
-npm test
+cd client && npm test
