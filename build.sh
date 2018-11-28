@@ -10,8 +10,9 @@ nvm install $NODE_VERSION
 
 nvm use $NODE_VERSION
 
-npm install
+npm ci
 
 npm run lint
 
-cd client && npm install && npm test
+cd client
+npm test
