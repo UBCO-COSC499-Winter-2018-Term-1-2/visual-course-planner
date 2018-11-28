@@ -1,2 +1,4 @@
 language: node_js
 script: ./build.sh
+env:
+  - CI=true
