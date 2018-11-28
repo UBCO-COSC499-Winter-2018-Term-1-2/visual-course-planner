@@ -17,9 +17,9 @@ class ExtraStudentInfoInterface extends Component {
 
             <div>
             <ul className="listLayout">
-                <li onClick="">Coffee</li>
-                 <li>Tea</li>
-                 <li>Milk</li>
+                <li>Coffee</li>
+                <li>Tea</li>
+                <li>Milk</li>
             </ul> 
             </div>
             

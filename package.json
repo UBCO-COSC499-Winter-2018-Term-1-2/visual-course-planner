@@ -6,7 +6,9 @@
     "i": "^0.3.6",
     "npm": "^6.4.1"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint client/src server/src"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -17,9 +19,12 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@ljharb/eslint-config": "^13.0.0",
     "babel-eslint": "^9.x",
+    "babel-plugin-macros": "^2.4.2",
     "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-dev": "^2.0.0",
     "eslint-config-react-app": "^3.0.5",
     "eslint-plugin-flowtype": "^2.x",
     "eslint-plugin-import": "^2.14.0",
