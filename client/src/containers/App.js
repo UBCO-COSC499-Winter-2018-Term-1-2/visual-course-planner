@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 //import './App.css';
-import ReactDOM from 'react-dom';
 import '../components/Login/LoginInterface.css';
-import LoginMenu from '../components/Login/LoginMenu'
-import CreateAccountMenu from '../components/Signup/CreateAccountMenu'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
-import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo'
+import LoginMenu from '../components/Login/LoginMenu';
+import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt);
@@ -24,19 +23,13 @@ class App extends Component {
 
   render() {
     return (
-        <div className="App">
-          <LoginMenu  /> 
-          {/* toggleMenu={this.toggleMenu} */}
-          <CreateAccountMenu /> 
-          {/* showMenu={this.state.showMenu} */}
-          <ExtraStudentInfo></ExtraStudentInfo>
-        </div>
-       
-          
-        
-       
-        
-      
+      <div className="App">
+        <LoginMenu  /> 
+        {/* toggleMenu={this.toggleMenu} */}
+        <CreateAccountMenu /> 
+        {/* showMenu={this.state.showMenu} */}
+        <ExtraStudentInfo></ExtraStudentInfo>
+      </div>
     );
   }
 }

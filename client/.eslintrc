@@ -6,6 +6,18 @@
   "parser": "babel-eslint",
   "rules": {
     "indent": ["error", 2],
-    "strict": 0
+    "strict": 0,
+    "camelcase": [2, {"properties": "always"}],
+    "semi": 2,
+    "no-multiple-empty-lines": 2,
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "import", "next": "class" }
+    ]
+  },
+  "settings": {
+    "react": {
+      "version": "16.0"
+    }
   }
 }
