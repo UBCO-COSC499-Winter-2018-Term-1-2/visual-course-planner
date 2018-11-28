@@ -4,4 +4,3 @@ node_js:
 script: ./build.sh
 env:
   - CI=true
-  - NODE_VERSION="v10.12.0"
