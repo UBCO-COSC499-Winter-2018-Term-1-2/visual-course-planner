@@ -12,4 +12,4 @@ npm install
 
 npm run lint
 
-CI="true" cd client && npm test
+CI="true" cd client && npm install && npm test
