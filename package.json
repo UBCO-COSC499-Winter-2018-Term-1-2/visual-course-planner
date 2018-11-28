@@ -8,7 +8,7 @@
     "prop-types": "^15.6.2"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint client/src server/src"
+    "lint": "./node_modules/.bin/eslint client/**/*.js server/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"

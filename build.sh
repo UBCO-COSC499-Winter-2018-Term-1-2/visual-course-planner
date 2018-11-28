@@ -15,4 +15,5 @@ npm ci
 npm run lint
 
 cd client
+
 npm test
