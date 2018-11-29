@@ -5,6 +5,7 @@ import LoginMenu from '../components/Login/LoginMenu';
 import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { fasFaHeart } from '@fortawesome/free-solid-svg-icons';
 import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
 
 import SideBarToggleButton from '../components/SideBarToggleButton/SideBarToggleButton'
@@ -13,6 +14,7 @@ import Backdrop from '../components/Backdrop/Backdrop'
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt);
+library.add(fasFaHeart);
 
 class App extends Component {
   // constructor(){
