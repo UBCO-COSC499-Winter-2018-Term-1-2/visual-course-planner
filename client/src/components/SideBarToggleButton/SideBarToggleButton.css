@@ -1,0 +1,13 @@
+.sidebar-toggle-button {
+    background:none;
+    border:none;
+    margin: 0em auto;
+    cursor: pointer;
+    color: #84bd00;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-toggle-button:focus {
+    outline: none;
+}
