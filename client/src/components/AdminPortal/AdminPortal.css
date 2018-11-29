@@ -1,135 +1,73 @@
-body{
+body {
     background-color: #262427;
     font-family: Helvetica;
     color: #e4e4e4;
 }
 
-.admin-portal-parent-wrapper{
-    margin: auto;
-    overflow: auto;
-}
-
-.admin-acc-logout-wrapper{
-    overflow: auto;
-}
-
-.admin-acc-logout-container{
-    width: 30%;
-    float: right;
-    overflow: auto;
-}
-
-.admin-username-container{
-    width: 50%;
-    float: left;
-}
-
-.admin-logoutBtn-container{
-    width: 50%; 
-}
-
-.username{
+.username {
     color: #d4d7d8;
 }
 
-.logout-button{
+.logout-button {
     background-color: #71a009;
-    float: left;
 }
 
-.admin-heading-container{
-    clear: both;
-    margin-left: 10%;
+.admin-acc-logout-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
-.admin-heading{
-    float: left;
+.admin-heading {
+    margin-bottom: 3em;
     color: #c5980f;
+    text-align: left;
+    font-weight: normal;
 }
 
-
-.admin-body-wrapper{
-    clear: both;
+.admin-portal-parent-wrapper {
+    margin: 6em auto;
+    width: 80%;
+    position: relative;
 }
 
-.admin-body-description-container{
-    clear: both;
-}
-
-.choose-file-heading{
-   float: left;
-   clear: both;
-   margin-left: 10%; 
+.choose-file-heading {
    color: #84bd00;
 }
 
-.admin-disclaimer-para{
-    float: left;
-    clear: both;
-    margin-left: 10%;
-    margin-top: 0%;
+#choose-file-btn {
+    display: none;
 }
 
-.admin-uploadfile-container{
-    clear: both;
-    margin-left: 10%;
-}
-
-.upload-file-btn{
-    float: left;
+#choose-file-label {
     background-color: #e4e4e4;
+    color: black;
     border-radius: 4px;
-    width: 10%;
-    height: 25px;
-    box-shadow: none;
-    margin-top: 3%;
-    margin-right: 3%;
-    border: none;
+    padding: 0.5em 1em;
+    margin: 5em 0;
+    width: 6em;
+    display: block;
 }
 
-.upload-file-status{
-    width: 30%;
-    padding-top: 3%;
-    vertical-align: -webkit-baseline-middle;
-}
-
-.admin-comment-input-container{
-    clear: both;
-    width: 100%;
-}
-
-.comments-input{
+.comments-input {
     background-color: #333035;
     color: #9c9b9d;
-    width: 30%;
-    height: 25px;
-    float: left;
-    clear: both;
-    margin-left: 10%;
-    margin-top: 4%;
+    height: 5em;
     border: none;
+    outline: none;
+    resize: none;
+
 }
 
-.admin-submit-container{
-    clear: both;
-    margin-left: 10%;
-}
-
-.submit-file-btn{
-    float: left;
+.submit-file-btn {
     background-color: #262427;
     color: #84bd00;
-    margin-top: 4%;
-    width: 12%;
-    height: 30px;
     border-color: #84bd00;
-    box-shadow: none;
-    
-
+    padding: 0.5em 4em;
+    font-size: 1em;
 }
 
-.admin-submit-disclaimer-para{
-    float: left;
-    width: 70%;
+.admin-submit-disclaimer-para {
+    display: inline;
     color: #5d4b22;
 }

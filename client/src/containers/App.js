@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import './App.css';
 import '../components/Login/LoginInterface.css';
-import LoginMenu from '../components/Login/LoginMenu';
+import LoginInterface from '../components/Login/LoginInterface';
 import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LoginMenu  /> 
+        <LoginInterface /> 
         {/* toggleMenu={this.toggleMenu} */}
         <CreateAccountMenu /> 
         {/* showMenu={this.state.showMenu} */}

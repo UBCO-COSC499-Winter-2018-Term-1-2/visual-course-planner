@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './AdminPortal.css';
-import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 
 class AdminPortal extends Component {
 
@@ -17,42 +16,41 @@ class AdminPortal extends Component {
             <div className="admin-logoutBtn-container">
               <button className="logout-button">Logout</button> {/*use generic logout component button*/}
             </div>
-            <CourseListSideBar></CourseListSideBar>
+            {/* <CourseListSideBar></CourseListSideBar> */}
           </div>
         </div>
                 
-        <div className="admin-heading-container">
-          <h1 className="admin-heading"> ADMIN PORTAL</h1>
-        </div>
+        <h1 className="admin-heading"> ADMIN PORTAL</h1>
                 
         <div className="admin-body-wrapper">
-                   
+
+        <form enctype="multipart/form-data" method="post">
           <div className="admin-body-description-container">
-            <h4 className="choose-file-heading">CHOOSE YOUR FILE</h4>
+            <label className="choose-file-heading">CHOOSE YOUR FILE</label>
             <p className="admin-disclaimer-para">Please make sure file includes all the degree requirements for a specific 
                            and the current offered courses for the current year. 
             </p>
           </div>
                     
           <div className="admin-uploadfile-container">
-            <button className="upload-file-btn">Upload File</button>
-            <p className="upload-file-status">No file selected (code logic)</p>
+            <label id="choose-file-label" for="choose-file-btn">Choose File</label>
+            <input type="file" id="choose-file-btn"/>
           </div>
                    
           <div className="admin-comment-input-container">
-            <input type="text" className="comments-input" placeholder="Comments..."></input>
+            <textarea className="comments-input" placeholder="Comments..."></textarea>
           </div>
                    
           <div className="admin-submit-container">
             <button className="submit-file-btn">Submit</button>
             <p className="admin-submit-disclaimer-para">
-                            Uploaded information affects students&#39; ability to create their course plan.
-                            It is recommended to keep information up to date. 
+            Uploaded information affects students&#39; ability to create their course plan.
+            It is recommended to keep information up to date. 
             </p>
           </div>
-               
+        </form>
+  
         </div>
-
       </div>
     );
 

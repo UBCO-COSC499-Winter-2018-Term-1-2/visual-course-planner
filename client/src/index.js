@@ -5,12 +5,14 @@ import './index.css';
 import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 import Main from './containers/Main';
+import AdminPortal from "./components/AdminPortal/AdminPortal";
 
 const routing = (
   <Router>
     <div>
       <Route exact path="/" component={App} />
       <Route path="/main" component={Main} />
+      <Route path="/admin" component={AdminPortal} />
     </div>
   </Router>
 );
