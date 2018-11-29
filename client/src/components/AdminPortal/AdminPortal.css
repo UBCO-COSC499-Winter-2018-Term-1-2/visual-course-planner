@@ -1,15 +1,13 @@
-body {
-    background-color: #262427;
-    font-family: Helvetica;
-    color: #e4e4e4;
-}
-
 .username {
     color: #d4d7d8;
 }
 
 .logout-button {
-    background-color: #71a009;
+    color: #71a009;
+    background: none;
+    border: none;
+    font-size: 1em;
+    padding: 0;
 }
 
 .admin-acc-logout-wrapper {
@@ -29,6 +27,7 @@ body {
     margin: 6em auto;
     width: 80%;
     position: relative;
+    color: #e4e4e4;
 }
 
 .choose-file-heading {
@@ -44,7 +43,6 @@ body {
     color: black;
     border-radius: 4px;
     padding: 0.5em 1em;
-    margin: 5em 0;
     width: 6em;
     display: block;
 }
@@ -56,7 +54,8 @@ body {
     border: none;
     outline: none;
     resize: none;
-
+    width: 50em;
+    font-size: 1em;
 }
 
 .submit-file-btn {
@@ -65,9 +64,14 @@ body {
     border-color: #84bd00;
     padding: 0.5em 4em;
     font-size: 1em;
+    margin-right: 1em;
 }
 
 .admin-submit-disclaimer-para {
     display: inline;
-    color: #5d4b22;
+    color: #c5980f;
+}
+
+.admin-portal-element {
+    margin: 4em 0;
 }
