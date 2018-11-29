@@ -44,7 +44,6 @@
     border-radius: 4px;
     padding: 0.5em 1em;
     width: 6em;
-    display: block;
 }
 
 .comments-input {
@@ -54,7 +53,7 @@
     border: none;
     outline: none;
     resize: none;
-    width: 50em;
+    width: 100%;
     font-size: 1em;
 }
 
@@ -68,10 +67,21 @@
 }
 
 .admin-submit-disclaimer-para {
-    display: inline;
+    display: inline-block;
     color: #c5980f;
 }
 
 .admin-portal-element {
-    margin: 4em 0;
+    margin: 4rem 0;
+}
+
+.file-select-text {
+    display: inline;
+    margin-left: 1em;
+}
+
+@media only screen and (max-width: 600px) {
+    .admin-acc-logout-wrapper {
+        position: relative;
+    }
 }

@@ -13,11 +13,16 @@
     "padding-line-between-statements": [
       "error",
       { "blankLine": "always", "prev": "import", "next": "class" }
-    ]
+    ],
+    "no-console":"off"
   },
   "settings": {
     "react": {
       "version": "16.0"
     }
+  },
+  "env": {
+    "node": true,
+    "es6": true
   }
 }
