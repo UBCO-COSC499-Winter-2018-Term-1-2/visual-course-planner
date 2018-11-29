@@ -1,13 +1,19 @@
 #!/bin/bash
 
-NODE_VERSION="v10.12.0"
-cd $TRAVIS_BUILD_DIR/learning/shopping-list/
+export PATH=./node_modules/.bin:$PATH
 
 source $NVM_DIR/nvm.sh
 
-nvm install $NODE_VERSION
+nvm install
 
-nvm use $NODE_VERSION
+npm i -g npm@6
 
-npm install
+npm run lint
+
+cd client
+
+nvm use
+
+npm ci
+
 npm test
