@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PlannerHeader from '../PlannerHeader/PlannerHeader'
 
 
 class PlannerArea extends Component {
@@ -11,7 +12,8 @@ class PlannerArea extends Component {
     return (
       <div id="planner-area">
         <div id="session-container">
-          <p>Planner Container</p>
+          <PlannerHeader />
+          {/*<p>Planner Container</p>*/}
         </div>
       </div>
     );
