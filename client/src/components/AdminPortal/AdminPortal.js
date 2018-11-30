@@ -22,9 +22,8 @@ class AdminPortal extends Component {
   }
 
   handleUpload = () => {
-    const data = new FormData();
+    let data = new FormData();
     data.append('file', this.state.selectedFile, this.state.selectedFile.name);
-
     axios
       .post('/api/upload', data, {
         onUploadProgress: ProgressEvent => {
@@ -39,7 +38,6 @@ class AdminPortal extends Component {
   }
 
   handleSelectedFile = (e) => {
-    console.log(e.target.files);
     this.setState({
       selectedFile: e.target.files[0],
       loaded: 0

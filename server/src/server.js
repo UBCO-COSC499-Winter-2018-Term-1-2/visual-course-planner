@@ -2,11 +2,13 @@ const express = require('express');
 
 const upload = require('../../routes/api/upload/upload');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 
 // Express Middleware
 app.use(express.json());
+app.use(fileUpload());
 
 // Use routes
 app.use('/api', upload);
