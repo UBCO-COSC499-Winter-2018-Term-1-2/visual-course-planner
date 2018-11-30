@@ -6,7 +6,6 @@ import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
-
 import SideBarToggleButton from '../components/SideBarToggleButton/SideBarToggleButton'
 import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar'
 import Backdrop from '../components/Backdrop/Backdrop'
