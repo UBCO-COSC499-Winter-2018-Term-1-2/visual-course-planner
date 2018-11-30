@@ -10,14 +10,14 @@ class AdminPortal extends Component {
       name: "Samantha Jones",
       selectedFile: null, 
       loaded: 0
-    }
+    };
   }
 
   Progress = () => {
     if (this.state.selectedFile) {
       return <p className="file-select-text">{this.state.selectedFile.name} Progress: {Math.round(this.state.loaded, 2) } %</p>;
     } else {
-      return <p className="file-select-text">No file selected.</p>
+      return <p className="file-select-text">No file selected.</p>;
     }
   }
 
@@ -34,14 +34,14 @@ class AdminPortal extends Component {
       })
       .then(res => {
         console.log(res.statusText);
-      })
+      });
   }
 
   handleSelectedFile = (e) => {
     this.setState({
       selectedFile: e.target.files[0],
       loaded: 0
-    })
+    });
   }
 
   render() {
