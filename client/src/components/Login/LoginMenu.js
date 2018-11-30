@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import './LoginInterface.css';
+import CreateAccountMenu from '../Signup/CreateAccountMenu';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-// const loginMenu = () => {
+
 class LoginMenu extends Component {
+
   render(){
 
     return(
+    
       <div className="Menu">
         <h1>Visual Course Planner</h1>
         <form>
@@ -15,15 +19,16 @@ class LoginMenu extends Component {
           <input type="text" name="pass" placeholder="Password"/>   
           <button className="loginbtn">Login</button> 
           <section className = "CreateAccountMenu">
-            <button className="openCreateAccountbtn" onClick={this.props.toggleMenu}>Create Account</button> 
+            <button className="openDiffMenubtn" ><Link to = "/create-account">Create Account</Link></button> 
           </section>
         </form>        
-      </div>
-        
+    </div> 
 
     );
+    }
+ 
   }
-}
+
 LoginMenu.propTypes = {
   toggleMenu: PropTypes.func
 };
