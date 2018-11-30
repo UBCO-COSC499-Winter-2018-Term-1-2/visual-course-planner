@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 
 // @route   POST api/upload
@@ -8,7 +9,7 @@ const router = express.Router();
 router.post('/upload', (req, res) => {
   let uploadFile = req.files.file;
   const fileName = req.files.file.name;
-  const uploadDir = `${__dirname}/../../../client/public/files`;
+  const uploadDir = path.resolve(`${__dirname}/../../../client/public/files`);
 
   const upload = () => {
     uploadFile.mv(`${uploadDir}/${fileName}`, function (err) {
@@ -23,7 +24,7 @@ router.post('/upload', (req, res) => {
 
   try {
     fs.mkdir(uploadDir, (err) => {
-      if (err == null) {
+      if (err == null || err.code == 'EEXIST') {
         upload();
       } else {
         return res.status(500).send(err);

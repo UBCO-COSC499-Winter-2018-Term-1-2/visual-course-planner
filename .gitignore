@@ -35,3 +35,5 @@ yarn-debug.log*
 yarn-error.log*
 
 client/public/files/
+
+.vscode

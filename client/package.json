@@ -108,5 +108,8 @@
       "react-app"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "eslint-loader": "^2.1.1"
+  }
 }

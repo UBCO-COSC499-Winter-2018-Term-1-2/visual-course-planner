@@ -14,8 +14,8 @@
     "lint": "./node_modules/.bin/eslint 'client/**/*.js' 'server/**/*.js' 'routes/**/*.js'",
     "fix": "./node_modules/.bin/eslint --fix 'client/**/*.js' 'server/**/*.js' 'routes/**/*.js'",
     "client-install": "npm install --prefix client",
-    "start": "node server.js",
-    "server": "nodemon server.js",
+    "start": "node server/src/server.js",
+    "server": "nodemon server/src/server.js",
     "test": "CI=true npm test --prefix client",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
