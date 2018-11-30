@@ -23,7 +23,6 @@ class App extends Component {
   }
 
   openCourseListSidebar = () => {
-    console.log("clickeed");
     const isOpen = this.state.drawerOpen;
     this.setState({
       drawerOpen : !isOpen
