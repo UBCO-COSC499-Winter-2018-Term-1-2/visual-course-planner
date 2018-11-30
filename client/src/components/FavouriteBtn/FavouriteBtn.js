@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class FavouriteBtn extends Component {
     constructor(props){
@@ -17,9 +16,9 @@ class FavouriteBtn extends Component {
 
     render(){
         return(
-            <button className="fav-icon-container" onClick={this.toggleFavouriteHandler}>
-                
-                {this.state.isFavourite ? <FontAwesomeIcon icon="fas fa-heart" /> :<FontAwesomeIcon icon="far fa-heart" />}
+            <button id="fav-plan-btn" onClick={this.toggleFavouriteHandler}>
+                {/*<FontAwesomeIcon icon="fas fa-heart" />*/}
+                {this.state.isFavourite ? <p>It is Favourite</p> : <p>It is Not Favourite</p>}
             </button>
         );
     }
