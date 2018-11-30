@@ -15,44 +15,36 @@ import Backdrop from '../components/Backdrop/Backdrop'
 library.add(faSignOutAlt);
 
 class App extends Component {
-  // constructor(){
-  //   super();
-  //   this.state = { showMenu: true};
-  //   this.toggleMenu = this.toggleMenu.bind(this);
-  // }
+  constructor(){
+    super();
+    this.state = {
+      drawerOpen: false
+    };
+  }
 
-  // toggleMenu = () => {
-  //   this.setState( {showMenu: !this.state.showMenu});
-  // }
-
-  state = {
-    drawerOpen : false
-  };
-
-  drawerClickHandler = () => {
+  openCourseListSidebar = () => {
+    console.log("clickeed");
     const isOpen = this.state.drawerOpen;
-    this.setState(
-      {drawerOpen : !isOpen}
-    );
+    this.setState({
+        drawerOpen : !isOpen
+    });
   }
 
   closeCourseListSidebar = () => {
-    this.setState({drawerOpen: false});
+    this.setState({
+      drawerOpen: false
+    });
   };
+
+
 
   render() {
 
-    let backdrop;
-
-    if(this.state.drawerOpen){
-      backdrop = <Backdrop click={this.closeCourseListSidebar}/>
-    }
-
     return (
         <div className="App">
-          <SideBarToggleButton click={this.drawerClickHandler}/>
+          <SideBarToggleButton click={this.openCourseListSidebar}/>
           <CourseListSideBar show={this.state.drawerOpen} close={this.closeCourseListSidebar} />
-          {backdrop}
+           {this.state.drawerOpen ? <Backdrop click={this.closeCourseListSidebar} /> : null }
 
           <LoginInterface /> 
           {/* toggleMenu={this.toggleMenu} */}
@@ -60,16 +52,8 @@ class App extends Component {
           {/* showMenu={this.state.showMenu} */}
           <ExtraStudentInfo></ExtraStudentInfo>
         </div>
-       
-          
-        
-       
-        
-      
     );
   }
 }
 
 export default App;
-
-// ReactDOM.render(<App />, document.getElementById('root'))
