@@ -12,7 +12,7 @@ class PlannerArea extends Component {
     return (
       <div id="planner-area">
         <div id="session-container">
-          <PlannerHeader />
+          <PlannerHeader toggleSidebar={this.props.toggleSidebar}/>
           {/*<p>Planner Container</p>*/}
         </div>
       </div>
