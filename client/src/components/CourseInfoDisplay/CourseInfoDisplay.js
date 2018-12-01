@@ -21,7 +21,7 @@ const CourseInfoDisplay = (props) => {
 
 };
 
-CourseInfoDisplay.PropTypes = {
+CourseInfoDisplay.propTypes = {
     title: PropTypes.string,
     info: PropTypes.string
 };
