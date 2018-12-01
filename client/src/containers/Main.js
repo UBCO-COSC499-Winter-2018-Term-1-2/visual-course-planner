@@ -27,7 +27,10 @@ class Main extends Component {
     this.setState({drawerOpen: false});
   };
 
-
+  optimizeHandler = () => {
+    console.log("Optimize button clicked");
+    //optimize button logic goes here
+  }
 
   render() {
     let backdrop;
@@ -41,7 +44,9 @@ class Main extends Component {
         <StudentInfo/>
         <PlanList/>
         <NoteArea/>
-        <PlannerArea toggleSidebar={this.toggleCourseListSidebarHandler}/>
+        <PlannerArea 
+          toggleSidebar={this.toggleCourseListSidebarHandler}
+          optimize={this.optimizeHandler}/>
        
        {/*'courseTitle','courseInfo' should come from the database */}
         <CourseListSideBar 
