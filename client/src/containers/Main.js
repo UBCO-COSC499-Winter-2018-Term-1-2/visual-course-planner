@@ -16,7 +16,7 @@ class Main extends Component {
     drawerOpen : false
   };
 
-  drawerClickHandler = () => {
+  toggleCourseListSidebarHandler = () => {
     const isOpen = this.state.drawerOpen;
     this.setState(
       {drawerOpen : !isOpen}
@@ -41,8 +41,14 @@ class Main extends Component {
         <StudentInfo/>
         <PlanList/>
         <NoteArea/>
-        <PlannerArea toggleSidebar={this.drawerClickHandler}/>
-        <CourseListSideBar show={this.state.drawerOpen} close={this.closeCourseListSidebar} />
+        <PlannerArea toggleSidebar={this.toggleCourseListSidebarHandler}/>
+       
+       {/*'courseTitle','courseInfo' should come from the database */}
+        <CourseListSideBar 
+          show={this.state.drawerOpen} 
+          close={this.closeCourseListSidebar}
+          courseTitle="COSC 111"
+          courseInfo="This Course is the best course with the best prof Dr.Abdallah." />
         {backdrop}
       </div>
     );
