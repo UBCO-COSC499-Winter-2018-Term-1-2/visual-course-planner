@@ -1,8 +1,48 @@
 import React, { Component } from 'react';
 import './AdminPortal.css';
-import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
+import axios from 'axios';
 
 class AdminPortal extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Samantha Jones",
+      selectedFile: null, 
+      loaded: 0
+    };
+  }
+
+  Progress = () => {
+    if (this.state.selectedFile) {
+      return <p className="file-select-text">{this.state.selectedFile.name} Progress: {Math.round(this.state.loaded, 2) } %</p>;
+    } else {
+      return <p className="file-select-text">No file selected.</p>;
+    }
+  }
+
+  handleUpload = () => {
+    let data = new FormData();
+    data.append('file', this.state.selectedFile, this.state.selectedFile.name);
+    axios
+      .post('/api/upload', data, {
+        onUploadProgress: ProgressEvent => {
+          this.setState({
+            loaded: (ProgressEvent.loaded / ProgressEvent.total * 100)
+          });
+        }
+      })
+      .then(res => {
+        console.log(res.statusText);
+      });
+  }
+
+  handleSelectedFile = (e) => {
+    this.setState({
+      selectedFile: e.target.files[0],
+      loaded: 0
+    });
+  }
 
   render() {
 
@@ -12,47 +52,44 @@ class AdminPortal extends Component {
         <div className="admin-acc-logout-wrapper">
           <div className="admin-acc-logout-container">
             <div className="admin-username-container">
-              <p className="username"> User: Admin Username</p> {/*use generic username component*/}
+              <p className="username"> User: {this.state.name}</p> {/*use generic username component*/}
             </div>
             <div className="admin-logoutBtn-container">
               <button className="logout-button">Logout</button> {/*use generic logout component button*/}
             </div>
-            <CourseListSideBar></CourseListSideBar>
+            {/* <CourseListSideBar></CourseListSideBar> */}
           </div>
         </div>
                 
-        <div className="admin-heading-container">
-          <h1 className="admin-heading"> ADMIN PORTAL</h1>
-        </div>
+        <h1 className="admin-heading admin-portal-element">ADMIN PORTAL</h1>
                 
         <div className="admin-body-wrapper">
-                   
-          <div className="admin-body-description-container">
-            <h4 className="choose-file-heading">CHOOSE YOUR FILE</h4>
+
+          <div className="admin-body-description-container admin-portal-element">
+            <label className="choose-file-heading">CHOOSE YOUR FILE</label>
             <p className="admin-disclaimer-para">Please make sure file includes all the degree requirements for a specific 
-                           and the current offered courses for the current year. 
+              and the current offered courses for the current year. 
             </p>
           </div>
                     
-          <div className="admin-uploadfile-container">
-            <button className="upload-file-btn">Upload File</button>
-            <p className="upload-file-status">No file selected (code logic)</p>
+          <div className="admin-uploadfile-container admin-portal-element">
+            <label id="choose-file-label" htmlFor="choose-file-btn">Choose File</label>
+            <input type="file" id="choose-file-btn" onChange={this.handleSelectedFile}/>
+            <this.Progress/>
           </div>
                    
-          <div className="admin-comment-input-container">
-            <input type="text" className="comments-input" placeholder="Comments..."></input>
+          <div className="admin-comment-input-container admin-portal-element">
+            <textarea className="comments-input" placeholder="Comments..."></textarea>
           </div>
                    
-          <div className="admin-submit-container">
-            <button className="submit-file-btn">Submit</button>
+          <div className="admin-submit-container admin-portal-element">
+            <button className="submit-file-btn" onClick={this.handleUpload}>Upload</button>
             <p className="admin-submit-disclaimer-para">
-                            Uploaded information affects students&#39; ability to create their course plan.
-                            It is recommended to keep information up to date. 
+              Uploaded information affects students&#39; ability to create their course plan.
+              It is recommended to keep information up to date. 
             </p>
-          </div>
-               
+          </div>  
         </div>
-
       </div>
     );
 
