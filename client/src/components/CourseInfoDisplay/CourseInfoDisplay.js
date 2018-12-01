@@ -1,24 +1,29 @@
 import React from 'react';
 import './CourseInfoDisplay.css';
+import PropTypes from 'prop-types';
 
 const CourseInfoDisplay = (props) => {
-
-    //this functional component needs to use props
 
     return(
         <div className="courseinfo-wrapper">
             <div className="courseinfo-header-container">
                 <h4 id="course-title">
-                    COSC 111
+                    {props.title}
                 </h4>
             </div>
             <div className="course-info-body-container">
                 <p id="course-info-body">
-                    This Course is the best course with the best prof Dr.Abdallah.
+                    {props.info}
                 </p>
             </div>
         </div>
     );
+
+};
+
+CourseInfoDisplay.PropTypes = {
+    title: PropTypes.string,
+    info: PropTypes.string
 };
 
 export default CourseInfoDisplay;
