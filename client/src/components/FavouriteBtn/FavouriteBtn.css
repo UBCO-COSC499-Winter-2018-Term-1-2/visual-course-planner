@@ -1,3 +1,12 @@
-#fav-plan-btn{
+.fav-plan-btn-container{
     cursor: pointer;
+    background-color: brown;
+}
+
+.fav-icon-red{
+    color: red;
+}
+
+.fav-icon-grey {
+    color: grey;
 }

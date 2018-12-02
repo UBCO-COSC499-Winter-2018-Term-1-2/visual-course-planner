@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+//const solidHeart = <FontAwesomeIcon icon={["fa","heart"]}  size="2x" />;
+// const hollowHeart = <FontAwesomeIcon icon={["fas","plus"]} className="hollow-heart" />;
+//^ THIS SHIT DOESNT FUCKING WORK
 
 class FavouriteBtn extends Component {
     constructor(props){
@@ -8,18 +13,22 @@ class FavouriteBtn extends Component {
         };
       };
 
-    toggleFavouriteHandler = () =>{
+    toggleFavouriteHandler = () => {
         const isFavourite = this.state.isFavourite;
         this.setState({isFavourite: !isFavourite});
         //will need more functionality here
       }
+    
+    
 
     render(){
         return(
-            <button id="fav-plan-btn" onClick={this.toggleFavouriteHandler}>
-                {/*<FontAwesomeIcon icon="fas fa-heart" />*/}
-                {this.state.isFavourite ? <p>It is Favourite</p> : <p>It is Not Favourite</p>}
-            </button>
+            <div className="fav-plan-btn-container"  onClick={this.toggleFavouriteHandler}> 
+                    <FontAwesomeIcon 
+                        icon="heart" 
+                        size="2x" 
+                        className= {this.props.isFavourite ? "fav-icon-red" : "fav-icon-grey" }/> 
+            </div>
         );
     }
     
