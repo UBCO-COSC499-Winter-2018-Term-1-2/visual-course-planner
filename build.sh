@@ -1,21 +1,27 @@
 #!/bin/bash
-
+set -e
 export PATH=./node_modules/.bin:$PATH
 
 source $NVM_DIR/nvm.sh
 
 nvm install
 
+# Need to globally install npm so client can use it
 npm i -g npm@6
 
+# Enforce linting
 npm run lint
 
 cd client
 
+# Switch to current node version
 nvm use
 
-npm test
-
+# Install deps
 npm ci
 
+# Runs tests
+npm test
+
+# Build project
 npm run build
