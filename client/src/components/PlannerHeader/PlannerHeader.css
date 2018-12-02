@@ -3,28 +3,26 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    color: white;
-    background-color: black;
+    /* background-color: black; */
 }
 
 .plan-name-container{
     width: 25%;
-    background-color: red;
+    /* background-color: red; */
 }
 
 .favouriteBtn-container{
-    width: 7%;
-    background-color: darkblue;
+    /* width: 7%; */
 }
 
 .optimizeBtn-container{
-    background-color: orange;
+    /* background-color: orange; */
 }
 
 .warning-summary-container{
-    background-color: green;
+    /* background-color: green; */
 }
 
 .addcourseBtn-container{
-    background-color: purple;
+    /* background-color: purple; */
 }
