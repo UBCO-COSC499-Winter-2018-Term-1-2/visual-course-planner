@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-  - "7"
-script: ./build.sh
+- '7'
+script: "./build.sh"
 env:
-  - CI=true
+- CI=true
+before_install:
+- openssl aes-256-cbc -K $encrypted_832f2107ea50_key -iv $encrypted_832f2107ea50_iv
+  -in id_rsa.enc -out id_rsa -d
