@@ -7,7 +7,7 @@ body{
     font-family: Helvetica;
 }
 
-h1{
+.login-heading {
     text-align: center;
     color: #ffffff;
    

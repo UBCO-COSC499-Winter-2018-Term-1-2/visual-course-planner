@@ -1,8 +1,10 @@
 import React from 'react';
 import './CourseListSideBar.css';
-import CourseSearchBar from '../CourseSearchBar/CourseSearchBar'
-import CloseSideBarBtn from '../CloseSideBarBtn/CloseSideBarBtn'
-import CourseInfoDisplay from '../CourseInfoDisplay/CourseInfoDisplay'
+import CourseSearchBar from '../CourseSearchBar/CourseSearchBar';
+import CloseSideBarBtn from '../CloseSideBarBtn/CloseSideBarBtn';
+import CourseInfoDisplay from '../CourseInfoDisplay/CourseInfoDisplay';
+import PropTypes from 'prop-types';
+
 
 const CourseListSideBar = (props) => {
     

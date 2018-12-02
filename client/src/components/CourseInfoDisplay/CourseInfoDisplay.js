@@ -2,7 +2,7 @@ import React from 'react';
 import './CourseInfoDisplay.css';
 import PropTypes from 'prop-types';
 
-const CourseInfoDisplay = (props) => {
+const CourseInfoDisplay = () => {
 
     return(
         <div className="courseinfo-wrapper">

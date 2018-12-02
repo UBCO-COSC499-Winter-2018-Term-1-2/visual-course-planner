@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import './App.css';
 import '../components/Login/LoginInterface.css';
-import LoginMenu from '../components/Login/LoginMenu';
+import LoginInterface from '../components/Login/LoginInterface';
 import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -47,5 +47,3 @@ class App extends Component {
 }
 
 export default App;
-
-// ReactDOM.render(<App />, document.getElementById('root'))

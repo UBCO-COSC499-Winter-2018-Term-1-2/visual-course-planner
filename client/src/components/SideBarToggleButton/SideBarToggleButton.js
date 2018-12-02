@@ -17,4 +17,8 @@ const SideBarToggleButton = (props) => {
     );
 }
 
+SideBarToggleButton.propTypes = {
+  click: PropTypes.func,
+};
+
 export default SideBarToggleButton;
