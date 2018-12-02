@@ -6,6 +6,7 @@ import LoginInterface from '../components/Login/LoginInterface';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
+import { Router } from 'react-router-dom';
 
 
 // Font Awesome Icon Imports
@@ -43,7 +44,9 @@ class App extends Component {
 
     return (
       <div>
-        <LoginInterface /> 
+        <Router>
+          <LoginInterface /> 
+        </Router>
         <ExtraStudentInfo></ExtraStudentInfo>
       </div>
     );
