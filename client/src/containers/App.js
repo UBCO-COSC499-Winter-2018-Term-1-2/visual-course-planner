@@ -2,19 +2,14 @@ import React, { Component } from 'react';
 //import './App.css';
 import '../components/Login/LoginInterface.css';
 import LoginInterface from '../components/Login/LoginInterface';
-import CreateAccountMenu from '../components/Signup/CreateAccountMenu';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSignOutAlt, prefix } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
 
-import SideBarToggleButton from '../components/SideBarToggleButton/SideBarToggleButton';
-import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
-import Backdrop from '../components/Backdrop/Backdrop';
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt);
-
-
 
 class App extends Component {
 
@@ -47,7 +42,7 @@ class App extends Component {
   render() {
 
     return (
-  <div>
+      <div>
         <LoginInterface /> 
         <ExtraStudentInfo></ExtraStudentInfo>
       </div>
