@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PlannerHeader from '../PlannerHeader/PlannerHeader'
+import PropTypes from 'prop-types';
+import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 
 class PlannerArea extends Component {
@@ -28,5 +29,16 @@ class PlannerArea extends Component {
     );
   }
 }
+
+PlannerArea.propTypes = {
+  planName: PropTypes.string.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+  optimize: PropTypes.func.isRequired,
+  numberOfWarnings: PropTypes.number.isRequired,
+  showWarning: PropTypes.func.isRequired,
+  showSnackbar: PropTypes.bool.isRequired,
+  closeSnackbar: PropTypes.func.isRequired,
+  warningMessage: PropTypes.string.isRequired,
+};
 
 export default PlannerArea;

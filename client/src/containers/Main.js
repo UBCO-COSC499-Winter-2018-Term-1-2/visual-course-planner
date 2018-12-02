@@ -4,19 +4,18 @@ import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
-import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar'
-import Backdrop from '../components/Backdrop/Backdrop'
+import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
+import Backdrop from '../components/Backdrop/Backdrop';
 
 class Main extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      drawerOpen : false,
+      showSnackbar : false,
+      planName: "BA Major Computer Science"
+    };
   }
-
-  state = {
-    drawerOpen : false,
-    showSnackbar : false,
-    planName: "BA Major Computer Science"
-  };
 
   toggleCourseListSidebarHandler = () => {
     const isOpen = this.state.drawerOpen;
@@ -47,7 +46,7 @@ class Main extends Component {
     let backdrop;
 
     if(this.state.drawerOpen){
-      backdrop = <Backdrop click={this.closeCourseListSidebar}/>
+      backdrop = <Backdrop click={this.closeCourseListSidebar}/>;
     }
 
     return (
@@ -65,7 +64,7 @@ class Main extends Component {
           closeSnackbar={this.closeWarningSnackbarHandler}
           warningMessage="Pre-reqs missing for COSC 304"/>
        
-       {/*'courseTitle','courseInfo' should come from the database */}
+        {/*'courseTitle','courseInfo' should come from the database */}
         <CourseListSideBar 
           show={this.state.drawerOpen} 
           close={this.closeCourseListSidebar}

@@ -28,18 +28,14 @@ class App extends Component {
   render() {
 
     return (
-        <div className="App">
+      <div className="App">
         
-          <LoginMenu  /> 
-          {/* toggleMenu={this.toggleMenu} */}
-          <CreateAccountMenu /> 
-          {/* showMenu={this.state.showMenu} */}
-          <ExtraStudentInfo></ExtraStudentInfo>
-        </div>
-       
-          
-        
-       
+        <LoginInterface  /> 
+        {/* toggleMenu={this.toggleMenu} */}
+        <CreateAccountMenu /> 
+        {/* showMenu={this.state.showMenu} */}
+        <ExtraStudentInfo></ExtraStudentInfo>
+      </div>
         
       
     );

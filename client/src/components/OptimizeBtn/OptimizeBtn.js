@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 
 const OptimizeBtn = (props) => {
     
-    return(
-        <button id="optimize-btn" onClick={props.click}> Optimize </button>
-    );
-}
+  return(
+    <button id="optimize-btn" onClick={props.click}> Optimize </button>
+  );
+};
 
 OptimizeBtn.propTypes = {
-    click: PropTypes.func.isRequired
-}
+  click: PropTypes.func.isRequired
+};
 
 export default OptimizeBtn;
