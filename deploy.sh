@@ -6,7 +6,7 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
     cd client/build
     git init
         
-    git remote add deploy "deploy@visualcourseplanner.gq:/var/www/html"
+    git remote add deploy "deploy@visualcourseplanner.gq:/var/www/html/client/build"
     git config user.name "Travis CI"
     git config user.email "mackenziesalloum+travisCI@gmail.com"
     
