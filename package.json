@@ -13,8 +13,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
     "fix": "./node_modules/.bin/eslint --fix .",
-    "start": "node server/src/server.js",
-    "server": "nodemon server/src/server.js",
+    "start": "node server.js",
+    "server": "nodemon server.js",
     "test": "CI=true npm test --prefix client",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
@@ -44,7 +44,7 @@
     "nodemon": "^1.18.7"
   },
   "description": "A visual course planner.",
-  "main": "server/src/server.js",
+  "main": "server.js",
   "directories": {
     "doc": "docs"
   },

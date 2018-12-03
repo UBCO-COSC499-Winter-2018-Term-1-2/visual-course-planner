@@ -20,6 +20,9 @@
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
+    "eslint": "^5.9.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-react": "^7.11.1",
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
@@ -108,8 +111,5 @@
       "react-app"
     ]
   },
-  "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "eslint-loader": "^2.1.1"
-  }
+  "proxy": "http://localhost:5000"
 }
