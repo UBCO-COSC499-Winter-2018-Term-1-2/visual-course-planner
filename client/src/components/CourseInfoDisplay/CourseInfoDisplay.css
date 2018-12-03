@@ -2,11 +2,17 @@
     color: white;
     font-family: Helvetica;
     padding: 5%;
+    display: flex;
+    flex-direction: column;
     
 }
 
+.course-info-body-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
-
-.course-info-body{
-    text-align: left;
+#course-info-body{
+    overflow: hidden;
 }

@@ -13,7 +13,6 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
     "fix": "./node_modules/.bin/eslint --fix .",
-    "client-install": "npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
     "test": "CI=true npm test --prefix client",

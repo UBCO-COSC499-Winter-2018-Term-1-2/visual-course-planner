@@ -1,13 +1,22 @@
-.sidebar-toggle-button {
+.sidebar-toggle-button-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar-togglebtn-container, .plus-icon-container{
+    color: #84bd00;
+    padding: 0.2em;
+}
+
+#sidebar-togglebtn{
     background:none;
     border:none;
     margin: 0em auto;
     cursor: pointer;
-    color: #84bd00;
     white-space: nowrap;
     overflow: hidden;
 }
 
-.sidebar-toggle-button:focus {
+#sidebar-togglebtn:focus {
     outline: none;
 }
