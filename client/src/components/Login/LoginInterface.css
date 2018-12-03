@@ -1,6 +1,3 @@
-
-/* Li = Login Interface  */
-
 body{
 
     background-color: #262427;
@@ -16,13 +13,8 @@ body{
 .Menu{
     background-color: #201e21;
     width: 50%;
-    padding: 12px 50px;
-    margin: 20% 20%;
-    display: inline-block; 
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    
+    padding: 2em 4em;
+    margin: 10% auto;   
 }
 
 input[type=text] {
@@ -36,6 +28,7 @@ input[type=text] {
     border: none;
 }
 
+/* BTN ALLOWS USER TO LOG INTO VCP */
 .loginbtn{
     width: 50%;
     padding: 9px 20px;
@@ -54,33 +47,33 @@ input[type=text] {
     color: black;
 }
 
-/* THIS BTN IS TO OPEN CREATE ACCOUNT MENU -- DOES NOT CREATE A NEW ACCOUNT FOR USER */
-.openCreateAccountbtn{
+/* THIS BTN IS TO OPEN DIFFERENT MENU THEN WHAT IS ACTIVE*/
+.openDiffMenubtn{
     background:none;
     border:none;
-    margin: 0em auto;
     cursor: pointer;
     color: #84bd00;
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: 1em;
+    display: block;
 }
 
-.openCreateAccountbtn:hover {
-    /* background-color: #84bd00;  */
+a{
+    color: #84bd00;
+}
+a:hover {
     color: #afda77;
 }
 
 /* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
 .createAccountbtn{
     background:none;
-    margin: 2em 31%;
+    margin: 2em auto;
     border-color: #84bd00;
-    padding:0.5% 10%;
+    padding:1em 2em;
     cursor: pointer;
     color: #84bd00;
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: 1em;
+    display: block;
 }
 
 .createAccountbtn:hover {
@@ -88,3 +81,6 @@ input[type=text] {
     color: #afda77;
     border-color: #afda77;
 }
+
+
+

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import '../Login/LoginInterface.css';
+import { Link } from 'react-router-dom';
 
 
 // const CreateAccountMenu = () => {
@@ -11,12 +12,9 @@ class CreateAccountMenu extends Component {
     
     return(
       <div className="Menu">
-        {/*             
-            // CURRENT COMMENTED OUT CODE MAKES THIS MENU DISAPPER.. ? 
-            {this.props.showmenu && 
-            <section id = "CreateAccountMenu"> */}
+        
         <form>
-          <h1>Visual Course Planner</h1>
+          <h1 className="login-heading">Visual Course Planner</h1>
             
           <input type="text" name="fname" placeholder="* First Name"/>
           <input type="text" name="lname" placeholder="* Last Name"/>   
@@ -24,8 +22,8 @@ class CreateAccountMenu extends Component {
           <input type="text" name="pass" placeholder="* Password"/>   
           <input type="text" name="confirmPass" placeholder="* Confirm Password"/>
           <button className="createAccountbtn">Create Account</button> 
+          <button className="openDiffMenubtn" ><Link to = "/login">Login Instead</Link></button> 
         </form> 
-        {/* </section> */}
 
       </div>
 
