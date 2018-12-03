@@ -11,9 +11,8 @@
     "prop-types": "^15.6.2"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint 'client/**/*.js' 'server/**/*.js' 'routes/**/*.js'",
-    "fix": "./node_modules/.bin/eslint --fix 'client/**/*.js' 'server/**/*.js' 'routes/**/*.js'",
-    "client-install": "npm install --prefix client",
+    "lint": "./node_modules/.bin/eslint .",
+    "fix": "./node_modules/.bin/eslint --fix .",
     "start": "node server/src/server.js",
     "server": "nodemon server/src/server.js",
     "test": "CI=true npm test --prefix client",

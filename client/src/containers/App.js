@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 //import './App.css';
 import '../components/Login/LoginInterface.css';
 import LoginInterface from '../components/Login/LoginInterface';
-
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
-import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
 import { BrowserRouter } from 'react-router-dom';
-
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt);
+library.add(faHeart);
+library.add(faExclamationTriangle);
+library.add(faPlus);
+library.add(faTimes);
 
 class App extends Component {
 
@@ -29,11 +31,6 @@ class App extends Component {
     });
   }
 
-  closeCourseListSidebar = () => {
-    this.setState({
-      drawerOpen: false
-    });
-  };
 
   render() {
 
@@ -44,6 +41,8 @@ class App extends Component {
         </BrowserRouter>
         <ExtraStudentInfo></ExtraStudentInfo>
       </div>
+        
+      
     );
   }
 }
