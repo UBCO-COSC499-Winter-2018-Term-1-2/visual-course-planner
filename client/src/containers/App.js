@@ -6,18 +6,13 @@ import LoginInterface from '../components/Login/LoginInterface';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import ExtraStudentInfo from '../components/Signup/ExtraStudentInfo';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt);
 
 class App extends Component {
-
-
-  state = {
-    drawerOpen : false
-  };
 
   constructor(){
     super();
@@ -44,9 +39,9 @@ class App extends Component {
 
     return (
       <div>
-        <Router>
+        <BrowserRouter>
           <LoginInterface /> 
-        </Router>
+        </BrowserRouter>
         <ExtraStudentInfo></ExtraStudentInfo>
       </div>
     );
