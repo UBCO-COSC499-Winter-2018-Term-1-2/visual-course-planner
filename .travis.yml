@@ -4,7 +4,15 @@ node_js:
 script: "./build.sh"
 env:
 - CI=true
+addons:
+  ssh_known_hosts: visualcourseplanner.gq
 before_install:
-- openssl aes-256-cbc -K $encrypted_832f2107ea50_key -iv $encrypted_832f2107ea50_iv -in id_rsa.enc -out id_rsa -d
-after_success:
-  - deploy.sh
+- openssl aes-256-cbc -K $encrypted_832f2107ea50_key -iv $encrypted_832f2107ea50_iv -in id_rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
+deploy:
+  provider: script
+  script: "./deploy.sh"
+  on:
+    branch: master
