@@ -5,6 +5,8 @@ import './index.css';
 import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 import Main from './containers/Main';
+import Login from './components/Login/LoginInterface';
+import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
 
 const routing = (
@@ -12,6 +14,8 @@ const routing = (
     <div>
       <Route exact path="/" component={App} />
       <Route path="/main" component={Main} />
+      <Route path="/login" component={Login} />
+      <Route path="/create-account" component={CreateAccount} />
       <Route path="/admin" component={AdminPortal} />
     </div>
   </Router>
