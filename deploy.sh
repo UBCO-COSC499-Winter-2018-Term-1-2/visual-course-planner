@@ -5,7 +5,7 @@ set -x
 ssh deploy@visualcourseplanner.gq <<EOF
   cd /var/www/html
   sudo git fetch --all
-  sudo git reset origin/master
+  sudo git pull
   cd client
   npm install
   cd ..
