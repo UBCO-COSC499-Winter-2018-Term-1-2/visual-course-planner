@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -x
-if [ $TRAVIS_BRANCH == 'master' ] ; then
+# if [ $TRAVIS_BRANCH == 'master' ] ; then
     # Initialize a new git repo in client/build, and push it to the server.
     ssh deploy@visualcourseplanner.gq <<EOF
 
@@ -15,6 +15,6 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
       pm2 restart vcp
 EOF
    
-else
-    echo "Not deploying, since this branch isn't master."
-fi
+# else
+    # echo "Not deploying, since this branch isn't master."
+# fi
