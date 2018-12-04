@@ -1,0 +1,17 @@
+.warning-summary-wrapper{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+#warning-icon{
+    color: #c5980f;
+}
+
+.warning-icon-container, .warning-notification-container{
+    padding: 0.2em;
+}
+
+#warning-notification{
+    color: #c5980f;
+}

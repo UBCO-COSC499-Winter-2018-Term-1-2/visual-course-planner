@@ -1,13 +1,27 @@
 #!/bin/bash
-
-NODE_VERSION="v10.12.0"
-cd $TRAVIS_BUILD_DIR/learning/shopping-list/
+set -e
+export PATH=./node_modules/.bin:$PATH
 
 source $NVM_DIR/nvm.sh
 
-nvm install $NODE_VERSION
+nvm install
 
-nvm use $NODE_VERSION
+# Need to globally install npm so client can use it
+npm i -g npm@6
 
-npm install
+# Enforce linting
+npm run lint
+
+cd client
+
+# Switch to current node version
+nvm use
+
+# Install deps
+npm ci
+
+# Runs tests
 npm test
+
+# Build project
+npm run build

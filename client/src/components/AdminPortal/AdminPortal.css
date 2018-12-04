@@ -1,0 +1,87 @@
+.username {
+    color: #d4d7d8;
+}
+
+.logout-button {
+    color: #71a009;
+    background: none;
+    border: none;
+    font-size: 1em;
+    padding: 0;
+}
+
+.admin-acc-logout-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.admin-heading {
+    margin-bottom: 3em;
+    color: #c5980f;
+    text-align: left;
+    font-weight: normal;
+}
+
+.admin-portal-parent-wrapper {
+    margin: 6em auto;
+    width: 80%;
+    position: relative;
+    color: #e4e4e4;
+}
+
+.choose-file-heading {
+   color: #84bd00;
+}
+
+#choose-file-btn {
+    display: none;
+}
+
+#choose-file-label {
+    background-color: #e4e4e4;
+    color: black;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    width: 6em;
+}
+
+.comments-input {
+    background-color: #333035;
+    color: #9c9b9d;
+    height: 5em;
+    border: none;
+    outline: none;
+    resize: none;
+    width: 100%;
+    font-size: 1em;
+}
+
+.submit-file-btn {
+    background-color: #262427;
+    color: #84bd00;
+    border-color: #84bd00;
+    padding: 0.5em 4em;
+    font-size: 1em;
+    margin-right: 1em;
+}
+
+.admin-submit-disclaimer-para {
+    display: inline-block;
+    color: #c5980f;
+}
+
+.admin-portal-element {
+    margin: 4rem 0;
+}
+
+.file-select-text {
+    display: inline;
+    margin-left: 1em;
+}
+
+@media only screen and (max-width: 600px) {
+    .admin-acc-logout-wrapper {
+        position: relative;
+    }
+}

@@ -1,0 +1,34 @@
+#optimize-btn{
+    position: relative;
+    background-color: #d16313;
+    border: none;
+    border-radius: 0.3em;
+    color: #e4e4e4;
+    width: 12em;
+    height: 2em;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    overflow: hidden;
+    cursor: pointer;
+    outline: none;
+}
+
+#optimize-btn:after {
+    content: "";
+    background: #fdc196;
+    display: block;
+    position: absolute;
+    padding-top: 50em;
+    padding-left: 50em;
+    margin-left: -0.5em!important;
+    margin-top: -10em;
+    opacity: 0;
+    transition: all 1s
+}
+
+#optimize-btn:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
