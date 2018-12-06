@@ -7,30 +7,34 @@ import PropTypes from 'prop-types';
 
 
 const CourseListSideBar = (props) => {
-  let drawerClasses = 'side-drawer';
-  if (props.show) {
-    drawerClasses = 'side-drawer open';
-  }
-  
-  // adding search bar component to the side bar component
-  // need to pass call back function as click prop
-
+    
+  let drawerClasses;
+  //Show or hide side bar by changes 
+  props.show ? (drawerClasses = 'side-drawer open') : (drawerClasses = 'side-drawer');
+    
   return (
     <div className={drawerClasses}>
       <CloseSideBarBtn click={props.close}/>
+        
       <CourseSearchBar />
       {/* course search display results component goes here */}
-      <hr className="sidebar-divider"/>
+      <div className="sidebar-divider-container">
+        <hr id="sidebar-divider"/>
+      </div>
 
-      {/* course info component goes here */}
-      <CourseInfoDisplay />
+      <CourseInfoDisplay 
+        title={props.courseTitle}
+        info={props.courseInfo}
+      />
     </div>
   );
 };
 
 CourseListSideBar.propTypes = {
-  close: PropTypes.func,
-  show: PropTypes.func
+  show: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  courseTitle: PropTypes.string.isRequired,
+  courseInfo: PropTypes.string.isRequired
 };
 
 export default CourseListSideBar;
