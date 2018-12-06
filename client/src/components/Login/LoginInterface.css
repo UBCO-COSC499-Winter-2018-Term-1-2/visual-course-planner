@@ -10,7 +10,7 @@ body{
    
 }
 
-.Menu{
+.menu{
     background-color: #201e21;
     width: 50%;
     padding: 2em 4em;
@@ -48,7 +48,7 @@ input[type=text] {
 }
 
 /* THIS BTN IS TO OPEN DIFFERENT MENU THEN WHAT IS ACTIVE*/
-.openDiffMenubtn{
+.open-diff-menubtn{
     background:none;
     border:none;
     cursor: pointer;
@@ -65,7 +65,7 @@ a:hover {
 }
 
 /* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
-.createAccountbtn{
+.create-accountbtn{
     background:none;
     margin: 2em auto;
     border-color: #84bd00;
@@ -76,11 +76,9 @@ a:hover {
     display: block;
 }
 
-.createAccountbtn:hover {
+.create-accountbtn:hover {
     /* background-color: #84bd00;  */
     color: #afda77;
     border-color: #afda77;
 }
-
-
 
