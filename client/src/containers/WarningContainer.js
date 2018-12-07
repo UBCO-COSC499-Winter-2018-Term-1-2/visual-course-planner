@@ -35,9 +35,7 @@ class WarningContainer extends Component {
     Promise
       .all(courseWarnings)
       .then(warnings => {
-        if (courseWarnings != null) {
-          warnings.concat(courseWarnings);
-        }
+        return warnings;
       })
       .catch(err => {
         console.log(err);
@@ -45,10 +43,15 @@ class WarningContainer extends Component {
   }
 
   componentDidMount = () => {
-    const warnings = await this.getWarnings();
-    this.setState({
-      warnings: warnings
-    });
+    this.getWarnings()
+      .then(warnings =>
+        this.setState({
+          warnings: warnings
+        })
+      )
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
