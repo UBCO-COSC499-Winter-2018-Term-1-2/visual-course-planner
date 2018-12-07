@@ -1,4 +1,4 @@
-function getStandingWarning(user, course) {
+function getStandingWarnings(user, course) {
   let warnings = [];
   if (user.standing < course.standingRequirement) {
     warnings.push({
@@ -22,7 +22,7 @@ function getPrereqWarnings(plan, course) {
       });
     }
   });
-  return ;
+  return warnings;
 }
 
 function getCoreqWarnings(plan, course) {
@@ -49,7 +49,7 @@ module.exports = {
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];
     warnings = warnings.concat(
-      getStandingWarning(user, course),
+      getStandingWarnings(user, course),
       getCoreqWarnings(plan, course),
       getPrereqWarnings(plan, course)
     );
@@ -61,7 +61,7 @@ module.exports = {
     let warnings = [];
     plan.course.forEach(planCourse => {
       warnings = warnings.concat(
-        getStandingWarning(user, planCourse),
+        getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
         getPrereqWarnings(plan, planCourse)
       );
