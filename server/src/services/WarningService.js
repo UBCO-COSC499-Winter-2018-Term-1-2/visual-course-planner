@@ -2,7 +2,7 @@ function getStandingWarnings(user, course) {
   let warnings = [];
   if (user.standing < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
       type: "standing"
     });
   }
@@ -17,7 +17,7 @@ function getPrereqWarnings(plan, course) {
     const courseYearSemester = course.year.concat(course.semester);
     if (!planHasCourse(plan, req) || reqYearSemester >= courseYearSemester) {
       warnings.push({
-        message: `${course.code} missing pre-requisite ${req.code}`,
+        message: `${course.code} missing pre-requisite ${req.code}.`,
         type: "prereq"
       });
     }
@@ -29,20 +29,32 @@ function getCoreqWarnings(plan, course) {
   let warnings = [];
   const requirements = course.coRequisites;
   requirements.forEach(req => {
-    const reqYearSemester = req.year.concat(req.semester);
-    const courseYearSemester = course.year.concat(course.semester);
-    if (!planHasCourse(plan, req) || reqYearSemester >= courseYearSemester) {
+    if (!planHasCourse(plan, req)) {
       warnings.push({
-        message: `${course.code} missing co-requisite ${req.code}`,
+        message: `${course.code} missing co-requisite ${req.code}.`,
         type: "coreq"
       });
+    } else {
+      const reqYearSemester = req.year.concat(req.semester);
+      const courseYearSemester = course.year.concat(course.semester);
+      if (reqYearSemester >= courseYearSemester) {
+        warnings.push({
+          message: `${req.code} needs to be in the same semester as ${course.code}.`,
+          type: "coreq"
+        });
+      }
     }
   });
   return warnings;
 }
 
 function planHasCourse(plan, course) {
-  return plan.courses.has(course.code);
+  plan.courses.forEach(planCourse => {
+    if (planCourse.code === course.code) {
+      return true;
+    }
+  });
+  return false;
 }
 
 module.exports = {
