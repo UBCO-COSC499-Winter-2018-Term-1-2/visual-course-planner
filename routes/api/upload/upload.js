@@ -3,9 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 
-// @route   POST api/upload
-// @desc    upload file
-// @access  Private
+/** 
+ * @route   POST api/upload
+ * @desc    upload file
+ * @access  Private
+ */
 router.post('/upload', (req, res) => {
   let uploadFile = req.files.file;
   const fileName = req.files.file.name;
