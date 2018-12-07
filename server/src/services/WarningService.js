@@ -71,7 +71,7 @@ module.exports = {
 
   getWarnings: (plan, user) => {
     let warnings = [];
-    plan.course.forEach(planCourse => {
+    plan.courses.forEach(planCourse => {
       warnings = warnings.concat(
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
