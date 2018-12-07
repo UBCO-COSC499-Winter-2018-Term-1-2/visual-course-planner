@@ -3,8 +3,8 @@ import styling from '../Login/LoginInterface.css';
 
 const input = ( props ) => {
   let inputElement = null;
-  let cssInputElement = "InputElement";
-  let cssInvalid = "Invalid";
+  let cssInputElement = "input-element";
+  let cssInvalid = "invalid";
 
   const inputStyling = [cssInputElement];
 

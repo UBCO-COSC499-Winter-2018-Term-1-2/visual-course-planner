@@ -17,7 +17,7 @@ body{
     margin: 10% auto;   
 }
 
-.InputElement{
+.input-element{
     width: 100%;
     padding: 12px 20px;
     margin: 1em 0;
@@ -93,6 +93,6 @@ a:hover {
     cursor: not-allowed;
 }
 
-.Invalid{
+.invalid{
     border: 1px solid red;
 }
