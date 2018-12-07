@@ -5,7 +5,7 @@ import PlanName from '../PlanName/PlanName';
 import FavouriteBtn from '../FavouriteBtn/FavouriteBtn';
 import SideBarToggleButton from '../SideBarToggleButton/SideBarToggleButton';
 import OptimizeBtn from '../OptimizeBtn/OptimizeBtn'; 
-import WarningSummary from '../WarningSummary/WarningSummary';
+import WarningContainer from '../WarningSummary/WarningSummary';
 
 const PlannerHeader = (props) => {
   return (
@@ -13,10 +13,9 @@ const PlannerHeader = (props) => {
       <div className="plan-name-container"> <PlanName name={props.planName}/> </div>
       <div className="favouriteBtn-container"><FavouriteBtn favourite={true}/></div>
       <div className="optimizeBtn-container"><OptimizeBtn click={props.optimize}/></div>
-      <div className="warning-summary-container">
-        <WarningSummary 
-          numberOfWarnings={props.numberOfWarnings}
-          click={props.showWarning}/></div>
+      <WarningContainer 
+        click={props.showWarning}
+      />
       <div className="addcourseBtn-container"><SideBarToggleButton click={props.toggleSidebar}/></div>
     </div>
   );

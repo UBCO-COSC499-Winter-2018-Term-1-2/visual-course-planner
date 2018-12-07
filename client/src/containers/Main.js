@@ -8,13 +8,14 @@ import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar
 import Backdrop from '../components/Backdrop/Backdrop';
 
 class Main extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      drawerOpen : false,
-      showSnackbar : false,
-      planName: "BA Major Computer Science"
-    };
+  state = {
+    drawerOpen : false,
+    showSnackbar : false,
+    currentPlan: {
+      id: 0,
+      name: "BA Major Computer Science"
+    }
+
   }
 
   toggleCourseListSidebarHandler = () => {
@@ -33,15 +34,6 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
-  warningSystemHandler = () => {
-    this.setState({ showSnackbar: true });
-    //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
-  }
-
-  closeWarningSnackbarHandler = () => {
-    this.setState({ showSnackbar: false });
-  }
-
   render() {
     let backdrop;
 
@@ -55,14 +47,11 @@ class Main extends Component {
         <PlanList/>
         <NoteArea/>
         <PlannerArea 
-          planName={this.state.planName}
+          planId={this.state.currentPlan.planId}
+          planName={this.state.currentPlan.name}
           toggleSidebar={this.toggleCourseListSidebarHandler}
           optimize={this.optimizeHandler}
-          numberOfWarnings={5}
-          showWarning={this.warningSystemHandler}
-          showSnackbar={this.state.showSnackbar}
-          closeSnackbar={this.closeWarningSnackbarHandler}
-          warningMessage="Pre-reqs missing for COSC 304"/>
+        />
        
         {/*'courseTitle','courseInfo' should come from the database */}
         <CourseListSideBar 

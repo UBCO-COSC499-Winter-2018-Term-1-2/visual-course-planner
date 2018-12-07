@@ -4,10 +4,15 @@ import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 
 class PlannerArea extends Component {
-  constructor(props){
-    super(props);
+
+  warningSystemHandler = () => {
+    this.setState({ showSnackbar: true });
+    //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
   }
 
+  closeWarningSnackbarHandler = () => {
+    this.setState({ showSnackbar: false });
+  }
 
   render() {
     return (
@@ -18,7 +23,8 @@ class PlannerArea extends Component {
             toggleSidebar={this.props.toggleSidebar} 
             optimize={this.props.optimize}
             numberOfWarnings={this.props.numberOfWarnings}
-            showWarning={this.props.showWarning}/>
+            showWarning={this.props.showWarning}
+          />
           
           <WarningSnackbar 
             showSnackbar={this.props.showSnackbar}
@@ -39,6 +45,7 @@ PlannerArea.propTypes = {
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,
   warningMessage: PropTypes.string.isRequired,
+  planId: PropTypes.number
 };
 
 export default PlannerArea;
