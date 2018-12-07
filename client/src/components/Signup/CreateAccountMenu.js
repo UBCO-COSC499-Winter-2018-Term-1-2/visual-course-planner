@@ -165,8 +165,8 @@ class CreateAccountMenu extends Component {
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
-        <button className="loginbtn" disabled={!this.state.formIsValid}>Login</button> 
-        <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
+        <button className="create-accountbtn" disabled={!this.state.formIsValid}>Create Account</button> 
+        <button className="open-diff-menubtn" ><Link to = "/login">Login Instead</Link></button> 
       </form>
     );
     
