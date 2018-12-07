@@ -7,51 +7,7 @@ import Input from '../Input/input';
 
 
 class LoginInterface extends Component {
-  // state = {
-  //   isValidated: false
-  // }
-
-  // validateForm = () => {
-  //   const formLength = this.formEl.length;
-
-  //   if (this.formEl.checkValidity () === false) {
-  //     for(let i=0; i<formLength; i++) {
-  //       const element = this.formEl[i];
-  //       const errorLabel = element.parentNode.querySelector('.invalid-feedback');
-
-  //       if(errorLabel && element.nodeName.toLowerCase() !== 'button'){
-  //         if(!element.validity.valid) {
-  //           errorLabel.textContent = element.validationMessage;
-  //         } else {
-  //           errorLabel.textContent = "";
-  //         }
-  //       }
-  //     }
-
-  //     return false;
-  //   } else {
-  //     for(let i=0; i<formLength; i++) {
-  //       const element = this.formEl[i];
-  //       const errorLabel = element.parentNode.querySelector('.invalid-feedback');
-
-  //       if(errorLabel && element.nodeName.toLowerCase() !== 'button') {
-  //         errorLabel.textContent = "";
-  //       }
-  //     }
-  //     return true;
-  //   }
-  // }
-
-  // submitHandle = (event) => {
-  //   event.preventDefault();
-
-  //   if(this.validate()) {
-  //     this.props.submit();
-  //   }
-  //   this.setState({isValidated: true});
-  // }
-
-  // ----------------------------------
+ 
     state = {
       loginMenu: {
         email: {
@@ -60,7 +16,12 @@ class LoginInterface extends Component {
             type: 'text',
             placeholder: 'Email'
           },
-          value: ''
+          value: '',
+          validation: {
+            required: true
+          },
+          valid: false,
+          inputElementTouched: false 
         },
         password: {
           elementType: 'input',
@@ -68,66 +29,29 @@ class LoginInterface extends Component {
             type: 'text',
             placeholder: 'Password'
           },
-          value: ''
+          value: '',
+          validation: {
+            required: true
+          },
+          valid: false,
+          inputElementTouched: false 
         },
     
       },
+      formIsValid: false,
       loading: false
     }
 
+    checkValidity(value, rules) {
+      let isValid = true;
 
-    // validateForm(){
-    //   let fields = this.state.fields;
-    //   let errors = {};
-    //   let formIsValid = true;
+      if(rules.required){
+        isValid = value.trim() !== '' && isValid;
+      }
 
-    //   //EMAIL VALIDATION
-    //   if(!fields["email"]){
-    //     formIsValid = false;
-    //     errors["email"] = "*please provide your email address";
-    //   }
-    //   if (typeof fields["email"] !=="undefined"){
-    //     let atPosition = fields["email"].lastIndexof('@');
-    //     let lastPeriodPosition = fields["email"].lastIndexof(".");
-
-    //     if(!(atPosition < lastPeriodPosition && atPosition >0 && fields["email"].lastIndexof('@@') == 1 && atPosition > 2 && (fields["email"].length - lastPeriodPosition) > 2)){
-    //       formIsValid = false;
-    //       errors["email"] = "EMAIL IS NOT VALID!! ";
-    //     }
-    //   }
-    //   //   //PASSWORD VALIDATION
-    //   if(!fields["password"] && !fields["confirmPassword"]){
-    //     formIsValid = false;
-    //     errors["password"] = "*please enter a password";
-    //     errors["confirmPassword"] = "*please confirm your  password";
-    //   }
-    //   if (typeof fields["password"] !== "undefined") {
-    //     if (!fields["password"].match(/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).*$/) ) {
-    //       formIsValid = false;
-    //       errors["password"] = "*Please enter secure password.";
-    //     }
-    //   }
-
-    //   this.setState({errors: errors});
-    //   return formIsValid;
-    // }
-    
-    // contactSubmit(e){
-    //   e.preventDefault();
-    //   if(this.validateForm()){
-    //     alert("Form submitted");
-    //   }else{
-    //     alert("Form has errors.");
-    //   }
-    
-    // }
-    
-    // handleChange(field, e){    		
-    //   let fields = this.state.fields;
-    //   fields[field] = e.target.value;        
-    //   this.setState({fields});
-    // }
-    orderHandler = ( event ) => {
+      return isValid;
+    }
+    handler = ( event ) => {
       event.preventDefault();
       this.setState( { loading: true } );
       
@@ -153,8 +77,10 @@ class LoginInterface extends Component {
     
     }
 
+    //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
+    //IE. EMAIL AND PASSWORD.
     inputChangeHandler = (event, inputIdentifier) => {
-      console.log(event.target.value);
+      console.log(event.target.value); //prints values to console
       const updatedloginMenu = {
         ...this.state.loginMenu
       };
@@ -162,8 +88,17 @@ class LoginInterface extends Component {
         ...updatedloginMenu[inputIdentifier]
       };
       updatedMenuElement.value = event.target.value;
+      //CHECKS IF EACH STATE HAS A VALUE
+      updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation);
+      updatedMenuElement.inputElementTouched = true;
       updatedloginMenu[inputIdentifier] = updatedMenuElement;
-      this.setState({loginMenu: updatedloginMenu});
+      
+      let formIsValid = true;
+      for (let inputIdentifier in updatedloginMenu){
+        formIsValid = updatedloginMenu[inputIdentifier].valid && formIsValid;
+      }
+      this.setState({loginMenu: updatedloginMenu, formIsValid: formIsValid});
+     
     }
 
     render(){
@@ -175,22 +110,29 @@ class LoginInterface extends Component {
         });
       }
       
+      //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
+      //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
       let form = (
-        <form onSubmit={this.orderHandler}>
+        <form onSubmit={this.handler}>
           {formElementsArray.map(formElement => (
             <Input 
               key={formElement.id}
               elementType={formElement.config.elementType}
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
+              invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
+              shouldBeValidated={formElement.config.validation}
+              inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button className="loginbtn">Login</button> 
+          <button className="loginbtn" disabled={!this.state.formIsValid}>Login</button> 
           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
         </form>
       );
 
+
       return(
+        //RETURN LOGIN MENU HERE
         <div className="menu">
           <h1 className="login-heading">Visual Course Planner</h1>
           {form}     
@@ -201,10 +143,7 @@ class LoginInterface extends Component {
 } //end of class 
 
 LoginInterface.propTypes = {
-  toggleMenu: PropTypes.func.isRequired,
-  // children: PropTypes.node,
-  // className: PropTypes.string,
-  // submit: PropTypes.func.isRequired
+  toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
 };
 
 export default LoginInterface;
