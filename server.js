@@ -1,6 +1,6 @@
 const express = require('express');
 
-const upload = require('./routes/api/upload/upload');
+const upload = require('./server/src/routes/api/upload/upload');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 

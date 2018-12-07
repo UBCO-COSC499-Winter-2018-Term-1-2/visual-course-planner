@@ -9,38 +9,6 @@ class WarningContainer extends Component {
     warnings: []
   };
 
-  getWarningsForCourse = async (plan, course) => {
-    axios
-      .get(`/api/courses/${course.id}`)
-      .then(res => {
-        return res.data.requirements;
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    // const standing = User.getStanding
-    // if (plan.contains(courseReqs)) // also need to make sure they are in the correct semester
-    // coreqs vs prereqs
-    //    we good
-    // else
-    //  add warning
-    // return list of warnings
-  }
-
-  getWarnings = async () => {
-    const courseWarnings = this.props.plan.courses.map(function(course) {
-      return this.getWarningsForCourse(this.props.plan, course);
-    }.bind(this));
-
-    Promise
-      .all(courseWarnings)
-      .then(warnings => {
-        return warnings;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   componentDidMount = () => {
     this.getWarnings()
