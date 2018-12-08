@@ -6,15 +6,18 @@ import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 class PlannerArea extends Component {
 
   state = {
-    warnings: []
+    warnings: [{
+      message: "test"
+    }],
+    showSnackbar: false
   }
 
-  warningSystemHandler = () => {
+  showSnackbar = () => {
     this.setState({ showSnackbar: true });
     //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
   }
 
-  closeWarningSnackbarHandler = () => {
+  closeSnackbar = () => {
     this.setState({ showSnackbar: false });
   }
 
@@ -31,13 +34,15 @@ class PlannerArea extends Component {
           plan={this.props.plan}
           toggleSidebar={this.props.toggleSidebar} 
           optimize={this.props.optimize}
-          showWarning={this.props.showWarning}
+          showWarning={this.showSnackbar}
           setWarnings={this.setWarnings}
+          warnings={this.state.warnings}
+          user={this.props.user}
         />
           
         <WarningSnackbar 
-          showSnackbar={this.props.showSnackbar}
-          closeSnackbar={this.props.closeSnackbar}
+          showSnackbar={this.state.showSnackbar}
+          closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
         />
         <div id="session-container">
@@ -52,9 +57,6 @@ PlannerArea.propTypes = {
   plan: PropTypes.object.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
   optimize: PropTypes.func.isRequired,
-  showWarning: PropTypes.func.isRequired,
-  showSnackbar: PropTypes.bool.isRequired,
-  closeSnackbar: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 };
 

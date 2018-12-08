@@ -5,13 +5,18 @@ import PropTypes from 'prop-types';
 // import Plan from '../models/Plan';
 
 class WarningContainer extends Component {
-  state = {
-    warnings: []
-  };
 
   getWarnings = async () => {
     axios
-      .get('api/warnings')
+      .get('api/warnings', 
+        {
+          plan: this.props.plan,
+          user: this.props.user
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      )
       .then(warnings => {
         return warnings;
       })
@@ -32,7 +37,8 @@ class WarningContainer extends Component {
 
   render() {
     return (
-      <WarningSummary numberOfWarnings={this.state.warnings.length} click={this.props.click} />
+      
+      <WarningSummary click={this.props.click} numberOfWarnings={this.props.warnings.length}/>
     );
   }
 }
@@ -41,7 +47,8 @@ WarningContainer.propTypes = {
   click: PropTypes.func.isRequired,
   plan: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  setWarnings: PropTypes.func.isRequired
+  setWarnings: PropTypes.func.isRequired,
+  warnings: PropTypes.array.isRequired
 };
 
 export default WarningContainer;

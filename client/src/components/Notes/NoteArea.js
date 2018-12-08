@@ -13,7 +13,7 @@ class NoteArea extends Component {
       <div id="note-area">
         <div className="sidebar-info-area-end">
           <h3 className="sidebar-header">NOTES</h3>
-          <textarea className="notes-text-area focus-element">{this.state.notes}</textarea>
+          <textarea className="notes-text-area focus-element" defaultValue={this.state.notes}></textarea>
         </div>
       </div>
     );
