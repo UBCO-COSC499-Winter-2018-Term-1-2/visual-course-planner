@@ -13,14 +13,23 @@ function getPrereqWarnings(plan, course) {
   let warnings = [];
   const requirements = course.preRequisites;
   requirements.forEach(req => {
-    const reqYearSemester = req.year.concat(req.semester);
-    const courseYearSemester = course.year.concat(course.semester);
-    if (!planHasCourse(plan, req) || reqYearSemester >= courseYearSemester) {
+    const planCourse = getPlanCourse(plan, req);
+    if (planCourse == null) {
       warnings.push({
         message: `${course.code} missing pre-requisite ${req.code}.`,
         type: "prereq"
       });
+    } else {
+      const reqYearSemester = planCourse.year.concat(planCourse.semester);
+      const courseYearSemester = course.year.concat(course.semester);
+      if (reqYearSemester >= courseYearSemester) {
+        warnings.push({
+          message: `${course.code} must be taken earlier than ${req.code}.`,
+          type: "prereq"
+        });
+      }
     }
+    
   });
   return warnings;
 }
@@ -29,17 +38,18 @@ function getCoreqWarnings(plan, course) {
   let warnings = [];
   const requirements = course.coRequisites;
   requirements.forEach(req => {
-    if (!planHasCourse(plan, req)) {
+    const planCourse = getPlanCourse(plan, req);
+    if (planCourse == null) {
       warnings.push({
         message: `${course.code} missing co-requisite ${req.code}.`,
         type: "coreq"
       });
     } else {
-      const reqYearSemester = req.year.concat(req.semester);
+      const reqYearSemester = planCourse.year.concat(planCourse.semester);
       const courseYearSemester = course.year.concat(course.semester);
-      if (reqYearSemester >= courseYearSemester) {
+      if (reqYearSemester > courseYearSemester) {
         warnings.push({
-          message: `${req.code} needs to be in the same semester as ${course.code}.`,
+          message: `${planCourse.code} needs to be in the same semester as ${course.code}, or earlier.`,
           type: "coreq"
         });
       }
@@ -48,13 +58,14 @@ function getCoreqWarnings(plan, course) {
   return warnings;
 }
 
-function planHasCourse(plan, course) {
-  plan.courses.forEach(planCourse => {
-    if (planCourse.code === course.code) {
-      return true;
+function getPlanCourse(plan, course) {
+  console.log(plan, course);
+  for(let planCourse of plan.courses) {
+    if (planCourse.code == course.code) {
+      return planCourse;
     }
-  });
-  return false;
+  }
+  return null;
 }
 
 module.exports = {
