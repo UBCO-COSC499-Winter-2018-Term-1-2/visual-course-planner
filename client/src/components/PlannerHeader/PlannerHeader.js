@@ -13,7 +13,7 @@ const PlannerHeader = (props) => {
       <PlanName name={props.plan.name}/>
       <FavouriteBtn favourite={true}/>
       <OptimizeBtn click={props.optimize}/>
-      <WarningContainer click={props.showWarning} plan={props.plan}/>
+      <WarningContainer click={props.showWarning} plan={props.plan} setWarnings={props.setWarnings}/>
       <SideBarToggleButton click={props.toggleSidebar}/>
     </div>
   );
@@ -23,9 +23,9 @@ PlannerHeader.propTypes = {
   plan: PropTypes.string.isRequired,
   optimize: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired,
   showWarning: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  setWarnings: PropTypes.func.isRequired
 };
 
 export default PlannerHeader;

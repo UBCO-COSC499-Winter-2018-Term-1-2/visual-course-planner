@@ -25,3 +25,5 @@ router.get('/course', (req, res) => {
     res.send(warnings);
   }
 });
+
+module.exports = router;

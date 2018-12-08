@@ -32,14 +32,6 @@
     to {bottom: 30px; opacity: 1;}
 }
 
-.closebtn-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    padding: 0;
-    margin: 0;
-}
-
 #close-snackbar-btn{
     cursor: pointer;
 }

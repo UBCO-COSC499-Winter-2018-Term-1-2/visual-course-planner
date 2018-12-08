@@ -20,13 +20,11 @@ class WarningContainer extends Component {
       });
   }
 
-  componentDidMount = () => {
+  componentDidUpdate = () => {
     this.getWarnings()
-      .then(warnings =>
-        this.setState({
-          warnings: warnings
-        })
-      )
+      .then(warnings => {
+        this.props.setWarnings(warnings);
+      })
       .catch(err => {
         console.log(err);
       });
@@ -42,7 +40,8 @@ class WarningContainer extends Component {
 WarningContainer.propTypes = {
   click: PropTypes.func.isRequired,
   plan: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  setWarnings: PropTypes.func.isRequired
 };
 
 export default WarningContainer;

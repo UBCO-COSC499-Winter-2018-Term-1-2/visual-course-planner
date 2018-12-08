@@ -13,8 +13,8 @@ class LoginInterface extends Component {
       <div className="Menu">
         <h1 className="login-heading">Visual Course Planner</h1>
         <form>
-          <input type="text" name="email" placeholder="Email"/>
-          <input type="text" name="pass" placeholder="Password"/>   
+          <input className="login-input" type="text" name="email" placeholder="Email"/>
+          <input className="login-input" type="text" name="pass" placeholder="Password"/>   
           <button className="loginbtn">Login</button> 
           {/* <section className = "CreateAccountMenu"> */}
           <button className="openDiffMenubtn" ><Link to = "/create-account">Create Account</Link></button> 

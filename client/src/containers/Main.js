@@ -14,6 +14,9 @@ class Main extends Component {
     currentPlan: {
       id: 0,
       name: "BA Major Computer Science"
+    },
+    user: {
+      name: "Leonardo"
     }
 
   }
@@ -43,14 +46,14 @@ class Main extends Component {
 
     return (
       <div id="main">
-        <StudentInfo/>
+        <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea/>
         <PlannerArea 
-          planId={this.state.currentPlan.planId}
-          planName={this.state.currentPlan.name}
+          plan={this.state.currentPlan}
           toggleSidebar={this.toggleCourseListSidebarHandler}
           optimize={this.optimizeHandler}
+          user={this.state.user}
         />
        
         {/*'courseTitle','courseInfo' should come from the database */}

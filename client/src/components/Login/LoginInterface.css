@@ -17,7 +17,7 @@ body{
     margin: 10% auto;   
 }
 
-input[type=text] {
+.login-input {
     width: 100%;
     padding: 12px 20px;
     margin: 1em 0;
