@@ -15,6 +15,7 @@ class CreateAccountMenu extends Component {
         
         <form>
           <h1 className="login-heading">Visual Course Planner</h1>
+         
             
           <input type="text" name="fname" placeholder="* First Name"/>
           <input type="text" name="lname" placeholder="* Last Name"/>   
