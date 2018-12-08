@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 const OptimizeBtn = (props) => {
     
   return(
-    <button id="optimize-btn" onClick={props.click}> Optimize </button>
+    <div className="optimizeBtn-container">
+      <button id="optimize-btn" onClick={props.click}> Optimize </button>
+    </div>
   );
 };
 

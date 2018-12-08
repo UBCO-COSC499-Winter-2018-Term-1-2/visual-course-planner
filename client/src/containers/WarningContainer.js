@@ -9,6 +9,16 @@ class WarningContainer extends Component {
     warnings: []
   };
 
+  getWarnings = async () => {
+    axios
+      .get('api/warnings')
+      .then(warnings => {
+        return warnings;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
   componentDidMount = () => {
     this.getWarnings()
@@ -24,14 +34,15 @@ class WarningContainer extends Component {
 
   render() {
     return (
-      <WarningSummary warnings={this.state.warnings} click={this.props.click} />
+      <WarningSummary numberOfWarnings={this.state.warnings.length} click={this.props.click} />
     );
   }
 }
 
 WarningContainer.propTypes = {
   click: PropTypes.func.isRequired,
-  plan: PropTypes.object.isRequired
+  plan: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default WarningContainer;
