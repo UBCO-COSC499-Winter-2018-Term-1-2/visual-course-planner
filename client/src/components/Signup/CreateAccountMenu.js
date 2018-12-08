@@ -171,11 +171,13 @@ class CreateAccountMenu extends Component {
     );
     
     return(
+
       //RETURN LOGIN MENU HERE
       <div className="menu">
         <h1 className="login-heading">Visual Course Planner</h1>
         {form}     
       </div> 
+
 
     );
   }
