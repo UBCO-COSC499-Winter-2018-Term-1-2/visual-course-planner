@@ -17,19 +17,21 @@ class PlannerArea extends Component {
   render() {
     return (
       <div id="planner-area">
-        <div id="session-container">
-          <PlannerHeader 
-            planName = {this.props.planName}
-            toggleSidebar={this.props.toggleSidebar} 
-            optimize={this.props.optimize}
-            numberOfWarnings={this.props.numberOfWarnings}
-            showWarning={this.props.showWarning}
-          />
+        <PlannerHeader 
+          planName = {this.props.planName}
+          toggleSidebar={this.props.toggleSidebar} 
+          optimize={this.props.optimize}
+          numberOfWarnings={this.props.numberOfWarnings}
+          showWarning={this.props.showWarning}
+        />
           
-          <WarningSnackbar 
-            showSnackbar={this.props.showSnackbar}
-            closeSnackbar={this.props.closeSnackbar}
-            warningMessage={this.props.warningMessage}/>
+        <WarningSnackbar 
+          showSnackbar={this.props.showSnackbar}
+          closeSnackbar={this.props.closeSnackbar}
+          warningMessage={this.props.warningMessage}
+        />
+        <div id="session-container">
+          
         </div>
       </div>
     );
