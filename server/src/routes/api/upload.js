@@ -4,11 +4,11 @@ const path = require('path');
 const router = express.Router();
 
 /** 
- * @route   POST api/upload
+ * @route   POST api/upload/
  * @desc    upload file
  * @access  Private
  */
-router.post('/upload', (req, res) => {
+router.post('/', (req, res) => {
   let uploadFile = req.files.file;
   const fileName = req.files.file.name;
   const uploadDir = path.resolve(`${__dirname}/../../../client/public/files`);
