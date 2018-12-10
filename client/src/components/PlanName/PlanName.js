@@ -4,7 +4,9 @@ import './PlanName.css';
 
 const PlanName = (props) => {
   return (
-    <h3 id="plan-name-heading"> {props.name} </h3>
+    <div className="plan-name-container">
+      <h3 id="plan-name-heading"> {props.name} </h3>
+    </div>
   );
 };
 

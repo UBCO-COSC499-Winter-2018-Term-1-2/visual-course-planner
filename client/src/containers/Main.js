@@ -8,13 +8,18 @@ import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar
 import Backdrop from '../components/Backdrop/Backdrop';
 
 class Main extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      drawerOpen : false,
-      showSnackbar : false,
-      planName: "BA Major Computer Science"
-    };
+  state = {
+    drawerOpen : false,
+    showSnackbar : false,
+    currentPlan: {
+      courses: [],
+      id: 0,
+      name: "BA Major Computer Science"
+    },
+    user: {
+      name: "Leonardo"
+    }
+
   }
 
   toggleCourseListSidebarHandler = () => {
@@ -33,15 +38,6 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
-  warningSystemHandler = () => {
-    this.setState({ showSnackbar: true });
-    //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
-  }
-
-  closeWarningSnackbarHandler = () => {
-    this.setState({ showSnackbar: false });
-  }
-
   render() {
     let backdrop;
 
@@ -51,18 +47,15 @@ class Main extends Component {
 
     return (
       <div id="main">
-        <StudentInfo/>
+        <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea/>
         <PlannerArea 
-          planName={this.state.planName}
+          plan={this.state.currentPlan}
           toggleSidebar={this.toggleCourseListSidebarHandler}
           optimize={this.optimizeHandler}
-          numberOfWarnings={5}
-          showWarning={this.warningSystemHandler}
-          showSnackbar={this.state.showSnackbar}
-          closeSnackbar={this.closeWarningSnackbarHandler}
-          warningMessage="Pre-reqs missing for COSC 304"/>
+          user={this.state.user}
+        />
        
         {/*'courseTitle','courseInfo' should come from the database */}
         <CourseListSideBar 
