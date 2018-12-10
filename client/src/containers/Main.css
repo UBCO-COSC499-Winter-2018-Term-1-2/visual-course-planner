@@ -14,6 +14,7 @@
 }
 
 #planner-area {
+  position: relative;
   grid-area: planner;
   background-color: #262427;
 }
@@ -42,7 +43,7 @@
   height: 100%;
 }
 
-.sidebar-info-area * {
+.sidebar-info-area > * {
   min-width: 130px;
   display: block;
 }
@@ -80,6 +81,10 @@
   font-size: 1em;
 }
 
+.sidebar-button:focus {
+  outline: none;
+}
+
 .sidebar-button:hover {
   color: #afda77;
 }
@@ -88,7 +93,6 @@
   background-color: black;
   color: #e4e4e4;
   border: none;
-  border-radius: 3px;
   height: 71%;
   width: 100%;
   resize: none;
@@ -96,9 +100,9 @@
   font-size: 1em;
 }
 
-.notes-text-area:focus {
+.focus-element:focus {
   outline: none;
-  border: 2px solid #84bd00;
+  border: 1px solid #84bd00;
 }
 
 .student-buttons-container {

@@ -4,26 +4,47 @@ import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 
 class PlannerArea extends Component {
-  constructor(props){
-    super(props);
+
+  state = {
+    warnings: [],
+    showSnackbar: false
   }
 
+  showSnackbar = () => {
+    this.setState({ showSnackbar: true });
+    //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
+  }
+
+  closeSnackbar = () => {
+    this.setState({ showSnackbar: false });
+  }
+
+  setWarnings = (warnings) => {
+    this.setState({
+      warnings: warnings
+    });
+  }
 
   render() {
     return (
       <div id="planner-area">
-        <div id="session-container">
-          <PlannerHeader 
-            planName = {this.props.planName}
-            toggleSidebar={this.props.toggleSidebar} 
-            optimize={this.props.optimize}
-            numberOfWarnings={this.props.numberOfWarnings}
-            showWarning={this.props.showWarning}/>
+        <PlannerHeader 
+          plan={this.props.plan}
+          toggleSidebar={this.props.toggleSidebar} 
+          optimize={this.props.optimize}
+          showWarning={this.showSnackbar}
+          setWarnings={this.setWarnings}
+          warnings={this.state.warnings}
+          user={this.props.user}
+        />
           
-          <WarningSnackbar 
-            showSnackbar={this.props.showSnackbar}
-            closeSnackbar={this.props.closeSnackbar}
-            warningMessage={this.props.warningMessage}/>
+        <WarningSnackbar 
+          showSnackbar={this.state.showSnackbar}
+          closeSnackbar={this.closeSnackbar}
+          warnings={this.state.warnings}
+        />
+        <div id="session-container">
+          
         </div>
       </div>
     );
@@ -31,14 +52,10 @@ class PlannerArea extends Component {
 }
 
 PlannerArea.propTypes = {
-  planName: PropTypes.string.isRequired,
+  plan: PropTypes.object.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
   optimize: PropTypes.func.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired,
-  showWarning: PropTypes.func.isRequired,
-  showSnackbar: PropTypes.bool.isRequired,
-  closeSnackbar: PropTypes.func.isRequired,
-  warningMessage: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default PlannerArea;

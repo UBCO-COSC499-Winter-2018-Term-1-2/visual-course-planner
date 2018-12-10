@@ -5,29 +5,33 @@ import PlanName from '../PlanName/PlanName';
 import FavouriteBtn from '../FavouriteBtn/FavouriteBtn';
 import SideBarToggleButton from '../SideBarToggleButton/SideBarToggleButton';
 import OptimizeBtn from '../OptimizeBtn/OptimizeBtn'; 
-import WarningSummary from '../WarningSummary/WarningSummary';
+import WarningContainer from '../../containers/WarningContainer';
 
 const PlannerHeader = (props) => {
   return (
     <div className="planner-header-wrapper">
-      <div className="plan-name-container"> <PlanName name={props.planName}/> </div>
-      <div className="favouriteBtn-container"><FavouriteBtn favourite={true}/></div>
-      <div className="optimizeBtn-container"><OptimizeBtn click={props.optimize}/></div>
-      <div className="warning-summary-container">
-        <WarningSummary 
-          numberOfWarnings={props.numberOfWarnings}
-          click={props.showWarning}/></div>
-      <div className="addcourseBtn-container"><SideBarToggleButton click={props.toggleSidebar}/></div>
+      <PlanName name={props.plan.name}/>
+      <FavouriteBtn favourite={true}/>
+      <OptimizeBtn click={props.optimize}/>
+      <WarningContainer
+        warnings={props.warnings}
+        click={props.showWarning} plan={props.plan}
+        setWarnings={props.setWarnings}
+        user={props.user}
+      />
+      <SideBarToggleButton click={props.toggleSidebar}/>
     </div>
   );
 };
 
 PlannerHeader.propTypes = {
-  planName: PropTypes.string.isRequired,
+  plan: PropTypes.object.isRequired,
   optimize: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired,
-  showWarning: PropTypes.func.isRequired
+  showWarning: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  setWarnings: PropTypes.func.isRequired,
+  warnings: PropTypes.array.isRequired
 };
 
 export default PlannerHeader;

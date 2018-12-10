@@ -12,6 +12,9 @@ npm i -g npm@6
 # Enforce linting
 npm run lint
 
+# Run server tests
+npm run test
+
 cd client
 
 # Switch to current node version
