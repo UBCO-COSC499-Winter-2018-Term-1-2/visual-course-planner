@@ -4,6 +4,37 @@ const assert = require('chai').assert;
 describe("WarningService", () => {
   
   describe("#getWarningsForCourse()", () => {
+
+    it("should return a prereq wrong semester warning when one exists", () => {
+      let user = {
+        name: "Test",
+        standing: 1
+      };
+  
+      let courseNoPrereq = {
+        code: "COSC 121",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [ { code: "COSC 111" } ],
+        year: "2018",
+        semester: "1"
+      };
+  
+      let plan = {
+        courses: [courseNoPrereq]
+      };
+  
+      const expectedWarnings = [
+        {
+          message: "COSC 121 missing pre-requisite COSC 111.",
+          type: "prereq"
+        }
+      ];
+  
+      const actualWarnings = warningService.getWarningsForCourse(plan, user, courseNoPrereq);
+  
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
     
     it("should return a standing warning when one exists", () => {
       let user = {
@@ -67,6 +98,7 @@ describe("WarningService", () => {
 
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
+
     it("should return a coreq wrong semester warning when one exists", () => {
       let user = {
         name: "Test",
@@ -124,6 +156,77 @@ describe("WarningService", () => {
       const acutalWarnings = warningService.getWarnings(plan, user);
       assert.deepEqual(acutalWarnings, expectedWarnings);
       
+    });
+
+    it("should return a prereq wrong semester warning when one exists", () => {
+      let user = {
+        name: "Test",
+        standing: 1
+      };
+  
+      let preReqWrongSemester = {
+        code: "COSC 111",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        semester: "2"
+      };
+  
+      let courseBeforePrereq = {
+        code: "COSC 121",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [ { code: "COSC 111" } ],
+        year: "2018",
+        semester: "1"
+      };
+  
+      let plan = {
+        courses: [courseBeforePrereq, preReqWrongSemester]
+      };
+  
+      const expectedWarnings = [
+        {
+          message: "COSC 111 must be taken earlier than COSC 121.",
+          type: "prereq"
+        }
+      ];
+  
+      const actualWarnings = warningService.getWarnings(plan, user);
+  
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    it("should return a prereq wrong semester warning when one exists", () => {
+      let user = {
+        name: "Test",
+        standing: 1
+      };
+  
+      let courseNoPrereq = {
+        code: "COSC 121",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [ { code: "COSC 111" } ],
+        year: "2018",
+        semester: "1"
+      };
+  
+      let plan = {
+        courses: [courseNoPrereq]
+      };
+  
+      const expectedWarnings = [
+        {
+          message: "COSC 121 missing pre-requisite COSC 111.",
+          type: "prereq"
+        }
+      ];
+  
+      const actualWarnings = warningService.getWarnings(plan, user);
+  
+      assert.deepEqual(actualWarnings, expectedWarnings);
     });
   });
 });

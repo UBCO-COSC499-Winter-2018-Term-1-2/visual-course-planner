@@ -24,7 +24,7 @@ function getPrereqWarnings(plan, course) {
       const courseYearSemester = course.year.concat(course.semester);
       if (reqYearSemester >= courseYearSemester) {
         warnings.push({
-          message: `${course.code} must be taken earlier than ${req.code}.`,
+          message: `${req.code} must be taken earlier than ${course.code}.`,
           type: "prereq"
         });
       }
@@ -59,7 +59,6 @@ function getCoreqWarnings(plan, course) {
 }
 
 function getPlanCourse(plan, course) {
-  console.log(plan, course);
   for(let planCourse of plan.courses) {
     if (planCourse.code == course.code) {
       return planCourse;
