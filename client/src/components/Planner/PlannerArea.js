@@ -6,9 +6,7 @@ import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 class PlannerArea extends Component {
 
   state = {
-    warnings: [{
-      message: "test"
-    }],
+    warnings: [],
     showSnackbar: false
   }
 

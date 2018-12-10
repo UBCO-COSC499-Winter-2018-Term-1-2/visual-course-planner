@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import WarningSummary from '../components/WarningSummary/WarningSummary';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-// import Plan from '../models/Plan';
 
 class WarningContainer extends Component {
 
   getWarnings = async () => {
-    axios
-      .get('api/warnings', 
+    try {
+      const response = await axios.post('api/warnings', 
         {
           plan: this.props.plan,
           user: this.props.user
@@ -16,28 +15,25 @@ class WarningContainer extends Component {
         {
           headers: { "Content-Type": "application/json" }
         }
-      )
-      .then(warnings => {
-        return warnings;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      );
+      return response.data;
+      
+    } catch(err) {
+      console.log(err);
+    }  
   }
 
-  componentDidUpdate = () => {
-    this.getWarnings()
-      .then(warnings => {
-        this.props.setWarnings(warnings);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  componentDidMount = async () => {
+    try {
+      const warnings = await this.getWarnings();
+      this.props.setWarnings(warnings);
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   render() {
     return (
-      
       <WarningSummary click={this.props.click} numberOfWarnings={this.props.warnings.length}/>
     );
   }

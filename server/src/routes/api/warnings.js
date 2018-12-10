@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const warningService = require('../../services/WarningService');
 
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
   if (!req.body.hasOwnProperty('plan')) {
+    console.log(req.body);
     res.status(500).send("Did not receive plan.");
   } else if (!req.body.hasOwnProperty('user')) {
     res.status(500).send("Did not receive user.");
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/course', (req, res) => {
+router.post('/course', (req, res) => {
   if (!req.body.hasOwnProperty('plan')) {
     res.status(500).send("Did not receive plan.");
   } else if (!req.body.hasOwnProperty('user')) {

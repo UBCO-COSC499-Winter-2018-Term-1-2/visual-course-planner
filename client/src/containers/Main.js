@@ -12,6 +12,7 @@ class Main extends Component {
     drawerOpen : false,
     showSnackbar : false,
     currentPlan: {
+      courses: [],
       id: 0,
       name: "BA Major Computer Science"
     },
