@@ -178,7 +178,6 @@ class CreateAccountMenu extends Component {
         {form}     
       </div> 
 
-
     );
   }
 }

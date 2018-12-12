@@ -1,0 +1,21 @@
+.input-element{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 1em 0;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+}
+
+.invalid{
+    border: 1px solid red;
+}
+
+.green-title{
+    color: #84bd00;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin: 1em auto;
+}

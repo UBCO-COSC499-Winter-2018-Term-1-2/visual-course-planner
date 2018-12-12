@@ -27,6 +27,7 @@ body{
 .green-borderbtn{
     background: none;
     margin: auto 50em;
+
     border-color: #84bd00;
     padding:.5em 1em;
     cursor: pointer;
@@ -59,6 +60,7 @@ body{
     color: #afda77;
     border-color: #afda77;
 }
+
 
 .exit-green-borderbtn:hover {
     /* background-color: #84bd00;  */
