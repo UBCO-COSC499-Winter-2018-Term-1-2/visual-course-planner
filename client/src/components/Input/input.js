@@ -1,21 +1,27 @@
 import React from 'react';
-import styling from '../Login/LoginInterface.css';
+// import styling from '../Login/LoginInterface.css';
+import styling from '../Input/input.css';
 
 const input = ( props ) => {
   let inputElement = null;
   let cssInputElement = "input-element";
   let cssInvalid = "invalid";
+  // let cssLabel ="green-title";
+ 
 
   const inputStyling = [cssInputElement];
+  // const labelStyling = [cssLabel];
+  
 
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
     inputStyling.push(cssInvalid);
     //shouldBeValidated is used if state element has "validation" -- will be used on other pages
   }
-
+  
   switch ( props.elementType ) {
   case ( 'input' ):
     inputElement = <input
+      label={props.title}
       className={inputStyling.join(' ')}
       {...props.elementConfig}
       value={props.value}
@@ -28,6 +34,14 @@ const input = ( props ) => {
       value={props.value}
       onChange={props.changed} />;
     break;
+
+    // case ( 'label' ):
+    //   inputElement = <label 
+    //     className={inputStyling.join('')}>
+    //     {/* {props.title} */}
+    //   </label>;
+    //   break;
+
   case ( 'select' ):
     inputElement = (
       <select
