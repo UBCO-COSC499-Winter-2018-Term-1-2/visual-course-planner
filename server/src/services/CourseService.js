@@ -7,10 +7,14 @@ class CourseService {
   setCoursesOffered(courses) {
     parse(courses)
       .then(output => {
-        course.setCourseOffered(output);
+        output.array.forEach(element => {
+          course.setCourseOffered(element).catch(err => {
+            console.error(err);
+          });
+        });
       })
       .catch(err => {
-        
+        console.error(err);
         // do something with err
       });
   }
