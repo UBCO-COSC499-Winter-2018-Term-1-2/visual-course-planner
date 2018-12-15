@@ -125,7 +125,7 @@ class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button className="loginbtn" disabled={!this.state.formIsValid}>Login</button> 
+          <button className="deafultbtn" disabled={!this.state.formIsValid}>Login</button> 
           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
         </form>
       );
