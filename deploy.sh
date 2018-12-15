@@ -7,9 +7,10 @@ ssh deploy@visualcourseplanner.gq <<EOF
   sudo git fetch --all
   sudo git pull
   cd client
-  sudo npm install
+  sudo npm ci
+  sudo npm run build
   cd ..
-  sudo npm install
-  pm2 restart vcp
+  sudo npm ci
+  pm2 restart server
 EOF
   
