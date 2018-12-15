@@ -1,9 +1,9 @@
-DROP TABLE IF EXISTS course_semester;
+DROP TABLE IF EXISTS course_term;
 DROP TABLE IF EXISTS course_requirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
-DROP TABLE IF EXISTS semester;
+DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS course;
@@ -15,9 +15,11 @@ DROP TABLE IF EXISTS user;
 CREATE TABLE course (
   id                  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   code                VARCHAR(20),
-  name                VARCHAR(100),
-  description         VARCHAR(1000),
-  standingRequirement INT
+
+  FOREIGN KEY (code)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION
 );
 
 CREATE TABLE degree (
@@ -86,16 +88,10 @@ CREATE TABLE plan (
     ON DELETE NO ACTION
 );
 
-CREATE TABLE semester (
+CREATE TABLE term (
   id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   num INT,
-  pid INT,
   sid INT,
-
-  FOREIGN KEY (pid)
-    REFERENCES plan(id)
-    ON UPDATE CASCADE
-    ON DELETE NO ACTION,
 
   FOREIGN KEY (sid)
     REFERENCES session(id)
@@ -148,7 +144,22 @@ CREATE TABLE course_requirement (
     ON DELETE NO ACTION
 );
 
-CREATE TABLE course_semester (
+CREATE TABLE course_corequirement (
+  cid INT,
+  rid INT,
+
+  FOREIGN KEY (cid)
+    REFERENCES course(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  FOREIGN KEY (rid)
+    REFERENCES course(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION
+);
+
+CREATE TABLE course_term (
   cid INT,
   sid INT,
 
@@ -158,7 +169,15 @@ CREATE TABLE course_semester (
     ON DELETE NO ACTION,
 
   FOREIGN KEY (sid)
-    REFERENCES semester(id)
+    REFERENCES term(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
+
+CREATE TABLE course_info (
+  id                  VARCHAR(9) NOT NULL PRIMARY KEY,
+  credits             INT,
+  name                VARCHAR(100),
+  description         VARCHAR(1000),
+  standingRequirement INT
+)
