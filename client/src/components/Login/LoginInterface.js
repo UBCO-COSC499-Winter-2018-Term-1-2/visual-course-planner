@@ -4,6 +4,7 @@ import './LoginInterface.css';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 
 class LoginInterface extends Component {
@@ -26,7 +27,7 @@ class LoginInterface extends Component {
         password: {
           elementType: 'input',
           elementConfig: {
-            type: 'text',
+            type: 'password',
             placeholder: 'Password'
           },
           value: '',
@@ -60,20 +61,22 @@ class LoginInterface extends Component {
       for (let formElementIdentifier in this.state.loginMenu) {
         menuData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
       }
-      //this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      //   const order = {
-      //     ingredients: this.props.ingredients,
-      //     price: this.props.price,
-      //     formData: formData
-      // }
-      // axios.post( '/orders.json', order )
-      //     .then( response => {
-      //         this.setState( { loading: false } );
-      //         this.props.history.push( '/' );
-      //     } )
-      //     .catch( error => {
-      //         this.setState( { loading: false } );
-      //     } );
+      // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
+      const menu = {
+        // ingredients: this.props.ingredients,
+        // price: this.props.price,
+        menuData: menuData
+      };
+      axios.post( 'login', menu )
+        .then( response => {
+          this.setState( { loading: false } );
+          console.log(response);
+          //this.props.history.push( '/' );
+        } )
+        .catch( error => {
+          this.setState( { loading: false } );
+          console.log(error.response);
+        } );
     
     }
 

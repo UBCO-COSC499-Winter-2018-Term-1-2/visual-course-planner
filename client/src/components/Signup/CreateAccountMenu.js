@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 
 // const CreateAccountMenu = () => {
@@ -53,7 +54,7 @@ class CreateAccountMenu extends Component {
       password: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Password'
         },
         value: '',
@@ -66,7 +67,7 @@ class CreateAccountMenu extends Component {
       confirmPassword: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Confirm Password'
         },
         value: '',
@@ -100,20 +101,20 @@ class CreateAccountMenu extends Component {
     for (let formElementIdentifier in this.state.createAccountMenu) {
       menuData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
     }
-    //this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-    //   const order = {
-    //     ingredients: this.props.ingredients,
-    //     price: this.props.price,
-    //     formData: formData
-    // }
-    // axios.post( '/orders.json', order )
-    //     .then( response => {
-    //         this.setState( { loading: false } );
-    //         this.props.history.push( '/' );
-    //     } )
-    //     .catch( error => {
-    //         this.setState( { loading: false } );
-    //     } );
+    // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
+    const menu = {
+      menuData: menuData
+    };
+    axios.post( 'create-account', menu )
+      .then( response => {
+        this.setState( { loading: false } );
+        console.log(response);
+        //this.props.history.push( '/' );
+      } )
+      .catch( error => {
+        this.setState( { loading: false } );
+        console.log(error.response);
+      } );
   
   }
 
