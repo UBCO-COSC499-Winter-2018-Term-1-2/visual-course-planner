@@ -26,7 +26,7 @@ body{
 
 .green-borderbtn{
     background: none;
-    margin: auto 50em;
+    margin: 0em 1em;
 
     border-color: #84bd00;
     padding:.5em 1em;
@@ -42,7 +42,7 @@ body{
 /* STRICLY CREATED SO BOTH GREEN-BORDERBTNS MATCH IN WIDTH */
 .exit-green-borderbtn{
     background: none;
-    margin: auto 43em;
+    margin: 0em 1em;
     border-color: #84bd00;
     padding:.5em 1.8em;
     cursor: pointer;
@@ -73,13 +73,12 @@ body{
 .profile-menu{
     background-color: #262427;
     /* background-color: red; */
-    width: 30%;
+    width: 50em;
     padding: 2em 4em;
     margin: auto 2em;
     /* display: flex; */
     /* flex-direction: row; */
     /* float: left; */
-    /* text-align: center;  */
 }
 
 a:link{
@@ -87,5 +86,11 @@ a:link{
 }
 
 
+.btn-div{
+    margin: 4em 0em;
+    display: flex;
+    flex-direction: row;
+    /* text-align: center;  */
+}
 
 

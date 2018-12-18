@@ -6,10 +6,12 @@ const input = ( props ) => {
   let inputElement = null;
   let cssInputElement = "input-element";
   let cssInvalid = "invalid";
-  // let cssLabel ="green-title";
+  let greenTitle = "green-title";
+  let cssSelectItems ="select-items";
  
 
   const inputStyling = [cssInputElement];
+  const selectStyling = [cssSelectItems];
   // const labelStyling = [cssLabel];
   
 
@@ -36,16 +38,15 @@ const input = ( props ) => {
     break;
 
     // case ( 'label' ):
-    //   inputElement = <label 
-    //     className={inputStyling.join('')}>
-    //     {/* {props.title} */}
-    //   </label>;
+    //   inputElement = <a 
+    //     className={greenTitle}>
+    //   </a>;
     //   break;
 
   case ( 'select' ):
     inputElement = (
       <select
-        className={inputStyling.join(' ')}
+        className={selectStyling.join(' ')}
         value={props.value}
         onChange={props.changed}>
         {props.elementConfig.options.map(option => (
@@ -66,7 +67,8 @@ const input = ( props ) => {
 
   return (
     <div className={styling.Input}>
-      <label className={styling.Label}>{props.label}</label>
+      {/* prints labels in the forum + can change css here:: */}
+      <label className={greenTitle}>{props.label}</label> 
       {inputElement}
     </div>
   );

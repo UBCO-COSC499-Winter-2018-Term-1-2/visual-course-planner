@@ -66,8 +66,26 @@ class profile extends Component {
           valid: false,
           inputElementTouched: false 
         },
+        currentYear: {
+          elementType: 'select',
+          elementConfig: {
+            options:[
+              {value: '1', displayValue: '1'},
+              {value: '2', displayValue: '2'},
+              {value: '3', displayValue: '3'},
+              {value: '4', displayValue: '4'}
+            ]
+          },
+          validation: {
+            required: false
+          },
+          label: 'CURRENT YEAR STANDING',
+          value: '',
+          valid: true,
+          inputElementTouched: false 
+        },
       
-      },
+      }, //end of profile menu
       formIsValid: false,
       loading: false
     }
@@ -141,7 +159,10 @@ class profile extends Component {
                 inputElementTouched={formElement.config.inputElementTouched}
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
-            <button className="green-borderbtn">Submit</button> 
+            <div className="btn-div">
+              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+              <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+            </div>
           </form>
         );
         
@@ -152,8 +173,7 @@ class profile extends Component {
             <div className="profile-menu">
               <h1 className="yellow-title">Users Name </h1>
               {form} 
-              <h4 className="green-title">Current Year Standing</h4>
-              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+              
             </div> 
           </div>
     
