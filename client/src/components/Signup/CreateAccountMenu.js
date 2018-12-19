@@ -113,7 +113,9 @@ class CreateAccountMenu extends Component {
       } )
       .catch( error => {
         this.setState( { loading: false } );
-        console.log(error.response);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
       } );
   
   }

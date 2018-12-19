@@ -67,6 +67,26 @@ class LoginInterface extends Component {
         // price: this.props.price,
         menuData: menuData
       };
+
+      axios.get('http://jsonplaceholder.typicode.com/todos', {})
+        .then(function (response) {
+          console.log("THIS IS THE GET CALL");
+          console.log(response);
+          //resultElement.innerHTML = generateSuccessHTMLOutput(response);
+        })
+        .catch(error => {
+          //resultElement.innerHTML = generateErrorHTMLOutput(error);
+          this.setState( { loading: false } );
+          if(error.response){
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request){
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        });
+
       axios.post( 'login', menu )
         .then( response => {
           this.setState( { loading: false } );
@@ -75,7 +95,18 @@ class LoginInterface extends Component {
         } )
         .catch( error => {
           this.setState( { loading: false } );
-          console.log(error.response);
+          if(error.response){
+          // console.log(error.response);
+            console.log("data::");
+            console.log(error.response.data);
+            console.log("status::");
+            console.log(error.response.status);
+            console.log("headers::");
+            console.log(error.response.headers);
+          } else if (error.request){
+            console.log('ERROR', error.message);
+          }
+          console.log(error.config);
         } );
     
     }
