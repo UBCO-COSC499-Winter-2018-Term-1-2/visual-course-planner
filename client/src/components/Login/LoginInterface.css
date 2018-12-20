@@ -28,6 +28,10 @@ body{
     border: none;
 } */
 
+/* .input-element:focus{
+    border: none;
+} */
+
 .deafultbtn{
     width: 50%;
     padding: 1em 1em;
