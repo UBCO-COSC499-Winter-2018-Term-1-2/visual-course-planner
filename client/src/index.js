@@ -8,6 +8,7 @@ import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
 import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
+import UserProfile from "./components/UserProfile/profile";
 
 const routing = (
   <Router>
@@ -17,6 +18,7 @@ const routing = (
       <Route path="/login" component={Login} />
       <Route path="/create-account" component={CreateAccount} />
       <Route path="/admin" component={AdminPortal} />
+      <Route path="/profile" component={UserProfile} />
     </div>
   </Router>
 );
