@@ -8,10 +8,12 @@ const input = ( props ) => {
   let cssInvalid = "invalid";
   let greenTitle = "green-title";
   let cssSelectItems ="select-items";
+  let cssCourseList ="course-list";
  
 
   const inputStyling = [cssInputElement];
   const selectStyling = [cssSelectItems];
+  const listStyling = [cssCourseList];
   // const labelStyling = [cssLabel];
   
 
@@ -37,11 +39,20 @@ const input = ( props ) => {
       onChange={props.changed} />;
     break;
 
-    // case ( 'label' ):
-    //   inputElement = <a 
-    //     className={greenTitle}>
-    //   </a>;
-    //   break;
+  case ( 'list' ):
+    inputElement = ( 
+      <li 
+        className={listStyling.join(' ')}
+        value={props.value}
+        onChange={props.changed}>
+        {props.elementConfig.options.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.displayValue}
+          </option>
+        ))}
+      </li>
+    );
+    break;
 
   case ( 'select' ):
     inputElement = (
