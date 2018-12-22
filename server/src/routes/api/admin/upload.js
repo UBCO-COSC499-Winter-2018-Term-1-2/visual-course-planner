@@ -4,7 +4,7 @@ const path = require('path');
 const router = express.Router();
 
 /** 
- * @route   POST api/upload/
+ * @route   POST api/admin/upload/
  * @desc    upload file
  * @access  Private
  */

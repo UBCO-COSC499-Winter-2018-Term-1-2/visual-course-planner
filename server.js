@@ -1,6 +1,6 @@
 const express = require('express');
 
-const upload = require('./server/src/routes/api/upload');
+const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Use routes
-app.use('/api/upload', upload);
+app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
 
 // Server static assets if in production

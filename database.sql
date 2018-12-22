@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS course_term;
 DROP TABLE IF EXISTS course_requirement;
+DROP TABLE IF EXISTS course_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
@@ -10,6 +11,7 @@ DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS plan;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS course_info
 
 
 CREATE TABLE course (
