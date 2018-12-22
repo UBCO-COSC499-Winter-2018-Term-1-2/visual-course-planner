@@ -14,8 +14,8 @@ module.exports = {
   async ensureSession(year, season) {
     const session = await this.sessionExists(year, season);
     if (!session) {
-      const newSession = await Session.createSession(year, season);
-      return newSession.insertId;
+      const results = await Session.createSession(year, season);
+      return Session.getSessionById(results.insertId);
     } else {
       return session;
     }
