@@ -25,7 +25,7 @@ class AdminPortal extends Component {
     let data = new FormData();
     data.append('file', this.state.selectedFile, this.state.selectedFile.name);
     axios
-      .post('/api/upload', data, {
+      .post('/api/admin/upload', data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total * 100)
@@ -74,7 +74,7 @@ class AdminPortal extends Component {
                     
           <div className="admin-uploadfile-container admin-portal-element">
             <label id="choose-file-label" htmlFor="choose-file-btn">Choose File</label>
-            <input type="file" id="choose-file-btn" onChange={this.handleSelectedFile}/>
+            <input type="file" accept=".csv,text/csv" id="choose-file-btn" onChange={this.handleSelectedFile}/>
             <this.Progress/>
           </div>
                    

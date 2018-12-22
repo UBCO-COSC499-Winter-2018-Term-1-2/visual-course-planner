@@ -4,19 +4,27 @@ DROP TABLE IF EXISTS course_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
-DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS session;
+DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS plan;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS course_info
+DROP TABLE IF EXISTS course_info;
 
+
+CREATE TABLE course_info (
+  id                  VARCHAR(9) NOT NULL PRIMARY KEY,
+  credits             INT,
+  name                VARCHAR(100),
+  description         VARCHAR(1000),
+  standingRequirement INT
+);
 
 CREATE TABLE course (
-  id                  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  code                VARCHAR(20),
+  id    INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  code  VARCHAR(20),
 
   FOREIGN KEY (code)
     REFERENCES course_info(id)
@@ -175,11 +183,3 @@ CREATE TABLE course_term (
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
-
-CREATE TABLE course_info (
-  id                  VARCHAR(9) NOT NULL PRIMARY KEY,
-  credits             INT,
-  name                VARCHAR(100),
-  description         VARCHAR(1000),
-  standingRequirement INT
-)

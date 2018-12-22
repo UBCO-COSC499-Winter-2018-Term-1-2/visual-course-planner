@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const router = express.Router();
+const courseService = require('../../../services/CourseService');
 
 /** 
  * @route   POST api/admin/upload/
@@ -10,17 +11,24 @@ const router = express.Router();
  */
 router.post('/', (req, res) => {
   let uploadFile = req.files.file;
-  const fileName = req.files.file.name;
-  const uploadDir = path.resolve(`${__dirname}/../../../client/public/files`);
+  const fileName = uploadFile.name;
+  if (uploadFile.mimetype !== 'text/csv') {
+    return res.status(400).send("Only csv files may be uploaded.");
+  }
+  const uploadDir = path.resolve(`${__dirname}/../../../../../client/public/files`);
+  console.log(uploadDir);
+  const filePath = `${uploadDir}/${fileName}`;
 
   const upload = () => {
-    uploadFile.mv(`${uploadDir}/${fileName}`, function (err) {
+    uploadFile.mv(filePath, function (err) {
       if (err) {
         return res.status(500).send(err);
       }
       res.json({
-        file: `${uploadDir}/${fileName}`,
+        file: filePath,
       });
+      console.log("setting courses");
+      courseService.setCoursesOfferedFromCsv(filePath);
     });
   };
 

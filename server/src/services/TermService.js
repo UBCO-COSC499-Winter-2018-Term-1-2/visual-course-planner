@@ -1,7 +1,7 @@
 const Term = require('../models/Term');
 
 
-class TermService {
+module.exports = {
   async termExists(num, sessionId) {
     const termResults = await Term.getTerm(num, sessionId);
     if (termResults.length > 0) {
@@ -9,7 +9,7 @@ class TermService {
     }
     return false;
     
-  }
+  },
 
   async ensureTerm(num, sessionId) {
     const term = await this.termExists(num, sessionId);
@@ -21,6 +21,4 @@ class TermService {
     }
   }
   
-}
-
-export default TermService;
+};

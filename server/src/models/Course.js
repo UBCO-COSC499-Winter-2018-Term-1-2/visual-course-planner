@@ -1,11 +1,9 @@
 const promisify = require('util').promisify;
-const db = require('../dbconnection');
+const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
 
-class Course {
-  
-
+module.exports = {
   async insertCourse(code, termId) {
     const results = await db.query("INSERT INTO course (code) VALUES (?)", [code, termId]);
     const courseId = results.insertId;
@@ -13,7 +11,7 @@ class Course {
     await db.query("INSERT INTO course_term VALUES (?, ?)", [courseId, termId]);
 
     return courseId;
-  }
+  },
 
   async getCourse(id) {
     db
@@ -25,14 +23,10 @@ class Course {
         throw err;
       }); 
       
-  }
+  },
 
   async getCourseInfo(code) {
-    const courseInfoResults = await db.query("SELECT id FROM course_info WHERE code = ?", [code]);
+    const courseInfoResults = await db.query("SELECT * FROM course_info WHERE id = ?", [code]);
     return courseInfoResults;
   }
-  
-
-}
-
-export default Course;
+};
