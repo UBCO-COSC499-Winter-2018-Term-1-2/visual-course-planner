@@ -8,6 +8,11 @@ module.exports = {
     return termResults;
   },
 
+  async getTermById(id) {
+    const termResults = await db.query("SELECT * FROM term WHERE id = ?", [id]);
+    return termResults;
+  },
+
   async createTerm(term, sessionId) {
     const newTerm = await db.query("INSERT INTO term (num, sid) VALUES (?, ?)", [term, sessionId]);
     return newTerm;

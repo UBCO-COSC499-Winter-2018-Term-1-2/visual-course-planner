@@ -15,7 +15,7 @@ module.exports = {
     const term = await this.termExists(num, sessionId);
     if (!term) {
       const newTerm = await Term.createTerm(num, sessionId);
-      return newTerm.insertId;
+      return Term.getTermById(newTerm.insertId);
     } else {
       return term;
     }

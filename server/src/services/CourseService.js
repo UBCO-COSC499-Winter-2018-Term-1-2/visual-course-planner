@@ -16,9 +16,9 @@ module.exports = {
       const session = await sessionService.ensureSession(element.year, element.season);
   
       // ensure term exists
-      const termId = await termService.ensureTerm(element.term, session.id);
+      const term = await termService.ensureTerm(element.term, session.id);
   
-      await course.insertCourse(element.code, termId);
+      await course.insertCourse(element.code, term.id);
 
     }
   },
