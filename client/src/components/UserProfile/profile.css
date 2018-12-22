@@ -83,11 +83,13 @@ body{
 
 a:link{
     text-decoration: none;
+    text-transform: uppercase;
+
 }
 
 
 .btn-div{
-    margin: 4em 0em;
+    margin: 4em -1em;
     display: flex;
     flex-direction: row;
     /* text-align: center;  */

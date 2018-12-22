@@ -159,7 +159,8 @@ class profile extends Component {
                 inputElementTouched={formElement.config.inputElementTouched}
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
-            <div className="btn-div">
+            <Link to ="course-history">Change/add courses to current course history </Link>
+            <div className="btn-div"> 
               <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
             </div>
@@ -173,6 +174,7 @@ class profile extends Component {
             <div className="profile-menu">
               <h1 className="yellow-title">Users Name </h1>
               {form} 
+              
               
             </div> 
           </div>
