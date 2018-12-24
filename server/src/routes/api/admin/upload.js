@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const courseService = require('../../../services/CourseService');
+const COURSE_DOCUMENT = require('../../../../../client/src/components/AdminPortal/AdminPortal').ADMIN_COURSE_DOCUMENT;
+const DEGREE_DOCUMENT = require('../../../../../client/src/components/AdminPortal/AdminPortal').ADMIN_DEGREE_DOCUMENT;
 
 /** 
  * @route   POST api/admin/upload/
@@ -11,6 +13,7 @@ const courseService = require('../../../services/CourseService');
  */
 router.post('/', (req, res) => {
   let uploadFile = req.files.file;
+  let documentType = req.documentType;
   const fileName = uploadFile.name;
   if (uploadFile.mimetype !== 'text/csv') {
     return res.status(400).send("Only csv files may be uploaded.");
@@ -28,7 +31,11 @@ router.post('/', (req, res) => {
         file: filePath,
       });
       console.log("setting courses");
-      courseService.setCoursesOfferedFromCsv(filePath);
+      if (documentType === COURSE_DOCUMENT) {
+        courseService.setCoursesOfferedFromCsv(filePath); // TODO: display courses added to the user
+      } else if (documentType === DEGREE_DOCUMENT) {
+        courseService.setDegreeRequirementsFromCsv(filePath);
+      }
     });
   };
 

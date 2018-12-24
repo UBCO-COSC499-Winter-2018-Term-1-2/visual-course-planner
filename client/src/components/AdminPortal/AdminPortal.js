@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './AdminPortal.css';
 import axios from 'axios';
 
+export const ADMIN_COURSE_DOCUMENT = 'courses';
+export const ADMIN_DEGREE_DOCUMENT = 'degree';
+
 class AdminPortal extends Component {
 
   state = {
@@ -112,5 +115,6 @@ class AdminPortal extends Component {
 
   }
 }
+
 
 export default AdminPortal;
