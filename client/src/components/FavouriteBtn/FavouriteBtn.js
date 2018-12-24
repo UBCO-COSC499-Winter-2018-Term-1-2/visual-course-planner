@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import './FavouriteBtn.css';
 
-//const solidHeart = <FontAwesomeIcon icon={["fa","heart"]}  size="2x" />;
-// const hollowHeart = <FontAwesomeIcon icon={["fas","plus"]} className="hollow-heart" />;
-//^ THIS SHIT DOESNT FUCKING WORK
+library.add(faHeart);
 
 class FavouriteBtn extends Component {
   constructor(props){
@@ -23,15 +24,15 @@ class FavouriteBtn extends Component {
 
     render(){
       return(
-        <div className="fav-plan-btn-container"  onClick={this.toggleFavouriteHandler}> 
-          <FontAwesomeIcon 
-            icon="heart" 
-            size="2x" 
-            className= {this.state.isFavourite ? "fav-icon-red" : "fav-icon-grey" }/> 
+        <div className="fav-plan-btn-container"  onClick={this.toggleFavouriteHandler}>
+          <FontAwesomeIcon
+            icon="heart"
+            size="2x"
+            className= {this.state.isFavourite ? "fav-icon-red" : "fav-icon-grey" }/>
         </div>
       );
     }
-    
+
 }
 
 FavouriteBtn.propTypes = {

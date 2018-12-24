@@ -71,6 +71,7 @@
 }
 
 .sidebar-button {
+  display: block;
   text-align: left;
   background:none;
   border:none;
@@ -103,6 +104,10 @@
 .focus-element:focus {
   outline: none;
   border: 1px solid #84bd00;
+}
+
+.focus-element {
+  box-sizing: border-box;
 }
 
 .student-buttons-container {

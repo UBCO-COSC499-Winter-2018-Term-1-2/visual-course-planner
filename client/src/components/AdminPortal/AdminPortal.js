@@ -4,14 +4,12 @@ import axios from 'axios';
 
 class AdminPortal extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "Samantha Jones",
-      selectedFile: null, 
-      loaded: 0
-    };
-  }
+  state = {
+    name: "Samantha Jones",
+    selectedFile: null, 
+    loaded: 0,
+    documentType: "courses"
+  };
 
   Progress = () => {
     if (this.state.selectedFile) {
@@ -24,6 +22,7 @@ class AdminPortal extends Component {
   handleUpload = () => {
     let data = new FormData();
     data.append('file', this.state.selectedFile, this.state.selectedFile.name);
+    data.append("documentType", this.state.documentType);
     axios
       .post('/api/admin/upload', data, {
         onUploadProgress: ProgressEvent => {
@@ -44,6 +43,12 @@ class AdminPortal extends Component {
     });
   }
 
+  handleChangeType = (e) => {
+    this.setState({
+      documentType: e.target.value
+    });
+  }
+
   render() {
 
     return (
@@ -61,12 +66,12 @@ class AdminPortal extends Component {
           </div>
         </div>
                 
-        <h1 className="admin-heading admin-portal-element">ADMIN PORTAL</h1>
+        <h1 className="admin-heading admin-portal-element">Admin Portal</h1>
                 
         <div className="admin-body-wrapper">
 
           <div className="admin-body-description-container admin-portal-element">
-            <label className="choose-file-heading">CHOOSE YOUR FILE</label>
+            <label className="choose-file-heading">choose your file</label>
             <p className="admin-disclaimer-para">Please make sure file includes all the degree requirements for a specific 
               and the current offered courses for the current year. 
             </p>
@@ -77,9 +82,21 @@ class AdminPortal extends Component {
             <input type="file" accept=".csv,text/csv" id="choose-file-btn" onChange={this.handleSelectedFile}/>
             <this.Progress/>
           </div>
+
+          <div className="admin-portal-element">
+            <p>Select document type: </p>
+            <div className="admin-radio-input">
+              <input type="radio" id="courses" name="document-type" value="courses"  onChange={this.handleChangeType} checked={this.state.documentType === 'courses'}/>
+              <label id="document-type-courses-label" htmlFor="courses">Courses Offered</label>
+            </div>
+            <div className="admin-radio-input">
+              <input type="radio" id="degree" name="document-type" value="degree" onChange={this.handleChangeType} checked={this.state.documentType === 'degree'}/>
+              <label id="document-type-degree-label" htmlFor="degree">Degree Requirements</label>
+            </div>
+          </div>
                    
           <div className="admin-comment-input-container admin-portal-element">
-            <textarea className="comments-input" placeholder="Comments..."></textarea>
+            <textarea className="comments-input focus-element" placeholder="Comments..."></textarea>
           </div>
                    
           <div className="admin-submit-container admin-portal-element">

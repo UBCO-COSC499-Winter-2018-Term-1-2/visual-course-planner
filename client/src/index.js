@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
-import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
 import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
+import App from './containers/App';
 
 const routing = (
   <Router>

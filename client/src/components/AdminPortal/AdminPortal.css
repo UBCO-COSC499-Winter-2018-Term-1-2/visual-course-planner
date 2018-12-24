@@ -21,6 +21,7 @@
     color: #c5980f;
     text-align: left;
     font-weight: normal;
+    text-transform: uppercase;
 }
 
 .admin-portal-parent-wrapper {
@@ -32,6 +33,7 @@
 
 .choose-file-heading {
    color: #84bd00;
+   text-transform: uppercase;
 }
 
 #choose-file-btn {
@@ -78,6 +80,11 @@
 .file-select-text {
     display: inline;
     margin-left: 1em;
+}
+
+.admin-radio-input input {
+  margin-right: 1em;
+  margin-bottom: 1em;
 }
 
 @media only screen and (max-width: 600px) {

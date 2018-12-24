@@ -49,12 +49,10 @@ CREATE TABLE specialization (
 );
 
 CREATE TABLE credit_requirement (
-  id              INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  electives       INT,
-  upperYear       INT,
-  upperYearDegree INT,
-  upperYearMajor  INT,
-  spid            INT,
+  id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  credits INT,
+  courses VARCHAR(1000),
+  spid    INT,
 
   FOREIGN KEY (spid)
     REFERENCES specialization(id)
