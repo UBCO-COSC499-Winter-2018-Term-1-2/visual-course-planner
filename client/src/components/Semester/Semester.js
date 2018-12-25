@@ -1,26 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Semester.css';
+import Course from '../Course/Course';
 
-const Semester = (props) => {
+class Semester extends Component {
   //term or year divider style attribute
-  const Divider = {
-    "border-right": "1px solid #b7b7b8"  
+  termDivider = {
+    "borderRight": "1px solid #b7b7b8"
   };
 
   //using this to add a border to the divs to act as a year/term divider
-  const isEvenTerm = (props.term % 2 == 0);
+  isEvenTerm = (this.props.term % 2 == 0);
 
-  return (
-    <div className="semester-container" style={isEvenTerm ? Divider : null}>
-      <h3 className="term-heading"> TERM {props.term} </h3>
-      <div className="courses-container" style={isEvenTerm ? null: Divider}></div>
-    </div>
-  );
-};
+  coursesContained = this.props.coursesContained;
+  
+  renderCourses = () => {
+    return (this.coursesContained.map((course) => {
+      return (
+        <Course
+          key={course}
+          code={course}
+          type="required"
+          onDragStart={this.props.onCourseDragStart} />
+      );
+    }
+    ));
+  }
+  render() {
+    return (
+      <div className="semester-container" style={this.isEvenTerm ? this.termDivider : null}>
+        <h3 className="term-heading"> TERM {this.props.term} </h3>
+        <div
+          className="courses-container" style={this.isEvenTerm ? null : this.termDivider}
+          onDragOver={this.props.onCourseDragOver}
+          onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}>
+
+          <this.renderCourses />
+
+        </div>
+      </div>
+    );
+  }
+}
 
 Semester.propTypes = {
-  term: PropTypes.number.isRequired
+  term: PropTypes.string.isRequired,
+  coursesContained: PropTypes.array.isRequired,
+  onCourseDragOver: PropTypes.func.isRequired,
+  onCourseDragStart: PropTypes.func.isRequired,
+  onCourseDrop: PropTypes.func.isRequired
 };
 
 export default Semester;
