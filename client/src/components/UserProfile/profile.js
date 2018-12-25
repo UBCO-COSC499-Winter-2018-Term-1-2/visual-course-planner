@@ -18,7 +18,7 @@ class profile extends Component {
             type: 'text',
             placeholder: '* First Name'
           },
-          label: 'USERS NAME',
+          label: 'MY NAME',
           value: '',
           validation: {
             required: true
@@ -159,7 +159,9 @@ class profile extends Component {
                 inputElementTouched={formElement.config.inputElementTouched}
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
-            <Link to ="course-history">Change/add courses to current course history </Link>
+            <h4 className="green-title">Change/add courses to current course history</h4>
+            <Link to ="course-history"><button className="course-historybtn">My Course History → </button></Link>
+           
             <div className="btn-div"> 
               <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 

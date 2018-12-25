@@ -95,4 +95,30 @@ a:link{
     /* text-align: center;  */
 }
 
+.link-to-course-history{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #d16313;
+
+}
+
+.course-historybtn{
+    color: lightgreen;
+    background: none;
+    border-color: lightgreen;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+.course-historybtn:hover{
+    color: rgb(188, 240, 188);
+    background: none;
+    border-color: rgb(188, 240, 188)    ;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+
 
