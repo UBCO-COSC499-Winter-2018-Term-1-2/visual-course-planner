@@ -2,6 +2,7 @@ const express = require('express');
 
 const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
+const degrees = require('./server/src/routes/api/degrees');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 
@@ -14,6 +15,7 @@ app.use(fileUpload());
 // Use routes
 app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
+app.use('/api/degrees', degrees);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

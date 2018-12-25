@@ -18,3 +18,6 @@ router.get('/:id', (req, res) => {
       console.error("Couldnt get course: " + err);
     });
 });
+
+
+module.exports = router;

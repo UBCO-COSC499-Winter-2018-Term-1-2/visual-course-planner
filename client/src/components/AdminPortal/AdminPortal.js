@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import './AdminPortal.css';
 import axios from 'axios';
 
-export const ADMIN_COURSE_DOCUMENT = 'courses';
-export const ADMIN_DEGREE_DOCUMENT = 'degree';
-
+const ADMIN_COURSE_DOCUMENT = 'courses';
+const ADMIN_DEGREE_DOCUMENT = 'degree';
 class AdminPortal extends Component {
 
   state = {
     name: "Samantha Jones",
     selectedFile: null, 
     loaded: 0,
-    documentType: "courses"
+    documentType: "courses",
+    degrees: [],
+    isNewDegree: true,
+    degreeName: "",
+
   };
 
   Progress = () => {
@@ -22,10 +25,32 @@ class AdminPortal extends Component {
     }
   }
 
-  handleUpload = () => {
+  submitFile = () => {
     let data = new FormData();
+
+    if (this.state.documentType === ADMIN_DEGREE_DOCUMENT) {
+      // validate degree info
+      data.append("isNewDegree", this.state.isNewDegree);
+      if (this.state.isNewDegree) {
+        if (this.state.degreeName == "") {
+          alert("Please set a degree name");
+          return;
+        } else {
+          data.append("degreeName", this.state.degreeName);
+        }
+      } else {
+        data.append("degreeId", this.state.degreeId);
+      }
+    } else if (this.state.documentType === ADMIN_COURSE_DOCUMENT) {
+      // do nothing
+    } else {
+      return;
+    }
+
     data.append('file', this.state.selectedFile, this.state.selectedFile.name);
     data.append("documentType", this.state.documentType);
+  
+    
     axios
       .post('/api/admin/upload', data, {
         onUploadProgress: ProgressEvent => {
@@ -52,7 +77,57 @@ class AdminPortal extends Component {
     });
   }
 
+  async getDegrees() {
+    let degrees = [];
+    try {
+      const res = await axios.get('/api/degrees');
+      degrees = res.data;
+    } catch(err) {
+      console.log("Error getting degrees in admin portal: " + err);
+    }
+ 
+    return degrees;
+  }
+
+  async componentDidMount() {
+    this.getDegrees()
+      .then(degrees => {
+        console.log(degrees);
+        this.setState({
+          degrees: degrees
+        });
+      });
+  }
+
+  handleDegreeNameChange = (e) => {
+    this.setState({
+      degreeName: e.target.value
+    });
+  }
+
+  handleChangeNewDegree = (e) => {
+    this.setState({
+      isNewDegree: e.target.value
+    });
+  }
+
   render() {
+    const degreeSelect = 
+      <div className="admin-select-input admin-radio-input">
+        {this.state.degrees.length > 0 && 
+      <div className="admin-radio-input">
+        <input type="radio" name="isNewDegree" value="false" id="existing-degree-select" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "false"}/>
+        <label htmlFor="degree-select">Existing degree: </label>
+        <select id="degree-select">
+          {this.state.degrees.map(s => <option value={s.id} key={s.id}>{s.name}</option>)};
+        </select>
+        <p>Or</p>
+      </div>
+        }
+        <input type="radio" name="isNewDegree" value="true" id="new-degree-select" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "true"}/>
+        <label htmlFor="new-degree-input">New degree: </label>
+        <input type="text" onChange={this.handleDegreeNameChange} id="new-degree-input"/>
+      </div>;
 
     return (
       <div className="admin-portal-parent-wrapper">
@@ -89,21 +164,23 @@ class AdminPortal extends Component {
           <div className="admin-portal-element">
             <p>Select document type: </p>
             <div className="admin-radio-input">
-              <input type="radio" id="courses" name="document-type" value="courses"  onChange={this.handleChangeType} checked={this.state.documentType === 'courses'}/>
+              <input type="radio" id="courses" name="document-type" value="courses"  onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_COURSE_DOCUMENT}/>
               <label id="document-type-courses-label" htmlFor="courses">Courses Offered</label>
             </div>
             <div className="admin-radio-input">
-              <input type="radio" id="degree" name="document-type" value="degree" onChange={this.handleChangeType} checked={this.state.documentType === 'degree'}/>
-              <label id="document-type-degree-label" htmlFor="degree">Degree Requirements</label>
+              <input type="radio" id="degree" name="document-type" value="degree" onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_DEGREE_DOCUMENT}/>
+              <label id="document-type-degree-label" htmlFor="degree">Specialization Requirements</label>
             </div>
+            {this.state.documentType === ADMIN_DEGREE_DOCUMENT && degreeSelect}
           </div>
+            
                    
           <div className="admin-comment-input-container admin-portal-element">
             <textarea className="comments-input focus-element" placeholder="Comments..."></textarea>
           </div>
                    
           <div className="admin-submit-container admin-portal-element">
-            <button className="submit-file-btn" onClick={this.handleUpload}>Upload</button>
+            <button className="submit-file-btn" onClick={this.submitFile}>Upload</button>
             <p className="admin-submit-disclaimer-para">
               Uploaded information affects students&#39; ability to create their course plan.
               It is recommended to keep information up to date. 

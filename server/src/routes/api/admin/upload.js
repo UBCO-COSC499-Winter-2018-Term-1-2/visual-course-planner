@@ -3,8 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const router = express.Router();
 const courseService = require('../../../services/CourseService');
-const COURSE_DOCUMENT = require('../../../../../client/src/components/AdminPortal/AdminPortal').ADMIN_COURSE_DOCUMENT;
-const DEGREE_DOCUMENT = require('../../../../../client/src/components/AdminPortal/AdminPortal').ADMIN_DEGREE_DOCUMENT;
+const specializationRequirementsService = require('../../../services/SpecializationRequirementsService');
+const degree = require('../../../models/Degree');
+const COURSE_DOCUMENT = require('../../../services/CourseService').ADMIN_COURSE_DOCUMENT;
+const DEGREE_DOCUMENT = require('../../../services/CourseService').ADMIN_DEGREE_DOCUMENT;
 
 /** 
  * @route   POST api/admin/upload/
@@ -13,7 +15,8 @@ const DEGREE_DOCUMENT = require('../../../../../client/src/components/AdminPorta
  */
 router.post('/', (req, res) => {
   let uploadFile = req.files.file;
-  let documentType = req.documentType;
+  let documentType = req.body.documentType;
+  console.log("Doc type: " + documentType);
   const fileName = uploadFile.name;
   if (uploadFile.mimetype !== 'text/csv') {
     return res.status(400).send("Only csv files may be uploaded.");
@@ -23,6 +26,7 @@ router.post('/', (req, res) => {
   const filePath = `${uploadDir}/${fileName}`;
 
   const upload = () => {
+    console.log("Uploading file.");
     uploadFile.mv(filePath, function (err) {
       if (err) {
         return res.status(500).send(err);
@@ -30,11 +34,25 @@ router.post('/', (req, res) => {
       res.json({
         file: filePath,
       });
-      console.log("setting courses");
       if (documentType === COURSE_DOCUMENT) {
+        console.log("setting courses");
         courseService.setCoursesOfferedFromCsv(filePath); // TODO: display courses added to the user
       } else if (documentType === DEGREE_DOCUMENT) {
-        courseService.setDegreeRequirementsFromCsv(filePath);
+        console.log("setting spec reqs");
+        if (req.body.isNewDegree) {
+          console.log("Creating new degree");
+          degree.createDegree(req.body.degreeName)
+            .then(id => {
+              specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {id, ...req.body.specialization});
+            });
+        } else {
+          console.log("Using existing degree");
+          let did = req.body.degreeId;
+          specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {did, ...req.body.specialization});
+        }
+
+      } else {
+        console.log("Couldnt identify doc type.");
       }
     });
   };

@@ -4,8 +4,14 @@ const parse = promisify(require('csv-parse'));
 const course = require('../models/Course');
 const sessionService = require('../services/SessionService');
 const readFile = promisify(require('fs').readFile);
+const ADMIN_COURSE_DOCUMENT = 'courses';
+const ADMIN_DEGREE_DOCUMENT = 'degree';
 
 module.exports = {
+
+  ADMIN_COURSE_DOCUMENT,
+  ADMIN_DEGREE_DOCUMENT,
+
   async addOfferedCourses(courses) {
     for(const element of courses) {
       const courseExists = await this.courseInfoExists(element.code);
@@ -61,53 +67,5 @@ module.exports = {
       };
     });
     return courses;
-  },
-
-  async setDegreeRequirementsFromCsv(filePath) {
-    try {
-      const file = await readFile(filePath);
-      const degree = await this.validateDegreeRequirements(file);
-      console.log("Adding: " + degree.toString());
-      await this.addDegreeRequirements(degree);
-      
-    } catch(err) {
-      console.error(err);
-    }
-  },
-
-  async addDegreeRequirements(degree) {
-    for(const element of degree) {
-      // add new degree
-      // check if course exists
-      const courseExists = await this.courseInfoExists(element.code);
-      if(!courseExists){
-        throw new Error(`Couldnt find info for course ${element.code}`);
-      }
-
-      const session = await sessionService.ensureSession(element.year, element.season);
-  
-      // ensure term exists
-      const term = await termService.ensureTerm(element.term, session.id);
-  
-      await course.insertCourse(element.code, term.id);
-
-    }
-
-  },
-
-  async validateDegreeRequirements(file) {
-    let records = [];
-    try {
-      records = await parse(file, { columns: true, trim: true });
-    } catch(err) {
-      throw new Error(err);
-    }
-    const requirements = records.map(record => {
-      // map record to req object
-      return {
-        // requirements object
-      };
-    });
-    return requirements;
   }
 };
