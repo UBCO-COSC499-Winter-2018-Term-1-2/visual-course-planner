@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import './FavouriteBtn.css';
-
-library.add(faHeart);
 
 class FavouriteBtn extends Component {
   constructor(props){
