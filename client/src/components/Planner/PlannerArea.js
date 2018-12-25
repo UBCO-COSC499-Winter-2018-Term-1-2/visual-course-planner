@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
-<<<<<<< HEAD
-=======
 import Semester from '../Semester/Semester';
 import './PlannerArea.css';
->>>>>>> Add hard coded state for semester
 
 class PlannerArea extends Component {
 
@@ -68,9 +65,6 @@ class PlannerArea extends Component {
         coursesContained: ["COSC 111", "COSC 122"],
         year: "2018",
         session: "W"
-
-<<<<<<< HEAD
-=======
       }
     ]
   }
@@ -118,10 +112,8 @@ class PlannerArea extends Component {
     console.log(this.state); 
   }
 
->>>>>>> Add hard coded state for semester
   showSnackbar = () => {
     this.setState({ showSnackbar: true });
-    //setTimeout(() => { this.setState({ showSnackbar: false });}, 3000); 
   }
 
   closeSnackbar = () => {
@@ -137,23 +129,27 @@ class PlannerArea extends Component {
   render() {
     return (
       <div id="planner-area">
-        <PlannerHeader 
+        <PlannerHeader
           plan={this.props.plan}
-          toggleSidebar={this.props.toggleSidebar} 
+          toggleSidebar={this.props.toggleSidebar}
           optimize={this.props.optimize}
           showWarning={this.showSnackbar}
           setWarnings={this.setWarnings}
           warnings={this.state.warnings}
           user={this.props.user}
         />
-          
-        <WarningSnackbar 
+
+        <div id="semester-view">
+          <this.renderSemesters />
+        </div>
+
+        <WarningSnackbar
           showSnackbar={this.state.showSnackbar}
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
         />
         <div id="session-container">
-          
+
         </div>
       </div>
     );
