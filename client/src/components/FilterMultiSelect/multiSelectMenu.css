@@ -1,0 +1,68 @@
+.yoshi{
+    color:red;
+    width: 23em;
+    /* padding: 12px 20px; */
+    margin: 2em 0;
+    box-sizing: border-box;
+    font-size: 1em;
+    /* color: #9c9b9d; */
+  
+    /* background-color: #333035; */
+    background-color: purple;
+    border: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.FilteredMultiSelect__filter{
+    width: auto;
+    padding: 10px 20px;
+    /* margin: 1em auto; */
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    height: 3em;
+}
+
+.FilteredMultiSelect__filter:focus{
+    outline: none;
+}
+
+.FilteredMultiSelect__button{
+    width: 20em;
+    padding: 1em 1em;
+    margin: 2em auto;
+    box-sizing: border-box;
+    font-size: 1em;
+    text-align: center;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    display: block;
+    cursor: pointer;
+}
+
+.FilteredMultiSelect__button:hover{
+    background-color: #84bd00;
+    color: black;
+}
+
+.FilteredMultiSelect__select{
+    width: auto;
+    padding: 10px 20px;
+    /* margin: 1em auto; */
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #84bd00;
+    background-color: #333035;
+    border: none;
+}
+
+.added-courses{
+    color:orange;
+    display: flex;
+    justify-content: flex-end;
+    float:right;
+}
