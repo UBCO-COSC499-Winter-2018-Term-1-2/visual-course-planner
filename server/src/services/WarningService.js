@@ -88,6 +88,16 @@ function getWarningsForSpecializationRequirement(plan, requirement) {
   return warnings;
 }
 
+// function parseCourses(courses) {
+//   const courseCodes = ["COSC"];
+//   const areas = ["SCIENCE", "ARTS"];
+//   const words = courses.split(',');
+
+//   if (words[0] === "GENERAL") {
+//     // general electives
+//   } else if (words[0] === '')
+// }
+
 module.exports = {
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];

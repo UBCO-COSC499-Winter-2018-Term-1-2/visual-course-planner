@@ -32,7 +32,7 @@ module.exports = {
       // create specialization  
       const specializationId = await specializationModel.createSpecialization(specializationObj);
       // add requirements to the spec
-      console.log("Adding: " + specializationObj.toString());
+      console.log("Adding: " + JSON.stringify(specializationObj));
       await this.addSpecializationRequirements(requirements, specializationId);
     } catch (err) {
       throw new Error(err);

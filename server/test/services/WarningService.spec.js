@@ -231,7 +231,7 @@ describe("WarningService", () => {
   });
 
   describe("#getWarningsForSpecialization", () => {
-    it("should return requirement warnings for specialization when one exists", () => {
+    it("should return a requirement warning for specialization when one exists", () => {
       const specializationRequirements = [
         {
           courses: "COSC 111",
@@ -269,5 +269,98 @@ describe("WarningService", () => {
 
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
+
+    it("should return no warnings when all requirements are satisfied", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100",
+          credits: 3
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            semester: "1",
+            credits: 3
+          },
+          {
+            code: "MATH 100",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            semester: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [];
+      
+      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    it("should return warning from multi course requirement when one exists", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100, MATH 101",
+          credits: 6
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            semester: "1",
+            credits: 3
+          },
+          {
+            code: "MATH 100",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            semester: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [
+        {
+          message: `Missing 3 credits of ${specializationRequirements[1].courses}.`,
+          type: "missingCredits"
+        }
+      ];
+      
+      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    
   });
 });

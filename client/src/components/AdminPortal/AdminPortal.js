@@ -36,7 +36,7 @@ class AdminPortal extends Component {
 
     if (this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT) {
       // validate degree info
-      if (this.state.specializationName == "") {
+      if (this.state.specializationName === "") {
         alert("Please set a name for this specialization.");
         return;
       } else {
@@ -120,7 +120,15 @@ class AdminPortal extends Component {
     });
   }
 
+
+  handleDegreeSelect = (e) => {
+    this.setState({
+      degreeId: e.target.value
+    });
+  }
+
   handleSpecName = (e) => {
+    console.log(e.target.value);
     this.setState({
       specializationName: e.target.value
     });
@@ -140,7 +148,7 @@ class AdminPortal extends Component {
         <label htmlFor="existing-degree-radio" className="admin-radio-label">
             Existing degree
         </label>
-        <select id="degree-select" className="admin-select-input">
+        <select id="degree-select" className="admin-select-input" onChange={this.handleDegreeSelect}>
           {this.state.degrees.map(s => <option value={s.id} key={s.id}>{s.name}</option>)};
         </select>
         <p>Or</p>

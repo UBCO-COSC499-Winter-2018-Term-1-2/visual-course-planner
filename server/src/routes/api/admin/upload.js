@@ -41,9 +41,10 @@ router.post('/', (req, res) => {
         console.log("setting spec reqs");
         if (req.body.isNewDegree === "true") {
           console.log("Creating new degree for spec");
+          console.log(req.body);
           degree.createDegree(req.body.degreeName)
-            .then(id => {
-              specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {id, ...req.body.specialization});
+            .then(degreeId => {
+              specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {degreeId: degreeId, name: req.body.specializationName});
             })
             .catch(err => {
               console.error("Couldnt set spec requirements: " + err);
@@ -51,7 +52,8 @@ router.post('/', (req, res) => {
         } else {
           console.log("Using existing degree for spec");
           let did = req.body.degreeId;
-          specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {did, ...req.body.specialization})
+          console.log(req.body);
+          specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {degreeId: did, name: req.body.specializationName})
             .catch(err => {
               console.error("Couldnt set spec requirements: " + err);
             });
