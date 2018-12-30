@@ -229,4 +229,45 @@ describe("WarningService", () => {
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
   });
+
+  describe("#getWarningsForSpecialization", () => {
+    it("should return requirement warnings for specialization when one exists", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100",
+          credits: 3
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            semester: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [
+        {
+          message: `Missing ${specializationRequirements[1].credits} credits of ${specializationRequirements[1].courses}.`,
+          type: "missingCredits"
+        }
+      ];
+      
+      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+  });
 });
