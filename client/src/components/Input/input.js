@@ -31,12 +31,23 @@ const input = ( props ) => {
       value={props.value}
       onChange={props.changed} />;
     break;
+
   case ( 'textarea' ):
     inputElement = <textarea
       className={inputStyling.join(' ')}
       {...props.elementConfig}
       value={props.value}
       onChange={props.changed} />;
+    break;
+
+  case ( 'checkbox' ):
+    inputElement = <input
+      type="checkbox"
+      className={inputStyling.join(' ')}
+      {...props.elementConfig}
+      value={props.value}
+      onChange={props.changed} />;
+      
     break;
 
   case ( 'list' ):

@@ -3,7 +3,7 @@ import '../PreviousCourses/PreviousCourses.css';
 // import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 // import Input from '../Input/input';
-import FilteredMultiSelect from '../PreviousCourses/multiSelectMenu.js';
+import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
 
 // NOTES:
 // Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
@@ -166,39 +166,42 @@ class previousCourses extends Component {
               you have previously taken and have received credits for.
               </p>
               
-              <ol className="course-list">
-                {/* {form}  */}
-              </ol>
-             
-              <div className="btn-div">
-                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
-                <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
-              </div>
+              {/* <ol className="course-list"> */}
+              {/* {form}  */}
+              {/* </ol> */}
 
-
-              <p>Multi Select Mene is here</p>
+               
               <FilteredMultiSelect
                 onChange={this.handleSelectionChange}
                 options={CULTURE_SHIPS}
                 selectedOptions={selectedShips}
                 textProp="name"
                 valueProp="id"
+                buttonText="Add Course"
+                placeholder="Course Name.."
+                className="yoshi"
               />
-              {selectedShips.length === 0 && <p>(nothing selected yet)</p>}
-              {selectedShips.length > 0 && <ul>
-                {selectedShips.map((ship, i) => <li key={ship.id}>
-                  {`${ship.name} `}
-                  <button type="button" onClick={() => this.handleDeselect(i)}>
-                   &times;
-                  </button>
-                </li>)}
-              </ul>}
-              
-              <p>mario up up </p>
+              <div className="added-courses">
+                {selectedShips.length === 0 && <p>(nothing selected yet)</p>}
+                {selectedShips.length > 0 && 
+                <ul>
+                  {selectedShips.map((ship, i) => 
+                    <li className="taken-courses-added" key={ship.id}>
+                      {`${ship.name} `}
+                      <button type="button" onClick={() => this.handleDeselect(i)}>
+                      &times;
+                      </button>
+                    </li>)}
+                </ul>}
+              </div>
+                    
+              <div className="btn-div">
+                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+                <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+              </div>
+
             </div> 
             <div className="right-menu">
-            
-
             </div>
           </div>
     
