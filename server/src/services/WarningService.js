@@ -67,6 +67,27 @@ function getPlanCourse(plan, course) {
   return null;
 }
 
+function getWarningsForSpecializationRequirement(plan, requirement) {
+  // check if plan has number of credits from courses
+
+  let creditsNeeded = parseInt(requirement.credits);
+  let warnings = [];
+  requirement.courses.split(',').map(course => course.trim()).forEach(reqCode => {
+    const planCourse = getPlanCourse(plan, {code: reqCode});
+    if (planCourse !== null) {
+      creditsNeeded -= parseInt(planCourse.credits);
+    }
+  });
+  // TODO: notify which course is missing
+  if (creditsNeeded > 0) {
+    warnings.push({
+      message: `Missing ${creditsNeeded} credits of ${requirement.courses}.`,
+      type: "missingCredits"
+    });
+  }
+  return warnings;
+}
+
 module.exports = {
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];
@@ -88,6 +109,18 @@ module.exports = {
         getPrereqWarnings(plan, planCourse)
       );
     });
+    return warnings;
+  },
+
+  getPlanWarningsForSpecializationRequirements: (plan, requirements) => {
+    let warnings = [];
+
+    requirements.forEach(req => {
+      warnings = warnings.concat(
+        getWarningsForSpecializationRequirement(plan, req)
+      );
+    });
+
     return warnings;
   }
 

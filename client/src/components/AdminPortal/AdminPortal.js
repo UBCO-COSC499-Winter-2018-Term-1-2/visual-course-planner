@@ -102,7 +102,6 @@ class AdminPortal extends Component {
   async componentDidMount() {
     this.getDegrees()
       .then(degrees => {
-        console.log(degrees);
         this.setState({
           degrees: degrees
         });
