@@ -5,12 +5,12 @@ const course = require('../models/Course');
 const sessionService = require('../services/SessionService');
 const readFile = promisify(require('fs').readFile);
 const ADMIN_COURSE_DOCUMENT = 'courses';
-const ADMIN_DEGREE_DOCUMENT = 'degree';
+const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
 
 module.exports = {
 
   ADMIN_COURSE_DOCUMENT,
-  ADMIN_DEGREE_DOCUMENT,
+  ADMIN_SPECIALIZATION_DOCUMENT,
 
   async addOfferedCourses(courses) {
     for(const element of courses) {

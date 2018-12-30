@@ -24,7 +24,7 @@ CREATE TABLE course_info (
 
 CREATE TABLE course (
   id    INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  code  VARCHAR(20),
+  code  VARCHAR(9),
 
   FOREIGN KEY (code)
     REFERENCES course_info(id)
@@ -122,9 +122,9 @@ CREATE TABLE plan_course (
     ON DELETE NO ACTION
 );
 
-CREATE TABLE specialization_course (
+CREATE TABLE specialization_course_info (
   spid INT,
-  cid INT,
+  cid VARCHAR(9),
 
   FOREIGN KEY (spid)
     REFERENCES specialization(id)
@@ -132,37 +132,37 @@ CREATE TABLE specialization_course (
     ON DELETE NO ACTION,
 
   FOREIGN KEY (cid)
-    REFERENCES course(id)
+    REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
 
-CREATE TABLE course_requirement (
-  cid INT,
-  rid INT,
+CREATE TABLE course_info_requirement (
+  cid VARCHAR(9),
+  rid VARCHAR(9),
 
   FOREIGN KEY (cid)
-    REFERENCES course(id)
+    REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
   FOREIGN KEY (rid)
-    REFERENCES course(id)
+    REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
 
-CREATE TABLE course_corequirement (
-  cid INT,
-  rid INT,
+CREATE TABLE course_info_corequirement (
+  cid VARCHAR(9),
+  rid VARCHAR(9),
 
   FOREIGN KEY (cid)
-    REFERENCES course(id)
+    REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
   FOREIGN KEY (rid)
-    REFERENCES course(id)
+    REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );

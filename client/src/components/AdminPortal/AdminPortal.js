@@ -3,7 +3,8 @@ import './AdminPortal.css';
 import axios from 'axios';
 
 const ADMIN_COURSE_DOCUMENT = 'courses';
-const ADMIN_DEGREE_DOCUMENT = 'degree';
+const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
+
 class AdminPortal extends Component {
 
   state = {
@@ -12,9 +13,9 @@ class AdminPortal extends Component {
     loaded: 0,
     documentType: "courses",
     degrees: [],
-    isNewDegree: true,
+    isNewDegree: "false",
     degreeName: "",
-
+    specializationName: ""
   };
 
   Progress = () => {
@@ -28,10 +29,23 @@ class AdminPortal extends Component {
   submitFile = () => {
     let data = new FormData();
 
-    if (this.state.documentType === ADMIN_DEGREE_DOCUMENT) {
+    if (this.state.selectedFile == null) {
+      alert("Please select a file.");
+      return;
+    }
+
+    if (this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT) {
       // validate degree info
+      if (this.state.specializationName == "") {
+        alert("Please set a name for this specialization.");
+        return;
+      } else {
+        data.append("specializationName", this.state.specializationName);
+      }
+      
       data.append("isNewDegree", this.state.isNewDegree);
-      if (this.state.isNewDegree) {
+      
+      if (this.state.isNewDegree === "true") {
         if (this.state.degreeName == "") {
           alert("Please set a degree name");
           return;
@@ -41,10 +55,6 @@ class AdminPortal extends Component {
       } else {
         data.append("degreeId", this.state.degreeId);
       }
-    } else if (this.state.documentType === ADMIN_COURSE_DOCUMENT) {
-      // do nothing
-    } else {
-      return;
     }
 
     data.append('file', this.state.selectedFile, this.state.selectedFile.name);
@@ -111,23 +121,39 @@ class AdminPortal extends Component {
     });
   }
 
+  handleSpecName = (e) => {
+    this.setState({
+      specializationName: e.target.value
+    });
+  }
+
   render() {
-    const degreeSelect = 
-      <div className="admin-select-input admin-radio-input">
-        {this.state.degrees.length > 0 && 
+    const specializationForm = 
+    <div className="specialization-form-container">
+      <div className="admin-specialization-input">
+        <label htmlFor="specialization-name-input">Specialization Name:</label>
+        <input type="text" placeholder="e.g. Major in Computer Science" id="specialization-name-input" className="admin-text-input focus-element" onChange={this.handleSpecName}/>
+      </div>
+      <p>For</p>
+      { this.state.degrees.length > 0 && 
       <div className="admin-radio-input">
-        <input type="radio" name="isNewDegree" value="false" id="existing-degree-select" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "false"}/>
-        <label htmlFor="degree-select">Existing degree: </label>
-        <select id="degree-select">
+        <input type="radio" name="isNewDegree" value="false" id="existing-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "false"}/>
+        <label htmlFor="existing-degree-radio" className="admin-radio-label">
+            Existing degree
+        </label>
+        <select id="degree-select" className="admin-select-input">
           {this.state.degrees.map(s => <option value={s.id} key={s.id}>{s.name}</option>)};
         </select>
         <p>Or</p>
+      </div> }
+      <div className="admin-radio-input">
+        <input type="radio" name="isNewDegree" value="true" id="new-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "true"}/>
+        <label htmlFor="new-degree-radio" className="admin-radio-label">
+            New degree
+        </label>
+        <input type="text" placeholder="e.g. Bachelor of Science" onChange={this.handleDegreeNameChange} id="new-degree-input" className="admin-text-input focus-element"/>
       </div>
-        }
-        <input type="radio" name="isNewDegree" value="true" id="new-degree-select" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "true"}/>
-        <label htmlFor="new-degree-input">New degree: </label>
-        <input type="text" onChange={this.handleDegreeNameChange} id="new-degree-input"/>
-      </div>;
+    </div>;
 
     return (
       <div className="admin-portal-parent-wrapper">
@@ -164,14 +190,14 @@ class AdminPortal extends Component {
           <div className="admin-portal-element">
             <p>Select document type: </p>
             <div className="admin-radio-input">
-              <input type="radio" id="courses" name="document-type" value="courses"  onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_COURSE_DOCUMENT}/>
-              <label id="document-type-courses-label" htmlFor="courses">Courses Offered</label>
+              <input type="radio" id="courses" name="document-type" value={ADMIN_COURSE_DOCUMENT}  onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_COURSE_DOCUMENT}/>
+              <label id="document-type-courses-label" className="admin-radio-label" htmlFor="courses">Courses Offered</label>
             </div>
             <div className="admin-radio-input">
-              <input type="radio" id="degree" name="document-type" value="degree" onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_DEGREE_DOCUMENT}/>
-              <label id="document-type-degree-label" htmlFor="degree">Specialization Requirements</label>
+              <input type="radio" id="degree" name="document-type" value={ADMIN_SPECIALIZATION_DOCUMENT} onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT}/>
+              <label id="document-type-degree-label" htmlFor="degree" className="admin-radio-label">Specialization Requirements</label>
+              {this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT && specializationForm}
             </div>
-            {this.state.documentType === ADMIN_DEGREE_DOCUMENT && degreeSelect}
           </div>
             
                    

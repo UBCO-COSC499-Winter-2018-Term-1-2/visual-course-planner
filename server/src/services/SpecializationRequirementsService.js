@@ -1,43 +1,50 @@
-const termService = require('./TermService');
 const promisify = require('util').promisify;
 const parse = promisify(require('csv-parse'));
-const course = require('../models/Course');
-const sessionService = require('../services/SessionService');
 const specializationModel = require('../models/Specialization');
 const readFile = promisify(require('fs').readFile);
 
 module.exports = {
-  async setSpecializationRequirementsFromCsv(filePath, specialization) {
-    console.log("Creating spec");
-    // create specialization
-    await specializationModel.createSpecialization(specialization);
+  async setSpecializationRequirementsFromCsv(filePath, specializationObj) {
+    let file = [];
     try {
-      const file = await readFile(filePath);
-      const specialization = await this.validateSpecializationRequirements(file);
-      console.log("Adding: " + specialization.toString());
-      await this.addSpecializationRequirements(specialization);
-      
+      file = await readFile(filePath);
     } catch(err) {
-      console.error(err);
+      throw new Error("Could not read file: " + err.toString());
+    }
+    
+    const specializationReqs = await this.validateSpecializationRequirements(file);
+
+    let requirements = [];
+    if (specializationReqs === false) {
+      throw new Error("Invalid CSV");
+    } else {
+      requirements = specializationReqs.map(record => {
+        // map record to req object
+        return {
+          credits: record["CREDITS"],
+          courses: record["COURSES"]
+        };
+      });
+    }
+    
+    try {
+      console.log("Creating spec");
+      // create specialization  
+      const specializationId = await specializationModel.createSpecialization(specializationObj);
+      // add requirements to the spec
+      console.log("Adding: " + specializationObj.toString());
+      await this.addSpecializationRequirements(requirements, specializationId);
+    } catch (err) {
+      throw new Error(err);
     }
   },
 
-  async addSpecializationRequirements(specialization) {
-    for(const element of specialization) {
-      // add new specialization
-      // check if course exists
-      const courseExists = await this.degree(element.code);
-      if(!courseExists){
-        throw new Error(`Couldnt find info for course ${element.code}`);
-      }
-
-      const session = await sessionService.ensureSession(element.year, element.season);
-  
-      // ensure term exists
-      const term = await termService.ensureTerm(element.term, session.id);
-  
-      await course.insertCourse(element.code, term.id);
-    }
+  async addSpecializationRequirements(requirements, specId) {
+    // possibly need to await this
+    requirements.forEach(req => {
+      specializationModel.createSpecializationRequirement(req, specId);
+    });
+    
   },
 
   async validateSpecializationRequirements(file) {
@@ -45,14 +52,10 @@ module.exports = {
     try {
       records = await parse(file, { columns: true, trim: true });
     } catch(err) {
-      throw new Error(err);
+      console.error("Failed to parse csv: " + err);
+      return false;
     }
-    const requirements = records.map(record => {
-      // map record to req object
-      return {
-        // requirements object
-      };
-    });
-    return requirements;
+    
+    return records;
   }
 };
