@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import '../PreviousCourses/PreviousCourses.css';
-// import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
-// import Input from '../Input/input';
 import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
 
 // NOTES:
@@ -20,94 +18,6 @@ const CULTURE_SHIPS = [
 
 class previousCourses extends Component {
 
-  // state = {
-  //   courseList: {
-  //     listOfAllCourses: {
-  //       elementType: 'list',
-  //       elementConfig: {
-  //         // type: 'ul',
-
-  //         options:[
-  //         //HARD CODED FOR NOW... NEEDS LOGIC!
-  //           {value: '1', displayValue: 'Course 1'},
-  //           {value: '2', displayValue: 'Course 4'},
-  //           {value: '3', displayValue: 'Course 3'},
-  //           {value: '1', displayValue: 'Course 1'},
-  //           {value: '2', displayValue: 'Course 4'},
-  //           {value: '3', displayValue: 'Course 3'},
-  //           {value: '1', displayValue: 'Course 1'},
-  //           {value: '2', displayValue: 'Course 4'},
-  //           {value: '3', displayValue: 'Course 3'},
-  //           {value: '1', displayValue: 'Course 1'},
-  //           {value: '2', displayValue: 'Course 4'},
-  //           {value: '3', displayValue: 'Course 3'},
-  //           {value: '1', displayValue: 'Course 1'},
-  //           {value: '2', displayValue: 'Course 4'},
-  //           {value: '3', displayValue: 'Course 3'},
-  //         ]
-            
-  //       },
-  //       validation: {
-  //         required: false
-  //       },
-  //       //   label: 'Course History',
-  //       value: '',
-  //       valid: true,
-  //       inputElementTouched: false 
-  //     },
-      
-  //   }, //end of profile menu
-  //   formIsValid: false,
-  //   loading: false
-  // }
-
-    
-  // checkValidity(value, rules) {
-  //   let isValid = true;
-    
-  //   if(rules.required){
-  //     isValid = value.trim() !== '' && isValid;
-  //   }
-    
-  //   return isValid;
-  // }
-  //   handler = ( event ) => {
-  //     event.preventDefault();
-  //     this.setState( { loading: true } );
-        
-  //     //this is log send user input to send to database.
-  //     const menuData = {};
-  //     for (let formElementIdentifier in this.state.courseList) {
-  //       menuData[formElementIdentifier] = this.state.profcourseListileMenu[formElementIdentifier].value;
-  //     }
-  //   }
-    
-  //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
-  //IE. EMAIL AND PASSWORD.
-  // inputChangeHandler = (event, inputIdentifier) => {
-  //   console.log(event.target.value); //prints values to console
-  //   const updatedCourseList = {
-  //     ...this.state.courseList
-  //   };
-  //   const updatedMenuElement = { 
-  //     ...updatedCourseList[inputIdentifier]
-  //   };
-  //   updatedMenuElement.value = event.target.value;
-  //   //CHECKS IF EACH STATE HAS A VALUE
-  //   updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation);
-  //   updatedMenuElement.inputElementTouched = true;
-  //   updatedCourseList[inputIdentifier] = updatedMenuElement;
-        
-  //   let formIsValid = true;
-  //   for (let inputIdentifier in updatedCourseList){
-  //     formIsValid = updatedCourseList[inputIdentifier].valid && formIsValid;
-  //   }
-  //   this.setState({courseList: updatedCourseList, formIsValid: formIsValid});
-       
-  // }
-
-  //////TESTING HERE-----------------
-
       state = {selectedShips: []}
 
       handleDeselect(index) {
@@ -121,36 +31,6 @@ class previousCourses extends Component {
       }
     
       render(){
-
-        //TO DO: MAKE LIST ITEMS SELECTABLE -------------------
-
-        // const formElementsArray = [];
-        // for (let key in this.state.courseList) {
-        //   formElementsArray.push({
-        //     id: key,
-        //     config: this.state.courseList[key]
-        //   });
-        // }
-        
-        //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-        //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-        // let form = (
-        //   <form onSubmit={this.handler}>
-        //     {formElementsArray.map(formElement => (
-        //       <Input 
-        //         label={formElement.config.label}
-        //         key={formElement.id}
-        //         elementType={formElement.config.elementType}
-        //         elementConfig={formElement.config.elementConfig}
-        //         value={formElement.config.value}
-        //         invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-        //         shouldBeValidated={formElement.config.validation}
-        //         inputElementTouched={formElement.config.inputElementTouched}
-        //         changed={(event) => this.inputChangeHandler(event, formElement.id)} />
-        //     ))}
-
-        //   </form>
-        // );
 
         var {selectedShips} = this.state;
         
@@ -179,16 +59,16 @@ class previousCourses extends Component {
                 valueProp="id"
                 buttonText="Add Course"
                 placeholder="Course Name.."
-                className="yoshi"
+                className="ubco-offered-courses-list"
               />
               <div className="added-courses">
-                {selectedShips.length === 0 && <p>(nothing selected yet)</p>}
+                {selectedShips.length === 0 && <p><i>(Nothing selected yet)</i></p>}
                 {selectedShips.length > 0 && 
-                <ul>
+                <ul className="yoshii">
                   {selectedShips.map((ship, i) => 
-                    <li className="taken-courses-added" key={ship.id}>
+                    <li key={ship.id}>
                       {`${ship.name} `}
-                      <button type="button" onClick={() => this.handleDeselect(i)}>
+                      <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
                       &times;
                       </button>
                     </li>)}

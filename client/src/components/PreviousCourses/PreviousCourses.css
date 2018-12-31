@@ -79,9 +79,11 @@ a:link{
 
 
 .btn-div{
+    clear: both;
     margin: 4em 0em;
     display: flex;
     flex-direction: row;
+    
     /* text-align: center;  */
 }
 
