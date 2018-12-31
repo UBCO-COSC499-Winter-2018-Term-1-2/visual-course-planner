@@ -1,5 +1,4 @@
 import React from 'react';
-// import styling from '../Login/LoginInterface.css';
 import styling from '../Input/input.css';
 
 const input = ( props ) => {
