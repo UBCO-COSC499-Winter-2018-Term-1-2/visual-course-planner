@@ -103,7 +103,7 @@ class PlannerArea extends Component {
           defaultTerms: [
             ...this.state.defaultTerms.slice(0,term.number-1),
             Object.assign([], this.state.defaultTerms[term.number-1],term.coursesContained.push(movedCourse)),
-            ...this.state.defaultTerms.slice(term.number-1)
+            ...this.state.defaultTerms.slice(term.number)
           ]
         });
         //console.log(movedCourse + " to " + term.coursesContained);
