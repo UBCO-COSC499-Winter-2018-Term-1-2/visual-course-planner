@@ -2,38 +2,35 @@ const promisify = require('util').promisify;
 const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
-
-//const testUser = {"Firstname:" Noman } 
-
 class User {
 
-    async checkUser(email) {
-        db
-          .query("SELECT * FROM user WHERE email = ?", [email])
-          .then(rows => {
+  async checkUser(email) {
+    db
+      .query("SELECT * FROM user WHERE email = ?", [email])
+      .then(rows => {
 
-            if (rows > 0){
-                return false;
-            }
-            else
-                return true;
-          })
-          .catch(err => {
-            throw err;
-          });
-      }
+        if (rows > 0){
+          return false;
+        }
+        else
+          return true;
+      })
+      .catch(err => {
+        throw err;
+      });
+  }
 
-      async insertUser(newUser) {
+  async insertUser(newUser) {
     
-        db
-          .query("INSERT INTO user SET ?", [newUser])
-          .then(
-            console.log("user inserted")
-          )
-          .catch(err => {
-            throw err;
-          });  
-      }
+    db
+      .query("INSERT INTO user SET ?", [newUser])
+      .then(
+        console.log("user inserted")
+      )
+      .catch(err => {
+        throw err;
+      });  
+  }
 
 }
 

@@ -15,12 +15,12 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Body ParserMiddleware
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // Use routes
 app.use('/api/upload', upload);
 app.use('/api/warnings', warnings);
-app.use('/api/users', signup)
+app.use('/api/users', signup);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
