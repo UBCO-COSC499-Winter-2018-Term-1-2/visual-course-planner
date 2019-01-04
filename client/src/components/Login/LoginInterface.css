@@ -28,9 +28,9 @@ body{
     border: none;
 }
 
-/* .input-element:focus{
+.input-element:focus{
     border: none;
-} */
+}
 
 .deafultbtn{
     width: 50%;
