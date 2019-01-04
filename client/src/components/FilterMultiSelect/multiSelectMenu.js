@@ -3,6 +3,8 @@
 import t from 'prop-types';
 import React, { Component } from 'react';
 import '../FilterMultiSelect/multiSelectMenu.css';
+//import PropTypes from 'prop-types';
+
 
 function makeLookup(arr, prop) {
   let lkup = {};
