@@ -82,7 +82,7 @@ a:link{
     clear: both;
     margin: 4em 0em;
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     
     /* text-align: center;  */
 }

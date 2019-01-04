@@ -38,8 +38,8 @@ class previousCourses extends Component {
           <div>
             
             <div className="course-menu">
-              <h1 className="yellow-title">Select All That Apply</h1>
-              <label className="green-title">Course History</label>
+              <h1 className="yellow-title">Course History</h1>
+              <label className="green-title">Select All That Apply</label>
               
               <p className="msg-text">
               For an accurate Degree Plan, please select all courses 
@@ -76,8 +76,8 @@ class previousCourses extends Component {
               </div>
                     
               <div className="btn-div">
-                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
                 <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
               </div>
 
             </div> 
