@@ -1,4 +1,4 @@
-body{
+/* body{
 
     background-color: #262427;
     font-family: Helvetica;
@@ -11,7 +11,7 @@ body{
     list-style-type: none;
     color: #ffffff;
     column-count: 2;
-    overflow: hidden; /*keeps list items inside of div*/
+    overflow: hidden; 
     overflow-y:scroll;
 }
 
@@ -32,7 +32,6 @@ body{
     margin: 0% 10%;
     padding: 0 0 3% 0;
     font-weight: normal;
-
     
 
-}
+} */
