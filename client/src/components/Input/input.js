@@ -1,5 +1,6 @@
 import React from 'react';
 import styling from '../Input/input.css';
+import PropTypes from 'prop-types';
 
 const input = ( props ) => {
   let inputElement = null;
@@ -21,6 +22,17 @@ const input = ( props ) => {
     //shouldBeValidated is used if state element has "validation" -- will be used on other pages
   }
   
+  input.propTypes = {
+    invalid: PropTypes.string,
+    shouldBeValidated: PropTypes.string,
+    inputElementTouched: PropTypes.bool,
+    elementType: PropTypes.string,
+    elementConfig: PropTypes.object,
+    value: PropTypes.string,
+    changed: PropTypes.func,
+    label: PropTypes.string
+  };
+
   switch ( props.elementType ) {
   case ( 'input' ):
     inputElement = <input
