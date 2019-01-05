@@ -67,6 +67,16 @@ function getPlanCourse(plan, course) {
   return null;
 }
 
+/* How to check if a course code matches a requirement
+loop over all courses
+check if course matches specific course
+check if course matches general course
+check if 
+*/
+function fulfillsUpperSpecific(course) {
+
+}
+
 // TODO: probably more effciect to go through plan courses and see if what req they fit into
 function getSpecializationWarning(plan, requirement) {
   // check specific req, then go more general
@@ -79,6 +89,7 @@ function getSpecializationWarning(plan, requirement) {
       creditsNeeded -= parseInt(planCourse.credits);
     }
     /* Check for upper level code Upper e.g. Level COSC */
+    if (reqCode ){}
     /* Check for upper level area e.g. Upper Level Science */
     /* Check for upper level general e.g. Upper Level General */
     /* Check for any specific */
@@ -103,19 +114,31 @@ function getSpecializationWarnings(plan, requirements) {
   });
   return warnings;
 }
-
+/* Check for upper level code Upper e.g. Level COSC */
+/* Check for upper level area e.g. Upper Level Science */
+/* Check for upper level general e.g. Upper Level General */
+/* Check for any specific */
+/* Check for any area */
+/* Check for any general */
 
 // need to parse course field of csv and put into spec course info table
-// function parseCourses(courses) {
+// function parseCourses(req) {
 //   const courseCodes = ["COSC"];
 //   const areas = ["SCIENCE", "ARTS"];
-//   const words = courses.split(',');
-
-//   if (words[0] === "GENERAL") {
-//     // general electives
-//   } else if (words[0] === '') {
-
+//   const general = "GENERAL";
+//   let requirement = req.split(',').map(c => c.trim());
+//   requirement = requirement.length
+//   if (requirement.length === 1) {
+    
+//     if (requirement[0] === "UPPER") {
+//       if (courseCodes.contains(requirement[1])) {
+        
+//       }
+//     } else if (requirement[0] === '') {
+  
+//     }
 //   }
+  
 // }
 
 module.exports = {
@@ -152,6 +175,4 @@ module.exports = {
   
     return warnings;
   }
-
 };
-
