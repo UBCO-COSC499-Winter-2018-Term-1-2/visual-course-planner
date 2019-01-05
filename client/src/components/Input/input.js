@@ -30,7 +30,8 @@ const input = ( props ) => {
     elementConfig: PropTypes.object,
     value: PropTypes.string,
     changed: PropTypes.func,
-    label: PropTypes.string
+    label: PropTypes.string,
+    title: PropTypes.string,
   };
 
   switch ( props.elementType ) {
