@@ -91,6 +91,7 @@ class LoginInterface extends Component {
       axios.post( 'login', menu )
         .then( response => {
           this.setState( { loading: false } );
+          console.log("no errors::");
           console.log(response);
           //this.props.history.push( '/' );
         } )
