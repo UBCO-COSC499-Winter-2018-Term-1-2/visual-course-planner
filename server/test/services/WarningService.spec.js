@@ -193,7 +193,7 @@ describe("WarningService", () => {
         }
       ];
   
-      const actualWarnings = warningService.getWarnings(plan, user);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
   
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
@@ -224,7 +224,7 @@ describe("WarningService", () => {
         }
       ];
   
-      const actualWarnings = warningService.getWarnings(plan, user);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
   
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
@@ -265,7 +265,7 @@ describe("WarningService", () => {
         }
       ];
       
-      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
 
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
@@ -308,7 +308,7 @@ describe("WarningService", () => {
 
       const expectedWarnings = [];
       
-      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
 
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
@@ -356,7 +356,7 @@ describe("WarningService", () => {
         }
       ];
       
-      const actualWarnings = warningService.getPlanWarningsForSpecializationRequirements(plan, specializationRequirements);
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
 
       assert.deepEqual(actualWarnings, expectedWarnings);
     });

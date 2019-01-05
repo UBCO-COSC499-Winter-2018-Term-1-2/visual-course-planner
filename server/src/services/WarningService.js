@@ -71,7 +71,7 @@ function getPlanCourse(plan, course) {
 function getSpecializationWarning(plan, requirement) {
   // check specific req, then go more general
   let creditsNeeded = parseInt(requirement.credits);
-  let warning = {};
+  let warning = [];
   requirement.courses.split(',').map(course => course.trim()).forEach(reqCode => {
     /* Check for specific course requirement */
     const planCourse = getPlanCourse(plan, {code: reqCode});
@@ -87,10 +87,10 @@ function getSpecializationWarning(plan, requirement) {
   });
   // TODO: notify which course is missing
   if (creditsNeeded > 0) {
-    warning = {
+    warning.push({
       message: `Missing ${creditsNeeded} credits of ${requirement.courses}.`,
       type: "missingCredits"
-    };
+    });
   }
   return warning;
 }
@@ -99,9 +99,8 @@ function getSpecializationWarnings(plan, requirements) {
   // check if plan has number of credits from courses
   let warnings = [];
   requirements.forEach(req => {
-    warnings.push(getSpecializationWarning(req));
+    warnings = warnings.concat(getSpecializationWarning(plan, req));
   });
-
   return warnings;
 }
 
@@ -141,6 +140,16 @@ module.exports = {
         getSpecializationWarnings(plan, requirements)
       );
     });
+    return warnings;
+  },
+
+  getSpecializationWarnings: (plan, requirements) => {
+    // check if plan has number of credits from courses
+    let warnings = [];
+    requirements.forEach(req => {
+      warnings = warnings.concat(getSpecializationWarning(plan, req));
+    });
+  
     return warnings;
   }
 
