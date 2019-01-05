@@ -14,7 +14,11 @@ class Main extends Component {
     currentPlan: {
       courses: [],
       id: 0,
-      name: "BA Major Computer Science"
+      name: "BA Major Computer Science",
+      specialization: {
+        id: 1,
+        name: "Major in Computer Science"
+      }
     },
     user: {
       name: "Leonardo"

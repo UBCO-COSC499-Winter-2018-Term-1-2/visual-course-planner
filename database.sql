@@ -121,7 +121,7 @@ CREATE TABLE plan_course (
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
-
+-- maybe should be credit req instead of specialization
 CREATE TABLE specialization_course_info (
   spid INT,
   cid VARCHAR(9),
