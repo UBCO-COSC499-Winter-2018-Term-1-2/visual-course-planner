@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../UserProfile/profile.css';
-// import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 
@@ -163,8 +162,8 @@ class profile extends Component {
             <Link to ="course-history"><button className="course-historybtn">My Course History → </button></Link>
            
             <div className="btn-div"> 
-              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
             </div>
           </form>
         );
