@@ -88,28 +88,66 @@ class PlannerArea extends Component {
   }
 
   //drag start event handler for course component - passed in as prop via Semester
-  //set data uses hard coded course code!
-  onCourseDragStart = (e, courseCode) => {
+  onCourseDragStart = (e, courseCode, sourceTerm) => {
     e.dataTransfer.setData("courseCode", courseCode);
+    e.dataTransfer.setData("sourceTerm", sourceTerm);
   }
 
   //on drop event handler for semester component
+  //need to implement removing course from source term
+  //need to implement rejection of duplicate courses in a term
   onCourseDrop = (e, targetTerm) => {
+
     let movedCourse = e.dataTransfer.getData("courseCode");
-    this.state.defaultTerms.filter((term) => {
-      if (term.number == targetTerm) {
-        //console.log(term.coursesContained);
-        this.setState({
-          defaultTerms: [
-            ...this.state.defaultTerms.slice(0,term.number-1),
-            Object.assign([], this.state.defaultTerms[term.number-1],term.coursesContained.push(movedCourse)),
-            ...this.state.defaultTerms.slice(term.number)
-          ]
-        });
-        //console.log(movedCourse + " to " + term.coursesContained);
+    let sourceTerm = e.dataTransfer.getData("sourceTerm");
+    const targetTermIndex = targetTerm - 1;
+    const sourceTermIndex = sourceTerm - 1;
+    let removedCourseIndex;
+    console.log("source term: " + sourceTerm);
+    console.log("target term: " + targetTerm);
+
+    //extract source term object from the state variable
+    const sourceTermObject = this.state.defaultTerms.filter((term) => {
+      if ((targetTerm != sourceTerm) && (term.number == sourceTerm)) {
+        console.log("filtered term: " + term.number);
+        return term;
       }
     });
-    console.log(this.state); 
+    console.log(sourceTermObject);
+
+    //check if source term object extracted from state is not empty
+    if(sourceTermObject.length != 0) {
+     
+      removedCourseIndex = sourceTermObject[0].coursesContained.indexOf(movedCourse);
+      console.log("lulu");
+      
+      //remove course by updating state
+      this.setState({
+        defaultTerms: [
+          ...this.state.defaultTerms.slice(0, sourceTermIndex),
+          Object.assign([], this.state.defaultTerms[sourceTermIndex], sourceTermObject[0].coursesContained.splice(removedCourseIndex,1)),
+          ...this.state.defaultTerms.slice(sourceTermIndex + 1)
+        ]
+      });
+    }
+    else
+      removedCourseIndex = -1;
+    
+    //add course
+    this.state.defaultTerms.filter((term) => {
+      if ((targetTerm != sourceTerm) && (term.number == targetTerm)) {
+
+        this.setState({
+          defaultTerms: [
+            ...this.state.defaultTerms.slice(0, targetTermIndex),
+            Object.assign([], this.state.defaultTerms[targetTermIndex], term.coursesContained.push(movedCourse)),
+            ...this.state.defaultTerms.slice(targetTermIndex + 1)
+          ]
+        });
+      }
+    });
+
+    console.log(this.state);
   }
 
   showSnackbar = () => {
