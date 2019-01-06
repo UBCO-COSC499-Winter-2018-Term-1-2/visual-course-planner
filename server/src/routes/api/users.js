@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const expressValidator = require('express-validator');
+
+router.use(expressValidator());
+
 
 
 //user model
 const User = require('../../models/User');
-
+const user = new User();
 
 /**
  * @route POST api/sign-up
@@ -13,7 +17,8 @@ const User = require('../../models/User');
  * @access Private
  */ 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+
   const fname = req.body.fname;
   const lname = req.body.lname;
   const email = req.body.email;
@@ -25,22 +30,19 @@ router.post('/', (req, res) => {
   req.checkBody('lname', 'Name is required').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
-  req.checkBody('password', 'Password is required').isEmpty();
-  req.checkBody('confirmPassword', 'Confirm password is required').isEmpty();
+  req.checkBody('password', 'Password is required').notEmpty();
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
   if(errors){
 
-    res.render('LoginInterface', {
+    res.status(500).send(errors);
 
-      errors:errors
-    });     
-  }else{
+  }else{ 
         
-    let existUser = User.checkUser(email);
+    const existUser = await user.checkUser(email);
         
-    if(existUser == true){
+    if(existUser === true){
 
       res.status(500).send("User already exists. Did not create user.");
 
@@ -63,12 +65,14 @@ router.post('/', (req, res) => {
             standing: 0
                 
           };
-
-          // do some error handling either in the model, or here: https://medium.com/technoetics/handling-user-login-and-registration-using-nodejs-and-mysql-81b146e37419
-
-          User.insertUser(newUser);
-
-          // check on postman
+          
+          try{
+            user.insertUser(newUser);
+            res.status(200).send("New user was created.");
+          }
+          catch(err) {
+            res.status(500).send("User was not created. Error with db." + err);
+          }
 
         });
       });

@@ -5,26 +5,27 @@ db.query = promisify(db.query);
 class User {
 
   async checkUser(email) {
-    db
-      .query("SELECT * FROM user WHERE email = ?", [email])
-      .then(rows => {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT * FROM user WHERE email = ?", [email]);
+    } catch (err) {
+      throw err;
+    }
 
-        if (rows > 0){
-          return false;
-        }
-        else
-          return true;
-      })
-      .catch(err => {
-        throw err;
-      });
+    if (rows.length > 0){
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   async insertUser(newUser) {
     
     db
-      .query("INSERT INTO user SET ?", [newUser])
+      .query("INSERT INTO user SET ?", newUser)
       .then(
+
         console.log("user inserted")
       )
       .catch(err => {

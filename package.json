@@ -8,6 +8,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
+    "express-validator": "^5.3.1",
     "i": "^0.3.6",
     "mysql": "^2.16.0",
     "npm": "^6.4.1",
