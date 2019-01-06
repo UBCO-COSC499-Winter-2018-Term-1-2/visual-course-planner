@@ -1,6 +1,6 @@
 import React from 'react';
-// import styling from '../Login/LoginInterface.css';
 import styling from '../Input/input.css';
+import PropTypes from 'prop-types';
 
 const input = ( props ) => {
   let inputElement = null;
@@ -8,10 +8,12 @@ const input = ( props ) => {
   let cssInvalid = "invalid";
   let greenTitle = "green-title";
   let cssSelectItems ="select-items";
+  let cssCourseList ="course-list";
  
 
   const inputStyling = [cssInputElement];
   const selectStyling = [cssSelectItems];
+  const listStyling = [cssCourseList];
   // const labelStyling = [cssLabel];
   
 
@@ -20,6 +22,19 @@ const input = ( props ) => {
     //shouldBeValidated is used if state element has "validation" -- will be used on other pages
   }
   
+  input.propTypes = {
+    invalid: PropTypes.string,
+    shouldBeValidated: PropTypes.string,
+    inputElementTouched: PropTypes.bool,
+    elementType: PropTypes.string,
+    elementConfig: PropTypes.object,
+    value: PropTypes.string,
+    changed: PropTypes.func,
+    label: PropTypes.string,
+    title: PropTypes.string,
+  };
+
+
   switch ( props.elementType ) {
   case ( 'input' ):
     inputElement = <input
@@ -29,6 +44,7 @@ const input = ( props ) => {
       value={props.value}
       onChange={props.changed} />;
     break;
+
   case ( 'textarea' ):
     inputElement = <textarea
       className={inputStyling.join(' ')}
@@ -37,11 +53,30 @@ const input = ( props ) => {
       onChange={props.changed} />;
     break;
 
-    // case ( 'label' ):
-    //   inputElement = <a 
-    //     className={greenTitle}>
-    //   </a>;
-    //   break;
+  case ( 'checkbox' ):
+    inputElement = <input
+      type="checkbox"
+      className={inputStyling.join(' ')}
+      {...props.elementConfig}
+      value={props.value}
+      onChange={props.changed} />;
+      
+    break;
+
+  case ( 'list' ):
+    inputElement = ( 
+      <li 
+        className={listStyling.join(' ')}
+        value={props.value}
+        onChange={props.changed}>
+        {props.elementConfig.options.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.displayValue}
+          </option>
+        ))}
+      </li>
+    );
+    break;
 
   case ( 'select' ):
     inputElement = (

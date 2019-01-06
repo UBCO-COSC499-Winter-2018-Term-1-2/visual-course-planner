@@ -7,11 +7,7 @@
     color: #9c9b9d;
     background-color: #333035;
     border: none;
-    
 
-    /* display:  inherit; */
-    /* flex-direction: row-reverse; */
-    /* float: left; */
 }
 
 .input-element:focus{
@@ -28,14 +24,7 @@
     background-color: #333035;
     border: none;
     display: flex;  
-    /* -webkit-appearance: none; */
-    /* -webkit-menulist: inherit; */
-    /* -webkit-appearance: none; 
-    -moz-appearance: none; */
-  
-
-    /* clear: left; */
-    /* float: left; */
+ 
 }
 
 .select-items:hover {
@@ -55,9 +44,16 @@
     color: #84bd00;
     font-weight: normal;
     text-transform: uppercase;
-    margin: 1em auto;
 }
 
+
+ol.course-list{
+    list-style-type: none;
+    color: #9c9b9d;
+    margin: 2em -2em;
+    overflow-y:scroll;
+    height:17em; 
+}
 
 
 
