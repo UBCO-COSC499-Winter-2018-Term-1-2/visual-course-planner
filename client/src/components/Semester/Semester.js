@@ -21,6 +21,7 @@ class Semester extends Component {
           key={course}
           code={course}
           type="required"
+          sourceTerm={this.props.term}
           onDragStart={this.props.onCourseDragStart} />
       );
     }
