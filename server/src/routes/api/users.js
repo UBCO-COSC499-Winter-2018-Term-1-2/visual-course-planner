@@ -6,7 +6,6 @@ const expressValidator = require('express-validator');
 router.use(expressValidator());
 
 
-
 //user model
 const User = require('../../models/User');
 const user = new User();
@@ -19,11 +18,8 @@ const user = new User();
 
 router.post('/', async (req, res) => {
 
-  const fname = req.body.fname;
-  const lname = req.body.lname;
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
 
   // server side validation
   req.checkBody('fname', 'Name is required').notEmpty();
