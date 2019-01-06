@@ -15,7 +15,7 @@ class Course extends Component{
       <div 
         className={this.props.type == "required" ? "course-required" : "course-elective"}
         draggable
-        onDragStart={(e) => this.props.onDragStart(e,this.state.code)}>
+        onDragStart={(e) => this.props.onDragStart(e, this.state.code, this.props.sourceTerm)}>
         <h5 className="course-code">{this.state.code}</h5>
       </div>
     );
@@ -25,6 +25,7 @@ class Course extends Component{
 Course.propTypes = {
   code: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  sourceTerm: PropTypes.string.isRequired,
   onDragStart: PropTypes.func.isRequired
 };
 
