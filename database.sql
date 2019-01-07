@@ -1,6 +1,10 @@
+DROP TABLE IF EXISTS credit_requirement_course_info;
+DROP TABLE IF EXISTS exception_course_info;
+DROP TABLE IF EXISTS exception;
+DROP TABLE IF EXISTS course_category;
 DROP TABLE IF EXISTS course_term;
-DROP TABLE IF EXISTS course_requirement;
-DROP TABLE IF EXISTS course_corequirement;
+DROP TABLE IF EXISTS course_info_requirement;
+DROP TABLE IF EXISTS course_info_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
@@ -49,15 +53,45 @@ CREATE TABLE specialization (
 );
 
 CREATE TABLE credit_requirement (
-  id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  credits INT,
-  courses VARCHAR(1000),
-  spid    INT,
+  id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  credits     INT,
+  category    VARCHAR(100),
+  spid        INT,
+  exceptionId INT,
+
+  FOREIGN KEY (catid)
+    REFERENCES course_category(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
 
   FOREIGN KEY (spid)
     REFERENCES specialization(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
+  
+);
+
+CREATE TABLE exception (
+  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  category  VARCHAR(100)
+
+);
+
+CREATE TABLE exception_course_info (
+  eid  INT,
+  cid  VARCHAR(9),
+
+  FOREIGN KEY (eid)
+    REFERENCES exception(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  FOREIGN KEY (cid)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION
+
+  PRIMARY KEY (eid, cid)
 );
 
 CREATE TABLE session (
@@ -121,10 +155,10 @@ CREATE TABLE plan_course (
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
--- maybe should be credit req instead of specialization
-CREATE TABLE specialization_course_info (
-  spid INT,
-  cid VARCHAR(9),
+
+CREATE TABLE specialization_credit_requirement (
+  spid  INT,
+  cid   VARCHAR(9),
 
   FOREIGN KEY (spid)
     REFERENCES specialization(id)
@@ -132,9 +166,11 @@ CREATE TABLE specialization_course_info (
     ON DELETE NO ACTION,
 
   FOREIGN KEY (cid)
-    REFERENCES course_info(id)
+    REFERENCES credit_requirement(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
+
+  PRIMARY KEY (spid, cid)
 );
 
 CREATE TABLE course_info_requirement (
@@ -150,6 +186,8 @@ CREATE TABLE course_info_requirement (
     REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
+
+  PRIMARY KEY (cid, rid)
 );
 
 CREATE TABLE course_info_corequirement (
@@ -165,6 +203,8 @@ CREATE TABLE course_info_corequirement (
     REFERENCES course_info(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
+
+  PRIMARY KEY (cid, rid)
 );
 
 CREATE TABLE course_term (
@@ -180,4 +220,23 @@ CREATE TABLE course_term (
     REFERENCES term(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
+
+  PRIMARY KEY (cid, sid)
+);
+
+CREATE TABLE credit_requirement_course_info (
+  crid  INT,
+  cid   VARCHAR(9),
+
+  FOREIGN KEY (crid)
+    REFERENCES credit_requirement(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  FOREIGN KEY (cid)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION
+
+  PRIMARY KEY (crid, cid)
 );
