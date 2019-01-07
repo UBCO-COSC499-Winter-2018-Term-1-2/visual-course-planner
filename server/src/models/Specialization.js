@@ -10,21 +10,24 @@ module.exports = {
   },
 
   async createSpecializationRequirement(requirementObj, specId) {
+    // make transaction
     const req = requirementObj.requirements;
     const exception = requirementObj.exceptions;
-    const hasException = req.exception.length > 0 ? true : false;
+    const hasException = exception.length > 0 ? true : false;
 
     const COURSES_TYPE = 'courses';
     const CATEGORY_TYPE = 'category';
 
     if (req.type === COURSES_TYPE) {
-      const results = await db.query("INSERT INTO credit_requirement (credits, category, spid) VALUES (?, ?, ?)", [req.credits, null, specId]);
+      const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, null]);
       const crid = results.insertId;
-      req.course.forEach(async course => { 
-        db.query("INSERT INTO credit_requirement_course_info (crid, cid) VALUES (?, ?, ?)", [crid, course]);
+      await db.query("INSERT INTO specialization_credit_requirement (spid, crid) VALUES (?, ?)", [specId, crid]);
+      req.courses.forEach(async course => {
+        // could catch error here if the course info does not exist 
+        db.query("INSERT INTO credit_requirement_course_info (crid, cid) VALUES (?, ?)", [crid, course]);
       });
     } else if (req.type === CATEGORY_TYPE) {
-      db.query("INSERT INTO credit_requirement (credits, category, spid) VALUES (?, ?, ?)", [req.credits, req.type, specId]);
+      db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, req.type]);
     }
 
     if (hasException) {  

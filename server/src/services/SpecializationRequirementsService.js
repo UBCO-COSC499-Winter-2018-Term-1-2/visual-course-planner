@@ -42,13 +42,14 @@ module.exports = {
 
   async addSpecializationRequirements(requirements, specId) {
     // possibly need to await this
-    requirements.forEach(req => {
-      req = {
+    requirements.forEach(async req => {
+      const parsedRequirement = {
         credits: req.credits,
         requirements: this.parseCourses(req.courses),
         exceptions: this.parseCourses(req.exceptions)
       };
-      specializationModel.createSpecializationRequirement(req, specId);
+      console.log("Adding requirements: " + JSON.stringify(parsedRequirement));
+      await specializationModel.createSpecializationRequirement(parsedRequirement, specId);
     });
     
   },
@@ -65,8 +66,7 @@ module.exports = {
     return records;
   },
 
-  async parseCourses(requirementFromCsv) {
-
+  parseCourses(requirementFromCsv) {
     if (requirementFromCsv === '') {
       return {
         type: "courses",
@@ -74,18 +74,20 @@ module.exports = {
       };
     }
     let requirements = requirementFromCsv.split(',').map(c => c.trim());
-    let requirement = {};
     // Test the first element to see if it is a course
     const testReq = requirements[0].split(' ');
     if (testReq.length > 1 && !isNaN(testReq[1])) {
-      requirement.type = "courses";
-      requirement.courses = requirements;
-      return requirement;
+      const builtRequirement = {
+        type: "courses",
+        courses: requirements
+      };
+      return builtRequirement;
     }
 
-    return {
+    const builtRequirement = {
       type: "category",
       courses: [requirementFromCsv.trim()]
     };
+    return builtRequirement;
   }
 };

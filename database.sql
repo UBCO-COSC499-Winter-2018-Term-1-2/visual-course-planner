@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS credit_requirement_course_info;
 DROP TABLE IF EXISTS exception_course_info;
+DROP TABLE IF EXISTS specialization_credit_requirement;
 DROP TABLE IF EXISTS exception;
 DROP TABLE IF EXISTS course_category;
 DROP TABLE IF EXISTS course_term;
@@ -56,18 +57,7 @@ CREATE TABLE credit_requirement (
   id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   credits     INT,
   category    VARCHAR(100),
-  spid        INT,
-  exceptionId INT,
-
-  FOREIGN KEY (catid)
-    REFERENCES course_category(id)
-    ON UPDATE CASCADE
-    ON DELETE NO ACTION,
-
-  FOREIGN KEY (spid)
-    REFERENCES specialization(id)
-    ON UPDATE CASCADE
-    ON DELETE NO ACTION
+  exceptionId INT
 );
 
 CREATE TABLE exception (
@@ -87,7 +77,7 @@ CREATE TABLE exception_course_info (
   FOREIGN KEY (cid)
     REFERENCES course_info(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
   PRIMARY KEY (eid, cid)
 );
@@ -105,7 +95,7 @@ CREATE TABLE user (
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
-  standing  INT 
+  standing  INT
 );
 
 CREATE TABLE plan (
@@ -156,19 +146,19 @@ CREATE TABLE plan_course (
 
 CREATE TABLE specialization_credit_requirement (
   spid  INT,
-  cid   VARCHAR(9),
+  crid   INT,
 
   FOREIGN KEY (spid)
     REFERENCES specialization(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
-  FOREIGN KEY (cid)
+  FOREIGN KEY (crid)
     REFERENCES credit_requirement(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
-  PRIMARY KEY (spid, cid)
+  PRIMARY KEY (spid, crid)
 );
 
 CREATE TABLE course_info_requirement (
@@ -183,7 +173,7 @@ CREATE TABLE course_info_requirement (
   FOREIGN KEY (rid)
     REFERENCES course_info(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
   PRIMARY KEY (cid, rid)
 );
@@ -200,7 +190,7 @@ CREATE TABLE course_info_corequirement (
   FOREIGN KEY (rid)
     REFERENCES course_info(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
   PRIMARY KEY (cid, rid)
 );
@@ -217,7 +207,7 @@ CREATE TABLE course_term (
   FOREIGN KEY (sid)
     REFERENCES term(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
   PRIMARY KEY (cid, sid)
 );
@@ -234,7 +224,41 @@ CREATE TABLE credit_requirement_course_info (
   FOREIGN KEY (cid)
     REFERENCES course_info(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION
+    ON DELETE NO ACTION,
 
   PRIMARY KEY (crid, cid)
 );
+
+
+INSERT INTO course_info (id) VALUES ("ENGL 112");
+INSERT INTO course_info (id) VALUES ("ENGL 114");
+INSERT INTO course_info (id) VALUES ("ENGL 113");
+INSERT INTO course_info (id) VALUES ("ENGL 150");
+INSERT INTO course_info (id) VALUES ("ENGL 151");
+INSERT INTO course_info (id) VALUES ("ENGL 153");
+INSERT INTO course_info (id) VALUES ("MATH 100");
+INSERT INTO course_info (id) VALUES ("MATH 101");
+
+INSERT INTO course_info (id) VALUES ("PHYS 111");
+INSERT INTO course_info (id) VALUES ("PHYS 112");
+INSERT INTO course_info (id) VALUES ("PHYS 102");
+INSERT INTO course_info (id) VALUES ("PHYS 121");
+INSERT INTO course_info (id) VALUES ("PHYS 122");
+INSERT INTO course_info (id) VALUES ("CHEM 111");
+INSERT INTO course_info (id) VALUES ("CHEM 121");
+INSERT INTO course_info (id) VALUES ("CHEM 113");
+INSERT INTO course_info (id) VALUES ("CHEM 123");
+INSERT INTO course_info (id) VALUES ("COSC 111");
+INSERT INTO course_info (id) VALUES ("COSC 123");
+INSERT INTO course_info (id) VALUES ("COSC 121");
+INSERT INTO course_info (id) VALUES ("COSC 211");
+INSERT INTO course_info (id) VALUES ("COSC 221");
+INSERT INTO course_info (id) VALUES ("COSC 222");
+INSERT INTO course_info (id) VALUES ("MATH 200");
+INSERT INTO course_info (id) VALUES ("MATH 221");
+INSERT INTO course_info (id) VALUES ("STAT 230");
+INSERT INTO course_info (id) VALUES ("COSC 304");
+INSERT INTO course_info (id) VALUES ("COSC 310");
+INSERT INTO course_info (id) VALUES ("COSC 320");
+INSERT INTO course_info (id) VALUES ("COSC 341");
+INSERT INTO course_info (id) VALUES ("PHIL 331");
