@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
     const existUser = await user.checkUser(email);
         
     if(existUser === true){
-
+      console.log("User already exists. Did not create user.");
       res.status(500).send("User already exists. Did not create user.");
 
     }else{
@@ -75,6 +75,13 @@ router.post('/', async (req, res) => {
       });
     }
   }
+});
+
+
+router.get('/', async (req, res) => {
+
+
+
 });
 
 module.exports = router;
