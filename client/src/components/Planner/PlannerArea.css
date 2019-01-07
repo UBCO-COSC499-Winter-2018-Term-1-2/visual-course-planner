@@ -1,0 +1,17 @@
+#semester-view{
+  display: flex;
+  overflow-x: auto;
+
+  max-width: 100vw;
+}
+
+#semester-view::-webkit-scrollbar
+{
+    height: 0.4em;
+}
+
+#semester-view::-webkit-scrollbar-thumb
+{
+    border-radius: 2em;
+    background-color: #1a191b;
+}

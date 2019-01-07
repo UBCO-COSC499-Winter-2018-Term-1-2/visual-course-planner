@@ -54,7 +54,7 @@ class CreateAccountMenu extends Component {
       password: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Password'
         },
         value: '',
@@ -67,7 +67,7 @@ class CreateAccountMenu extends Component {
       confirmPassword: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Confirm Password'
         },
         value: '',
@@ -170,6 +170,7 @@ class CreateAccountMenu extends Component {
     );
     
     return(
+
       //RETURN LOGIN MENU HERE
       <div className="menu">
         <h1 className="login-heading">Visual Course Planner</h1>
