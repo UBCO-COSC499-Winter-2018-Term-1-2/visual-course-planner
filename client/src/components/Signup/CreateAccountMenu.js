@@ -92,30 +92,26 @@ class CreateAccountMenu extends Component {
 
     return isValid;
   }
+
   handler = ( event ) => {
+    console.log('handler');
     event.preventDefault();
     this.setState( { loading: true } );
     
     //this is log send user input to send to database.
-    const menuData = {};
+    let formData = new FormData();
     for (let formElementIdentifier in this.state.createAccountMenu) {
-      menuData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
+      formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     }
-    // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-    const menu = {
-      menuData: menuData
-    };
-    axios.post( 'create-account', menu )
+    console.log(formData);
+    axios.post( '/api/users', formData )
       .then( response => {
         this.setState( { loading: false } );
         console.log(response);
-        //this.props.history.push( '/' );
       } )
       .catch( error => {
         this.setState( { loading: false } );
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error);
       } );
   
   }
@@ -156,7 +152,7 @@ class CreateAccountMenu extends Component {
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form onSubmit={this.handler}>
+      <form>
         {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
@@ -168,7 +164,7 @@ class CreateAccountMenu extends Component {
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
-        <button className="deafultbtn" disabled={!this.state.formIsValid}>Create Account</button> 
+        <button className="deafultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Create Account</button> 
         <button className="open-diff-menubtn" ><Link to = "/login">Login</Link></button> 
       </form>
     );
