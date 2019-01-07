@@ -1,0 +1,22 @@
+.semester-container{
+  margin: 0.5em;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  min-width: 25%;
+  max-width: 25%;
+}
+
+.term-heading{
+  width: 30%;
+  color: #84bd00;
+  align-self: center;
+  font-weight: lighter;
+  margin-bottom: 0.1em;
+}
+
+.courses-container{
+  height: 65vh;
+  justify-content: center;
+  max-width: 100%;
+}

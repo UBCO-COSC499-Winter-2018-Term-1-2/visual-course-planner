@@ -1,0 +1,104 @@
+/* UBCO COURSES OFFERRED -- UPLOADED BY ADMINS */
+.ubco-offered-courses-list{
+    color:red;
+    width: 50%;
+    /* padding: 12px 20px; */
+    margin: 2em 0;
+    box-sizing: border-box;
+    font-size: 1em;
+    /* background-color: #333035; */
+    border: none;
+    display: flex;
+    flex-direction: column;
+    float: left;
+    box-sizing: border-box;
+  
+
+}
+
+.FilteredMultiSelect__filter{
+    width: auto;
+    padding: 10px 20px;
+    margin: 0em 0em 1em 0em;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    height: 3em;
+}
+
+.FilteredMultiSelect__filter:focus{
+    outline: none;
+}
+
+.FilteredMultiSelect__select{
+    width: auto;
+    height: 30em;
+    padding: 1em 1em;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #84bd00;
+    background-color: #333035;
+    border: none;
+    overflow: scroll;
+}
+
+.FilteredMultiSelect__select:focus{
+    outline: none;
+}
+
+.FilteredMultiSelect__button{
+    width: 20em;
+    padding: 1em 1em;
+    margin: 2em auto;
+    box-sizing: border-box;
+    font-size: 1em;
+    text-align: center;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    display: block;
+    cursor: pointer;
+}
+
+.FilteredMultiSelect__button:hover{
+    background-color: #84bd00;
+    color: black;
+}
+
+/* CHOSEN COURSES BY STUDENTS IN WHICH THAT HAVE RECIEVED CREDITS FOR */
+.added-courses{
+    color: #84bd00;
+    align-content: left;
+    display: flex;
+    justify-content: flex-end;
+    float:right;
+    width: 23em;
+    height: 34em;
+    background-color: #333035;
+    margin: 2em 0;
+    box-sizing: border-box;
+    padding:3em;
+    overflow: scroll;
+}
+
+.remove-coursebtn{
+    color:orange;
+    width: 3em;
+    background:none;
+    border: none;
+}
+
+.remove-coursebtn:focus{
+    outline: none;
+}
+
+.remove-coursebtn:hover{
+    color:  #84bd00;
+}
+
+.yoshii{
+    list-style: none;
+    align-items:left;
+}
