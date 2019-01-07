@@ -68,13 +68,11 @@ CREATE TABLE credit_requirement (
     REFERENCES specialization(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
-  
 );
 
 CREATE TABLE exception (
   id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   category  VARCHAR(100)
-
 );
 
 CREATE TABLE exception_course_info (

@@ -114,32 +114,6 @@ function getSpecializationWarnings(plan, requirements) {
   });
   return warnings;
 }
-/* Check for upper level code Upper e.g. Level COSC */
-/* Check for upper level area e.g. Upper Level Science */
-/* Check for upper level general e.g. Upper Level General */
-/* Check for any specific */
-/* Check for any area */
-/* Check for any general */
-
-// need to parse course field of csv and put into spec course info table
-// function parseCourses(req) {
-//   const courseCodes = ["COSC"];
-//   const areas = ["SCIENCE", "ARTS"];
-//   const general = "GENERAL";
-//   let requirement = req.split(',').map(c => c.trim());
-//   requirement = requirement.length
-//   if (requirement.length === 1) {
-    
-//     if (requirement[0] === "UPPER") {
-//       if (courseCodes.contains(requirement[1])) {
-        
-//       }
-//     } else if (requirement[0] === '') {
-  
-//     }
-//   }
-  
-// }
 
 module.exports = {
   getWarningsForCourse: (plan, user, course) => {
