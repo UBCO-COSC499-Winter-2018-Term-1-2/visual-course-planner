@@ -44,7 +44,7 @@ module.exports = {
     // possibly need to await this
     requirements.forEach(async req => {
       const parsedRequirement = {
-        credits: req.credits,
+        credits: parseInt(req.credits),
         requirements: this.parseCourses(req.courses),
         exceptions: this.parseCourses(req.exceptions)
       };

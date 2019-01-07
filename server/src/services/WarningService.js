@@ -67,18 +67,14 @@ function getPlanCourse(plan, course) {
   return null;
 }
 
-/* How to check if a course code matches a requirement
-loop over all courses
-check if course matches specific course
-check if course matches general course
-check if 
-*/
-function fulfillsUpperSpecific(course) {
-
-}
-
-// TODO: probably more effciect to go through plan courses and see if what req they fit into
+// TODO: probably more efficient to go through plan courses and see if what req they fit into
 function getSpecializationWarning(plan, requirement) {
+
+  // plan.courses.forEach(course => {
+
+  // });
+
+
   // check specific req, then go more general
   let creditsNeeded = parseInt(requirement.credits);
   let warning = [];
@@ -89,7 +85,9 @@ function getSpecializationWarning(plan, requirement) {
       creditsNeeded -= parseInt(planCourse.credits);
     }
     /* Check for upper level code Upper e.g. Level COSC */
-    if (reqCode ){}
+    // if (reqCode ){
+
+    // }
     /* Check for upper level area e.g. Upper Level Science */
     /* Check for upper level general e.g. Upper Level General */
     /* Check for any specific */

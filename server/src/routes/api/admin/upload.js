@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
             });
         } else {
           console.log("Using existing degree for spec");
-          let did = req.body.degreeId;
+          const did = req.body.degreeId;
           console.log(req.body);
           specializationRequirementsService.setSpecializationRequirementsFromCsv(filePath, {degreeId: did, name: req.body.specializationName})
             .catch(err => {

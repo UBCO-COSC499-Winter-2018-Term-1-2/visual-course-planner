@@ -57,8 +57,8 @@ module.exports = {
       throw new Error(err);
     }
     const courses = records.map(record => {
-      const year = record.ACADEMIC_YEAR.substring(0, 4);
-      const season = record.ACADEMIC_YEAR.substring(4);
+      const year = record["ACADEMIC_YEAR"].substring(0, 4);
+      const season = record["ACADEMIC_YEAR"].substring(4);
       return {
         code: record.COURSE_CODE,
         term: record.TERM,

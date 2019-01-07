@@ -27,7 +27,7 @@ module.exports = {
         db.query("INSERT INTO credit_requirement_course_info (crid, cid) VALUES (?, ?)", [crid, course]);
       });
     } else if (req.type === CATEGORY_TYPE) {
-      db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, req.type]);
+      db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, req.courses]);
     }
 
     if (hasException) {  
@@ -44,7 +44,12 @@ module.exports = {
   },
 
   async getSpecializationRequirements(specId) {
-    const results = await db.query("SELECT credits, courses FROM credit_requirement WHERE spid = ?", [specId]);
+    const results = await db.query(`
+      SELECT *
+      FROM specialization_credit_requirement AS scr JOIN credit_requirement AS cr ON scr.crid = cr.id
+      LEFT JOIN credit_requirement_course_info AS crci ON crci.cid = cr.id
+      JOIN course_info AS ci ON ci.id = crci.cid
+      WHERE spid = ?`, [specId]);
     return results;
   }
 };
