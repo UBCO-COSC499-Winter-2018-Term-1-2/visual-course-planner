@@ -42,7 +42,7 @@ class User {
       throw err;
     }
 
-   return rows;
+    return rows;
 
   }
 
