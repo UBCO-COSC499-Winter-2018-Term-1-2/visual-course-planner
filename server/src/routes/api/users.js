@@ -11,19 +11,20 @@ const User = require('../../models/User');
 const user = new User();
 
 /**
- * @route POST api/sign-up
+ * @route POST api/users
  * @desc Insert a new user into the database
  * @access Private
  */ 
 
 router.post('/', async (req, res) => {
+  console.log(req.body);
 
   const email = req.body.email;
   const password = req.body.password;
 
-  // server side validation
-  req.checkBody('fname', 'Name is required').notEmpty();
-  req.checkBody('lname', 'Name is required').notEmpty();
+  //server side validation
+  req.checkBody('fName', 'Name is required').notEmpty();
+  req.checkBody('lName', 'Name is required').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
   req.checkBody('password', 'Password is required').notEmpty();
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
 
   let errors = req.validationErrors();
   if(errors){
-
+    console.log(errors);
     res.status(500).send(errors);
 
   }else{ 
@@ -55,8 +56,8 @@ router.post('/', async (req, res) => {
                         
             email: req.body.email,
             password: hashPassword,
-            firstname: req.body.fname,
-            lastname: req.body.lname,
+            firstname: req.body.fName,
+            lastname: req.body.lName,
             isAdmin: false,
             standing: 0
                 
