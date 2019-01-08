@@ -7,7 +7,6 @@ import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
 import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
-import App from './containers/App';
 import UserProfile from "./components/UserProfile/profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
 import DegreeYear from "./components/DegreeYear-NewUser/DegreeYear";
