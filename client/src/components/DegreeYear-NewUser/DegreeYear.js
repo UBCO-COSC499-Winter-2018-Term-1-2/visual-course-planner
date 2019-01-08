@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import '../DegreeYear-NewUser/DegreeYear.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
-import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
-
-
-const DEGREES = [
-  {id: 1, name: 'Bachelor of Science, Major Computer Science'},
-  {id: 2, name: 'Bachelor of Arts, Major Computer Science'},
-  // {id: 249, name: 'Zero Gravitas'},
-  // {id: 250, name: 'Zoologist'}
-];
 
 class DegreeYear extends Component {
 
@@ -35,11 +26,30 @@ class DegreeYear extends Component {
           valid: true,
           inputElementTouched: false 
         },
+        degree: {
+          elementType: 'select',
+          elementConfig: {
+            options:[
+              {value: '1', displayValue: 'Bachelor of Science, Major in Computer Science'},
+              {value: '2', displayValue: 'Bachelor of Arts, Major in Computer Science '},
+              {value: '3', displayValue: 'Other Degrees'},
+              {value: '4', displayValue: 'Other Degrees'}
+            ]
+          },
+          validation: {
+            required: true
+          },
+          label: 'DESIRED DEGREE',
+          value: '',
+          valid: true,
+          inputElementTouched: false 
+        },
+        
       
       }, //end of profile menu
       formIsValid: false,
       loading: false,
-      selectedDegrees: []
+      // selectedDegrees: []
     }
     
     checkValidity(value, rules) {
@@ -107,8 +117,6 @@ class DegreeYear extends Component {
           });
         }
 
-        //MULTIFILTER::
-        var {selectedDegrees} = this.state;
         
         //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
         //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
@@ -127,32 +135,6 @@ class DegreeYear extends Component {
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
 
-            <label className="green-title-degree-list">Select your desired degree</label> 
-
-            {/* RETURN MULTIFILTER (LIST OF UBCO DEGREES) */}
-            <FilteredMultiSelect
-              onChange={this.handleSelectionChange}
-              options={DEGREES}
-              selectedOptions={selectedDegrees}
-              textProp="name"
-              valueProp="id"
-              buttonText="Add Course"
-              placeholder="Course Name.."
-              className="ubco-offered-courses-list"
-            />
-            <div className="added-courses">
-              {selectedDegrees.length === 0 && <p><i>(Nothing selected yet)</i></p>}
-              {selectedDegrees.length > 0 && 
-                <ul>
-                  {selectedDegrees.map((ship, i) => 
-                    <li key={ship.id}>
-                      {`${ship.name} `}
-                      <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
-                      &times;
-                      </button>
-                    </li>)}
-                </ul>}
-            </div>
 
             <div className="btn-div">
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
