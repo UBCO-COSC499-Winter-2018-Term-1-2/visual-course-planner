@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const upload = require('./server/src/routes/api/upload');
+const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
+const degrees = require('./server/src/routes/api/degrees');
 const signup = require('./server/src/routes/api/users');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -18,8 +19,9 @@ app.use(fileUpload());
 app.use(bodyParser.json());
 
 // Use routes
-app.use('/api/upload', upload);
+app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
+app.use('/api/degrees', degrees);
 app.use('/api/users', signup);
 
 // Server static assets if in production

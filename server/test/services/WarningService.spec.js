@@ -5,7 +5,7 @@ describe("WarningService", () => {
   
   describe("#getWarningsForCourse()", () => {
 
-    it("should return a prereq wrong semester warning when one exists", () => {
+    it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
         standing: 1
@@ -17,7 +17,7 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [ { code: "COSC 111" } ],
         year: "2018",
-        semester: "1"
+        term: "1"
       };
   
       let plan = {
@@ -80,7 +80,7 @@ describe("WarningService", () => {
         }],
         preRequisites: [],
         year: "2018",
-        semester: "1"
+        term: "1"
       };
 
       let plan = {
@@ -99,7 +99,7 @@ describe("WarningService", () => {
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
 
-    it("should return a coreq wrong semester warning when one exists", () => {
+    it("should return a coreq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
         standing: 1
@@ -113,7 +113,7 @@ describe("WarningService", () => {
         }],
         preRequisites: [],
         year: "2018",
-        semester: "1"
+        term: "1"
       };
 
       let preExistingCourse = {
@@ -122,7 +122,7 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [],
         year: "2018",
-        semester: "2"
+        term: "2"
       };
 
       let plan = {
@@ -131,7 +131,7 @@ describe("WarningService", () => {
 
       const expectedWarnings = [
         {
-          message: "MATH 101 needs to be in the same semester as MATH 221, or earlier.",
+          message: "MATH 101 needs to be in the same term as MATH 221, or earlier.",
           type: "coreq"
         }
       ];
@@ -158,19 +158,19 @@ describe("WarningService", () => {
       
     });
 
-    it("should return a prereq wrong semester warning when one exists", () => {
+    it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
         standing: 1
       };
   
-      let preReqWrongSemester = {
+      let preReqWrongTerm = {
         code: "COSC 111",
         standingRequirement: 0,
         coRequisites: [],
         preRequisites: [],
         year: "2018",
-        semester: "2"
+        term: "2"
       };
   
       let courseBeforePrereq = {
@@ -179,11 +179,11 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [ { code: "COSC 111" } ],
         year: "2018",
-        semester: "1"
+        term: "1"
       };
   
       let plan = {
-        courses: [courseBeforePrereq, preReqWrongSemester]
+        courses: [courseBeforePrereq, preReqWrongTerm]
       };
   
       const expectedWarnings = [
@@ -193,12 +193,12 @@ describe("WarningService", () => {
         }
       ];
   
-      const actualWarnings = warningService.getWarnings(plan, user);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
   
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
 
-    it("should return a prereq wrong semester warning when one exists", () => {
+    it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
         standing: 1
@@ -210,7 +210,7 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [ { code: "COSC 111" } ],
         year: "2018",
-        semester: "1"
+        term: "1"
       };
   
       let plan = {
@@ -224,9 +224,143 @@ describe("WarningService", () => {
         }
       ];
   
-      const actualWarnings = warningService.getWarnings(plan, user);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
   
       assert.deepEqual(actualWarnings, expectedWarnings);
     });
+  });
+
+  describe("#getWarningsForSpecialization", () => {
+    it("should return a requirement warning for specialization when one exists", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100",
+          credits: 3
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            term: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [
+        {
+          message: `Missing ${specializationRequirements[1].credits} credits of ${specializationRequirements[1].courses}.`,
+          type: "missingCredits"
+        }
+      ];
+      
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    it("should return no warnings when all requirements are satisfied", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100",
+          credits: 3
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            term: "1",
+            credits: 3
+          },
+          {
+            code: "MATH 100",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            term: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [];
+      
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    it("should return warning from multi course requirement when one exists", () => {
+      const specializationRequirements = [
+        {
+          courses: "COSC 111",
+          credits: 3
+        },
+        {
+          courses: "MATH 100, MATH 101",
+          credits: 6
+        }
+      ];
+
+      const plan = {
+        name: "Test Plan",
+        courses: [
+          {
+            code: "COSC 111",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            term: "1",
+            credits: 3
+          },
+          {
+            code: "MATH 100",
+            standingRequirement: 0,
+            coRequisites: [],
+            preRequisites: [],
+            year: "2018",
+            term: "1",
+            credits: 3
+          }
+        ]
+      };
+
+      const expectedWarnings = [
+        {
+          message: `Missing 3 credits of ${specializationRequirements[1].courses}.`,
+          type: "missingCredits"
+        }
+      ];
+      
+      const actualWarnings = warningService.getSpecializationWarnings(plan, specializationRequirements);
+
+      assert.deepEqual(actualWarnings, expectedWarnings);
+    });
+
+    
   });
 });

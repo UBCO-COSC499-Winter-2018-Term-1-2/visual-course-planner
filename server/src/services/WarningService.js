@@ -20,9 +20,9 @@ function getPrereqWarnings(plan, course) {
         type: "prereq"
       });
     } else {
-      const reqYearSemester = planCourse.year.concat(planCourse.semester);
-      const courseYearSemester = course.year.concat(course.semester);
-      if (reqYearSemester >= courseYearSemester) {
+      const reqYearTerm = planCourse.year.concat(planCourse.term);
+      const courseYearTerm = course.year.concat(course.term);
+      if (reqYearTerm >= courseYearTerm) {
         warnings.push({
           message: `${req.code} must be taken earlier than ${course.code}.`,
           type: "prereq"
@@ -45,11 +45,11 @@ function getCoreqWarnings(plan, course) {
         type: "coreq"
       });
     } else {
-      const reqYearSemester = planCourse.year.concat(planCourse.semester);
-      const courseYearSemester = course.year.concat(course.semester);
-      if (reqYearSemester > courseYearSemester) {
+      const reqYearTerm = planCourse.year.concat(planCourse.term);
+      const courseYearTerm = course.year.concat(course.term);
+      if (reqYearTerm > courseYearTerm) {
         warnings.push({
-          message: `${planCourse.code} needs to be in the same semester as ${course.code}, or earlier.`,
+          message: `${planCourse.code} needs to be in the same term as ${course.code}, or earlier.`,
           type: "coreq"
         });
       }
@@ -67,6 +67,52 @@ function getPlanCourse(plan, course) {
   return null;
 }
 
+// TODO: probably more efficient to go through plan courses and see if what req they fit into
+function getSpecializationWarning(plan, requirement) {
+
+  // plan.courses.forEach(course => {
+
+  // });
+
+
+  // check specific req, then go more general
+  let creditsNeeded = parseInt(requirement.credits);
+  let warning = [];
+  requirement.courses.split(',').map(course => course.trim()).forEach(reqCode => {
+    /* Check for specific course requirement */
+    const planCourse = getPlanCourse(plan, {code: reqCode});
+    if (planCourse !== null) {
+      creditsNeeded -= parseInt(planCourse.credits);
+    }
+    /* Check for upper level code Upper e.g. Level COSC */
+    // if (reqCode ){
+
+    // }
+    /* Check for upper level area e.g. Upper Level Science */
+    /* Check for upper level general e.g. Upper Level General */
+    /* Check for any specific */
+    /* Check for any area */
+    /* Check for any general */
+  });
+  // TODO: notify which course is missing
+  if (creditsNeeded > 0) {
+    warning.push({
+      message: `Missing ${creditsNeeded} credits of ${requirement.courses}.`,
+      type: "missingCredits"
+    });
+  }
+  return warning;
+}
+
+function getSpecializationWarnings(plan, requirements) {
+  // check if plan has number of credits from courses
+  let warnings = [];
+  requirements.forEach(req => {
+    warnings = warnings.concat(getSpecializationWarning(plan, req));
+  });
+  return warnings;
+}
+
 module.exports = {
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];
@@ -79,17 +125,26 @@ module.exports = {
   },
   
 
-  getWarnings: (plan, user) => {
+  getWarnings: (plan, user, requirements) => {
     let warnings = [];
     plan.courses.forEach(planCourse => {
       warnings = warnings.concat(
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
-        getPrereqWarnings(plan, planCourse)
+        getPrereqWarnings(plan, planCourse),
+        getSpecializationWarnings(plan, requirements)
       );
     });
     return warnings;
+  },
+
+  getSpecializationWarnings: (plan, requirements) => {
+    // check if plan has number of credits from courses
+    let warnings = [];
+    requirements.forEach(req => {
+      warnings = warnings.concat(getSpecializationWarning(plan, req));
+    });
+  
+    return warnings;
   }
-
 };
-

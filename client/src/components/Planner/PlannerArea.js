@@ -12,69 +12,70 @@ class PlannerArea extends Component {
     showSnackbar: false,
     defaultTerms: [
       {
-        number: "1",
-        coursesContained: ["COSC 111", "COSC 122"],
+        id: "1",
+        coursesContained: [],
         year: "2018",
-        session: "W"
-
-      },
-      {
-        number: "2",
-        coursesContained: ["COSC 121", "COSC 123"],
-        year: "2019",
-        session: "W"
-
-      },
-      {
-        number: "3",
-        coursesContained: ["COSC 222", "COSC 211"],
-        year: "2019",
-        session: "W"
-
-      },
-      {
-        number: "4",
-        coursesContained: ["COSC 221", "MATH 200"],
-        year: "2020",
-        session: "W"
-
-      },
-      {
-        number: "5",
-        coursesContained: ["COSC 111", "COSC 122"],
-        year: "2018",
-        session: "W"
-
-      },
-      {
-        number: "6",
-        coursesContained: ["COSC 111", "COSC 122"],
-        year: "2018",
-        session: "W"
-
-      },
-      {
-        number: "7",
-        coursesContained: ["COSC 111", "COSC 122"],
-        year: "2018",
-        session: "W"
-
-      },
-      {
-        number: "8",
-        coursesContained: ["COSC 111", "COSC 122"],
-        year: "2018",
-        session: "W"
+        session: "W",
+        term: "1"
       }
     ]
+  }
+
+  insertCourseIntoTerm = (course, year, term) => {
+    let found = false;
+    this.state.defaultTerms.forEach(stateTerm => {
+      if (stateTerm.year === year && stateTerm.term === term) {
+        found = true;
+        const index = this.state.defaultTerms.findIndex(x=> x.id === stateTerm.id);
+        if (index === -1) {
+          // handle error
+        } else {
+          this.setState({
+            defaultTerms: [
+              ...this.state.defaultTerms.slice(0,index),
+              Object.assign({}, this.state.defaultTerms[index], {coursesContained: [...stateTerm.coursesContained, course]}),
+              ...this.state.defaultTerms.slice(index+1)
+            ]
+          });
+        }
+      }
+    });
+    if (!found) {
+      this.setState(prevState => {
+        const prevStateLastItem = prevState.defaultTerms[prevState.defaultTerms.length - 1];
+        return {
+          // this adds a term to default terms, and sets the id to id of the last term + 1
+          defaultTerms: [
+            ...prevState.defaultTerms,
+            {
+              id: (parseInt(prevStateLastItem.id) + 1).toString(),
+              coursesContained: [course],
+              year: prevStateLastItem.term === "2" ? (parseInt(prevStateLastItem.year) + 1).toString() : prevStateLastItem.year,
+              term: prevStateLastItem.term === "2" ? "1" : "2"
+
+            }
+          ]
+        };
+      });
+    }
+  }
+
+  componentDidMount = () => {
+    this.mapPlanToTerms();
+  }
+
+  mapPlanToTerms = () => {
+    this.props.plan.courses.forEach(course => {
+      this.insertCourseIntoTerm(course, course.year, course.term);
+    });
   }
 
   //rendering semester components by mapping defaulTerms state variable
   renderSemesters = () => {
     return (this.state.defaultTerms.map((term) =>
       <Semester
-        key={term.number}
-        term={term.number}
+        key={term.id}
+        term={term.id}
         coursesContained={term.coursesContained}
         onCourseDragOver={this.onCourseDragOver}
         onCourseDragStart={this.onCourseDragStart.bind(this)}
@@ -88,9 +89,8 @@ class PlannerArea extends Component {
   }
 
   //drag start event handler for course component - passed in as prop via Semester
-  onCourseDragStart = (e, courseCode, sourceTerm) => {
-    e.dataTransfer.setData("courseCode", courseCode);
-    e.dataTransfer.setData("sourceTerm", sourceTerm);
+  onCourseDragStart = (e, course) => {
+    e.dataTransfer.setData("course", JSON.stringify(course));
   }
 
   //on drop event handler for semester component
@@ -98,8 +98,8 @@ class PlannerArea extends Component {
   //need to implement rejection of duplicate courses in a term
   onCourseDrop = (e, targetTerm) => {
 
-    let movedCourse = e.dataTransfer.getData("courseCode");
-    let sourceTerm = e.dataTransfer.getData("sourceTerm");
+    let movedCourse = JSON.parse(e.dataTransfer.getData("course"));
+    let sourceTerm = movedCourse.term;
     const targetTermIndex = targetTerm - 1;
     const sourceTermIndex = sourceTerm - 1;
     let removedCourseIndex;
@@ -108,8 +108,8 @@ class PlannerArea extends Component {
 
     //extract source term object from the state variable
     const sourceTermObject = this.state.defaultTerms.filter((term) => {
-      if ((targetTerm != sourceTerm) && (term.number == sourceTerm)) {
-        console.log("filtered term: " + term.number);
+      if ((targetTerm != sourceTerm) && (term.id == sourceTerm)) {
+        console.log("filtered term: " + term.id);
         return term;
       }
     });
@@ -118,8 +118,8 @@ class PlannerArea extends Component {
     //check if source term object extracted from state is not empty
     if(sourceTermObject.length != 0) {
      
-      removedCourseIndex = sourceTermObject[0].coursesContained.indexOf(movedCourse);
-      console.log("lulu");
+      removedCourseIndex = sourceTermObject[0].coursesContained.findIndex(course=> course.code === movedCourse.code);
+      console.log(removedCourseIndex);
       
       //remove course by updating state
       this.setState({
@@ -129,13 +129,14 @@ class PlannerArea extends Component {
           ...this.state.defaultTerms.slice(sourceTermIndex + 1)
         ]
       });
-    }
-    else
+    } else {
       removedCourseIndex = -1;
-    
+    }
+
     //add course
-    this.state.defaultTerms.filter((term) => {
-      if ((targetTerm != sourceTerm) && (term.number == targetTerm)) {
+    movedCourse.term = targetTerm;
+    this.state.defaultTerms.forEach((term) => {
+      if ((targetTerm != sourceTerm) && (term.id == targetTerm)) {
 
         this.setState({
           defaultTerms: [
@@ -146,8 +147,13 @@ class PlannerArea extends Component {
         });
       }
     });
+    console.log("Moved Course: " + JSON.stringify(movedCourse));
+    let courses = [...this.props.plan.courses];
+    const updatedCourseIndex = this.props.plan.courses.findIndex(x => x.code === movedCourse.code);
+    courses.splice(updatedCourseIndex, 1);
+    courses.push(movedCourse);
 
-    console.log(this.state);
+    this.props.updatePlanCourses(courses);
   }
 
   showSnackbar = () => {
@@ -198,7 +204,8 @@ PlannerArea.propTypes = {
   plan: PropTypes.object.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
   optimize: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  updatePlanCourses: PropTypes.func.isRequired
 };
 
 export default PlannerArea;
