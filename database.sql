@@ -91,7 +91,7 @@ CREATE TABLE session (
 CREATE TABLE user (
   id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email     VARCHAR(320),
-  password  VARCHAR(40),
+  password  CHAR(60),
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,

@@ -9,6 +9,7 @@ import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
 import App from './containers/App';
 import UserProfile from "./components/UserProfile/profile";
+import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
 
 const routing = (
   <Router>
@@ -19,6 +20,7 @@ const routing = (
       <Route path="/create-account" component={CreateAccount} />
       <Route path="/admin" component={AdminPortal} />
       <Route path="/profile" component={UserProfile} />
+      <Route path="/course-history" component={PreviousCourses} />
     </div>
   </Router>
 );
