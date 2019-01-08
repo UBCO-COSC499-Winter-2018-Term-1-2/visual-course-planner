@@ -155,7 +155,7 @@ class degreeYear extends Component {
             </div>
 
             <div className="btn-div">
-              <button className="green-borderbtn"><Link to = "/course-history">Next</Link></button> 
+              <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
             </div>
 
           </form>
