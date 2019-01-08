@@ -12,7 +12,7 @@ const CULTURE_SHIPS = [
   // {id: 250, name: 'Zoologist'}
 ];
 
-class degreeYear extends Component {
+class DegreeYear extends Component {
 
   //FORM INITIAL SETUP ::
     state = {
@@ -185,4 +185,4 @@ class degreeYear extends Component {
 }
     
   
-export default degreeYear;
+export default DegreeYear;
