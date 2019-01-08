@@ -12,7 +12,23 @@ class Main extends Component {
     drawerOpen : false,
     showSnackbar : false,
     currentPlan: {
-      courses: [],
+      courses: [
+        {
+          code: "COSC 111",
+          standingRequirement: 0,
+          coRequisites: [],
+          preRequisites: [],
+          year: "2018",
+          term: "1"
+        },
+        {
+          code: "COSC 121",
+          standingRequirement: 0,
+          coRequisites: [],
+          preRequisites: [ { code: "COSC 111" } ],
+          year: "2018",
+          term: "2"
+        }],
       id: 0,
       name: "BA Major Computer Science",
       specialization: {
@@ -42,6 +58,17 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
+  updatePlanCourses = (courses) => {
+    this.setState(prevState => {
+      return {
+        currentPlan: {
+          ...prevState.currentPlan,
+          courses: courses
+        }
+      };
+    });
+  }
+
   render() {
     let backdrop;
 
@@ -59,6 +86,7 @@ class Main extends Component {
           toggleSidebar={this.toggleCourseListSidebarHandler}
           optimize={this.optimizeHandler}
           user={this.state.user}
+          updatePlanCourses={this.updatePlanCourses}
         />
        
         {/*'courseTitle','courseInfo' should come from the database */}

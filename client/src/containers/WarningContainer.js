@@ -32,6 +32,15 @@ class WarningContainer extends Component {
     }
   }
 
+  componentDidUpdate = async () => {
+    try {
+      const warnings = await this.getWarnings();
+      this.props.setWarnings(warnings);
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   render() {
     return (
       <WarningSummary click={this.props.click} numberOfWarnings={this.props.warnings.length}/>

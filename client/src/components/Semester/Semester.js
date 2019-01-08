@@ -12,14 +12,14 @@ class Semester extends Component {
   //using this to add a border to the divs to act as a year/term divider
   isEvenTerm = (this.props.term % 2 == 0);
 
-  coursesContained = this.props.coursesContained;
+  // coursesContained = this.props.coursesContained;
   
   renderCourses = () => {
-    return (this.coursesContained.map((course) => {
+    return (this.props.coursesContained.map((course) => {
       return (
         <Course
-          key={course}
-          code={course}
+          key={course.code}
+          course={course}
           type="required"
           sourceTerm={this.props.term}
           onDragStart={this.props.onCourseDragStart} />

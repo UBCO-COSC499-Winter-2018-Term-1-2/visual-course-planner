@@ -20,9 +20,9 @@ function getPrereqWarnings(plan, course) {
         type: "prereq"
       });
     } else {
-      const reqYearSemester = planCourse.year.concat(planCourse.semester);
-      const courseYearSemester = course.year.concat(course.semester);
-      if (reqYearSemester >= courseYearSemester) {
+      const reqYearTerm = planCourse.year.concat(planCourse.term);
+      const courseYearTerm = course.year.concat(course.term);
+      if (reqYearTerm >= courseYearTerm) {
         warnings.push({
           message: `${req.code} must be taken earlier than ${course.code}.`,
           type: "prereq"
@@ -45,11 +45,11 @@ function getCoreqWarnings(plan, course) {
         type: "coreq"
       });
     } else {
-      const reqYearSemester = planCourse.year.concat(planCourse.semester);
-      const courseYearSemester = course.year.concat(course.semester);
-      if (reqYearSemester > courseYearSemester) {
+      const reqYearTerm = planCourse.year.concat(planCourse.term);
+      const courseYearTerm = course.year.concat(course.term);
+      if (reqYearTerm > courseYearTerm) {
         warnings.push({
-          message: `${planCourse.code} needs to be in the same semester as ${course.code}, or earlier.`,
+          message: `${planCourse.code} needs to be in the same term as ${course.code}, or earlier.`,
           type: "coreq"
         });
       }
