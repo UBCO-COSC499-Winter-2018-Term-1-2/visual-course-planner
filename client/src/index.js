@@ -15,7 +15,7 @@ import DegreeYear from "./components/DegreeYear-NewUser/DegreeYear";
 const routing = (
   <Router>
     <div>
-      <Route exact path="/" component={App} />
+      <Route exact path="/" component={Login} />
       <Route path="/main" component={Main} />
       <Route path="/login" component={Login} />
       <Route path="/create-account" component={CreateAccount} />

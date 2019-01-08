@@ -164,7 +164,8 @@ class CreateAccountMenu extends Component {
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
-        <button className="deafultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Create Account</button> 
+        
+        <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/course-history">Create Account</Link></button> 
         <button className="open-diff-menubtn" ><Link to = "/login">Login</Link></button> 
       </form>
     );
@@ -183,20 +184,3 @@ class CreateAccountMenu extends Component {
 
 
 export default CreateAccountMenu;
-
-
-// <div className="menu">
-        
-// <form onSubmit= {this.sumbitUserCredentials}>
-//   <h1 className="login-heading">Visual Course Planner</h1>
-    
-//   <input className="InputElement" type="text" name="fname" placeholder="* First Name" value={this.state.fields.fName} onChange={this.changeHandler}/>
-//   <input className="InputElement" type="text" name="lname" placeholder="* Last Name" value={this.state.fields.lName} onChange={this.changeHandler}/>   
-//   <input className="InputElement" type="text" name="email" placeholder="* Email" value={this.state.fields.email} onChange={this.changeHandler}/>
-//   <input className="InputElement" type="text" name="password" placeholder="* Password" value={this.state.fields.password} onChange={this.changeHandler}/>   
-//   <input className="InputElement" type="text" name="confirmPassword" placeholder="* Confirm Password" value={this.state.fields.confirmPassword} onChange={this.changeHandler}/>
-//   <button className="create-accountbtn">Create Account</button> 
-//   <button className="open-diff-menubtn" ><Link to = "/login">Login Instead</Link></button> 
-// </form> 
-
-// </div>

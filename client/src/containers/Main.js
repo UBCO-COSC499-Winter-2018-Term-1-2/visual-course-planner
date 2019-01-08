@@ -5,8 +5,16 @@ import PlanList from '../components/PlanList/PlanList';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
 import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import Backdrop from '../components/Backdrop/Backdrop';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+// Font Awesome Icon Imports
+library.add(faSignOutAlt);
+library.add(faHeart);
+library.add(faExclamationTriangle);
+library.add(faPlus);
+library.add(faTimes);
 class Main extends Component {
   state = {
     drawerOpen : false,
