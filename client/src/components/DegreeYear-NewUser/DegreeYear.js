@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import '../DegreeYear-NewUser/degree-year.css';
+import '../DegreeYear-NewUser/DegreeYear.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
 
 
-const CULTURE_SHIPS = [
+const DEGREES = [
   {id: 1, name: 'Bachelor of Science, Major Computer Science'},
   {id: 2, name: 'Bachelor of Arts, Major Computer Science'},
   // {id: 249, name: 'Zero Gravitas'},
@@ -39,7 +39,7 @@ class DegreeYear extends Component {
       }, //end of profile menu
       formIsValid: false,
       loading: false,
-      selectedShips: []
+      selectedDegrees: []
     }
     
     checkValidity(value, rules) {
@@ -87,13 +87,13 @@ class DegreeYear extends Component {
       }
 
       handleDeselect(index) {
-        var selectedShips = this.state.selectedShips.slice();
-        selectedShips.splice(index, 1);
-        this.setState({selectedShips});
+        var selectedDegrees = this.state.selectedDegrees.slice();
+        selectedDegrees.splice(index, 1);
+        this.setState({selectedDegrees});
       }
     
-      handleSelectionChange = (selectedShips) => {
-        this.setState({selectedShips});
+      handleSelectionChange = (selectedDegrees) => {
+        this.setState({selectedDegrees});
       }
     
       render(){
@@ -108,7 +108,7 @@ class DegreeYear extends Component {
         }
 
         //MULTIFILTER::
-        var {selectedShips} = this.state;
+        var {selectedDegrees} = this.state;
         
         //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
         //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
@@ -132,8 +132,8 @@ class DegreeYear extends Component {
             {/* RETURN MULTIFILTER (LIST OF UBCO DEGREES) */}
             <FilteredMultiSelect
               onChange={this.handleSelectionChange}
-              options={CULTURE_SHIPS}
-              selectedOptions={selectedShips}
+              options={DEGREES}
+              selectedOptions={selectedDegrees}
               textProp="name"
               valueProp="id"
               buttonText="Add Course"
@@ -141,10 +141,10 @@ class DegreeYear extends Component {
               className="ubco-offered-courses-list"
             />
             <div className="added-courses">
-              {selectedShips.length === 0 && <p><i>(Nothing selected yet)</i></p>}
-              {selectedShips.length > 0 && 
-                <ul className="yoshii">
-                  {selectedShips.map((ship, i) => 
+              {selectedDegrees.length === 0 && <p><i>(Nothing selected yet)</i></p>}
+              {selectedDegrees.length > 0 && 
+                <ul>
+                  {selectedDegrees.map((ship, i) => 
                     <li key={ship.id}>
                       {`${ship.name} `}
                       <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>

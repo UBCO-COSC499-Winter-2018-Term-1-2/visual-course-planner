@@ -10,7 +10,7 @@ import CreateAccount from './components/Signup/CreateAccountMenu';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
 import UserProfile from "./components/UserProfile/profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
-import DegreeYear from "./components/DegreeYear-NewUser/degreeYear";
+import DegreeYear from "./components/DegreeYear-NewUser/DegreeYear";
 
 const routing = (
   <Router>
