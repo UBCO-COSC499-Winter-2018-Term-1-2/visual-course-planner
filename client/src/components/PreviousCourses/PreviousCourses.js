@@ -76,8 +76,8 @@ class previousCourses extends Component {
               </div>
                     
               <div className="btn-div">
-                <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
-                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+                <Link to = "/main"><button className="green-borderbtn">Submit</button></Link>
+                <Link to = "/main"><button className="exit-green-borderbtn">Exit</button></Link>
               </div>
 
             </div> 
