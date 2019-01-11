@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const expressValidator = require('express-validator');
+const passport = require('passport');
+
 
 router.use(expressValidator());
 
+//change user post routes and then continue to work on login
 
 //user model
 const User = require('../../models/User');
@@ -16,7 +19,7 @@ const user = new User();
  * @access Private
  */ 
 
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   console.log(req.body);
 
   const email = req.body.email;
@@ -78,9 +81,26 @@ router.post('/', async (req, res) => {
 });
 
 
-// router.get('/', async (req, res) => {
+ router.get('/login', async (req, res) => {
+
+  res.render('LoginInterface')
+
+ });
+
+router.post('/login', async (req, res, next) => {
+
+passport.authenticate('local', {
+
+  successRedirect: '/',
+  failureRedirect: '/users/login',
+  failureFlash: true
+
+ // passReqToCallback : true
+
+})(req, res, next);
+
+});
 
 
-// });
 
 module.exports = router;

@@ -6,6 +6,7 @@ const warnings = require('./server/src/routes/api/warnings');
 const signup = require('./server/src/routes/api/users');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+const passport = require('passport');
 
 
 const app = express();
@@ -14,13 +15,20 @@ const app = express();
 app.use(express.json());
 app.use(fileUpload());
 
-// Body ParserMiddleware
+// BodyParser Middleware
 app.use(bodyParser.json());
+
+// passport config
+require('./server/src/config/passport')(passport);
+
+// passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Use routes
 app.use('/api/upload', upload);
 app.use('/api/warnings', warnings);
-app.use('/api/users', signup);
+app.use('/api/users/signup', signup);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

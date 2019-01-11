@@ -46,6 +46,19 @@ class User {
 
   }
 
+
+  async getuserbyId(id) {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT * FROM user WHERE id = ?", [id]);
+    } catch (err) {
+      throw err;
+    }
+
+    return rows;
+
+  }
+
 }
 
 module.exports = User;

@@ -104,7 +104,7 @@ class CreateAccountMenu extends Component {
       formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     }
     console.log(formData);
-    axios.post( '/api/users', formData )
+    axios.post( '/api/users/signup', formData )
       .then( response => {
         this.setState( { loading: false } );
         console.log(response);
