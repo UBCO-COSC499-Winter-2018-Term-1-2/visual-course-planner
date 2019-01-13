@@ -1,14 +1,11 @@
-.term-container{
-  margin: 0.5em;
-  height: 75vh;
+.term-container {
   display: flex;
   flex-direction: column;
-  min-width: 25%;
-  max-width: 25%;
+  overflow: auto;
+  width: 200px;
 }
 
-.term-heading{
-  width: 30%;
+.term-heading {
   color: #84bd00;
   align-self: center;
   font-weight: lighter;
@@ -16,7 +13,8 @@
 }
 
 .courses-container{
-  height: 65vh;
+  display: flex;
   justify-content: center;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
 }

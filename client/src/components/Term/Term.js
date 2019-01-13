@@ -4,13 +4,6 @@ import './Term.css';
 import Course from '../Course/Course';
 
 class Term extends Component {
-  //term or year divider style attribute
-  termDivider = {
-    "borderRight": "1px solid #b7b7b8"
-  };
-
-  //using this to add a border to the divs to act as a year/term divider
-  isEvenTerm = (this.props.term.number % 2 == 0);
 
   // coursesContained = this.props.coursesContained;
   
@@ -29,15 +22,13 @@ class Term extends Component {
   }
   render() {
     return (
-      <div className="term-container" style={this.isEvenTerm ? this.termDivider : null}>
+      <div className="term-container"
+        onDragOver={this.props.onCourseDragOver}
+        onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}
+      >
         <h3 className="term-heading">Term {this.props.term.number}</h3>
-        <div
-          className="courses-container" style={this.isEvenTerm ? null : this.termDivider}
-          onDragOver={this.props.onCourseDragOver}
-          onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}>
-
+        <div className="courses-container">
           <this.renderCourses />
-
         </div>
       </div>
     );

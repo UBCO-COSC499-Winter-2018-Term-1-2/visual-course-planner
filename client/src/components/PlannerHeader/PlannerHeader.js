@@ -9,7 +9,7 @@ import WarningSummary from '../WarningSummary/WarningSummary';
 
 const PlannerHeader = (props) => {
   return (
-    <div className="planner-header-wrapper">
+    <div className="planner-header-wrapper" id="planner-header">
       <PlanName name={props.planName}/>
       <FavouriteBtn favourite={true}/>
       <OptimizeBtn click={props.optimize}/>

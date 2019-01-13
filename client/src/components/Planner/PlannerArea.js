@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import Term from '../Term/Term';
 import axios from 'axios';
@@ -10,7 +9,6 @@ class PlannerArea extends Component {
 
   state = {
     warnings: [],
-    showSnackbar: false,
     terms: [
     ]
   }
@@ -93,14 +91,42 @@ class PlannerArea extends Component {
     return nextTerm;
   }
 
-  componentDidMount = async () => {
+  updateWarnings() {
     this.getWarnings()
       .then(warnings => {
-        this.setWarnings(warnings);
+        this.props.setWarnings(warnings);
       })
       .catch(err => {
         console.error(err);
       });
+  }
+
+  objectsAreSame(x, y) {
+    var objectsAreSame = true;
+    for(var propertyName in x) {
+      if(x[propertyName] !== y[propertyName]) {
+        objectsAreSame = false;
+        break;
+      }
+    }
+    return objectsAreSame;
+  }
+
+  componentDidUpdate(prevProps) {
+    let same = true;
+    
+    if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
+      this.updateWarnings();
+    } else {
+      for (let i = 0; i < prevProps.plan.courses.length; i++) {
+        if (!this.objectsAreSame(prevProps.plan.courses[i], this.props.plan.courses[i])) {
+          same = false;
+        }
+      }
+      if (!same) {
+        this.updateWarnings();
+      }
+    }
   }
 
   // When we drag a course into the plan, it will have a term associated with it. When its dropped, we can just call map plan to terms
@@ -159,20 +185,6 @@ class PlannerArea extends Component {
     this.props.updatePlanCourses(courses);
   }
 
-  showSnackbar = () => {
-    this.setState({ showSnackbar: true });
-  }
-
-  closeSnackbar = () => {
-    this.setState({ showSnackbar: false });
-  }
-
-  setWarnings = (warnings) => {
-    this.setState({
-      warnings: warnings
-    });
-  }
-
   getWarnings = async () => {
     try {
       const response = await axios.post('api/warnings', 
@@ -194,22 +206,13 @@ class PlannerArea extends Component {
   render() {
     return (
       <div id="planner-area">
-        <PlannerHeader
-          planName={this.props.plan.name}
-          toggleSidebar={this.props.toggleSidebar}
-          optimize={this.props.optimize}
-          showWarning={this.showSnackbar}
-          numberOfWarnings={this.state.warnings.length}
-          user={this.props.user}
-        />
-
         <div id="session-container">
           <this.renderTerms />
         </div>
 
         <WarningSnackbar
-          showSnackbar={this.state.showSnackbar}
-          closeSnackbar={this.closeSnackbar}
+          showSnackbar={this.props.showSnackbar}
+          closeSnackbar={this.props.closeSnackbar}
           warnings={this.state.warnings}
         />
       </div>
@@ -219,10 +222,11 @@ class PlannerArea extends Component {
 
 PlannerArea.propTypes = {
   plan: PropTypes.object.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-  optimize: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  updatePlanCourses: PropTypes.func.isRequired
+  showSnackbar: PropTypes.bool.isRequired,
+  closeSnackbar: PropTypes.func.isRequired,
+  updatePlanCourses: PropTypes.func.isRequired,
+  setWarnings: PropTypes.func.isRequired
 };
 
 export default PlannerArea;

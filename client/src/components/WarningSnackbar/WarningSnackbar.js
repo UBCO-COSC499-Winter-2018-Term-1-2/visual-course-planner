@@ -35,7 +35,7 @@ class WarningSnackbar extends Component {
   }
   render() {
     return (
-      <div className={this.props.showSnackbar ? "warning-snackbar-wrapper-show" : "warning-snackbar-wrapper"}>
+      <div className={this.props.showSnackbar ? "warning-snackbar-wrapper show" : "warning-snackbar-wrapper"}>
         <div className="warning-snackbar-container">
           <this.CloseButton/>
           <this.WarningMessageList/>
