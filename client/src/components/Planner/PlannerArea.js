@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
-import Semester from '../Semester/Semester';
+import Term from '../Term/Term';
+import axios from 'axios';
 import './PlannerArea.css';
 
 class PlannerArea extends Component {
@@ -10,149 +11,151 @@ class PlannerArea extends Component {
   state = {
     warnings: [],
     showSnackbar: false,
-    defaultTerms: [
-      {
-        id: "1",
-        coursesContained: [],
-        year: "2018",
-        session: "W",
-        term: "1"
-      }
+    terms: [
     ]
   }
 
-  insertCourseIntoTerm = (course, year, term) => {
-    let found = false;
-    this.state.defaultTerms.forEach(stateTerm => {
-      if (stateTerm.year === year && stateTerm.term === term) {
-        found = true;
-        const index = this.state.defaultTerms.findIndex(x=> x.id === stateTerm.id);
-        if (index === -1) {
-          // handle error
-        } else {
-          this.setState({
-            defaultTerms: [
-              ...this.state.defaultTerms.slice(0,index),
-              Object.assign({}, this.state.defaultTerms[index], {coursesContained: [...stateTerm.coursesContained, course]}),
-              ...this.state.defaultTerms.slice(index+1)
-            ]
-          });
-        }
-      }
-    });
-    if (!found) {
-      this.setState(prevState => {
-        const prevStateLastItem = prevState.defaultTerms[prevState.defaultTerms.length - 1];
-        return {
-          // this adds a term to default terms, and sets the id to id of the last term + 1
-          defaultTerms: [
-            ...prevState.defaultTerms,
-            {
-              id: (parseInt(prevStateLastItem.id) + 1).toString(),
-              coursesContained: [course],
-              year: prevStateLastItem.term === "2" ? (parseInt(prevStateLastItem.year) + 1).toString() : prevStateLastItem.year,
-              term: prevStateLastItem.term === "2" ? "1" : "2"
+  insertCoursesIntoTerms = () => {
+    let terms = [{
+      id: 1,
+      coursesContained: [],
+      year: 2018,
+      session: "W",
+      number: 1
+    }];
 
-            }
-          ]
-        };
-      });
+    this.props.plan.courses.forEach(course => {
+      terms = terms.concat(this.getTermsForCourse(terms, course));
+      const indexOfTerm = terms.findIndex(existingTerm => course.term === existingTerm.number && course.year === existingTerm.year && course.session === existingTerm.session);
+      if (indexOfTerm === -1) {
+        console.error(`Couldn't find term after creating it. \nTerms: ${JSON.stringify(terms)}\nCourse: ${JSON.stringify(course)}`);
+      }
+      terms[indexOfTerm].coursesContained.push(course);
+    }); 
+
+    return terms;
+  }
+
+  getTermsForCourse(currentTerms, course) {
+    let termsToAdd = [];
+    const indexOfTerm = currentTerms.findIndex(existingTerm =>  {
+      console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
+
+      return course.term === existingTerm.number && course.year === existingTerm.year && course.term === existingTerm.number;
+    });
+    if (indexOfTerm !== -1) {
+      return [];
+    } else {
+      let lastTerm = {};
+      lastTerm = currentTerms[currentTerms.length - 1];
+
+      while(lastTerm.number != course.term || lastTerm.year != course.year || lastTerm.session != course.session) {
+
+        console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
+        
+        const nextTerm = this.getNextTerm(lastTerm, course);
+        termsToAdd.push(nextTerm);
+        lastTerm = nextTerm; 
+
+        console.log("Added term: " + JSON.stringify(nextTerm));
+        console.log("Terms to add: " + JSON.stringify(termsToAdd));
+      }
+      return termsToAdd;
     }
   }
+    
 
-  componentDidMount = () => {
-    this.mapPlanToTerms();
+  getNextTerm(currentTerm) {
+    let nextTermNumber;
+    let nextTermYear = currentTerm.year;
+    let nextTermSession = "W";
+
+    if (currentTerm.number === 1) {
+      nextTermNumber = 2;
+      nextTermSession = currentTerm.session;
+    } else {
+      if (currentTerm.session == "W") {
+        nextTermYear = currentTerm.year + 1;
+        nextTermSession = "S";
+      }
+      nextTermNumber = 1;
+    }
+    const nextTermId = currentTerm.id + 1;
+    
+    const nextTerm = {
+      id: nextTermId,
+      coursesContained: [],
+      year: nextTermYear,
+      number: nextTermNumber,
+      session: nextTermSession
+    };
+
+    return nextTerm;
   }
 
+  componentDidMount = async () => {
+    this.getWarnings()
+      .then(warnings => {
+        this.setWarnings(warnings);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  // When we drag a course into the plan, it will have a term associated with it. When its dropped, we can just call map plan to terms
   mapPlanToTerms = () => {
-    this.props.plan.courses.forEach(course => {
-      this.insertCourseIntoTerm(course, course.year, course.term);
-    });
+    console.log("Mapping plan to terms...");
+    return this.insertCoursesIntoTerms();
   }
 
-  //rendering semester components by mapping defaulTerms state variable
-  renderSemesters = () => {
-    return (this.state.defaultTerms.map((term) =>
-      <Semester
+  //rendering term components by mapping defaultTerms state variable
+  renderTerms = () => {
+    const terms = this.mapPlanToTerms().map((term) => (
+      <Term
         key={term.id}
-        term={term.id}
+        term={term}
         coursesContained={term.coursesContained}
         onCourseDragOver={this.onCourseDragOver}
         onCourseDragStart={this.onCourseDragStart.bind(this)}
-        onCourseDrop={this.onCourseDrop} />
+        onCourseDrop={this.onCourseDrop}
+      />
     ));
+    return (
+      <div id="term-view">
+        {terms}
+      </div>
+    );
   }
 
-  //drag over event handler for semester component - passed in as prop
+  //drag over event handler for term component - passed in as prop
   onCourseDragOver = (e) => {
     e.preventDefault();
   }
 
-  //drag start event handler for course component - passed in as prop via Semester
-  onCourseDragStart = (e, course) => {
+  //drag start event handler for course component - passed in as prop via Term
+  onCourseDragStart = (e, course, sourceTerm) => {
     e.dataTransfer.setData("course", JSON.stringify(course));
+    e.dataTransfer.setData("sourceTerm", JSON.stringify(sourceTerm));
   }
 
-  //on drop event handler for semester component
+  //on drop event handler for term component
   //need to implement removing course from source term
   //need to implement rejection of duplicate courses in a term
   onCourseDrop = (e, targetTerm) => {
 
     let movedCourse = JSON.parse(e.dataTransfer.getData("course"));
-    let sourceTerm = movedCourse.term;
-    const targetTermIndex = targetTerm - 1;
-    const sourceTermIndex = sourceTerm - 1;
-    let removedCourseIndex;
-    console.log("source term: " + sourceTerm);
-    console.log("target term: " + targetTerm);
 
-    //extract source term object from the state variable
-    const sourceTermObject = this.state.defaultTerms.filter((term) => {
-      if ((targetTerm != sourceTerm) && (term.id == sourceTerm)) {
-        console.log("filtered term: " + term.id);
-        return term;
-      }
-    });
-    console.log(sourceTermObject);
+    movedCourse.term = targetTerm.number;
+    movedCourse.year = targetTerm.year;
+    movedCourse.session = targetTerm.session;
 
-    //check if source term object extracted from state is not empty
-    if(sourceTermObject.length != 0) {
-     
-      removedCourseIndex = sourceTermObject[0].coursesContained.findIndex(course=> course.code === movedCourse.code);
-      console.log(removedCourseIndex);
-      
-      //remove course by updating state
-      this.setState({
-        defaultTerms: [
-          ...this.state.defaultTerms.slice(0, sourceTermIndex),
-          Object.assign([], this.state.defaultTerms[sourceTermIndex], sourceTermObject[0].coursesContained.splice(removedCourseIndex,1)),
-          ...this.state.defaultTerms.slice(sourceTermIndex + 1)
-        ]
-      });
-    } else {
-      removedCourseIndex = -1;
-    }
-
-    //add course
-    movedCourse.term = targetTerm;
-    this.state.defaultTerms.forEach((term) => {
-      if ((targetTerm != sourceTerm) && (term.id == targetTerm)) {
-
-        this.setState({
-          defaultTerms: [
-            ...this.state.defaultTerms.slice(0, targetTermIndex),
-            Object.assign([], this.state.defaultTerms[targetTermIndex], term.coursesContained.push(movedCourse)),
-            ...this.state.defaultTerms.slice(targetTermIndex + 1)
-          ]
-        });
-      }
-    });
     console.log("Moved Course: " + JSON.stringify(movedCourse));
-    let courses = [...this.props.plan.courses];
+    let courses = [ ...this.props.plan.courses];
     const updatedCourseIndex = this.props.plan.courses.findIndex(x => x.code === movedCourse.code);
     courses.splice(updatedCourseIndex, 1);
-    courses.push(movedCourse);
-
+    courses = [ ...courses, movedCourse];
+    console.log(courses);
     this.props.updatePlanCourses(courses);
   }
 
@@ -170,21 +173,38 @@ class PlannerArea extends Component {
     });
   }
 
+  getWarnings = async () => {
+    try {
+      const response = await axios.post('api/warnings', 
+        {
+          plan: this.props.plan,
+          user: this.props.user
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      return response.data;
+      
+    } catch(err) {
+      console.log(err);
+    }  
+  }
+
   render() {
     return (
       <div id="planner-area">
         <PlannerHeader
-          plan={this.props.plan}
+          planName={this.props.plan.name}
           toggleSidebar={this.props.toggleSidebar}
           optimize={this.props.optimize}
           showWarning={this.showSnackbar}
-          setWarnings={this.setWarnings}
-          warnings={this.state.warnings}
+          numberOfWarnings={this.state.warnings.length}
           user={this.props.user}
         />
 
-        <div id="semester-view">
-          <this.renderSemesters />
+        <div id="session-container">
+          <this.renderTerms />
         </div>
 
         <WarningSnackbar
@@ -192,9 +212,6 @@ class PlannerArea extends Component {
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
         />
-        <div id="session-container">
-
-        </div>
       </div>
     );
   }

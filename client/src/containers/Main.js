@@ -26,19 +26,31 @@ class Main extends Component {
           standingRequirement: 0,
           coRequisites: [],
           preRequisites: [],
-          year: "2018",
-          term: "1"
+          year: 2018,
+          session: "W",
+          term: 1
         },
         {
           code: "COSC 121",
           standingRequirement: 0,
           coRequisites: [],
           preRequisites: [ { code: "COSC 111" } ],
-          year: "2018",
-          term: "2"
-        }],
+          year: 2018,
+          session: "W",
+          term: 2
+        },
+        {
+          code: "COSC 341",
+          standingRequirement: 3,
+          coRequisites: [],
+          preRequisites: [],
+          year: 2019,
+          session: "W",
+          term: 2
+        }
+      ],
       id: 0,
-      name: "BA Major Computer Science",
+      name: "My Plan",
       specialization: {
         id: 1,
         name: "Major in Computer Science"
