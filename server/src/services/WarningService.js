@@ -20,8 +20,8 @@ function getPrereqWarnings(plan, course) {
         type: "prereq"
       });
     } else {
-      const reqYearTerm = planCourse.year.concat(planCourse.term);
-      const courseYearTerm = course.year.concat(course.term);
+      const reqYearTerm = planCourse.year.toString().concat(planCourse.term);
+      const courseYearTerm = course.year.toString().concat(course.term);
       if (reqYearTerm >= courseYearTerm) {
         warnings.push({
           message: `${req.code} must be taken earlier than ${course.code}.`,

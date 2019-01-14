@@ -3,8 +3,9 @@
   width: 100vw;
   display: grid;
   grid-template-columns: 1fr 4fr;
-  grid-template-rows: 1fr 3fr 2fr;
+  grid-template-rows: 1fr 1fr 6fr 4fr;
   grid-template-areas: 
+    "student-info planner-header"
     "student-info planner"
     "plan-list planner"
     "note-area planner";
@@ -17,6 +18,11 @@
   position: relative;
   grid-area: planner;
   background-color: #262427;
+}
+
+#planner-header {
+  grid-area: planner-header;
+  background-color: #1a191b;
 }
 
 #plan-list {

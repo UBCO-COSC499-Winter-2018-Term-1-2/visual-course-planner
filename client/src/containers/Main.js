@@ -6,6 +6,7 @@ import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
 import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
 import Backdrop from '../components/Backdrop/Backdrop';
 import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -26,19 +27,31 @@ class Main extends Component {
           standingRequirement: 0,
           coRequisites: [],
           preRequisites: [],
-          year: "2018",
-          term: "1"
+          year: 2018,
+          session: "W",
+          term: 1
         },
         {
           code: "COSC 121",
           standingRequirement: 0,
           coRequisites: [],
           preRequisites: [ { code: "COSC 111" } ],
-          year: "2018",
-          term: "2"
-        }],
+          year: 2018,
+          session: "W",
+          term: 2
+        },
+        {
+          code: "COSC 341",
+          standingRequirement: 3,
+          coRequisites: [],
+          preRequisites: [],
+          year: 2019,
+          session: "W",
+          term: 2
+        }
+      ],
       id: 0,
-      name: "BA Major Computer Science",
+      name: "My Plan",
       specialization: {
         id: 1,
         name: "Major in Computer Science"
@@ -46,8 +59,8 @@ class Main extends Component {
     },
     user: {
       name: "Leonardo"
-    }
-
+    },
+    warnings: []
   }
 
   toggleCourseListSidebarHandler = () => {
@@ -66,6 +79,16 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
+  setNumberOfWarnings = (number) => {
+    this.setState({numberOfWarnings: number});
+  }
+
+  setWarnings = (warnings) => {
+    this.setState({
+      warnings: warnings
+    });
+  }
+
   updatePlanCourses = (courses) => {
     this.setState(prevState => {
       return {
@@ -75,6 +98,14 @@ class Main extends Component {
         }
       };
     });
+  }
+
+  showSnackbar = () => {
+    this.setState({ showSnackbar: true });
+  }
+
+  closeSnackbar = () => {
+    this.setState({ showSnackbar: false });
   }
 
   render() {
@@ -89,12 +120,21 @@ class Main extends Component {
         <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea/>
-        <PlannerArea 
-          plan={this.state.currentPlan}
+        <PlannerHeader
+          planName={this.state.currentPlan.name}
           toggleSidebar={this.toggleCourseListSidebarHandler}
           optimize={this.optimizeHandler}
+          showWarning={this.showSnackbar}
+          numberOfWarnings={this.state.warnings.length}
+          user={this.state.user}
+        />
+        <PlannerArea 
+          plan={this.state.currentPlan}
           user={this.state.user}
           updatePlanCourses={this.updatePlanCourses}
+          showSnackbar={this.state.showSnackbar}
+          closeSnackbar={this.closeSnackbar}
+          setWarnings={this.setWarnings}
         />
        
         {/*'courseTitle','courseInfo' should come from the database */}
