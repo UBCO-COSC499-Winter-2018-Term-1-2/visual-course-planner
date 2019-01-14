@@ -10,9 +10,10 @@ import axios from 'axios';
 class CourseListSideBar extends React.Component {
 
   state = {
-    courses: []
+    courses: [],
+    filteredCourses: []
   }
-  
+
   getCourseList = async () => {
     let courseList = [];
     try {
@@ -28,23 +29,35 @@ class CourseListSideBar extends React.Component {
 
   componentDidMount = async () => {
     const courses = await this.getCourseList();
-    this.setState({courses: courses});
+    this.setState({courses: courses, filteredCourses: courses});
+  }
+
+  filterList = (e) => {
+    let updatedList = this.state.courses;
+    updatedList = updatedList.filter(item =>
+      item.code.toLowerCase().search(e.target.value.toLowerCase()) !== -1 || item.startYear.concat(item.season).toLowerCase().search(e.target.value.toLowerCase()) !== -1
+    );
+    this.setState({filteredCourses: updatedList});
   }
 
   render() {
     console.log(this.state.courses);
-    const courseList = this.state.courses.map(course => {
-      <CourseInfoDisplay
-        title={course.code}
-        info={course.description}
-      />;
+    const courseList = this.state.filteredCourses.map(course => {
+      return (
+        <CourseInfoDisplay
+          key={course.cid}
+          title={course.code}
+          info={course.description}
+          session={course.startYear.concat(course.season)}
+        />
+      );
     });
 
     return (
       <div className={this.props.show ? 'side-drawer open' : 'side-drawer'}>
         <CloseSideBarBtn click={this.props.close}/>
           
-        <CourseSearchBar />
+        <CourseSearchBar onChange={this.filterList}/>
         <div className="sidebar-divider-container">
           <hr id="sidebar-divider"/>
         </div>

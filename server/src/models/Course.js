@@ -17,7 +17,7 @@ module.exports = {
     db
       .query("SELECT * FROM course_info WHERE course.id = ?", [id])
       .then(rows => {
-        return rows;
+        return rows[0];
       })
       .catch(err => {
         throw err;
