@@ -127,20 +127,6 @@ function getCategorySpecializationWarning(plan, requirement) {
 
 }
 
-function getSpecializationWarnings(plan, requirements) {
-  // check if plan has number of credits from courses
-  let warnings = [];
-  requirements.filter(req => req.category == undefined).forEach(req => {
-    warnings = warnings.concat(getSpecificCoursesSpecializationWarning(plan, req));
-  });
-
-  requirements.filter(req => req.category != undefined).forEach(req => {
-    warnings = warnings.concat(getCategorySpecializationWarning(plan, req));
-  });
-
-  return warnings;
-}
-
 module.exports = {
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];
@@ -160,7 +146,7 @@ module.exports = {
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
         getPrereqWarnings(plan, planCourse),
-        getSpecializationWarnings(plan, requirements)
+        module.exports.getSpecializationWarnings(plan, requirements)
       );
     });
     return warnings;
@@ -169,10 +155,14 @@ module.exports = {
   getSpecializationWarnings: (plan, requirements) => {
     // check if plan has number of credits from courses
     let warnings = [];
-    requirements.forEach(req => {
-      warnings = warnings.concat(getSpecializationWarnings(plan, req));
+    requirements.filter(req => req.category == undefined).forEach(req => {
+      warnings = warnings.concat(getSpecificCoursesSpecializationWarning(plan, req));
     });
-  
+
+    requirements.filter(req => req.category != undefined).forEach(req => {
+      warnings = warnings.concat(getCategorySpecializationWarning(plan, req));
+    });
+
     return warnings;
   }
 };
