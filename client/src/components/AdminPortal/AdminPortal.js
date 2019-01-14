@@ -15,7 +15,8 @@ class AdminPortal extends Component {
     degrees: [],
     isNewDegree: "false",
     degreeName: "",
-    specializationName: ""
+    specializationName: "",
+    degreeId: 1
   };
 
   Progress = () => {

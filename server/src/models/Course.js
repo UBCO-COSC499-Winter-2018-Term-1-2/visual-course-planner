@@ -15,7 +15,7 @@ module.exports = {
 
   async getCourse(id) {
     db
-      .query("SELECT * FROM course WHERE course.id = ?", [id])
+      .query("SELECT * FROM course_info WHERE course.id = ?", [id])
       .then(rows => {
         return rows;
       })
@@ -23,6 +23,15 @@ module.exports = {
         throw err;
       }); 
       
+  },
+
+  async getCourses() {
+    const courseInfoResults = await db.query(`
+      SELECT * FROM course
+      JOIN course_term ON course.id = course_term.cid
+      JOIN term ON course_term.tid = term.id
+      JOIN session ON term.sid = session.id`);
+    return courseInfoResults;
   },
 
   async getCourseInfo(code) {

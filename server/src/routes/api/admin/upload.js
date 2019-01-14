@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
   if (uploadFile.mimetype !== 'text/csv') {
     return res.status(400).send("Only csv files may be uploaded.");
   }
-  const uploadDir = path.resolve(`${__dirname}/../../../../../client/public/files`);
+  const uploadDir = path.resolve(`${__dirname}/../../../../../client/uploads`);
   console.log(uploadDir);
   const filePath = `${uploadDir}/${fileName}`;
 

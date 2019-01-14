@@ -5,7 +5,7 @@ const connection = mysql.createPool({
   user:'vcpUser',
   password:'',
   database:'vcp',
-  port: '8889'
+  port: '3306'
  
 });
 

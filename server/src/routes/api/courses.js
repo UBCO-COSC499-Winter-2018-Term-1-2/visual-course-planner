@@ -19,5 +19,20 @@ router.get('/:id', (req, res) => {
     });
 });
 
+/**
+ * @route GET api/courses/
+ * @desc Get all offered courses
+ * @access Private
+ */
+router.get('/', (req, res) => {
+  Course.getCourses()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.error("Couldnt get courses: " + err);
+    });
+});
+
 
 module.exports = router;

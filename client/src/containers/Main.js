@@ -141,8 +141,7 @@ class Main extends Component {
         <CourseListSideBar 
           show={this.state.drawerOpen} 
           close={this.closeCourseListSidebar}
-          courseTitle="COSC 111"
-          courseInfo="This Course is the best course with the best prof Dr.Abdallah." />
+        />
         {backdrop}
       </div>
     );
