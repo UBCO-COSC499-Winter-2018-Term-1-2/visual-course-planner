@@ -58,7 +58,8 @@ class Main extends Component {
       }
     },
     user: {
-      name: "Leonardo"
+      name: "Leonardo",
+      standing: 1
     },
     warnings: []
   }
@@ -134,6 +135,7 @@ class Main extends Component {
           updatePlanCourses={this.updatePlanCourses}
           showSnackbar={this.state.showSnackbar}
           closeSnackbar={this.closeSnackbar}
+          warnings={this.state.warnings}
           setWarnings={this.setWarnings}
         />
        
