@@ -58,7 +58,8 @@ class Main extends Component {
       }
     },
     user: {
-      name: "Leonardo"
+      name: "Leonardo",
+      yearStanding: 1
     },
     warnings: []
   }
@@ -134,6 +135,7 @@ class Main extends Component {
           updatePlanCourses={this.updatePlanCourses}
           showSnackbar={this.state.showSnackbar}
           closeSnackbar={this.closeSnackbar}
+          warnings={this.state.warnings}
           setWarnings={this.setWarnings}
         />
        
@@ -141,8 +143,7 @@ class Main extends Component {
         <CourseListSideBar 
           show={this.state.drawerOpen} 
           close={this.closeCourseListSidebar}
-          courseTitle="COSC 111"
-          courseInfo="This Course is the best course with the best prof Dr.Abdallah." />
+        />
         {backdrop}
       </div>
     );

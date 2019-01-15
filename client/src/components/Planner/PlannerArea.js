@@ -8,7 +8,6 @@ import './PlannerArea.css';
 class PlannerArea extends Component {
 
   state = {
-    warnings: [],
     terms: [
     ]
   }
@@ -203,6 +202,10 @@ class PlannerArea extends Component {
     }  
   }
 
+  componentDidMount() {
+    this.updateWarnings();
+  }
+
   render() {
     return (
       <div id="planner-area">
@@ -213,7 +216,7 @@ class PlannerArea extends Component {
         <WarningSnackbar
           showSnackbar={this.props.showSnackbar}
           closeSnackbar={this.props.closeSnackbar}
-          warnings={this.state.warnings}
+          warnings={this.props.warnings}
         />
       </div>
     );
@@ -226,7 +229,8 @@ PlannerArea.propTypes = {
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,
   updatePlanCourses: PropTypes.func.isRequired,
-  setWarnings: PropTypes.func.isRequired
+  setWarnings: PropTypes.func.isRequired,
+  warnings: PropTypes.array.isRequired
 };
 
 export default PlannerArea;

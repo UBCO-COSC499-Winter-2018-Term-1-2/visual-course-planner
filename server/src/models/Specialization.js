@@ -10,8 +10,10 @@ module.exports = {
   },
 
   async createSpecializationRequirement(requirementObj, specId) {
+    console.log("Creating req object: " + JSON.stringify(requirementObj));
     // make transaction
     const req = requirementObj.requirements;
+    const credits = requirementObj.credits;
     const exception = requirementObj.exceptions;
     const hasException = exception.length > 0 ? true : false;
 
@@ -19,7 +21,7 @@ module.exports = {
     const CATEGORY_TYPE = 'category';
 
     if (req.type === COURSES_TYPE) {
-      const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, null]);
+      const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [credits, null]);
       const crid = results.insertId;
       await db.query("INSERT INTO specialization_credit_requirement (spid, crid) VALUES (?, ?)", [specId, crid]);
       req.courses.forEach(async course => {
@@ -27,7 +29,10 @@ module.exports = {
         db.query("INSERT INTO credit_requirement_course_info (crid, cid) VALUES (?, ?)", [crid, course]);
       });
     } else if (req.type === CATEGORY_TYPE) {
-      db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [req.credits, req.courses]);
+      console.log("Creating credit req: " + credits + " " + req.courses);
+      const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [credits, req.courses]);
+      await db.query("INSERT INTO specialization_credit_requirement (spid, crid) VALUES (?, ?)", [specId, results.insertId]);
+
     }
 
     if (hasException) {  
@@ -45,11 +50,12 @@ module.exports = {
 
   async getSpecializationRequirements(specId) {
     const results = await db.query(`
-      SELECT *
+      SELECT cr.credits, cr.category, cr.id, GROUP_CONCAT(ci.id)
       FROM specialization_credit_requirement AS scr JOIN credit_requirement AS cr ON scr.crid = cr.id
-      LEFT JOIN credit_requirement_course_info AS crci ON crci.cid = cr.id
-      JOIN course_info AS ci ON ci.id = crci.cid
-      WHERE spid = ?`, [specId]);
+      LEFT JOIN credit_requirement_course_info AS crci ON crci.crid = cr.id
+      LEFT JOIN course_info AS ci ON ci.id = crci.cid
+      WHERE spid = ?
+      GROUP BY cr.id`, [specId]);
     return results;
   }
 };

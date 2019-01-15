@@ -10,7 +10,7 @@ module.exports = {
 
   async getTermById(id) {
     const termResults = await db.query("SELECT * FROM term WHERE id = ?", [id]);
-    return termResults;
+    return termResults[0];
   },
 
   async createTerm(term, sessionId) {

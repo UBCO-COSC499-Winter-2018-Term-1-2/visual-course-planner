@@ -9,8 +9,8 @@ DROP TABLE IF EXISTS course_info_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
-DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS term;
+DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS plan;
@@ -197,19 +197,19 @@ CREATE TABLE course_info_corequirement (
 
 CREATE TABLE course_term (
   cid INT,
-  sid INT,
+  tid INT,
 
   FOREIGN KEY (cid)
     REFERENCES course(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
-  FOREIGN KEY (sid)
+  FOREIGN KEY (tid)
     REFERENCES term(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
-  PRIMARY KEY (cid, sid)
+  PRIMARY KEY (cid, tid)
 );
 
 CREATE TABLE credit_requirement_course_info (

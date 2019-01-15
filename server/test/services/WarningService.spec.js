@@ -8,7 +8,7 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 1
+        yearStanding: 1
       };
   
       let courseNoPrereq = {
@@ -39,7 +39,7 @@ describe("WarningService", () => {
     it("should return a standing warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 2
+        yearStanding: 2
       };
 
       let course = {
@@ -69,7 +69,7 @@ describe("WarningService", () => {
     it("should return a coreq missing warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 3
+        yearStanding: 3
       };
 
       let course = {
@@ -102,7 +102,7 @@ describe("WarningService", () => {
     it("should return a coreq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 1
+        yearStanding: 1
       };
 
       let courseAdded = {
@@ -150,7 +150,7 @@ describe("WarningService", () => {
 
       let user = {
         name: "Test",
-        standing: "1"
+        yearStanding: "1"
       };
       const expectedWarnings = [];
       const acutalWarnings = warningService.getWarnings(plan, user);
@@ -161,7 +161,7 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 1
+        yearStanding: 1
       };
   
       let preReqWrongTerm = {
@@ -201,7 +201,7 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        standing: 1
+        yearStanding: 1
       };
   
       let courseNoPrereq = {

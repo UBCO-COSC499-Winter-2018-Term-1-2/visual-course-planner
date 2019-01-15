@@ -23,6 +23,7 @@ module.exports = {
   
       // ensure term exists
       const term = await termService.ensureTerm(element.term, session.id);
+      console.log("Term exists: ", term);
   
       await course.insertCourse(element.code, term.id);
 

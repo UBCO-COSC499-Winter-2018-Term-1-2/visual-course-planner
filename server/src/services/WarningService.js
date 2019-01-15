@@ -1,8 +1,17 @@
+// const areas = {
+//   science: {
+//     codes: ["COSC", "MATH", "PHYS", "CHEM"]
+//   },
+//   arts: {
+//     codes: ["ENGL", "PHIL"]
+//   }
+// }
+
 function getStandingWarnings(user, course) {
   let warnings = [];
-  if (user.standing < course.standingRequirement) {
+  if (user.yearStanding < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.yearStanding}.`,
       type: "standing"
     });
   }
@@ -68,13 +77,7 @@ function getPlanCourse(plan, course) {
 }
 
 // TODO: probably more efficient to go through plan courses and see if what req they fit into
-function getSpecializationWarning(plan, requirement) {
-
-  // plan.courses.forEach(course => {
-
-  // });
-
-
+function getSpecificCoursesSpecializationWarning(plan, requirement) {
   // check specific req, then go more general
   let creditsNeeded = parseInt(requirement.credits);
   let warning = [];
@@ -84,15 +87,7 @@ function getSpecializationWarning(plan, requirement) {
     if (planCourse !== null) {
       creditsNeeded -= parseInt(planCourse.credits);
     }
-    /* Check for upper level code Upper e.g. Level COSC */
-    // if (reqCode ){
 
-    // }
-    /* Check for upper level area e.g. Upper Level Science */
-    /* Check for upper level general e.g. Upper Level General */
-    /* Check for any specific */
-    /* Check for any area */
-    /* Check for any general */
   });
   // TODO: notify which course is missing
   if (creditsNeeded > 0) {
@@ -104,13 +99,32 @@ function getSpecializationWarning(plan, requirement) {
   return warning;
 }
 
-function getSpecializationWarnings(plan, requirements) {
-  // check if plan has number of credits from courses
-  let warnings = [];
-  requirements.forEach(req => {
-    warnings = warnings.concat(getSpecializationWarning(plan, req));
-  });
-  return warnings;
+// function getCourseCat(course) {
+//   // subjectCode (COSC) area (Science) level (Upper) number (111)
+  
+//   return {
+//     subjectCode: course.substring(0, 4),
+//     area: "test"
+//   };
+// }
+
+function getCategorySpecializationWarning(plan, requirement) {
+
+
+  if (requirement.category.startsWith("UPPER")) {
+    console.log("upper");
+  }
+
+  /* Check for upper level code Upper e.g. Level COSC */
+  // if (reqCode ){
+
+  // }
+  /* Check for upper level area e.g. Upper Level Science */
+  /* Check for upper level general e.g. Upper Level General */
+  /* Check for any specific */
+  /* Check for any area */
+  /* Check for any general */
+
 }
 
 module.exports = {
@@ -132,7 +146,7 @@ module.exports = {
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
         getPrereqWarnings(plan, planCourse),
-        getSpecializationWarnings(plan, requirements)
+        module.exports.getSpecializationWarnings(plan, requirements)
       );
     });
     return warnings;
@@ -141,10 +155,14 @@ module.exports = {
   getSpecializationWarnings: (plan, requirements) => {
     // check if plan has number of credits from courses
     let warnings = [];
-    requirements.forEach(req => {
-      warnings = warnings.concat(getSpecializationWarning(plan, req));
+    requirements.filter(req => req.category == undefined).forEach(req => {
+      warnings = warnings.concat(getSpecificCoursesSpecializationWarning(plan, req));
     });
-  
+
+    requirements.filter(req => req.category != undefined).forEach(req => {
+      warnings = warnings.concat(getCategorySpecializationWarning(plan, req));
+    });
+
     return warnings;
   }
 };
