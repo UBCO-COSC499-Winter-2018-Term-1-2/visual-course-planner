@@ -9,22 +9,33 @@ const input = ( props ) => {
   let greenTitle = "green-title";
   let cssSelectItems ="select-items";
   let cssCourseList ="course-list";
+  let emailTest = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
  
 
   const inputStyling = [cssInputElement];
   const selectStyling = [cssSelectItems];
   const listStyling = [cssCourseList];
+  const  emailVarification =[emailTest];
+  
   // const labelStyling = [cssLabel];
   
 
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
     inputStyling.push(cssInvalid);
+    //`${name} is required and cannot be empty`;
+    console.log("botw is the best game - in my opinion");
+
+    if(props.id == 'email'){
+      emailVarification.push (console.log("orcarina of time is good too"));
+      emailTest.test(props.value);
+      `${name} should be a valid email address`;
+    }
     //shouldBeValidated is used if state element has "validation" -- will be used on other pages
   }
   
   input.propTypes = {
-    invalid: PropTypes.string,
-    shouldBeValidated: PropTypes.string,
+    invalid: PropTypes.boolean,
+    shouldBeValidated: PropTypes.object,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
     elementConfig: PropTypes.object,

@@ -22,6 +22,9 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
+        formErrors: {
+          fName: ''
+        },
         valid: false,
         inputElementTouched: false 
       },
@@ -35,9 +38,13 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
+        formErrors: {
+          lName: ''
+        },
         valid: false,
         inputElementTouched: false 
       },
+
       email: {
         elementType: 'input',
         elementConfig: {
@@ -48,9 +55,14 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
+        formErrors: {
+          email: ''
+        },
+        name: 'email',
         valid: false,
         inputElementTouched: false 
       },
+
       password: {
         elementType: 'input',
         elementConfig: {
@@ -60,6 +72,9 @@ class CreateAccountMenu extends Component {
         value: '',
         validation: {
           required: true
+        },
+        formErrors: {
+          password: ''
         },
         valid: false,
         inputElementTouched: false 
@@ -74,6 +89,9 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
+        formErrors: {
+          confirmPassword: ''
+        },
         valid: false,
         inputElementTouched: false 
       },
@@ -82,28 +100,56 @@ class CreateAccountMenu extends Component {
     formIsValid: false,
     loading: false
   }
+  
 
   checkValidity(value, rules) {
     let isValid = true;
+    //const fieldValidationErrors = this.state.formErrors;
+    // const isEmail = name === "email";
+    // const isPassword = name === "password";
+    // const emailTest = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    //const validity = this.state.valid;
+
+    
+    // this.setState({
+    //   formErrors: fieldValidationErrors,
+    //   formValidity: validity,
+    // },);
+
+    // if(isValid[value]) {
+    //   if(isPassword) {
+    //     isValid[value] = name.length >= 6; 
+    //     fieldValidationErrors[value] = isValid[value] ? '': `${name} should be more than 6 characters long`;
+    //   }
+    // }
+
+    // if(isEmail) {
+    //   isValid[value] = emailTest.test(name);
+    //   fieldValidationErrors[value] = isValid[value] ? '' : `${name} should be a valid email address`;
+    // }
 
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-    }
+    } 
+    //value = this.state.value ? 'zeldaisthebest' : `${name} is required and cannot be empty`;
+
 
     return isValid;
   }
 
   handler = ( event ) => {
-    console.log('handler');
+    //console.log('handler');
     event.preventDefault();
     this.setState( { loading: true } );
+
     
     //this is log send user input to send to database.
     let formData = new FormData();
     for (let formElementIdentifier in this.state.createAccountMenu) {
       formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     }
-    console.log(formData);
+    //console.log(formData);
     axios.post( '/api/users', formData )
       .then( response => {
         this.setState( { loading: false } );
@@ -120,6 +166,8 @@ class CreateAccountMenu extends Component {
   //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
     console.log(event.target.value); //prints values to console
+
+    //const {name, value} = event.target;
     const updatedCreateAccountMenu = {
       ...this.state.createAccountMenu
     };
@@ -128,7 +176,7 @@ class CreateAccountMenu extends Component {
     };
     updatedMenuElement.value = event.target.value;
     //CHECKS IF EACH STATE HAS A VALUE
-    updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation);
+    updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, updatedMenuElement.name);
     updatedMenuElement.inputElementTouched = true;
     updatedCreateAccountMenu[inputIdentifier] = updatedMenuElement;
     
