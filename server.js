@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const upload = require('./server/src/routes/api/upload');
 const warnings = require('./server/src/routes/api/warnings');
-const signup = require('./server/src/routes/api/users');
+const users = require('./server/src/routes/api/users');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 // Use routes
 app.use('/api/upload', upload);
 app.use('/api/warnings', warnings);
-app.use('/api/users', signup);
+app.use('/api/users', users);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

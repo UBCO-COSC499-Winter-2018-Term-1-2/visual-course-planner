@@ -16,13 +16,14 @@ const user = new User();
  * @access Private
  */ 
 
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
   console.log(req.body);
 
   const email = req.body.email;
   const password = req.body.password;
 
   //server side validation
+
   req.checkBody('fName', 'Name is required').notEmpty();
   req.checkBody('lName', 'Name is required').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
