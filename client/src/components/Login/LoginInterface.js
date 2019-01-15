@@ -4,6 +4,7 @@ import './LoginInterface.css';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 
 class LoginInterface extends Component {
@@ -26,7 +27,7 @@ class LoginInterface extends Component {
         password: {
           elementType: 'input',
           elementConfig: {
-            type: 'text',
+            type: 'password',
             placeholder: 'Password'
           },
           value: '',
@@ -60,20 +61,55 @@ class LoginInterface extends Component {
       for (let formElementIdentifier in this.state.loginMenu) {
         menuData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
       }
-      //this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      //   const order = {
-      //     ingredients: this.props.ingredients,
-      //     price: this.props.price,
-      //     formData: formData
-      // }
-      // axios.post( '/orders.json', order )
-      //     .then( response => {
-      //         this.setState( { loading: false } );
-      //         this.props.history.push( '/' );
-      //     } )
-      //     .catch( error => {
-      //         this.setState( { loading: false } );
-      //     } );
+      // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
+      const menu = {
+        // ingredients: this.props.ingredients,
+        // price: this.props.price,
+        menuData: menuData
+      };
+
+      //AXIO CODE HERE
+      axios.get('http://jsonplaceholder.typicode.com/todos', {})
+        .then(function (response) {
+          console.log("THIS IS THE GET CALL");
+          console.log(response);
+          //resultElement.innerHTML = generateSuccessHTMLOutput(response);
+        })
+        .catch(error => {
+          //resultElement.innerHTML = generateErrorHTMLOutput(error);
+          this.setState( { loading: false } );
+          if(error.response){
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request){
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
+        });
+
+      axios.post( 'login', menu )
+        .then( response => {
+          this.setState( { loading: false } );
+          console.log("no errors::");
+          console.log(response);
+          //this.props.history.push( '/' );
+        } )
+        .catch( error => {
+          this.setState( { loading: false } );
+          if(error.response){
+          // console.log(error.response);
+            console.log("data::");
+            console.log(error.response.data);
+            console.log("status::");
+            console.log(error.response.status);
+            console.log("headers::");
+            console.log(error.response.headers);
+          } else if (error.request){
+            console.log('ERROR', error.message);
+          }
+          console.log(error.config);
+        } );
     
     }
 
@@ -125,7 +161,7 @@ class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button className="loginbtn" disabled={!this.state.formIsValid}>Login</button> 
+          <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/main">Login</Link></button> 
           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
         </form>
       );
@@ -147,16 +183,3 @@ LoginInterface.propTypes = {
 };
 
 export default LoginInterface;
-
-
-// <div className="menu">
-//         <h1 className="login-heading">Visual Course Planner</h1>
-//         <form onSubmit= {this.contactSubmit.bind(this)}>
-//           <input type="text" name="email" placeholder="Email" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]}/>
-//           <input type="text" name="pass" placeholder="Password" onChange={this.handleChange.bind(this, "password")} value={this.state.fields["password"]}/>   
-//           <button className="loginbtn">Login</button> 
-//           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
-        
-         
-//         </form>        
-//       </div> 

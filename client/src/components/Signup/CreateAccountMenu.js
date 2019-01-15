@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 
 // const CreateAccountMenu = () => {
@@ -53,7 +54,7 @@ class CreateAccountMenu extends Component {
       password: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Password'
         },
         value: '',
@@ -66,7 +67,7 @@ class CreateAccountMenu extends Component {
       confirmPassword: {
         elementType: 'input',
         elementConfig: {
-          type: 'text',
+          type: 'password',
           placeholder: '* Confirm Password'
         },
         value: '',
@@ -91,29 +92,27 @@ class CreateAccountMenu extends Component {
 
     return isValid;
   }
+
   handler = ( event ) => {
+    console.log('handler');
     event.preventDefault();
     this.setState( { loading: true } );
     
     //this is log send user input to send to database.
-    const menuData = {};
+    let formData = new FormData();
     for (let formElementIdentifier in this.state.createAccountMenu) {
-      menuData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
+      formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     }
-    //this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-    //   const order = {
-    //     ingredients: this.props.ingredients,
-    //     price: this.props.price,
-    //     formData: formData
-    // }
-    // axios.post( '/orders.json', order )
-    //     .then( response => {
-    //         this.setState( { loading: false } );
-    //         this.props.history.push( '/' );
-    //     } )
-    //     .catch( error => {
-    //         this.setState( { loading: false } );
-    //     } );
+    console.log(formData);
+    axios.post( '/api/users', formData )
+      .then( response => {
+        this.setState( { loading: false } );
+        console.log(response);
+      } )
+      .catch( error => {
+        this.setState( { loading: false } );
+        console.log(error);
+      } );
   
   }
 
@@ -153,7 +152,7 @@ class CreateAccountMenu extends Component {
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form onSubmit={this.handler}>
+      <form>
         {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
@@ -165,12 +164,14 @@ class CreateAccountMenu extends Component {
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
-        <button className="create-accountbtn" disabled={!this.state.formIsValid}>Create Account</button> 
-        <button className="open-diff-menubtn" ><Link to = "/login">Login Instead</Link></button> 
+        
+        <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/course-history">Create Account</Link></button> 
+        <button className="open-diff-menubtn" ><Link to = "/login">Login</Link></button> 
       </form>
     );
     
     return(
+
       //RETURN LOGIN MENU HERE
       <div className="menu">
         <h1 className="login-heading">Visual Course Planner</h1>
@@ -183,20 +184,3 @@ class CreateAccountMenu extends Component {
 
 
 export default CreateAccountMenu;
-
-
-// <div className="menu">
-        
-// <form onSubmit= {this.sumbitUserCredentials}>
-//   <h1 className="login-heading">Visual Course Planner</h1>
-    
-//   <input className="InputElement" type="text" name="fname" placeholder="* First Name" value={this.state.fields.fName} onChange={this.changeHandler}/>
-//   <input className="InputElement" type="text" name="lname" placeholder="* Last Name" value={this.state.fields.lName} onChange={this.changeHandler}/>   
-//   <input className="InputElement" type="text" name="email" placeholder="* Email" value={this.state.fields.email} onChange={this.changeHandler}/>
-//   <input className="InputElement" type="text" name="password" placeholder="* Password" value={this.state.fields.password} onChange={this.changeHandler}/>   
-//   <input className="InputElement" type="text" name="confirmPassword" placeholder="* Confirm Password" value={this.state.fields.confirmPassword} onChange={this.changeHandler}/>
-//   <button className="create-accountbtn">Create Account</button> 
-//   <button className="open-diff-menubtn" ><Link to = "/login">Login Instead</Link></button> 
-// </form> 
-
-// </div>

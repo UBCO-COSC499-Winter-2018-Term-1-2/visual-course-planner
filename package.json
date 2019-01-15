@@ -4,9 +4,14 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "csv-parse": "^4.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
+    "express-validator": "^5.3.1",
     "i": "^0.3.6",
+    "mysql": "^2.16.0",
     "npm": "^6.4.1",
     "prop-types": "^15.6.2"
   },
@@ -15,7 +20,7 @@
     "fix": "./node_modules/.bin/eslint --fix .",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "test": "CI=true npm test --prefix client",
+    "test": "./node_modules/.bin/mocha server/**/*.spec.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
@@ -32,6 +37,8 @@
     "@ljharb/eslint-config": "^13.0.0",
     "babel-eslint": "^9.x",
     "babel-plugin-macros": "^2.4.2",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "concurrently": "^4.1.0",
     "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -41,7 +48,8 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "nodemon": "^1.18.7"
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.8"
   },
   "description": "A visual course planner.",
   "main": "server.js",

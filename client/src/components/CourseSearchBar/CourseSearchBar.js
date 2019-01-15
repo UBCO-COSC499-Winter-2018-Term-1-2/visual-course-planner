@@ -7,7 +7,7 @@ const CourseSearchBar = (props) => {
     <div className="searchbar-container">
       <input 
         type="text" 
-        className="course-searchbar" 
+        className="course-searchbar focus-element" 
         placeholder="Search Course Code"
         onClick={props.click} /> {/* call back func received as a prop*/}
     </div>

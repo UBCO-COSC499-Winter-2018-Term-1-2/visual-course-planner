@@ -1,28 +1,6 @@
-.planner-header-wrapper{
+.planner-header-wrapper {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    /* background-color: black; */
-}
-
-.plan-name-container{
-    width: 25%;
-    /* background-color: red; */
-}
-
-.favouriteBtn-container{
-    /* width: 7%; */
-}
-
-.optimizeBtn-container{
-    /* background-color: orange; */
-}
-
-.warning-summary-container{
-    /* background-color: green; */
-}
-
-.addcourseBtn-container{
-    /* background-color: purple; */
+    padding-top: 1em;
+    justify-content: space-evenly;
 }

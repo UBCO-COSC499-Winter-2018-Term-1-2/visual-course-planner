@@ -1,0 +1,146 @@
+body{
+
+    background-color: #262427;
+    font-family: Helvetica;
+}
+
+.login-heading {
+    text-align: center;
+    color: #ffffff;
+   
+}
+
+.green-title{
+     color: #84bd00;
+     font-weight: normal;
+     text-transform: uppercase;
+}
+
+.yellow-title{
+     color: #c5980f;
+     font-weight: normal;
+     text-transform: uppercase;
+     margin: 2em auto;
+}
+
+.green-borderbtn{
+    background: none;
+    margin: 0em 1em;
+
+    border-color: #84bd00;
+    padding:.5em 1em;
+    cursor: pointer;
+    color: #84bd00;
+    font-size: 1em;
+    /* display: inline-block; */
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+/* STRICLY CREATED SO BOTH GREEN-BORDERBTNS MATCH IN WIDTH */
+.exit-green-borderbtn{
+    background: none;
+    margin: 0em 1em;
+    border-color: #84bd00;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    color: #84bd00;
+    font-size: 1em;
+    /* display: inline-block; */
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+
+.green-borderbtn:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+    border-color: #afda77;
+}
+
+
+.exit-green-borderbtn:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+    border-color: #afda77;
+   
+}
+
+
+.profile-menu{
+    background-color: #262427;
+    /* background-color: red; */
+    width: 50em;
+    padding: 2em 4em;
+    margin: auto 2em;
+    /* display: flex; */
+    /* flex-direction: row; */
+    /* float: left; */
+}
+
+a:link{
+    text-decoration: none;
+}
+
+
+.btn-div{
+    margin: 4em -1em;
+    display: flex;
+    flex-direction: reverse;
+}
+
+.link-to-course-history{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #d16313;
+
+}
+
+.course-historybtn{
+    color: lightgreen;
+    background: none;
+    border-color: lightgreen;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+.course-historybtn:hover{
+    color: rgb(188, 240, 188);
+    background: none;
+    border-color: rgb(188, 240, 188)    ;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+.link-to-course-history{
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #d16313;
+
+}
+
+.course-historybtn{
+    color: lightgreen;
+    background: none;
+    border-color: lightgreen;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+.course-historybtn:hover{
+    color: rgb(188, 240, 188);
+    background: none;
+    border-color: rgb(188, 240, 188)    ;
+    padding:.5em 1.8em;
+    cursor: pointer;
+    font-size: .88em;
+}
+
+
+
+
