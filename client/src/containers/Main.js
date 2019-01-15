@@ -59,7 +59,7 @@ class Main extends Component {
     },
     user: {
       name: "Leonardo",
-      standing: 1
+      yearStanding: 1
     },
     warnings: []
   }

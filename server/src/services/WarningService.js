@@ -9,9 +9,9 @@
 
 function getStandingWarnings(user, course) {
   let warnings = [];
-  if (user.standing < course.standingRequirement) {
+  if (user.yearStanding < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.yearStanding}.`,
       type: "standing"
     });
   }
