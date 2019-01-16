@@ -31,6 +31,18 @@ class Plan {
 
   }
     
+  async planMakeFav (id) {
+    db
+    .query("UPDATE SET isfavourite = true FROM plan WHERE uid = ?", [id])
 
+
+    .then(rows => {
+      return rows;
+    })
+      .catch(err => {
+      throw err;
+    });
+
+  }
 }
 //const rows = await db.query("") 

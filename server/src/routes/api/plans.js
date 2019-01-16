@@ -24,3 +24,16 @@ router.get('/:id', (req, res) => {
       }
     });
   });
+
+router.post('/:id/favourite' , (req,res) => {
+  const UserId = req.param.id;
+  Plan.planMakeFavourite(UserId, (err,data) => {
+    if (err = null) {
+      res.send(data);
+    }else{
+      console.error("unable to favourite plan")
+    }
+  });
+});
+    
+  
