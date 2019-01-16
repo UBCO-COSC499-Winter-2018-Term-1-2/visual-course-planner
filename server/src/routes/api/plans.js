@@ -4,8 +4,8 @@ const Plan = require('../../models/Plan');
 
 
 router.get('/:id', (req, res) => {
-    const PlanId = req.params.id;
-    Plan.getPlanFromUser(courseId, (err, data) => {
+    const UserId = req.params.id;
+    Plan.getPlanForUser(UserId, (err, data) => {
       if (err == null) {
         res.send(data);
       } else {
@@ -14,3 +14,13 @@ router.get('/:id', (req, res) => {
     });
   });
 
+  router.get('/:id', (req, res) => {
+    const UserId = req.params.id;
+    Plan.getPlanList(UserId, (err, data) => {
+      if (err == null) {
+        res.send(data);
+      } else {
+        console.error("Couldn't retrieve plan");
+      }
+    });
+  });
