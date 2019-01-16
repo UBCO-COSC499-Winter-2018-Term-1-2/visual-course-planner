@@ -6,6 +6,7 @@ const warnings = require('./server/src/routes/api/warnings');
 const users = require('./server/src/routes/api/users');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+const passport = require('passport');
 
 
 const app = express();
@@ -16,6 +17,13 @@ app.use(fileUpload());
 
 // Body ParserMiddleware
 app.use(bodyParser.json());
+
+// passport config
+require('./server/src/config/passport')(passport);
+
+// passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Use routes
 app.use('/api/upload', upload);

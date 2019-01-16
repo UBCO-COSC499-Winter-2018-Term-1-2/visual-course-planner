@@ -33,6 +33,33 @@ class User {
       });  
   }
 
+  async getUser(email) {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT * FROM user WHERE email = ?", [email]);
+    } catch (err) {
+      throw err;
+    }
+
+    return rows;
+
+  }
+
+
+  async getuserbyId(id) {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT * FROM user WHERE id = ?", [id]);
+    } catch (err) {
+      throw err;
+    }
+
+    return rows;
+
+  }
+
+
+
 }
 
 module.exports = User;

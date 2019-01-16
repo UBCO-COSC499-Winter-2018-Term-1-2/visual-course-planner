@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const expressValidator = require('express-validator');
+const passport = require('passport');
+const flash = require('connect-flash');
+
+app.use(flash());
 
 router.use(expressValidator());
 
@@ -77,5 +81,26 @@ router.post('/signup', async (req, res) => {
     }
   }
 });
+
+router.get('/login', async (req, res) => {
+  res.status(500).send("login get route");
+  // res.render('LoginInterface')
+
+ });
+
+router.post('/login', async (req, res, next) => {
+
+res.status(500).send("login post route");
+
+passport.authenticate('local', {
+
+  successRedirect: '/',
+  failureRedirect: '/users/login',
+  failureFlash: true,
+  passReqToCallback : true
+})(req, res, next);
+
+});
+
 
 module.exports = router;
