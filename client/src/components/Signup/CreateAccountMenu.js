@@ -22,9 +22,7 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
-        formErrors: {
-          fName: ''
-        },
+        label: '',
         valid: false,
         inputElementTouched: false 
       },
@@ -38,9 +36,7 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
-        formErrors: {
-          lName: ''
-        },
+        label: '',
         valid: false,
         inputElementTouched: false 
       },
@@ -55,9 +51,7 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
-        formErrors: {
-          email: ''
-        },
+        label: '',
         name: 'email',
         valid: false,
         inputElementTouched: false 
@@ -73,9 +67,6 @@ class CreateAccountMenu extends Component {
         validation: {
           required: true
         },
-        formErrors: {
-          password: ''
-        },
         valid: false,
         inputElementTouched: false 
       },
@@ -88,9 +79,6 @@ class CreateAccountMenu extends Component {
         value: '',
         validation: {
           required: true
-        },
-        formErrors: {
-          confirmPassword: ''
         },
         valid: false,
         inputElementTouched: false 
@@ -210,7 +198,9 @@ class CreateAccountMenu extends Component {
             invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
             shouldBeValidated={formElement.config.validation}
             inputElementTouched={formElement.config.inputElementTouched}
-            changed={(event) => this.inputChangeHandler(event, formElement.id)} />
+            changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+            name={formElement.config.name}
+            label={formElement.config.label}/>
         ))}
         
         <Link to = "/course-history"><button className="deafultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link> 

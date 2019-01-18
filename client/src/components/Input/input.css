@@ -55,5 +55,11 @@ ol.course-list{
     height:17em; 
 }
 
+.warning-msg{
+    color: red;
+    font-weight: normal;
+    /* text-transform: uppercase; */
+}
+
 
 
