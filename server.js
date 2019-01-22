@@ -7,6 +7,11 @@ const users = require('./server/src/routes/api/users');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 const passport = require('passport');
+const flash = require('connect-flash');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
+
 
 
 const app = express();
@@ -17,6 +22,19 @@ app.use(fileUpload());
 
 // Body ParserMiddleware
 app.use(bodyParser.json());
+
+//flash middleware
+app.use(cookieParser());
+app.use(session(
+  {
+    cookie: {
+      maxAge: 60000,
+      name: 'gang'
+    },
+    secret: "cats"
+  }
+));
+app.use(flash());
 
 // passport config
 require('./server/src/config/passport')(passport);

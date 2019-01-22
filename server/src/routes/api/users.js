@@ -3,11 +3,10 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const expressValidator = require('express-validator');
 const passport = require('passport');
-const flash = require('connect-flash');
 
-app.use(flash());
 
-router.use(expressValidator());
+
+router.use(expressValidator()); // put the use in server.js and also import through npm?
 
 
 //user model
@@ -90,7 +89,7 @@ router.get('/login', async (req, res) => {
 
 router.post('/login', async (req, res, next) => {
 
-res.status(500).send("login post route");
+// res.status(500).send("login post route");
 
 passport.authenticate('local', {
 
