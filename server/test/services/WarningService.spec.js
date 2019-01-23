@@ -286,8 +286,8 @@ describe("WarningService", () => {
         yearStanding: "1"
       };
       const expectedWarnings = [];
-      const acutalWarnings = warningService.getWarnings(plan, user, []);
-      assert.deepEqual(acutalWarnings, expectedWarnings);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
+      assert.deepEqual(actualWarnings, expectedWarnings);
       
     });
 
