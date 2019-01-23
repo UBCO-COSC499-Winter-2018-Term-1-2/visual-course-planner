@@ -11,7 +11,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER SCIENCE',
+        category: 'UPPER SCIENCE',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -27,7 +27,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER SCIENCE',
+        category: 'UPPER SCIENCE',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -43,7 +43,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER SCIENCE',
+        category: 'UPPER SCIENCE',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -59,7 +59,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER GENERAL',
+        category: 'UPPER GENERAL',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -76,7 +76,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER COSC',
+        category: 'UPPER COSC',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -92,7 +92,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'UPPER COSC',
+        category: 'UPPER COSC',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -108,7 +108,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'SCIENCE',
+        category: 'SCIENCE',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -124,7 +124,7 @@ describe("WarningService", () => {
       };
   
       const requirement = {
-        courses: 'SCIENCE',
+        category: 'SCIENCE',
         type: Specialization.CATEGORY_TYPE
       };
   
@@ -286,7 +286,7 @@ describe("WarningService", () => {
         yearStanding: "1"
       };
       const expectedWarnings = [];
-      const acutalWarnings = warningService.getWarnings(plan, user);
+      const acutalWarnings = warningService.getWarnings(plan, user, []);
       assert.deepEqual(acutalWarnings, expectedWarnings);
       
     });
