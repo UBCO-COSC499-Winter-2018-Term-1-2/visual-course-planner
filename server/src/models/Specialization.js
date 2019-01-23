@@ -2,8 +2,14 @@ const promisify = require('util').promisify;
 const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
+const COURSES_TYPE = 'courses';
+const CATEGORY_TYPE = 'category';
 
 module.exports = {
+
+  COURSES_TYPE,
+  CATEGORY_TYPE,
+  
   async createSpecialization(specialization) {
     const results = await db.query("INSERT INTO specialization (name, did) VALUES (?, ?)", [specialization.name, specialization.degreeId]);
     return results.insertId;
@@ -16,9 +22,6 @@ module.exports = {
     const credits = requirementObj.credits;
     const exception = requirementObj.exceptions;
     const hasException = exception.length > 0 ? true : false;
-
-    const COURSES_TYPE = 'courses';
-    const CATEGORY_TYPE = 'category';
 
     if (req.type === COURSES_TYPE) {
       const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [credits, null]);
