@@ -107,15 +107,19 @@ function getCategorySpecializationWarning(plan, requirement) {
 
   let warnings = [];
   let creditsRemaining = parseInt(requirement.credits);
+  let courseSet = new Set();
   plan.courses.forEach(course => {
     if (courseFitsCategoryRequirement(course, requirement)) {
-      creditsRemaining -= course.credits;
+      if (!courseSet.has(course.code)) {
+        creditsRemaining -= course.credits;
+      }
+      courseSet.add(course.code);
     }
   });
 
   if (creditsRemaining > 0) {
     warnings.push({
-      message: `Missing ${creditsRemaining} credits from ${requirement.courses}.`,
+      message: `Missing ${creditsRemaining} credits from ${requirement.category}.`,
       type: 'specialization'
     });
   }
@@ -126,7 +130,7 @@ function getCategorySpecializationWarning(plan, requirement) {
 // this is the order in which we check
 function courseFitsCategoryRequirement(course, requirement) {
   if (requirement.type === CATEGORY_TYPE) {
-    const words = requirement.courses.split(" ");
+    const words = requirement.category.split(" ");
 
     if (words[0] === "UPPER") {
       // is upper level
@@ -189,23 +193,25 @@ module.exports = {
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
         getPrereqWarnings(plan, planCourse),
-        module.exports.getSpecializationWarnings(plan, requirements)
       );
     });
+    warnings = warnings.concat(
+      module.exports.getSpecializationWarnings(plan, requirements)
+    );
+
     return warnings;
   },
 
   getSpecializationWarnings: (plan, requirements) => {
     // check if plan has number of credits from courses
     let warnings = [];
-    requirements.filter(req => req.category == undefined).forEach(req => {
+    requirements.filter(req => req.category == null).forEach(req => {
       warnings = warnings.concat(getSpecificCoursesSpecializationWarning(plan, req));
     });
 
-    requirements.filter(req => req.category != undefined).forEach(req => {
+    requirements.filter(req => req.category != null).forEach(req => {
       warnings = warnings.concat(getCategorySpecializationWarning(plan, req));
     });
-
     return warnings;
   }
 };

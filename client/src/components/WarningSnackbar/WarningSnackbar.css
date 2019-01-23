@@ -14,6 +14,7 @@
   margin-left: auto;
   margin-right: auto;
   display: none;
+
 }
 
 .warning-snackbar-wrapper.show {
@@ -45,12 +46,22 @@
 }
 
 #close-snackbar-btn {
-    cursor: pointer;
-    float: right;
+  cursor: pointer;
+}
+
+.closebtn-container {
+  position: relative;
+  
+}
+
+.warning-list-container {
+  overflow-y: scroll;
+  max-height: 20em;
+
 }
 
 .warning-message-container {
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }

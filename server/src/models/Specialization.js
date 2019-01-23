@@ -53,7 +53,7 @@ module.exports = {
 
   async getSpecializationRequirements(specId) {
     const results = await db.query(`
-      SELECT cr.credits, cr.category, cr.id, GROUP_CONCAT(ci.id)
+      SELECT cr.credits, cr.category, cr.id, GROUP_CONCAT(ci.id) AS courses
       FROM specialization_credit_requirement AS scr JOIN credit_requirement AS cr ON scr.crid = cr.id
       LEFT JOIN credit_requirement_course_info AS crci ON crci.crid = cr.id
       LEFT JOIN course_info AS ci ON ci.id = crci.cid
