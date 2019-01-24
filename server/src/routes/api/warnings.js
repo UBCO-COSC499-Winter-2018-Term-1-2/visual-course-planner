@@ -16,17 +16,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/course', (req, res) => {
-  if (!req.body.hasOwnProperty('plan')) {
-    res.status(500).send("Did not receive plan.");
-  } else if (!req.body.hasOwnProperty('user')) {
-    res.status(500).send("Did not receive user.");
-  } else if (!req.body.hasOwnProperty('course')) {
-    res.status(500).send("Did not receive course.");
-  } else {
-    const warnings = warningService.getWarningsForCourse(req.body.plan, req.body.user, req.body.course);
-    res.send(warnings);
-  }
-});
-
 module.exports = router;
