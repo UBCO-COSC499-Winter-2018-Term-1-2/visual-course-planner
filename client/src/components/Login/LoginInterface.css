@@ -38,7 +38,7 @@ body{
     margin: 2em auto;
     box-sizing: border-box;
     font-size: 1em;
-    text-align: center;
+    /* text-align: center; */
     color: #9c9b9d;
     background-color: #333035;
     border: none;

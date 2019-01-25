@@ -4,133 +4,157 @@ import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
+//import validationWarning from '../WarningSnackbar/WarningSnackbar';
 
-
-// const CreateAccountMenu = () => {
 
 class CreateAccountMenu extends Component {
-
-  state = {
-    createAccountMenu: {
-      fName: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: '* First Name'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        label: '',
-        valid: false,
-        inputElementTouched: false 
-      },
-      lName: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: '* Last Name'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        label: '',
-        valid: false,
-        inputElementTouched: false 
-      },
-
-      email: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          placeholder: '* Email'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        label: '',
-        name: 'email',
-        valid: false,
-        inputElementTouched: false 
-      },
-
-      password: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'password',
-          placeholder: '* Password'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        inputElementTouched: false 
-      },
-      confirmPassword: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'password',
-          placeholder: '* Confirm Password'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        inputElementTouched: false 
-      },
   
-    },
-    formIsValid: false,
-    loading: false
-  }
-  
+    state = {      
+      validationWarnings: [],
+      createAccountMenu: {
+        fName: {
+          elementType: 'input',
+          elementConfig: {
+            type: 'text',
+            placeholder: '* First Name'
+          },
+          value: '',
+          validation: {
+            required: true
+          },
+          label: '',
+          valid: false,
+          inputElementTouched: false 
+        },
+        lName: {
+          elementType: 'input',
+          elementConfig: {
+            type: 'text',
+            placeholder: '* Last Name'
+          },
+          value: '',
+          validation: {
+            required: true
+          },
+          label: '',
+          valid: false,
+          inputElementTouched: false 
+        },
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    //const fieldValidationErrors = this.state.formErrors;
-    // const isEmail = name === "email";
-    // const isPassword = name === "password";
-    // const emailTest = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+        email: {
+          elementType: 'input',
+          elementConfig: {
+            type: 'text',
+            placeholder: '* Email'
+          },
+          value: '',
+          validation: {
+            required: true,
+            isEmail: true,
+          },
+          label: '',
+          name: 'email',
+          valid: false,
+          inputElementTouched: false 
+        },
 
-    //const validity = this.state.valid;
+        password: {
+          elementType: 'input',
+          elementConfig: {
+            type: 'password',
+            placeholder: '* Password'
+          },
+          value: '',
+          validation: {
+            required: true,
+            minLength: 5,
+            passMatch: false,
+          },
+          name: 'passwordName',
+          valid: false,
+          inputElementTouched: false 
+        },
+        confirmPassword: {
+          elementType: 'input',
+          elementConfig: {
+            type: 'password',
+            placeholder: '* Confirm Password'
+          },
+          value: '',
+          validation: {
+            required: true,
+            minLength: 5,
+            passMatch: false,
+          },
+          name: 'confirmPasswordName',
+          valid: false,
+          inputElementTouched: false 
+        },
 
+        // formErrors: {
+        //   emailErrors: '', 
+        //   username:'', 
+        //   password: '',
+          
+        //   validation: {
+        //     required: false
+        //   },
+        //   value: '',
+        // },
     
-    // this.setState({
-    //   formErrors: fieldValidationErrors,
-    //   formValidity: validity,
-    // },);
+      }, //end of menu
 
-    // if(isValid[value]) {
-    //   if(isPassword) {
-    //     isValid[value] = name.length >= 6; 
-    //     fieldValidationErrors[value] = isValid[value] ? '': `${name} should be more than 6 characters long`;
-    //   }
-    // }
+      formIsValid: false,
+      loading: false
+    }// end of state
 
-    // if(isEmail) {
-    //   isValid[value] = emailTest.test(name);
-    //   fieldValidationErrors[value] = isValid[value] ? '' : `${name} should be a valid email address`;
-    // }
-
-    if(rules.required){
-      isValid = value.trim() !== '' && isValid;
-    } 
-    //value = this.state.value ? 'zeldaisthebest' : `${name} is required and cannot be empty`;
+    //this.handler = this.handler.bind(this);
 
 
-    return isValid;
-  }
+    checkValidity(value, rules) {
+      let isValid = true;
+      
+      if(rules.required){
+        isValid = value.trim() !== '' && isValid;
+      } 
+
+      if (rules.minLength) {
+        isValid = value.length >= rules.minLength && isValid;
+        console.log("minlength: " + isValid);
+      }
+
+      if (rules.isEmail) {
+        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        //const reg =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        isValid = pattern.test(value) && isValid;
+        console.log("valid email: " + isValid);
+      }
+
+      if(rules.passMatch){
+        const pass = this.password.value;
+        const confirmPass = this.confirmPassword.value;
+        isValid = pass === confirmPass && isValid;
+        console.log("Pass matches: " + isValid);
+      }
+      return isValid;
+    }
 
   handler = ( event ) => {
     //console.log('handler');
-    event.preventDefault();
-    this.setState( { loading: true } );
 
+    //THIS IS THE TEST VALIDATION CODE -------
+    const{name,value} = event.target;
+    //THIS IS THE TEST VALIDATION CODE -------
+
+
+    event.preventDefault();
+
+    //THIS IS THE TEST VALIDATION CODE -------
+    this.setState({ 
+      loading: true,
+      [name]: value
+    }, function(){ this.errorValidation(name,value); });
+    //THIS IS THE TEST VALIDATION CODE -------
     
     //this is log send user input to send to database.
     let formData = new FormData();
@@ -153,7 +177,7 @@ class CreateAccountMenu extends Component {
   //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
   //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
-    console.log(event.target.value); //prints values to console
+    //console.log(event.target.value); //prints values to console
 
     //const {name, value} = event.target;
     const updatedCreateAccountMenu = {
@@ -163,6 +187,7 @@ class CreateAccountMenu extends Component {
       ...updatedCreateAccountMenu[inputIdentifier]
     };
     updatedMenuElement.value = event.target.value;
+
     //CHECKS IF EACH STATE HAS A VALUE
     updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, updatedMenuElement.name);
     updatedMenuElement.inputElementTouched = true;
@@ -175,6 +200,7 @@ class CreateAccountMenu extends Component {
     this.setState({createAccountMenu: updatedCreateAccountMenu, formIsValid: formIsValid});
    
   }
+  
 
   render(){
     const formElementsArray = [];
@@ -200,21 +226,26 @@ class CreateAccountMenu extends Component {
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             name={formElement.config.name}
+            //formErrors ={formElement.config.emailErrors}
             label={formElement.config.label}/>
         ))}
         
+        
         <Link to = "/course-history"><button className="deafultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link> 
-        <Link to = "/login"><button className="open-diff-menubtn" >Login</button></Link>
+        <button className="open-diff-menubtn" > <Link to = "/login">Login</Link></button>
       </form>
     );
     
     return(
 
       //RETURN LOGIN MENU HERE
-      <div className="menu">
-        <h1 className="login-heading">Visual Course Planner</h1>
-        {form}     
-      </div> 
+      <div>
+        <div className="menu">
+          <h1 className="login-heading">Visual Course Planner</h1>
+          {form}     
+        </div> 
+
+      </div>
 
     );
   }
