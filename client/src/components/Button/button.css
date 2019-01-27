@@ -1,0 +1,34 @@
+/* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
+.create-accountbtn{
+    background:none;
+    margin: 2em auto;
+    border-color: #84bd00;
+    padding:1em 2em;
+    cursor: pointer;
+    color: #84bd00;
+    font-size: 1em;
+    display: block;
+}
+
+.create-accountbtn:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+    border-color: #afda77;
+}
+
+.create-accountbtn:disabled{
+    cursor: not-allowed;
+}
+
+.Button:first-of-type {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* .Success {
+    color: #5C9210;
+} */
+
+.Danger {
+    color: #944317;
+}

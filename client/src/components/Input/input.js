@@ -1,7 +1,5 @@
 import React from 'react';
 import styling from '../Input/input.css';
-import '../WarningSnackbar/WarningSnackbar.css';
-
 import PropTypes from 'prop-types';
 //import { config } from '@fortawesome/fontawesome-svg-core';
 
@@ -10,7 +8,6 @@ const input = ( props ) => {
   let cssInputElement = "input-element";
   let cssInvalid = "invalid";
   let greenTitle = "green-title";
-  let cssWarning = "warning-msg";
   let cssSelectItems ="select-items";
   let cssCourseList ="course-list";
 
@@ -18,16 +15,15 @@ const input = ( props ) => {
   const inputStyling = [cssInputElement];
   const selectStyling = [cssSelectItems];
   const listStyling = [cssCourseList];
-  const errorStyling = [cssWarning];
   
   //IF A FORMELEMENT IS LEFT EMPTY = ERRORS PRESENTED
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
     inputStyling.push(cssInvalid);
   }
  
-  //NEED TO ADD ADDITIONAL PROPS THAT WERE ADDED!!! -----------------
+  
   input.propTypes = {
-    invalid: PropTypes.boolean,
+    invalid: PropTypes.func,
     shouldBeValidated: PropTypes.object,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
@@ -55,21 +51,6 @@ const input = ( props ) => {
       {...props.elementConfig}
       value={props.value}
       onChange={props.changed} />;
-    break;
-
-  case ( 'warningMsg' ):
-    inputElement = ( 
-      <li 
-        className={errorStyling.join(' ')}
-        value={props.value}
-        onChange={props.changed}>
-        {props.elementConfig.options.map(option => (
-          <option key={option.value} value={option.value}>
-            {option.displayValue}
-          </option>
-        ))}
-      </li>
-    );
     break;
 
   case ( 'checkbox' ):

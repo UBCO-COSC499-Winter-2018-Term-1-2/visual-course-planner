@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import '../Login/LoginInterface.css';
+//import Button from '../Button/button';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
@@ -91,17 +92,6 @@ class CreateAccountMenu extends Component {
           inputElementTouched: false 
         },
 
-        // formErrors: {
-        //   emailErrors: '', 
-        //   username:'', 
-        //   password: '',
-          
-        //   validation: {
-        //     required: false
-        //   },
-        //   value: '',
-        // },
-    
       }, //end of menu
 
       formIsValid: false,
@@ -113,7 +103,10 @@ class CreateAccountMenu extends Component {
 
     checkValidity(value, rules) {
       let isValid = true;
-      
+      if(!rules){
+        return true;
+      }
+        
       if(rules.required){
         isValid = value.trim() !== '' && isValid;
       } 
@@ -140,31 +133,22 @@ class CreateAccountMenu extends Component {
     }
 
   handler = ( event ) => {
-    //console.log('handler');
-
-    //THIS IS THE TEST VALIDATION CODE -------
-    const{name,value} = event.target;
-    //THIS IS THE TEST VALIDATION CODE -------
-
-
+    //console.log('handler')
     event.preventDefault();
-
-    //THIS IS THE TEST VALIDATION CODE -------
-    this.setState({ 
-      loading: true,
-      [name]: value
-    }, function(){ this.errorValidation(name,value); });
-    //THIS IS THE TEST VALIDATION CODE -------
     
-    //this is log send user input to send to database.
-    let formData = new FormData();
+    const formData ={};
     for (let formElementIdentifier in this.state.createAccountMenu) {
-      formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
+      formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
     }
-    //console.log(formData);
+    //let formData = new FormData();
+    // for (let formElementIdentifier in this.state.createAccountMenu) {
+    //   formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
+    // }
+   
     axios.post( '/api/users', formData )
       .then( response => {
         this.setState( { loading: false } );
+        //this.props.history.push('/');
         console.log(response);
       } )
       .catch( error => {
@@ -178,8 +162,6 @@ class CreateAccountMenu extends Component {
   //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
     //console.log(event.target.value); //prints values to console
-
-    //const {name, value} = event.target;
     const updatedCreateAccountMenu = {
       ...this.state.createAccountMenu
     };
@@ -232,7 +214,9 @@ class CreateAccountMenu extends Component {
         
         
         <Link to = "/course-history"><button className="deafultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link> 
+        {/* <Button btnType="create-accountbtn" disabled={!this.state.formIsValid}>MarIO</Button> */}
         <button className="open-diff-menubtn" > <Link to = "/login">Login</Link></button>
+        
       </form>
     );
     
