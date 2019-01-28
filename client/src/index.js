@@ -10,6 +10,7 @@ import AdminPortal from "./components/AdminPortal/AdminPortal";
 import UserProfile from "./components/UserProfile/profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
 import DegreeYear from "./components/DegreeYear-NewUser/DegreeYear";
+import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
 
 const routing = (
   <Router>
@@ -22,6 +23,7 @@ const routing = (
       <Route path="/profile" component={UserProfile} />
       <Route path="/course-history" component={PreviousCourses} />
       <Route path="/degree-year-selection" component={DegreeYear} />
+      <Route path="/confirm-email" component={ConfirmEmail} />
     </div>
   </Router>
 );

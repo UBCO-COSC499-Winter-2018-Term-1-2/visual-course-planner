@@ -92,6 +92,16 @@ const input = ( props ) => {
       </select>
     );
     break;
+
+  case ( 'text' ):
+    inputElement = <p
+      className={inputStyling.join(' ')}
+      {...props.elementConfig}
+      value={props.value}
+      onChange={props.changed} 
+    />;
+    break;
+
   default:
     inputElement = <input
       className={styling.InputElement}
