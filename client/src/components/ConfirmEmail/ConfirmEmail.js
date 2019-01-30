@@ -41,19 +41,12 @@ class ConfirmEmail extends Component {
       const menuData = {};
 
       for (let formElementIdentifier in this.state.emailVerificationMenu) {
-    
         menuData[formElementIdentifier] = this.state.emailVerificationMenu[formElementIdentifier].value;
       }
-      // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      const menu = {
-        // ingredients: this.props.ingredients,
-        // price: this.props.price,
-        menuData: menuData
-      };
 
       //AXIO CODE HERE
       axios.get('/api/users', {
-        createAccountMenu: {
+        emailVerificationMenu: {
 
           fName: this.state.value,
           email: this.state.value
@@ -76,30 +69,6 @@ class ConfirmEmail extends Component {
           }
           console.log(error.config);
         });
-
-      axios.post( 'login', menu )
-        .then( response => {
-          this.setState( { loading: false } );
-          console.log("no errors::");
-          console.log(response);
-          //this.props.history.push( '/' );
-        } )
-        .catch( error => {
-          this.setState( { loading: false } );
-          if(error.response){
-          // console.log(error.response);
-            console.log("data::");
-            console.log(error.response.data);
-            console.log("status::");
-            console.log(error.response.status);
-            console.log("headers::");
-            console.log(error.response.headers);
-          } else if (error.request){
-            console.log('ERROR', error.message);
-          }
-          console.log(error.config);
-        } );
-    
     }
 
 

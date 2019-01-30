@@ -103,7 +103,7 @@ class CreateAccountMenu extends Component {
     for (let formElementIdentifier in this.state.createAccountMenu) {
       formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     }
-    console.log(formData);
+    // console.log(formData);
     axios.post( '/api/users', formData )
       .then( response => {
         this.setState( { loading: false } );
@@ -119,7 +119,7 @@ class CreateAccountMenu extends Component {
   //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
   //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
-    console.log(event.target.value); //prints values to console
+    //console.log(event.target.value); //prints values to console
     const updatedCreateAccountMenu = {
       ...this.state.createAccountMenu
     };
@@ -165,7 +165,7 @@ class CreateAccountMenu extends Component {
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
         
-        <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/course-history">Create Account</Link></button> 
+        <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/confirm-email">Create Account</Link></button> 
         <button className="open-diff-menubtn" ><Link to = "/login">Login</Link></button> 
       </form>
     );
