@@ -4,7 +4,7 @@ const Plan = require('../../models/Plan');
 
 
 router.get('/:id', (req, res) => {
-    const  = req.params.id;
+  
     Note.getNotes(User, (err, data) => {
       if (err == null) {
         res.send(data);
@@ -14,3 +14,5 @@ router.get('/:id', (req, res) => {
     });
   });
 
+  module.exports = router;
+  

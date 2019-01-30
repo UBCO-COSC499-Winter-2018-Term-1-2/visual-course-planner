@@ -14,9 +14,9 @@ router.get('/:id', (req, res) => {
     });
   });
 
-  router.get('/:id', (req, res) => {
-    const UserId = req.params.id;
-    Plan.getPlanList(UserId, (err, data) => {
+  router.get('/user/:id', (req, res) => {
+  
+    Plan.getPlanList(req.params.id, (err, data) => {
       if (err == null) {
         res.send(data);
       } else {
@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 
 router.post('/:id/favourite' , (req,res) => {
-  const UserId = req.param.id;
+  const UserId = req.params.id;
   Plan.planMakeFavourite(UserId, (err,data) => {
     if (err = null) {
       res.send(data);
@@ -36,4 +36,4 @@ router.post('/:id/favourite' , (req,res) => {
   });
 });
     
-  
+module.exports = router;

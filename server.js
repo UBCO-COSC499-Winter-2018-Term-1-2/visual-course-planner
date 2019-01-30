@@ -4,8 +4,8 @@ const upload = require('./server/src/routes/api/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const path = require('path');
 const fileUpload = require('express-fileupload');
-const userEdit = require('./server/src/routes/api/userEdit');
-const plan = require('./server/src/routes/api/plans');
+const users = require('./server/src/routes/api/users');
+const plans = require('./server/src/routes/api/plans');
 const notes = require('./server/src/routes/api/notes');
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(fileUpload());
 // Use routes
 app.use('/api/upload', upload);
 app.use('/api/warnings', warnings);
-app.use('/api/userEdit', userEdit );
+app.use('/api/users', users );
 app.use('/api/plans', plans);
 app.use('/api/notes', notes);
 

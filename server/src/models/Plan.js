@@ -1,5 +1,5 @@
 const promisify = require('util').promisify;
-const db = require('../dbconnection');
+const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
 class Plan {

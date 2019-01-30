@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Profile = require('../../models/Profile');
+const User = require('../../models/User');
 
 router.post('/:id/user', (req, res) => {
     const UserId = req.params.id;
@@ -23,3 +23,5 @@ router.post('/:id/user', (req, res) => {
       }
     });
   });
+
+  module.exports = router;
