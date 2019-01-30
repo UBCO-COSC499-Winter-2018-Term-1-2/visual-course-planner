@@ -17,21 +17,25 @@ class WarningSnackbar extends Component {
   }
 
   WarningMessageList = () => {
+    let warnings;
     if (this.props.warnings.length > 0) {
-      return this.props.warnings.map((warning, index) =>
+      warnings = this.props.warnings.map((warning, index) => (
         <div className="warning-message-container" key={index}>
-          {/* <h3>{warning.course}</h3> */}
           <p>{warning.message}</p>
         </div>
-      );
+      ));
     } else {
-      return  (
+      warnings = (
         <div className="warning-message-container">
-          {/* <h3>{warning.course}</h3> */}
           <p>No warnings.</p>
         </div>
       );
     }
+    return (
+      <div className="warning-list-container">
+        {warnings}
+      </div>
+    );
   }
   render() {
     return (

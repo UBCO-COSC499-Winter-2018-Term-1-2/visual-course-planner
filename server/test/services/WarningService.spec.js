@@ -1,9 +1,142 @@
 const warningService = require('../../src/services/WarningService');
+const Specialization = require('../../src/models/Specialization');
 const assert = require('chai').assert;
 
 describe("WarningService", () => {
+
+  describe('#courseFitsCategoryRequirements', () => {
+    it('should return false for not fitting upper area, wrong code', () => {
+      const course = {
+        code: "ENGL 341"
+      };
   
-  describe("#getWarningsForCourse()", () => {
+      const requirement = {
+        category: 'UPPER SCIENCE',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = false;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert.equal(actualResult, expectedResult);
+    });
+
+    it('should return false for not fitting upper area, wrong level', () => {
+      const course = {
+        code: "MATH 241"
+      };
+  
+      const requirement = {
+        category: 'UPPER SCIENCE',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = false;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert.equal(actualResult, expectedResult);
+    });
+
+    it('should return true for fitting upper area', () => {
+      const course = {
+        code: "COSC 341"
+      };
+  
+      const requirement = {
+        category: 'UPPER SCIENCE',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = true;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert.equal(actualResult, expectedResult);
+    });
+
+    it('should return true for fitting upper elective', () => {
+      const course = {
+        code: "COSC 341"
+      };
+  
+      const requirement = {
+        category: 'UPPER GENERAL',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = true;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert.equal(actualResult, expectedResult);
+    });
+
+
+    it('should return true for fitting upper code', () => {
+      const course = {
+        code: "COSC 341"
+      };
+  
+      const requirement = {
+        category: 'UPPER COSC',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = true;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert. equal(actualResult, expectedResult);
+    });
+
+    it('should return false for not fitting upper code', () => {
+      const course = {
+        code: "MATH 341"
+      };
+  
+      const requirement = {
+        category: 'UPPER COSC',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = false;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert.equal(actualResult, expectedResult);
+    });
+
+    it('should return true for fitting area', () => {
+      const course = {
+        code: "COSC 341"
+      };
+  
+      const requirement = {
+        category: 'SCIENCE',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = true;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert. equal(actualResult, expectedResult);
+    });
+
+    it('should return false for not fitting area', () => {
+      const course = {
+        code: "ENGL 341"
+      };
+  
+      const requirement = {
+        category: 'SCIENCE',
+        type: Specialization.CATEGORY_TYPE
+      };
+  
+      const expectedResult = false;
+      const actualResult = warningService.courseFitsCategoryRequirement(course, requirement);
+
+      assert. equal(actualResult, expectedResult);
+    });
+    
+  });
+  
+  describe("#getWarningsForCourse", () => {
 
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
@@ -142,7 +275,7 @@ describe("WarningService", () => {
     });
   });
 
-  describe("#getWarnings()", () => {
+  describe("#getWarnings", () => {
     it("empty plan should return no warnings", () => {
       let plan = {
         courses: []
@@ -153,8 +286,8 @@ describe("WarningService", () => {
         yearStanding: "1"
       };
       const expectedWarnings = [];
-      const acutalWarnings = warningService.getWarnings(plan, user);
-      assert.deepEqual(acutalWarnings, expectedWarnings);
+      const actualWarnings = warningService.getWarnings(plan, user, []);
+      assert.deepEqual(actualWarnings, expectedWarnings);
       
     });
 

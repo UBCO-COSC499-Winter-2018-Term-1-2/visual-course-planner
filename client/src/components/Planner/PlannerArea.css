@@ -3,7 +3,7 @@
   margin-top: 1em;
   width: 100%;
   overflow-x: auto;
-  position: relative;
+  max-width: 100vw;
 }
 
 #term-view > .term-container {

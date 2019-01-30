@@ -1,11 +1,15 @@
-// const areas = {
-//   science: {
-//     codes: ["COSC", "MATH", "PHYS", "CHEM"]
-//   },
-//   arts: {
-//     codes: ["ENGL", "PHIL"]
-//   }
-// }
+const areas = {
+  SCIENCE: {
+    codes: ["COSC", "MATH", "PHYS", "CHEM"]
+  },
+  ARTS: {
+    codes: ["ENGL", "PHIL"]
+  }
+};
+
+const CATEGORY_TYPE = require('../models/Specialization').CATEGORY_TYPE;
+// const COURSES_TYPE = require('../models/Specialization').COURSES_TYPE;
+
 
 function getStandingWarnings(user, course) {
   let warnings = [];
@@ -99,35 +103,78 @@ function getSpecificCoursesSpecializationWarning(plan, requirement) {
   return warning;
 }
 
-// function getCourseCat(course) {
-//   // subjectCode (COSC) area (Science) level (Upper) number (111)
-  
-//   return {
-//     subjectCode: course.substring(0, 4),
-//     area: "test"
-//   };
-// }
-
 function getCategorySpecializationWarning(plan, requirement) {
 
+  let warnings = [];
+  let creditsRemaining = parseInt(requirement.credits);
+  let courseSet = new Set();
+  plan.courses.forEach(course => {
+    if (courseFitsCategoryRequirement(course, requirement)) {
+      if (!courseSet.has(course.code)) {
+        creditsRemaining -= course.credits;
+      }
+      courseSet.add(course.code);
+    }
+  });
 
-  if (requirement.category.startsWith("UPPER")) {
-    console.log("upper");
+  if (creditsRemaining > 0) {
+    warnings.push({
+      message: `Missing ${creditsRemaining} credits from ${requirement.category}.`,
+      type: 'specialization'
+    });
   }
 
-  /* Check for upper level code Upper e.g. Level COSC */
-  // if (reqCode ){
-
-  // }
-  /* Check for upper level area e.g. Upper Level Science */
-  /* Check for upper level general e.g. Upper Level General */
-  /* Check for any specific */
-  /* Check for any area */
-  /* Check for any general */
-
+  return warnings;
 }
 
+// this is the order in which we check
+function courseFitsCategoryRequirement(course, requirement) {
+  if (requirement.type === CATEGORY_TYPE) {
+    const words = requirement.category.split(" ");
+
+    if (words[0] === "UPPER") {
+      // is upper level
+      if (courseIsUpperLevel(course)) {
+        if (words[1] === course.code.split(' ')[0]){
+          // is a course code
+          return true;
+        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(course.code.split(' ')[0])) {
+          // is an area descriptor
+          return true;
+        } else if (words[1] === 'GENERAL') {
+          return true;
+        } else {
+          return false;
+        }
+      
+      } else {
+        return false;
+      }
+      
+    } else if (areas.hasOwnProperty(words[0])) {
+      if (words.length === 1) {
+        // is an single word area descriptor
+        if (areas[words[0]].codes.includes(course.code.split(' ')[0])) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+}
+
+
+function courseIsUpperLevel(course) {
+  return parseInt(course.code.split(' ')[1]) >= 300;
+}
+
+
 module.exports = {
+
+  courseFitsCategoryRequirement,
+
   getWarningsForCourse: (plan, user, course) => {
     let warnings = [];
     warnings = warnings.concat(
@@ -146,23 +193,25 @@ module.exports = {
         getStandingWarnings(user, planCourse),
         getCoreqWarnings(plan, planCourse),
         getPrereqWarnings(plan, planCourse),
-        module.exports.getSpecializationWarnings(plan, requirements)
       );
     });
+    warnings = warnings.concat(
+      module.exports.getSpecializationWarnings(plan, requirements)
+    );
+
     return warnings;
   },
 
   getSpecializationWarnings: (plan, requirements) => {
     // check if plan has number of credits from courses
     let warnings = [];
-    requirements.filter(req => req.category == undefined).forEach(req => {
+    requirements.filter(req => req.category == null).forEach(req => {
       warnings = warnings.concat(getSpecificCoursesSpecializationWarning(plan, req));
     });
 
-    requirements.filter(req => req.category != undefined).forEach(req => {
+    requirements.filter(req => req.category != null).forEach(req => {
       warnings = warnings.concat(getCategorySpecializationWarning(plan, req));
     });
-
     return warnings;
   }
 };
