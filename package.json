@@ -4,8 +4,12 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "csv": "^5.1.1",
+    "csv-parse": "^4.3.1",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
+    "fast": "^2.6.0",
+    "fast-csv": "^2.4.1",
     "i": "^0.3.6",
     "mysql": "^2.16.0",
     "npm": "^6.4.1",
