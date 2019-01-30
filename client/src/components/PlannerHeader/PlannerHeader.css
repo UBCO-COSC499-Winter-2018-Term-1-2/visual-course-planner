@@ -1,7 +1,6 @@
 .planner-header-wrapper {
     display: flex;
     flex-direction: row;
-    width: 100%;
     padding-top: 1em;
     justify-content: space-evenly;
 }

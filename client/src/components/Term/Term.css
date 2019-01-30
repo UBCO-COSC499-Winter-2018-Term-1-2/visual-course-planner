@@ -1,0 +1,20 @@
+.term-container {
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  min-width: 10%;
+  max-width: 15%;
+}
+
+ .term-heading {
+  color: #84bd00;
+  align-self: center;
+  font-weight: lighter;
+  margin-bottom: 0.1em;
+}
+
+ .courses-container {
+  height: 65vh;
+  justify-content: center;
+  max-width: 100%;
+} 
