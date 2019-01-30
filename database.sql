@@ -27,6 +27,23 @@ CREATE TABLE course_info (
   standingRequirement INT
 );
 
+CREATE TABLE user_course_info (
+  uid INT,
+  cid VARCHAR(9),
+
+  FOREIGN KEY (uid)
+    REFERENCES user(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  FOREIGN KEY (cid)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  PRIMARY KEY (uid, cid)
+);
+
 CREATE TABLE course (
   id    INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   code  VARCHAR(9),
