@@ -98,8 +98,6 @@ class CreateAccountMenu extends Component {
       loading: false
     }// end of state
 
-    //this.handler = this.handler.bind(this);
-
 
     checkValidity(value, rules) {
       let isValid = true;

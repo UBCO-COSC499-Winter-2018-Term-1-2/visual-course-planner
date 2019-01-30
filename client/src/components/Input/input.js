@@ -23,7 +23,7 @@ const input = ( props ) => {
  
   
   input.propTypes = {
-    invalid: PropTypes.func,
+    invalid: PropTypes.bool,
     shouldBeValidated: PropTypes.object,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
