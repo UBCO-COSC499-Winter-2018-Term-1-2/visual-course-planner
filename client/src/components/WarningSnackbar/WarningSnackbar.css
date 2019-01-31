@@ -1,51 +1,70 @@
 .warning-snackbar-wrapper {
-    visibility: hidden; 
+  -webkit-animation: 0.2s linear slideout;
+  animation: 0.2s linear slideout;
+  width: 15em;
+  background-color: #c5980f; 
+  color: black;
+  text-align: center; 
+  border-radius: 0.2em;
+  padding: 0.2em; 
+  position: absolute; 
+  z-index: 1;
+  left: 0;
+  right: 0; 
+  margin-left: auto;
+  margin-right: auto;
+  display: none;
 }
 
-.warning-snackbar-wrapper-show {
-    visibility: visible; 
-    -webkit-animation: fadein 0.5s;
-    animation: fadein 0.5s;
-
-    min-width: 250px;
-    margin-left: -5em;
-    background-color: #c5980f; 
-    color: black;
-    text-align: center; 
-    border-radius: 0.2em;
-    padding: 0.2em; 
-    position: fixed; 
-    z-index: 1; 
-    left: 45em; 
-    bottom: 2em; 
-   
+.warning-snackbar-wrapper.show {
+  display: block;
+  -webkit-animation: 0.2s linear slidein;
+  animation: 0.2s linear slidein;
+  bottom: 2em;
 }
 
 /* Animations to fade the snackbar in */
-@-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+@-webkit-keyframes slidein {
+    from {bottom: -4em; opacity: 1;} 
+    to {bottom: 2em; opacity: 1;}
 }
 
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+@keyframes slidein {
+    from {bottom: -4em; opacity: 1;}
+    to {bottom: 2em; opacity: 1;}
 }
 
-.closebtn-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    padding: 0;
-    margin: 0;
+@-webkit-keyframes slideout {
+  from {bottom: 2em; opacity: 1;}
+  to {bottom: -4em; opacity: 1;}
 }
 
-#close-snackbar-btn{
-    cursor: pointer;
+@keyframes slideout {
+  from {bottom: 2em; opacity: 1;}
+  to {bottom: -4em; opacity: 1;}
 }
 
-.warning-message-container{
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
+#close-snackbar-btn {
+  cursor: pointer;
+  position: absolute;
+  font-size: 1.5em;
+  right: 0.5em;
+  top: 0.1em;
+}
+
+.closebtn-container {
+  position: relative;
+}
+
+.warning-list-container {
+  padding-top: 1em;
+  overflow-y: scroll;
+  max-height: 20em;
+
+}
+
+.warning-message-container {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }

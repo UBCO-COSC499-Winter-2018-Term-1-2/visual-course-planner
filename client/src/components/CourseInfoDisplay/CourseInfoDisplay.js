@@ -13,7 +13,7 @@ const CourseInfoDisplay = (props) => {
       </div>
       <div className="course-info-body-container">
         <p id="course-info-body">
-          {props.info}
+          {props.session}
         </p>
       </div>
     </div>
@@ -23,7 +23,8 @@ const CourseInfoDisplay = (props) => {
 
 CourseInfoDisplay.propTypes = {
   title: PropTypes.string,
-  info: PropTypes.string
+  info: PropTypes.string,
+  session: PropTypes.string
 };
 
 export default CourseInfoDisplay;

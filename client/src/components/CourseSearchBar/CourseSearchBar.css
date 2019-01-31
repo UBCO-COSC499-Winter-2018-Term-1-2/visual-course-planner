@@ -1,11 +1,9 @@
-.searchbar-container{
-    width: 90%;
-    margin-top: 7%;
-    margin-left: 5%;
-}
-
-.course-searchbar{
+.course-searchbar {
     background-color: #333035;
     color: #9c9b9d;
-
+    border: none;
+    height: 2em;
+    font-size: 1em;
+    width: 100%;
+    margin: 1em 0;
 }

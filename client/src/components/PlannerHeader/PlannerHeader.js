@@ -9,15 +9,16 @@ import WarningSummary from '../WarningSummary/WarningSummary';
 
 const PlannerHeader = (props) => {
   return (
-    <div className="planner-header-wrapper">
-      <div className="plan-name-container"> <PlanName name={props.planName}/> </div>
-      <div className="favouriteBtn-container"><FavouriteBtn favourite={true}/></div>
-      <div className="optimizeBtn-container"><OptimizeBtn click={props.optimize}/></div>
-      <div className="warning-summary-container">
-        <WarningSummary 
-          numberOfWarnings={props.numberOfWarnings}
-          click={props.showWarning}/></div>
-      <div className="addcourseBtn-container"><SideBarToggleButton click={props.toggleSidebar}/></div>
+    <div className="planner-header-wrapper" id="planner-header">
+      <PlanName name={props.planName}/>
+      <FavouriteBtn favourite={true}/>
+      <OptimizeBtn click={props.optimize}/>
+      <WarningSummary
+        click={props.showWarning}
+        numberOfWarnings={props.numberOfWarnings}
+        user={props.user}
+      />
+      <SideBarToggleButton click={props.toggleSidebar}/>
     </div>
   );
 };
@@ -26,8 +27,9 @@ PlannerHeader.propTypes = {
   planName: PropTypes.string.isRequired,
   optimize: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired,
-  showWarning: PropTypes.func.isRequired
+  showWarning: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  numberOfWarnings: PropTypes.number.isRequired
 };
 
 export default PlannerHeader;

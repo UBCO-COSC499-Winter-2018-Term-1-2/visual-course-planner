@@ -6,7 +6,7 @@ const CloseSideBarBtn = (props) => {
   return(
     <div className="closebtn-container">
       <button 
-        className="close-sidebarbtn"
+        className="close-sidebarbtn sidebar-button"
         onClick={props.click}>
           Close
       </button>

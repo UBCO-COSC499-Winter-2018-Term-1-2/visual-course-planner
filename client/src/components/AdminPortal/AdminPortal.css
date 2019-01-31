@@ -21,6 +21,7 @@
     color: #c5980f;
     text-align: left;
     font-weight: normal;
+    text-transform: uppercase;
 }
 
 .admin-portal-parent-wrapper {
@@ -32,6 +33,7 @@
 
 .choose-file-heading {
    color: #84bd00;
+   text-transform: uppercase;
 }
 
 #choose-file-btn {
@@ -58,26 +60,90 @@
 }
 
 .submit-file-btn {
-    background-color: #262427;
-    color: #84bd00;
-    border-color: #84bd00;
-    padding: 0.5em 4em;
-    font-size: 1em;
-    margin-right: 1em;
+  background-color: #262427;
+  color: #84bd00;
+  border-color: #84bd00;
+  padding: 0.5em 4em;
+  font-size: 1em;
+  margin-right: 1em;
+  cursor: pointer;
 }
 
 .admin-submit-disclaimer-para {
-    display: inline-block;
-    color: #c5980f;
+  display: inline-block;
+  color: #c5980f;
 }
 
 .admin-portal-element {
-    margin: 4rem 0;
+  margin: 4rem 0;
 }
 
 .file-select-text {
-    display: inline;
-    margin-left: 1em;
+  display: inline;
+  margin-left: 1em;
+}
+
+.degree-selection-container {
+  margin-left: 1em;
+}
+
+#degree-select {
+  height: 2em;
+  font-size: 1em;
+  margin-left: 1em;
+  border-radius: 0;
+}
+
+.admin-text-input {
+  border: 1px solid #201e21;
+  background-color: #333035;
+  color: #9c9b9d;
+  height: 2em;
+  font-size: 1em;
+  margin-left: 1em;
+  padding-left: 0.5em;
+  width: 20em;
+}
+
+.admin-radio-input {
+  margin-top: 1em;
+}
+
+.admin-portal-parent-wrapper input[type='radio'] {
+  display: none;
+}
+
+.admin-portal-parent-wrapper input[type='radio']:checked+label {
+  background-color: #262427;
+  color: #84bd00;
+  border: 1px solid #84bd00;
+}
+
+.admin-radio-input input[type='radio']+label {
+  padding: 1em;
+  display: inline-block;  
+  border: 1px solid #e4e4e4;
+}
+
+.admin-radio-input input[type='radio']+label:hover {
+  background-color: #201e21;
+  border: 1px solid #e4e4e4;
+  cursor: pointer;
+}
+
+.admin-radio-input input[type='radio']:checked:hover+label {
+  background-color: #262427;
+  color: #84bd00;
+  border: 1px solid #84bd00;
+  cursor: default;
+}
+
+.degree-selection-container:last-child {
+  margin-top: 1em;
+}
+
+.admin-specialization-input {
+  margin-top: 1em;
 }
 
 @media only screen and (max-width: 600px) {
