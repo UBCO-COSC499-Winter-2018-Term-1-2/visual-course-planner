@@ -4,37 +4,74 @@ import CourseSearchBar from '../CourseSearchBar/CourseSearchBar';
 import CloseSideBarBtn from '../CloseSideBarBtn/CloseSideBarBtn';
 import CourseInfoDisplay from '../CourseInfoDisplay/CourseInfoDisplay';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 
-const CourseListSideBar = (props) => {
-    
-  let drawerClasses;
-  //Show or hide side bar by changes 
-  props.show ? (drawerClasses = 'side-drawer open') : (drawerClasses = 'side-drawer');
-    
-  return (
-    <div className={drawerClasses}>
-      <CloseSideBarBtn click={props.close}/>
-        
-      <CourseSearchBar />
-      {/* course search display results component goes here */}
-      <div className="sidebar-divider-container">
-        <hr id="sidebar-divider"/>
+class CourseListSideBar extends React.Component {
+
+  state = {
+    courses: [],
+    filteredCourses: []
+  }
+
+  getCourseList = async () => {
+    let courseList = [];
+    try {
+      const response = await axios.get('/api/courses');
+      courseList = response.data;
+      console.log("Received courses: ", courseList);
+
+    } catch(err) {
+      console.error("Couldnt retrieve course list." + err.message);
+    }
+    return courseList;
+  }
+
+  componentDidMount = async () => {
+    const courses = await this.getCourseList();
+    this.setState({courses: courses, filteredCourses: courses});
+  }
+
+  filterList = (e) => {
+    let updatedList = this.state.courses;
+    updatedList = updatedList.filter(item =>
+      item.code.toLowerCase().search(e.target.value.toLowerCase()) !== -1 || item.startYear.concat(item.season).toLowerCase().search(e.target.value.toLowerCase()) !== -1
+    );
+    this.setState({filteredCourses: updatedList});
+  }
+
+  render() {
+    console.log(this.state.courses);
+    const courseList = this.state.filteredCourses.map(course => {
+      return (
+        <CourseInfoDisplay
+          key={course.cid}
+          title={course.code}
+          info={course.description}
+          session={course.startYear.concat(course.season)}
+        />
+      );
+    });
+
+    return (
+      <div className={this.props.show ? 'side-drawer open' : 'side-drawer'}>
+        <CloseSideBarBtn click={this.props.close}/>
+          
+        <CourseSearchBar onChange={this.filterList}/>
+        <div className="sidebar-divider-container">
+          <hr id="sidebar-divider"/>
+        </div>
+
+        {courseList}
+         
       </div>
-
-      <CourseInfoDisplay 
-        title={props.courseTitle}
-        info={props.courseInfo}
-      />
-    </div>
-  );
-};
+    );
+  }
+}
 
 CourseListSideBar.propTypes = {
   show: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  courseTitle: PropTypes.string.isRequired,
-  courseInfo: PropTypes.string.isRequired
 };
 
 export default CourseListSideBar;

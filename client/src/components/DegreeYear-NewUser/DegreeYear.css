@@ -1,0 +1,70 @@
+body{
+
+    background-color: #262427;
+    font-family: Helvetica;
+}
+
+.green-title{
+     color: #84bd00;
+     font-weight: normal;
+     text-transform: uppercase;
+     margin: 1em auto;
+}
+
+.green-title-degree-list{
+    color: #84bd00;
+     font-weight: normal;
+     text-transform: uppercase;
+     margin: 2em -25em;
+}
+
+.yellow-title{
+     color: #c5980f;
+     font-weight: normal;
+     text-transform: uppercase;
+     margin: 2em auto;
+}
+
+.green-borderbtn{
+    background: none;
+    margin: 0em 1em;
+
+    border-color: #84bd00;
+    padding:.5em 1em;
+    cursor: pointer;
+    color: #84bd00;
+    font-size: 1em;
+    /* display: inline-block; */
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.green-borderbtn:hover {
+    /* background-color: #84bd00;  */
+    color: #afda77;
+    border-color: #afda77;
+}
+
+.degree-year-menu{
+    background-color: #262427;
+    width: 50em;
+    /* padding: 2em 4em; */
+    margin: 2em 4em;
+}
+
+a:link{
+    text-decoration: none;
+}
+
+
+.btn-div{
+    margin: 4em 0em;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.msg-text{
+    color: #9c9b9d;
+    margin: 1em auto 4em auto;
+}

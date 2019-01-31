@@ -1,17 +1,31 @@
-#semester-view{
+#term-view {
   display: flex;
+  margin-top: 1em;
+  width: 100%;
   overflow-x: auto;
-
   max-width: 100vw;
 }
 
-#semester-view::-webkit-scrollbar
-{
+#term-view > .term-container {
+  border-right: 1px dotted grey;
+}
+
+#term-view:last-child {
+  border-right: none;
+}
+
+#term-view::-webkit-scrollbar {
     height: 0.4em;
 }
 
-#semester-view::-webkit-scrollbar-thumb
-{
+#term-view::-webkit-scrollbar-thumb {
     border-radius: 2em;
     background-color: #1a191b;
+}
+
+#session-container {
+  flex: 1;
+  display: flex;
+  overflow: auto;
+  position: relative;
 }

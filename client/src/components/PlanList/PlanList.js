@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-class PlannerArea extends Component {
+class PlannerList extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -32,4 +32,4 @@ class PlannerArea extends Component {
   }
 }
 
-export default PlannerArea;
+export default PlannerList;

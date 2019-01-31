@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+// import { Link } from 'react-router-dom';
 
 class StudentInfo extends Component {
 
