@@ -47,7 +47,9 @@ class profile extends Component {
           label: 'CHANGE PASSWORD',
           value: '',
           validation: {
-            required: true
+            required: true,
+            minLength: 5,
+            passDiff: true,
           },
           valid: false,
           inputElementTouched: false 
@@ -60,7 +62,9 @@ class profile extends Component {
           },
           value: '',
           validation: {
-            required: true
+            required: true,
+            minLength: 5,
+            passDiff: true,
           },
           valid: false,
           inputElementTouched: false 
@@ -91,10 +95,26 @@ class profile extends Component {
     
     checkValidity(value, rules) {
       let isValid = true;
-    
+      if(!rules){
+        return true;
+      }
+        
       if(rules.required){
         isValid = value.trim() !== '' && isValid;
+      } 
+
+      if (rules.minLength) {
+        isValid = value.length >= rules.minLength && isValid;
+        console.log("minlength: " + isValid);
+        console.log("passwword value: " + value);
       }
+
+      // if(rules.passDiff){
+      //   const pass = value;
+      //   const confirmPass = value;
+      //   isValid = (pass !== confirmPass) && isValid;
+      //   console.log("Passes are different!!: " + isValid);
+      // }
     
       return isValid;
     }
@@ -112,7 +132,7 @@ class profile extends Component {
       //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
       //IE. EMAIL AND PASSWORD.
       inputChangeHandler = (event, inputIdentifier) => {
-        console.log(event.target.value); //prints values to console
+        //console.log(event.target.value); //prints values to console
         const updatedProfileMenu = {
           ...this.state.profileMenu
         };
