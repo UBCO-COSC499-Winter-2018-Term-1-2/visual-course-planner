@@ -7,14 +7,23 @@ const user = new User();
 
 module.exports = function(passport){
 //local strategy
-passport.use(new LocalStrategy(function(email, password, done){
+passport.use(new LocalStrategy({
+
+  loginEmail: req.getbody,
+  loginPassword: '12345'
+},
+  
+  function(email, password, done){
+
+
+  console.log(email, password);
  // match email
- try{
+ //try{
     const existUser = user.checkUser(email);
-  }
-  catch(err) {
+  //}
+  //catch(err) {
     res.status(500).send("Error with db." + err);
-  } 
+  //} 
   if(existUser === false){
     res.status(500).send("no user found");
     console.log('no user found');

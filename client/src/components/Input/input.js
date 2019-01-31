@@ -23,8 +23,8 @@ const input = ( props ) => {
   }
   
   input.propTypes = {
-    invalid: PropTypes.string,
-    shouldBeValidated: PropTypes.string,
+    invalid: PropTypes.bool,
+    shouldBeValidated: PropTypes.bool,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
     elementConfig: PropTypes.object,
@@ -32,6 +32,7 @@ const input = ( props ) => {
     changed: PropTypes.func,
     label: PropTypes.string,
     title: PropTypes.string,
+    id: PropTypes.string
   };
 
 
@@ -42,6 +43,8 @@ const input = ( props ) => {
       className={inputStyling.join(' ')}
       {...props.elementConfig}
       value={props.value}
+      name={props.id}
+      id={props.id}
       onChange={props.changed} />;
     break;
 

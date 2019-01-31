@@ -87,12 +87,13 @@ router.get('/login', async (req, res) => {
 
  });
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', (req, res, next) => {
 
+  console.log(req.body);
 // res.status(500).send("login post route");
 
 passport.authenticate('local', {
-
+  
   successRedirect: '/',
   failureRedirect: '/users/login',
   failureFlash: true,

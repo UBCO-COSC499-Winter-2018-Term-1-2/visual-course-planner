@@ -156,6 +156,7 @@ class CreateAccountMenu extends Component {
         {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
+            id={formElement.id}
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
