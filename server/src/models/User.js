@@ -46,7 +46,7 @@ class User {
   }
 
 
-  async getuserbyId(id) {
+  async getUserById(id) {
     let rows = [];
     try {
       rows = await db.query("SELECT * FROM user WHERE id = ?", [id]);
@@ -54,7 +54,7 @@ class User {
       throw err;
     }
 
-    return rows;
+    return rows[0];
 
   }
 

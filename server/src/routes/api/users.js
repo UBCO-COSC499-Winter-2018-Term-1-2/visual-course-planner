@@ -80,26 +80,13 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.get('/login', async (req, res) => {
-  res.status(500).send("login get route");
-  // res.render('LoginInterface')
 
-
-});
-
-router.post('/login', (req, res, next) => {
-
-  console.log(req.body);
-  // res.status(500).send("login post route");
-
-  passport.authenticate('local', {
-  
-    successRedirect: '/',
-    failureRedirect: '/users/login',
-    failureFlash: true,
-    passReqToCallback : true
-  })(req, res, next);
-});
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/main',
+  failureRedirect: '/login',
+  failureFlash: true,
+  passReqToCallback : true
+}));
 
 
 module.exports = router;

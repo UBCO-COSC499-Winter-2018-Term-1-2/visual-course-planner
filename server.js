@@ -31,7 +31,9 @@ app.use(session(
       maxAge: 60000,
       name: 'gang'
     },
-    secret: "cats"
+    secret: "cats",
+    resave: false,
+    saveUninitialized: false
   }
 ));
 app.use(flash());

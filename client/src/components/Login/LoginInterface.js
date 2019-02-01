@@ -57,44 +57,22 @@ class LoginInterface extends Component {
       this.setState( { loading: true } );
       
       //this is log send user input to send to database.
-      const menuData = {};
+      const loginData = {};
       for (let formElementIdentifier in this.state.loginMenu) {
-        menuData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
+        loginData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
       }
       // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      const menu = {
-        // ingredients: this.props.ingredients,
-        // price: this.props.price,
-        menuData: menuData
+      const loginObject = {
+        loginData: loginData
       };
 
-      //AXIO CODE HERE
-      axios.get('http://jsonplaceholder.typicode.com/todos', {})
-        .then(function (response) {
-          console.log("THIS IS THE GET CALL");
-          console.log(response);
-          //resultElement.innerHTML = generateSuccessHTMLOutput(response);
-        })
-        .catch(error => {
-          //resultElement.innerHTML = generateErrorHTMLOutput(error);
-          this.setState( { loading: false } );
-          if(error.response){
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request){
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
-
-      axios.post( 'login', menu )
-        .then( response => {
+      axios.post( '/api/users/login', loginObject )
+        .then(response => {
           this.setState( { loading: false } );
           console.log("no errors::");
-          console.log(response);
+          console.log(response.data);
           //this.props.history.push( '/' );
-        } )
+        })
         .catch( error => {
           this.setState( { loading: false } );
           if(error.response){
@@ -149,7 +127,7 @@ class LoginInterface extends Component {
       //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
       //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
       let form = (
-        <form onSubmit={this.handler}>
+        <form>
           {formElementsArray.map(formElement => (
             <Input 
               key={formElement.id}
@@ -162,7 +140,7 @@ class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/main">Login</Link></button> 
+          <button className="deafultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Login</button> 
           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
         </form>
       );

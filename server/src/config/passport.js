@@ -17,7 +17,7 @@ passport.use(new LocalStrategy({
 
 
   console.log(email, password);
- // match email
+  // match email
   let userExists = false;
   try {
     userExists = await user.checkUser(email);
@@ -29,7 +29,7 @@ passport.use(new LocalStrategy({
     console.log('no user found');
     return done(null, false, {message: 'no user found'});
   } else {
-    const loggedInUser = await user.getUser(email);// probably not the right way to do it
+    const loggedInUser = await user.getUser(email);
     bcrypt.compare(password, loggedInUser.password, function(err, isMatch){ 
     
       if (err) {
@@ -37,11 +37,11 @@ passport.use(new LocalStrategy({
       } 
 
       if (isMatch) {
-          console.log('user matched');
-          return done(null, userLogin[0]);
+        console.log('user matched');
+        return done(null, loggedInUser);
       } else {
-          console.log('wrong password');
-          return done(null, false, {message: 'Wrong password'});
+        console.log('wrong password');
+        return done(null, false, {message: 'Wrong password'});
       }
  });
 
@@ -49,12 +49,12 @@ passport.use(new LocalStrategy({
 }));
 
 passport.serializeUser(function(user, done) {
-    done(null, userLogin[0].id);
-  });
+  done(null, user.id);
+});
   
-  passport.deserializeUser(function(id, done) {
-    const userLogin2 = getuserbyId(id);
-      done(err, userLogin2[0]);
-  });
+passport.deserializeUser(function(id, done) {
+  const userLogin = user.getUserById(id);
+  done(err, userLogin);
+});
 
 }
