@@ -49,7 +49,7 @@ router.post('/signup', async (req, res) => {
     }else{
 
       bcrypt.genSalt(10, function(err, salt){
-        bcrypt.hash(password, salt, function(err, hash){
+        bcrypt.hash(password, salt, async function(err, hash){
           if(err){
             console.log(err);
           }
@@ -62,12 +62,12 @@ router.post('/signup', async (req, res) => {
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
-            yearStanding: 0
+            standing: 0
                 
           };
           
           try{
-            user.insertUser(newUser);
+            await user.insertUser(newUser);
             res.status(200).send("New user was created.");
           }
           catch(err) {
@@ -81,12 +81,14 @@ router.post('/signup', async (req, res) => {
 });
 
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/main',
-  failureRedirect: '/login',
-  failureFlash: true,
-  passReqToCallback : true
-}));
+router.post('/login', (req, res, next) => {
+  console.log(req.body);
+  passport.authenticate('local', (err, user, info) => {
+    console.log("info", info);
+    return res.send({...info, user});
+  })(req, res, next);
+  
+});
 
 
 module.exports = router;

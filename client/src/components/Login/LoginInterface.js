@@ -61,12 +61,8 @@ class LoginInterface extends Component {
       for (let formElementIdentifier in this.state.loginMenu) {
         loginData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
       }
-      // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      const loginObject = {
-        loginData: loginData
-      };
 
-      axios.post( '/api/users/login', loginObject )
+      axios.post( '/api/users/login', loginData )
         .then(response => {
           this.setState( { loading: false } );
           console.log("no errors::");
