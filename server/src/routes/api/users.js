@@ -5,7 +5,6 @@ const expressValidator = require('express-validator');
 const passport = require('passport');
 
 
-
 router.use(expressValidator()); // put the use in server.js and also import through npm?
 
 
@@ -85,21 +84,21 @@ router.get('/login', async (req, res) => {
   res.status(500).send("login get route");
   // res.render('LoginInterface')
 
- });
+
+});
 
 router.post('/login', (req, res, next) => {
 
   console.log(req.body);
-// res.status(500).send("login post route");
+  // res.status(500).send("login post route");
 
-passport.authenticate('local', {
+  passport.authenticate('local', {
   
-  successRedirect: '/',
-  failureRedirect: '/users/login',
-  failureFlash: true,
-  passReqToCallback : true
-})(req, res, next);
-
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: true,
+    passReqToCallback : true
+  })(req, res, next);
 });
 
 

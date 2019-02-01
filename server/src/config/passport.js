@@ -9,8 +9,8 @@ module.exports = function(passport){
 //local strategy
 passport.use(new LocalStrategy({
 
-  loginEmail: req.getbody,
-  loginPassword: '12345'
+  usernameField: 'email',
+  passwordField: 'password'
 },
   
   function(email, password, done){
@@ -18,30 +18,31 @@ passport.use(new LocalStrategy({
 
   console.log(email, password);
  // match email
- //try{
-    const existUser = user.checkUser(email);
-  //}
-  //catch(err) {
-    res.status(500).send("Error with db." + err);
-  //} 
-  if(existUser === false){
-    res.status(500).send("no user found");
+  let userExists = false;
+  try {
+    userExists = user.checkUser(email);
+  }
+  catch(err) {
+    done("Error with db." + err);
+  } 
+  if (userExists === false) {
     console.log('no user found');
-      return done(null, false, {message: 'no user found'});
-    
-  }else{
-      const userLogin = user.getUser(email);// probably not the right way to do it
+    return done(null, false, {message: 'no user found'});
+  } else {
+    const userLogin = user.getUser(email);// probably not the right way to do it
     bcrypt.compare(password, userLogin[0].password, function(err, isMatch){ 
-    if(err) throw err;
-    if(isMatch){
-        res.status(200).send("User matched.");
-        console.log('user matched');
-        return done(null,userLogin[0]);
-    }else{
-        res.status(200).send("wrong password.");
-        console.log('wrong password');
-        return done(null, false, {message: 'Wrong password'});
-    }
+    
+      if (err) {
+        throw err;
+      } 
+
+      if (isMatch) {
+          console.log('user matched');
+          return done(null, userLogin[0]);
+      } else {
+          console.log('wrong password');
+          return done(null, false, {message: 'Wrong password'});
+      }
  });
 
   }
