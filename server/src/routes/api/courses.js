@@ -10,11 +10,29 @@ const Course = require('../../models/Course');
  */
 router.get('/:id', (req, res) => {
   const courseId = req.params.id;
-  Course.getCourse(courseId, (err, data) => {
-    if (err == null) {
+  Course.getCourse(courseId)
+    .then(data => {
       res.send(data);
-    } else {
-      console.error("Couldnt get course.");
-    }
-  });
+    })
+    .catch(err => {
+      console.error("Couldnt get course: " + err);
+    });
 });
+
+/**
+ * @route GET api/courses/
+ * @desc Get all offered courses
+ * @access Private
+ */
+router.get('/', (req, res) => {
+  Course.getCourses()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.error("Couldnt get courses: " + err);
+    });
+});
+
+
+module.exports = router;

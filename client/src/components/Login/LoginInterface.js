@@ -91,6 +91,7 @@ class LoginInterface extends Component {
       axios.post( 'login', menu )
         .then( response => {
           this.setState( { loading: false } );
+          console.log("no errors::");
           console.log(response);
           //this.props.history.push( '/' );
         } )
@@ -161,7 +162,7 @@ class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button className="deafultbtn" disabled={!this.state.formIsValid}>Login</button> 
+          <button className="deafultbtn" disabled={!this.state.formIsValid}><Link to = "/main">Login</Link></button> 
           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
         </form>
       );
@@ -183,16 +184,3 @@ LoginInterface.propTypes = {
 };
 
 export default LoginInterface;
-
-
-// <div className="menu">
-//         <h1 className="login-heading">Visual Course Planner</h1>
-//         <form onSubmit= {this.contactSubmit.bind(this)}>
-//           <input type="text" name="email" placeholder="Email" onChange={this.handleChange.bind(this, "email")} value={this.state.fields["email"]}/>
-//           <input type="text" name="pass" placeholder="Password" onChange={this.handleChange.bind(this, "password")} value={this.state.fields["password"]}/>   
-//           <button className="loginbtn">Login</button> 
-//           <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
-        
-         
-//         </form>        
-//       </div> 
