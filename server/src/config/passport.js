@@ -13,14 +13,14 @@ passport.use(new LocalStrategy({
   passwordField: 'password'
 },
   
-  function(email, password, done){
+  async function(email, password, done){
 
 
   console.log(email, password);
  // match email
   let userExists = false;
   try {
-    userExists = user.checkUser(email);
+    userExists = await user.checkUser(email);
   }
   catch(err) {
     done("Error with db." + err);
@@ -29,8 +29,8 @@ passport.use(new LocalStrategy({
     console.log('no user found');
     return done(null, false, {message: 'no user found'});
   } else {
-    const userLogin = user.getUser(email);// probably not the right way to do it
-    bcrypt.compare(password, userLogin[0].password, function(err, isMatch){ 
+    const loggedInUser = await user.getUser(email);// probably not the right way to do it
+    bcrypt.compare(password, loggedInUser.password, function(err, isMatch){ 
     
       if (err) {
         throw err;

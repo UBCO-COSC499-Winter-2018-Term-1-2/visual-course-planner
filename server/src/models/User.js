@@ -41,7 +41,7 @@ class User {
       throw err;
     }
 
-    return rows;
+    return rows[0];
 
   }
 
@@ -57,8 +57,6 @@ class User {
     return rows;
 
   }
-
-
 
 }
 
