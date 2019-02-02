@@ -96,7 +96,7 @@ function getSpecificCoursesSpecializationWarning(plan, requirement) {
   // TODO: notify which course is missing
   if (creditsNeeded > 0) {
     warning.push({
-      message: `Missing ${creditsNeeded} credits of ${requirement.courses}.`,
+      message: `Missing ${creditsNeeded} credits of:\n${requirement.courses}.`,
       type: "missingCredits"
     });
   }
@@ -119,7 +119,7 @@ function getCategorySpecializationWarning(plan, requirement) {
 
   if (creditsRemaining > 0) {
     warnings.push({
-      message: `Missing ${creditsRemaining} credits from ${requirement.category}.`,
+      message: `Missing ${creditsRemaining} credits from:\n${requirement.category}.`,
       type: 'specialization'
     });
   }
@@ -198,7 +198,8 @@ module.exports = {
     warnings = warnings.concat(
       module.exports.getSpecializationWarnings(plan, requirements)
     );
-
+    
+    console.log(warnings);
     return warnings;
   },
 
