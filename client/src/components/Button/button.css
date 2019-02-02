@@ -1,33 +1,38 @@
 /* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
-.create-accountbtn{
-    background:none;
+.Button{
+    width: 50%;
+    padding: 1em 1em;
     margin: 2em auto;
-    border-color: #84bd00;
-    padding:1em 2em;
-    cursor: pointer;
-    color: #84bd00;
+    box-sizing: border-box;
     font-size: 1em;
-    display: block;
+    /* text-align: center; */
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    /* display: block; */
+    display: flex;
+    flex-direction: column-reverse;
+    cursor: pointer;
+
 }
 
-.create-accountbtn:hover {
-    /* background-color: #84bd00;  */
-    color: #afda77;
-    border-color: #afda77;
+.Button:hover {
+    background-color: #84bd00; 
+    color: black;
 }
 
-.create-accountbtn:disabled{
+.Button:disabled{
     cursor: not-allowed;
-}
 
+}
 .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
 }
 
-/* .Success {
+.Success {
     color: #5C9210;
-} */
+}
 
 .Danger {
     color: #944317;

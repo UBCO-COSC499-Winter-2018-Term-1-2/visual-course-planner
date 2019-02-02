@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import './LoginInterface.css';
+//import './LoginInterface.css';
 // import CreateAccountMenu from '../Signup/CreateAccountMenu';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
+//import { Route, BrowserRouter as Router } from 'react-router-dom';
+//port Main from '../../containers/Main';
+//import Button from '../Button/button.js';
 
-class LoginInterface extends Component {
+
+export class LoginInterface extends Component {
  
     state = {
       loginMenu: {
@@ -153,6 +157,11 @@ class LoginInterface extends Component {
      
     }
 
+    onNavigationVCPMain = () => {
+      this.props.history.push('/main');
+    }
+
+
     render(){
       const formElementsArray = [];
       for (let key in this.state.loginMenu) {
@@ -177,7 +186,7 @@ class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} />
           ))}
-          <button to= "/main" renderAs={Link} className="deafultbtn" disabled={!this.state.formIsValid}>Login</button>
+          <button className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
           <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
           {/*    <Link to = "/main"> */}
         </form>
@@ -200,6 +209,8 @@ class LoginInterface extends Component {
 
 LoginInterface.propTypes = {
   toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
+  history: PropTypes.object,
+
 };
 
 export default LoginInterface;

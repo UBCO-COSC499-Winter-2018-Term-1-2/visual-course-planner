@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 // import React from 'react';
 import '../Login/LoginInterface.css';
 //import Button from '../Button/button';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import Input from '../Input/input';
-import axios from 'axios';
+//import axios from 'axios';
 //import validationWarning from '../WarningSnackbar/WarningSnackbar';
 
 
@@ -143,16 +145,16 @@ class CreateAccountMenu extends Component {
     //   formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     // }
    
-    axios.post( '/api/users', formData )
-      .then( response => {
-        this.setState( { loading: false } );
-        //this.props.history.push('/');
-        console.log(response);
-      } )
-      .catch( error => {
-        this.setState( { loading: false } );
-        console.log(error);
-      } );
+    // axios.post( '/api/users', formData )
+    //   .then( response => {
+    //     this.setState( { loading: false } );
+    //     //this.props.history.push('/');
+    //     console.log(response);
+    //   } )
+    //   .catch( error => {
+    //     this.setState( { loading: false } );
+    //     console.log(error);
+    //   } );
   
   }
 
@@ -181,6 +183,10 @@ class CreateAccountMenu extends Component {
    
   }
   
+  onNavigation = () => {
+    this.props.history.push('/course-history');
+
+  }
 
   render(){
     const formElementsArray = [];
@@ -209,12 +215,11 @@ class CreateAccountMenu extends Component {
             //formErrors ={formElement.config.emailErrors}
             label={formElement.config.label}/>
         ))}
-        
-        
-        <Link to = "/course-history"><button className="deafultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link> 
-        {/* <Button btnType="create-accountbtn" disabled={!this.state.formIsValid}>MarIO</Button> */}
-        <button className="open-diff-menubtn" > <Link to = "/login">Login</Link></button>
-        
+    
+        {/* <Link to = "/course-history"><button className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link>  */}
+        <button  className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+        <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
+
       </form>
     );
     
@@ -232,6 +237,12 @@ class CreateAccountMenu extends Component {
     );
   }
 }
+CreateAccountMenu.propTypes = {
+  history: PropTypes.object,
+  invalid: PropTypes.bool,
+  shouldBeValidated: PropTypes.object,
+  inputElementTouched: PropTypes.bool,
 
+};
 
 export default CreateAccountMenu;

@@ -160,8 +160,8 @@ class profile extends Component {
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
             <div className="btn-div">
-              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
             </div>
           </form>
         );
@@ -184,18 +184,3 @@ class profile extends Component {
     
   
 export default profile;
-
-{/* <div>
-          <h1 className="yellow-title">Users Name </h1>
-          <h4 className="green-title">Users Name </h4>
-            <input type="text" name="fname" placeholder="* First Name"/>
-            <input type="text" name="lname" placeholder="* Last Name"/>   
-            <h4 className="green-title">Change Password</h4>
-            <input type="text" name="pass" placeholder="* Password"/> 
-            <input type="text" name="pass" placeholder="* Re-Enter Password"/> 
-            <h4 className="green-title">Current year standing</h4>
-            <h4 className="green-title">link to change which courses a student has taken</h4>
-        
-
-            <button className="green-borderbtn">Save + Submit</button> 
-          </div> */}

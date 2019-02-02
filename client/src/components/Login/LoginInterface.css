@@ -44,6 +44,7 @@ body{
 
 a{
     color: #84bd00;
+    
 }
 a:hover {
     color: #afda77;
@@ -70,17 +71,19 @@ a:hover {
     cursor: not-allowed;
 }
 
-.deafultbtn{
-    width: 50%;
-    padding: 1em 1em;
+.defaultbtn{
+    /* width: 50%; */
+    padding: 1em 6em;
     margin: 2em auto;
     box-sizing: border-box;
     font-size: 1em;
-    /* text-align: center; */
+    text-align: center;
     color: #9c9b9d;
     background-color: #333035;
     border: none;
-    display: block;
+    /* display: block; */
+    display: flex;
+    flex-direction: column-reverse;
     cursor: pointer;
 
 }
@@ -93,6 +96,13 @@ a:hover {
 .deafultbtn:disabled{
     cursor: not-allowed;
 
+}
+
+.btn-div{
+    margin: 4em 0em;
+    display: flex;
+    flex-direction: row;
+    /* text-align: center;  */
 }
 
 .overlay {
