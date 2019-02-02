@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
-            standing: 0
+            yearStanding: 0
                 
           };
           
