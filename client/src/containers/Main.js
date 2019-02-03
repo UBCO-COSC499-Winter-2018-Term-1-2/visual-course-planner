@@ -6,14 +6,10 @@ import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Font Awesome Icon Imports
-library.add(faSignOutAlt);
-library.add(faHeart);
-library.add(faExclamationTriangle);
-library.add(faPlus);
-library.add(faTimes);
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash);
 class Main extends Component {
   state = {
     isCourseListOpen: false,
