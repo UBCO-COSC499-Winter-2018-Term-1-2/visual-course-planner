@@ -2,7 +2,7 @@
   height: 75vh;
   display: flex;
   flex-direction: column;
-  min-width: 10%;
+  min-width: 7em;
   max-width: 15%;
 }
 

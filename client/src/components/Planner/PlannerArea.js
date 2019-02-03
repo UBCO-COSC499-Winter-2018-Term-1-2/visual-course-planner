@@ -178,11 +178,20 @@ class PlannerArea extends Component {
 
     console.log("Moved Course: " + JSON.stringify(movedCourse));
     let courses = [ ...this.props.plan.courses];
-    const updatedCourseIndex = this.props.plan.courses.findIndex(x => x.code === movedCourse.code);
-    courses.splice(updatedCourseIndex, 1);
-    courses = [ ...courses, movedCourse];
-    console.log(courses);
-    this.props.updatePlanCourses(courses);
+    const updatedCourseIndex = this.props.plan.courses.findIndex(x => x.id === movedCourse.id);
+
+    if (updatedCourseIndex === -1) {
+      console.log("Adding course to plan", movedCourse);
+      courses.push(movedCourse);
+      this.props.updatePlanCourses(courses);
+    } else {
+      console.log("Moving course already in plan", movedCourse);
+      courses.splice(updatedCourseIndex, 1);
+      courses = [ ...courses, movedCourse];
+      console.log(courses);
+      this.props.updatePlanCourses(courses);
+    }
+
   }
 
   getWarnings = async () => {

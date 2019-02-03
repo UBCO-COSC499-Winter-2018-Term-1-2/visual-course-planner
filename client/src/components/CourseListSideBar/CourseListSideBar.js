@@ -44,9 +44,15 @@ class CourseListSideBar extends React.Component {
     const courseList = this.state.filteredCourses.map(course => {
       return (
         <Course
-          key={course.cid}
+          key={course.id}
           course={course}
-          sourceTerm={0}
+          sourceTerm={{
+            id: 1,
+            coursesContained: [],
+            year: 2018,
+            session: "W",
+            number: 1
+          }}
           type={"elective"}
           onDragStart={(e, course, sourceTerm) => {this.props.close(); this.props.onCourseDragStart(e, course, sourceTerm);}}
         />

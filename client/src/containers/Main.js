@@ -21,6 +21,7 @@ class Main extends Component {
     currentPlan: {
       courses: [
         {
+          id: 100,
           code: "COSC 111",
           standingRequirement: 0,
           coRequisites: [],
@@ -30,6 +31,7 @@ class Main extends Component {
           term: 1
         },
         {
+          id: 101,
           code: "COSC 121",
           standingRequirement: 0,
           coRequisites: [],
@@ -39,6 +41,7 @@ class Main extends Component {
           term: 2
         },
         {
+          id: 102,
           code: "COSC 341",
           standingRequirement: 3,
           coRequisites: [],

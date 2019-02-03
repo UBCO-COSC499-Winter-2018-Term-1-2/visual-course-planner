@@ -11,7 +11,7 @@ class Term extends Component {
     return (this.props.coursesContained.map((course) => {
       return (
         <Course
-          key={course.code}
+          key={course.id}
           course={course}
           type="required"
           sourceTerm={this.props.term}

@@ -35,7 +35,7 @@ PlannerHeader.propTypes = {
   numberOfWarnings: PropTypes.number.isRequired,
   openCourseList: PropTypes.func.isRequired,
   closeCourseList: PropTypes.func.isRequired,
-  isCourseListOpen: PropTypes.func.isRequired
+  isCourseListOpen: PropTypes.bool.isRequired
 };
 
 export default PlannerHeader;
