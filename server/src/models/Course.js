@@ -27,10 +27,17 @@ module.exports = {
 
   async getCourses() {
     const courseInfoResults = await db.query(`
-      SELECT * FROM course
+      SELECT code, credits, name, description, standingRequirement, session.startYear, session.season, term.num,
+        GROUP_CONCAT(cir.rid) AS prerequisites,
+        GROUP_CONCAT(cic.rid) AS corequisites
+      FROM course
       JOIN course_term ON course.id = course_term.cid
       JOIN term ON course_term.tid = term.id
-      JOIN session ON term.sid = session.id`);
+      JOIN session ON term.sid = session.id
+      JOIN course_info AS ci ON course.code = ci.id
+      LEFT JOIN course_info_requirement AS cir ON ci.id = cir.cid
+      LEFT JOIN course_info_corequirement AS cic ON ci.id = cic.cid
+      GROUP BY course.id, session.startYear, session.season, term.num`);
     return courseInfoResults;
   },
 
