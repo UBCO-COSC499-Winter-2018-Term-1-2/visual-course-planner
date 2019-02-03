@@ -4,10 +4,8 @@ import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
-import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import Backdrop from '../components/Backdrop/Backdrop';
 import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Font Awesome Icon Imports
@@ -18,7 +16,7 @@ library.add(faPlus);
 library.add(faTimes);
 class Main extends Component {
   state = {
-    drawerOpen : false,
+    isCourseListOpen: false,
     showSnackbar : false,
     currentPlan: {
       courses: [
@@ -64,15 +62,12 @@ class Main extends Component {
     warnings: []
   }
 
-  toggleCourseListSidebarHandler = () => {
-    const isOpen = this.state.drawerOpen;
-    this.setState(
-      {drawerOpen : !isOpen}
-    );
+  openCourseListSidebar = () => {
+    this.setState({ isCourseListOpen : true });
   }
 
   closeCourseListSidebar = () => {
-    this.setState({drawerOpen: false});
+    this.setState({ isCourseListOpen: false });
   };
 
   optimizeHandler = () => {
@@ -110,12 +105,6 @@ class Main extends Component {
   }
 
   render() {
-    let backdrop;
-
-    if(this.state.drawerOpen){
-      backdrop = <Backdrop click={this.closeCourseListSidebar}/>;
-    }
-
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
@@ -123,13 +112,17 @@ class Main extends Component {
         <NoteArea/>
         <PlannerHeader
           planName={this.state.currentPlan.name}
-          toggleSidebar={this.toggleCourseListSidebarHandler}
+          openCourseList={this.openCourseListSidebar}
+          closeCourseList={this.closeCourseListSidebar}
+          isCourseListOpen={this.state.isCourseListOpen}
           optimize={this.optimizeHandler}
           showWarning={this.showSnackbar}
           numberOfWarnings={this.state.warnings.length}
           user={this.state.user}
         />
-        <PlannerArea 
+        <PlannerArea
+          isCourseListOpen={this.state.isCourseListOpen}
+          closeCourseList={this.closeCourseListSidebar}
           plan={this.state.currentPlan}
           user={this.state.user}
           updatePlanCourses={this.updatePlanCourses}
@@ -137,14 +130,7 @@ class Main extends Component {
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
           setWarnings={this.setWarnings}
-        />
-       
-        {/*'courseTitle','courseInfo' should come from the database */}
-        <CourseListSideBar 
-          show={this.state.drawerOpen} 
-          close={this.closeCourseListSidebar}
-        />
-        {backdrop}
+        />    
       </div>
     );
   }

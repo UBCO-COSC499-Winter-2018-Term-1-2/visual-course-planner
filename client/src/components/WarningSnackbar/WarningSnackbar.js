@@ -24,7 +24,6 @@ class WarningSnackbar extends Component {
       let messageParts = [];
       warnings = this.props.warnings.forEach(warning => {
         messageParts.push(warning.message.split('\n'));
-        console.log(warning);
       });
       
       // Build the jsx elements
@@ -40,7 +39,7 @@ class WarningSnackbar extends Component {
         </div>
       );
     }
-
+    console.log(warnings);
     return (
       <div className="warning-list-container">
         {warnings}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
+import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Term from '../Term/Term';
 import axios from 'axios';
 import './PlannerArea.css';
@@ -8,8 +9,7 @@ import './PlannerArea.css';
 class PlannerArea extends Component {
 
   state = {
-    terms: [
-    ]
+    terms: []
   }
 
   insertCoursesIntoTerms = () => {
@@ -160,6 +160,7 @@ class PlannerArea extends Component {
 
   //drag start event handler for course component - passed in as prop via Term
   onCourseDragStart = (e, course, sourceTerm) => {
+    console.log(e);
     e.dataTransfer.setData("course", JSON.stringify(course));
     e.dataTransfer.setData("sourceTerm", JSON.stringify(sourceTerm));
   }
@@ -213,6 +214,12 @@ class PlannerArea extends Component {
           <this.renderTerms />
         </div>
 
+        <CourseListSideBar 
+          isOpen={this.props.isCourseListOpen} 
+          close={this.props.closeCourseList}
+          onCourseDragStart={this.onCourseDragStart.bind(this)}
+        />
+
         <WarningSnackbar
           showSnackbar={this.props.showSnackbar}
           closeSnackbar={this.props.closeSnackbar}
@@ -230,7 +237,9 @@ PlannerArea.propTypes = {
   closeSnackbar: PropTypes.func.isRequired,
   updatePlanCourses: PropTypes.func.isRequired,
   setWarnings: PropTypes.func.isRequired,
-  warnings: PropTypes.array.isRequired
+  warnings: PropTypes.array.isRequired,
+  closeCourseList: PropTypes.func.isRequired,
+  isCourseListOpen: PropTypes.bool.isRequired
 };
 
 export default PlannerArea;
