@@ -393,7 +393,7 @@ describe("WarningService", () => {
 
       const expectedWarnings = [
         {
-          message: `Missing ${specializationRequirements[1].credits} credits of ${specializationRequirements[1].courses}.`,
+          message: `Missing ${specializationRequirements[1].credits} credits of:\n${specializationRequirements[1].courses}.`,
           type: "missingCredits"
         }
       ];
@@ -484,7 +484,7 @@ describe("WarningService", () => {
 
       const expectedWarnings = [
         {
-          message: `Missing 3 credits of ${specializationRequirements[1].courses}.`,
+          message: `Missing 3 credits of:\n${specializationRequirements[1].courses}.`,
           type: "missingCredits"
         }
       ];
