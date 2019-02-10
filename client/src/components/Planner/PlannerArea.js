@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Term from '../Term/Term';
 import axios from 'axios';
@@ -9,6 +10,7 @@ import './PlannerArea.css';
 class PlannerArea extends Component {
 
   state = {
+    trashColour: "white",
     terms: []
   }
 
@@ -209,7 +211,39 @@ class PlannerArea extends Component {
       
     } catch(err) {
       console.log(err);
-    }  
+    }
+  }
+
+  onCourseDragOverTrash = (e) => {
+    e.preventDefault();
+    this.setState({
+      trashColour: "green"
+    });
+  }
+
+  onCourseDragEndTrash = (e) => {
+    e.preventDefault();
+    this.setState({
+      trashColour: "white"
+    });
+  }
+
+  onCourseDropTrash = (e) => {
+    let movedCourse = JSON.parse(e.dataTransfer.getData("course"));
+
+
+    console.log("Remove Course: " + JSON.stringify(movedCourse));
+    let courses = [ ...this.props.plan.courses];
+    const removedCourseIndex = this.props.plan.courses.findIndex(x => x.id === movedCourse.id);
+
+    if (removedCourseIndex === -1) {
+      throw new Error("Couldnt find course in plan to remove", JSON.stringify(movedCourse));
+    } else {
+      console.log("Removing course from plan", movedCourse);
+      courses.splice(removedCourseIndex, 1);
+      console.log(courses);
+      this.props.updatePlanCourses(courses);
+    }
   }
 
   componentDidMount() {
@@ -234,6 +268,14 @@ class PlannerArea extends Component {
           closeSnackbar={this.props.closeSnackbar}
           warnings={this.props.warnings}
         />
+
+        <div className="floating-icon"
+          onDragOver={this.onCourseDragOverTrash}
+          onDragLeave={this.onCourseDragEndTrash}
+        >
+          <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
+        </div>
+
       </div>
     );
   }

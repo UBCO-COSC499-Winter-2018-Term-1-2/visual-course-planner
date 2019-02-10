@@ -15,12 +15,12 @@
 }
 
 #term-view::-webkit-scrollbar {
-    height: 0.4em;
+  height: 0.4em;
 }
 
 #term-view::-webkit-scrollbar-thumb {
-    border-radius: 2em;
-    background-color: #1a191b;
+  border-radius: 2em;
+  background-color: #1a191b;
 }
 
 #session-container {
@@ -28,4 +28,12 @@
   display: flex;
   overflow: auto;
   position: relative;
+  height: 100%;
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 2em;
+  bottom: 1em;
+  right: 2em;
 }

@@ -10,6 +10,7 @@ import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash 
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash);
+
 class Main extends Component {
   state = {
     isCourseListOpen: false,
