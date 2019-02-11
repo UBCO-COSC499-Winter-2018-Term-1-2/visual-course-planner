@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Semester.css';
 import Course from '../Course/Course';
+//import MultiRef from 'react-multi-ref';
 
 class Semester extends Component {
   //term or year divider style attribute
@@ -14,6 +15,17 @@ class Semester extends Component {
 
   coursesContained = this.props.coursesContained;
   
+  //courseRefs = new MultiRef();
+  //should make a map? key = course string and value = ref?
+  bob = new Map();
+
+  generateCourseRefs = () => {
+    this.coursesContained.forEach(course => {
+      const courseRef = React.createRef();
+      this.bob.set(course, courseRef);
+    });
+  }
+
   renderCourses = () => {
     return (this.coursesContained.map((course) => {
       return (
@@ -22,12 +34,14 @@ class Semester extends Component {
           code={course}
           type="required"
           sourceTerm={this.props.term}
-          onDragStart={this.props.onCourseDragStart} />
+          onDragStart={this.props.onCourseDragStart}
+          courseRef={this.bob.get(course)} />
       );
     }
     ));
   }
   render() {
+    this.generateCourseRefs();
     return (
       <div className="semester-container" style={this.isEvenTerm ? this.termDivider : null}>
         <h3 className="term-heading"> TERM {this.props.term} </h3>
@@ -37,7 +51,7 @@ class Semester extends Component {
           onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}>
 
           <this.renderCourses />
-
+          {console.log(this.bob)}
         </div>
       </div>
     );
