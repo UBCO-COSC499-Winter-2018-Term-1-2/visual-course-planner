@@ -45,6 +45,24 @@ export class LoginInterface extends Component {
         },
     
       },
+      //error state (form validation)
+      errors:{
+        email: {
+          hasError: false
+        },
+        fName: {
+          hasError: false
+        },
+        lName: {
+          hasError: false
+        },
+        password: {
+          hasError: false
+        },
+        confirmPassword: {
+          hasError: false
+        },
+      },
       formIsValid: false,
       loading: false
     }
@@ -61,17 +79,51 @@ export class LoginInterface extends Component {
       if (rules.minLength) {
         isValid = value.length >= rules.minLength && isValid;
         console.log("minlength: " + isValid);
+        isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
       }
 
       if (rules.isEmail) {
         const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        //const reg =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         isValid = pattern.test(value) && isValid;
-        console.log("valid email: " + isValid);
+        //console.log(isValid);
+        isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+
       }
 
       return isValid;
     }
+    
+    setError = (element, message) => {
+      //console.log("Setting error");
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              hasError: true,
+              message: message
+            }
+          }
+        };
+      });
+    }
+  
+    removeError = (element) => {
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              hasError: false,
+            }
+          }
+        };
+      });
+    }
+
+
     handler = ( event ) => {
       event.preventDefault();
       this.setState( { loading: true } );
@@ -157,6 +209,7 @@ export class LoginInterface extends Component {
      
     }
 
+    //LINKS FORM BTN TO PAGE SPECIFED
     onNavigationVCPMain = () => {
       this.props.history.push('/main');
     }
@@ -176,16 +229,21 @@ export class LoginInterface extends Component {
       let form = (
         <form onSubmit={this.handler}>
           {formElementsArray.map(formElement => (
-            <Input 
-              key={formElement.id}
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-              shouldBeValidated={formElement.config.validation}
-              inputElementTouched={formElement.config.inputElementTouched}
-              changed={(event) => this.inputChangeHandler(event, formElement.id)} />
+            <div key={formElement.id}>
+              <Input 
+                //  key={formElement.id}
+                elementType={formElement.config.elementType}
+                elementConfig={formElement.config.elementConfig}
+                value={formElement.config.value}
+                invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
+                shouldBeValidated={formElement.config.validation}
+                inputElementTouched={formElement.config.inputElementTouched}
+                changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+              />
+              {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
+            </div>  
           ))}
+          
           <button className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
           <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
           {/*    <Link to = "/main"> */}

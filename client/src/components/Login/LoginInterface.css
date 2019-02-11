@@ -115,6 +115,15 @@ a:hover {
     z-index: -1;
   }
 
-/* .invalid{
-    border: 1px solid red;
-} */
+
+.warning-msg{
+    color:  red;
+    /* font-weight: normal;
+    font-size: 1em;
+    /* background-color: #333035; */
+    /* border: none;
+    width: 31em;
+    resize: none;  */
+    list-style-type: none;
+    /* text-transform: uppercase; */
+}
