@@ -14,6 +14,8 @@ class PlannerArea extends Component {
     terms: []
   }
 
+  trashDragCounter = 0;
+
   insertCoursesIntoTerms = () => {
     let terms = [{
       id: 1,
@@ -38,7 +40,7 @@ class PlannerArea extends Component {
   getTermsForCourse(currentTerms, course) {
     let termsToAdd = [];
     const indexOfTerm = currentTerms.findIndex(existingTerm =>  {
-      console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
+      // console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
 
       return course.term === existingTerm.number && course.year === existingTerm.year && course.term === existingTerm.number;
     });
@@ -50,14 +52,14 @@ class PlannerArea extends Component {
 
       while(lastTerm.number != course.term || lastTerm.year != course.year || lastTerm.session != course.session) {
 
-        console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
+        // console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
         
         const nextTerm = this.getNextTerm(lastTerm, course);
         termsToAdd.push(nextTerm);
         lastTerm = nextTerm; 
 
-        console.log("Added term: " + JSON.stringify(nextTerm));
-        console.log("Terms to add: " + JSON.stringify(termsToAdd));
+        // console.log("Added term: " + JSON.stringify(nextTerm));
+        // console.log("Terms to add: " + JSON.stringify(termsToAdd));
       }
       return termsToAdd;
     }
@@ -214,21 +216,32 @@ class PlannerArea extends Component {
     }
   }
 
-  onCourseDragOverTrash = (e) => {
+  onCourseDragEnterTrash = (e) => {
     e.preventDefault();
+    this.trashDragCounter++;
+    console.log("Enter trash");
     this.setState({
       trashColour: "green"
     });
   }
 
-  onCourseDragEndTrash = (e) => {
+  onCourseDragLeaveTrash = () => {
+    this.trashDragCounter--;
+    console.log("leave trash", this.trashDragCounter);
+    if (this.trashDragCounter === 0) {
+      this.setState({
+        trashColour: "white"
+      });
+    }
+  }
+
+  onCourseDragOverTrash = (e) => {
     e.preventDefault();
-    this.setState({
-      trashColour: "white"
-    });
   }
 
   onCourseDropTrash = (e) => {
+    e.preventDefault();
+    this.trashDragCounter = 0;
     let movedCourse = JSON.parse(e.dataTransfer.getData("course"));
 
 
@@ -243,6 +256,9 @@ class PlannerArea extends Component {
       courses.splice(removedCourseIndex, 1);
       console.log(courses);
       this.props.updatePlanCourses(courses);
+      this.setState({
+        trashColour: "white"
+      });
     }
   }
 
@@ -269,9 +285,12 @@ class PlannerArea extends Component {
           warnings={this.props.warnings}
         />
 
-        <div className="floating-icon"
+        <div
+          className="floating-icon"
+          onDragEnter={this.onCourseDragEnterTrash}
+          onDragLeave={this.onCourseDragLeaveTrash}
           onDragOver={this.onCourseDragOverTrash}
-          onDragLeave={this.onCourseDragEndTrash}
+          onDrop={this.onCourseDropTrash}
         >
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>

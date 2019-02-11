@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS course_info_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
+DROP TABLE IF EXISTS user_course_info;
 DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS specialization;
@@ -25,23 +26,6 @@ CREATE TABLE course_info (
   name                VARCHAR(100),
   description         VARCHAR(1000),
   standingRequirement INT
-);
-
-CREATE TABLE user_course_info (
-  uid INT,
-  cid VARCHAR(9),
-
-  FOREIGN KEY (uid)
-    REFERENCES user(id)
-    ON UPDATE CASCADE
-    ON DELETE NO ACTION,
-
-  FOREIGN KEY (cid)
-    REFERENCES course_info(id)
-    ON UPDATE CASCADE
-    ON DELETE NO ACTION,
-
-  PRIMARY KEY (uid, cid)
 );
 
 CREATE TABLE course (
@@ -246,36 +230,52 @@ CREATE TABLE credit_requirement_course_info (
   PRIMARY KEY (crid, cid)
 );
 
+CREATE TABLE user_course_info (
+  uid INT,
+  cid VARCHAR(9),
 
-INSERT INTO course_info (id) VALUES ("ENGL 112");
-INSERT INTO course_info (id) VALUES ("ENGL 114");
-INSERT INTO course_info (id) VALUES ("ENGL 113");
-INSERT INTO course_info (id) VALUES ("ENGL 150");
-INSERT INTO course_info (id) VALUES ("ENGL 151");
-INSERT INTO course_info (id) VALUES ("ENGL 153");
-INSERT INTO course_info (id) VALUES ("MATH 100");
-INSERT INTO course_info (id) VALUES ("MATH 101");
+  FOREIGN KEY (uid)
+    REFERENCES user(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
 
-INSERT INTO course_info (id) VALUES ("PHYS 111");
-INSERT INTO course_info (id) VALUES ("PHYS 112");
-INSERT INTO course_info (id) VALUES ("PHYS 102");
-INSERT INTO course_info (id) VALUES ("PHYS 121");
-INSERT INTO course_info (id) VALUES ("PHYS 122");
-INSERT INTO course_info (id) VALUES ("CHEM 111");
-INSERT INTO course_info (id) VALUES ("CHEM 121");
-INSERT INTO course_info (id) VALUES ("CHEM 113");
-INSERT INTO course_info (id) VALUES ("CHEM 123");
-INSERT INTO course_info (id) VALUES ("COSC 111");
-INSERT INTO course_info (id) VALUES ("COSC 123");
-INSERT INTO course_info (id) VALUES ("COSC 121");
-INSERT INTO course_info (id) VALUES ("COSC 211");
-INSERT INTO course_info (id) VALUES ("COSC 221");
-INSERT INTO course_info (id) VALUES ("COSC 222");
-INSERT INTO course_info (id) VALUES ("MATH 200");
-INSERT INTO course_info (id) VALUES ("MATH 221");
-INSERT INTO course_info (id) VALUES ("STAT 230");
-INSERT INTO course_info (id) VALUES ("COSC 304");
-INSERT INTO course_info (id) VALUES ("COSC 310");
-INSERT INTO course_info (id) VALUES ("COSC 320");
-INSERT INTO course_info (id) VALUES ("COSC 341");
-INSERT INTO course_info (id) VALUES ("PHIL 331");
+  FOREIGN KEY (cid)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  PRIMARY KEY (uid, cid)
+);
+
+INSERT INTO course_info (id, credits) VALUES ("ENGL 112", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 114", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 113", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 150", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 151", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 153", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 100", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 101", 3);
+
+INSERT INTO course_info (id, credits) VALUES ("PHYS 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 112", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 102", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 122", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 113", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 123", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 123", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 211", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 221", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 222", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 200", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 221", 3);
+INSERT INTO course_info (id, credits) VALUES ("STAT 230", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 304", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 310", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 320", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
