@@ -5,6 +5,7 @@ db.query = promisify(db.query);
 
 module.exports = {
   async insertCourse(code, termId) {
+    console.log("inserting " + code);
     const results = await db.query("INSERT INTO course (code) VALUES (?)", [code, termId]);
     const courseId = results.insertId;
 

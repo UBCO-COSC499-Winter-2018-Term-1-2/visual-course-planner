@@ -6,7 +6,7 @@ db.query = promisify(db.query);
 module.exports = {
   async getSessionById(id) {
     const sessionResults = await db.query("SELECT id FROM session WHERE id = ?", [id]);
-    return sessionResults;
+    return sessionResults[0];
   },
 
   async getSession(year, season) {

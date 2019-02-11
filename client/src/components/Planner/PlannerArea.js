@@ -11,36 +11,40 @@ class PlannerArea extends Component {
 
   state = {
     trashColour: "white",
-    terms: []
-  }
-
-  trashDragCounter = 0;
-
-  insertCoursesIntoTerms = () => {
-    let terms = [{
+    terms: [{
       id: 1,
       coursesContained: [],
       year: 2018,
       session: "W",
       number: 1
-    }];
+    }]
+  }
+
+  trashDragCounter = 0;
+
+  insertCoursesIntoTerms = () => {
+    let terms = [];
 
     this.props.plan.courses.forEach(course => {
-      terms = terms.concat(this.getTermsForCourse(terms, course));
-      const indexOfTerm = terms.findIndex(existingTerm => course.term === existingTerm.number && course.year === existingTerm.year && course.session === existingTerm.session);
-      if (indexOfTerm === -1) {
-        console.error(`Couldn't find term after creating it. \nTerms: ${JSON.stringify(terms)}\nCourse: ${JSON.stringify(course)}`);
-      }
-      terms[indexOfTerm].coursesContained.push(course);
-    }); 
+      
+      const courseTerms = this.state.terms.concat(this.getTermsForCourse(this.state.terms, course));
 
+      const indexOfTerm = courseTerms.findIndex(existingTerm =>
+        course.term === existingTerm.number && course.year === existingTerm.year && course.session === existingTerm.session
+      );
+      if (indexOfTerm === -1) {
+        console.error(`Couldn't find term after creating it. \nTerms: ${JSON.stringify(this.state.terms)}\nCourse: ${JSON.stringify(course)}`);
+      }
+      courseTerms[indexOfTerm].coursesContained.push(course);
+      terms = courseTerms;
+    });
     return terms;
   }
 
   getTermsForCourse(currentTerms, course) {
     let termsToAdd = [];
     const indexOfTerm = currentTerms.findIndex(existingTerm =>  {
-      // console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
+      console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
 
       return course.term === existingTerm.number && course.year === existingTerm.year && course.term === existingTerm.number;
     });
@@ -52,14 +56,14 @@ class PlannerArea extends Component {
 
       while(lastTerm.number != course.term || lastTerm.year != course.year || lastTerm.session != course.session) {
 
-        // console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
+        console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
         
         const nextTerm = this.getNextTerm(lastTerm, course);
         termsToAdd.push(nextTerm);
         lastTerm = nextTerm; 
 
-        // console.log("Added term: " + JSON.stringify(nextTerm));
-        // console.log("Terms to add: " + JSON.stringify(termsToAdd));
+        console.log("Added term: " + JSON.stringify(nextTerm));
+        console.log("Terms to add: " + JSON.stringify(termsToAdd));
       }
       return termsToAdd;
     }
@@ -140,7 +144,8 @@ class PlannerArea extends Component {
 
   //rendering term components by mapping defaultTerms state variable
   renderTerms = () => {
-    const terms = this.mapPlanToTerms().map((term) => (
+    let terms = this.insertCoursesIntoTerms();
+    terms = terms.map((term) => (
       <Term
         key={term.id}
         term={term}

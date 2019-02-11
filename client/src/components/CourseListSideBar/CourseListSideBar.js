@@ -40,7 +40,6 @@ class CourseListSideBar extends React.Component {
   }
 
   render() {
-    console.log(this.state.courses);
     const courseList = this.state.filteredCourses.map(course => {
       return (
         <Course
