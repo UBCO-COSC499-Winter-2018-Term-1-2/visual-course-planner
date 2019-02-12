@@ -147,17 +147,12 @@ class CreateAccountMenu extends Component {
 
       }
 
-      // if(rules.passMatch){
-      //   const pass = value;
-      //   const confirmPass = value;
-      //   if (pass === confirmPass){
-      //     isValid = pass === confirmPass && isValid;
-      //   } else {
-      //     isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-      //   }
-      //console.log("Pass: " + this.password.value);
-      //console.log("PassCon: " + confirmPass);
-      // }
+      if(rules.passMatch){
+        const {password, confirmPassword} = this.state;
+        const matches = password === confirmPassword;
+        isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+        
+      }
 
 
       return isValid;
