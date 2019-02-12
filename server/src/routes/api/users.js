@@ -95,4 +95,13 @@ router.post('/login', (req, res, next) => {
 });
 
 
+router.post('/signup/coursehistory', async (req, res) => {
+  console.log(req.body);
+
+});
+
+
+
+
+
 module.exports = router;
