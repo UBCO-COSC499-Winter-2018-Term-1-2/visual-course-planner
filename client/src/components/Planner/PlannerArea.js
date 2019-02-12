@@ -41,32 +41,42 @@ class PlannerArea extends Component {
       },
       {
         number: "5",
-        coursesContained: ["COSC 111", "COSC 122"],
+        coursesContained: ["COSC 304", "COSC 360"],
         year: "2018",
         session: "W"
 
       },
       {
         number: "6",
-        coursesContained: ["COSC 111", "COSC 122"],
+        coursesContained: ["COSC 320", "COSC 341"],
         year: "2018",
         session: "W"
 
       },
       {
         number: "7",
-        coursesContained: ["COSC 111", "COSC 122"],
+        coursesContained: ["COSC 445", "COSC 328"],
         year: "2018",
         session: "W"
 
       },
       {
         number: "8",
-        coursesContained: ["COSC 111", "COSC 122"],
+        coursesContained: ["COSC 421", "COSC 499"],
         year: "2018",
         session: "W"
       }
     ]
+  }
+  courseRefs = new Map();
+
+  generateCourseRefs = () => {
+    this.state.defaultTerms.forEach((term) => {
+      term.coursesContained.forEach((course) => {
+        let courseRef = React.createRef();
+        this.courseRefs.set(course, courseRef);
+      });
+    });
   }
 
   //rendering semester components by mapping defaulTerms state variable
@@ -78,7 +88,9 @@ class PlannerArea extends Component {
         coursesContained={term.coursesContained}
         onCourseDragOver={this.onCourseDragOver}
         onCourseDragStart={this.onCourseDragStart.bind(this)}
-        onCourseDrop={this.onCourseDrop} />
+        onCourseDrop={this.onCourseDrop}
+        courseRefMap={this.courseRefs}
+        showXY={this.showElementCoordinates.bind(this)} />
     ));
   }
 
@@ -164,7 +176,13 @@ class PlannerArea extends Component {
     });
   }
 
+  showElementCoordinates = (e, courseRef) => {
+    let element = courseRef.current.getBoundingClientRect().left;
+    alert(element);
+  }
+
   render() {
+    this.generateCourseRefs();
     return (
       <div id="planner-area">
         <PlannerHeader
@@ -189,6 +207,7 @@ class PlannerArea extends Component {
         <div id="session-container">
 
         </div>
+        {console.log(this.courseRefs.get("COSC 360"))}
       </div>
     );
   }
