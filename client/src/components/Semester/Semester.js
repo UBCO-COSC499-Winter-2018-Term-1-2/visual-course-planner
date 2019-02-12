@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Semester.css';
 import Course from '../Course/Course';
-//import MultiRef from 'react-multi-ref';
 
 class Semester extends Component {
   //term or year divider style attribute
@@ -14,17 +13,9 @@ class Semester extends Component {
   isEvenTerm = (this.props.term % 2 == 0);
 
   coursesContained = this.props.coursesContained;
-  
-  //courseRefs = new MultiRef();
-  //should make a map? key = course string and value = ref?
-  bob = new Map();
 
-  generateCourseRefs = () => {
-    this.coursesContained.forEach(course => {
-      const courseRef = React.createRef();
-      this.bob.set(course, courseRef);
-    });
-  }
+  //Map containing references to the courses is received as a prop
+  courseRefs = this.props.courseRefMap;
 
   renderCourses = () => {
     return (this.coursesContained.map((course) => {
@@ -35,13 +26,13 @@ class Semester extends Component {
           type="required"
           sourceTerm={this.props.term}
           onDragStart={this.props.onCourseDragStart}
-          courseRef={this.bob.get(course)} />
+          courseRef={this.courseRefs.get(course)}
+          showXY={this.props.showXY} />
       );
     }
     ));
   }
-  render() {
-    this.generateCourseRefs();
+  render() {  
     return (
       <div className="semester-container" style={this.isEvenTerm ? this.termDivider : null}>
         <h3 className="term-heading"> TERM {this.props.term} </h3>
@@ -51,7 +42,6 @@ class Semester extends Component {
           onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}>
 
           <this.renderCourses />
-          {console.log(this.bob)}
         </div>
       </div>
     );
@@ -63,7 +53,9 @@ Semester.propTypes = {
   coursesContained: PropTypes.array.isRequired,
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,
-  onCourseDrop: PropTypes.func.isRequired
+  onCourseDrop: PropTypes.func.isRequired,
+  courseRefMap: PropTypes.object.isRequired,
+  showXY: PropTypes.func.isRequired
 };
 
 export default Semester;
