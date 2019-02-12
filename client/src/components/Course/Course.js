@@ -9,6 +9,7 @@ class Course extends Component{
       code : props.code,
       type: props.type
     };
+    //this.myRef = this.props.courseRef;
   }
   render(){
     return (
@@ -16,7 +17,8 @@ class Course extends Component{
         className={this.props.type == "required" ? "course-required" : "course-elective"}
         draggable
         onDragStart={(e) => this.props.onDragStart(e, this.state.code, this.props.sourceTerm)}
-        ref={this.props.courseRef}>
+        ref={this.props.courseRef}
+        onClick={(e) => this.props.showXY(e, this.props.courseRef)}>
         <h5 className="course-code">{this.state.code}</h5>
       </div>
     );
@@ -28,7 +30,8 @@ Course.propTypes = {
   type: PropTypes.string.isRequired,
   sourceTerm: PropTypes.string.isRequired,
   onDragStart: PropTypes.func.isRequired,
-  courseRef: PropTypes.object.isRequired
+  courseRef: PropTypes.object.isRequired,
+  showXY: PropTypes.func.isRequired
 };
 
 export default Course;
