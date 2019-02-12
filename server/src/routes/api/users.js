@@ -86,9 +86,10 @@ router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     console.log("info", info);
     if (err) {
-      console.err(err);
+      console.error(err);
     }
-    return res.send({...info, user});
+    return info;
+    //res.send({...info, user});
   })(req, res, next);
   
 });
