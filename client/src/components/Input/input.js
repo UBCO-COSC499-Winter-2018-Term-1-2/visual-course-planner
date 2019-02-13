@@ -1,6 +1,7 @@
 import React from 'react';
 import styling from '../Input/input.css';
 import PropTypes from 'prop-types';
+//import { config } from '@fortawesome/fontawesome-svg-core';
 
 const input = ( props ) => {
   let inputElement = null;
@@ -9,22 +10,24 @@ const input = ( props ) => {
   let greenTitle = "green-title";
   let cssSelectItems ="select-items";
   let cssCourseList ="course-list";
- 
+  
+  //let cssHideErrors = 'warning-msg';
 
   const inputStyling = [cssInputElement];
   const selectStyling = [cssSelectItems];
   const listStyling = [cssCourseList];
-  // const labelStyling = [cssLabel];
+  // const errorStyling = [cssHideErrors];
   
-
+  //IF A FORMELEMENT IS LEFT EMPTY = ERRORS PRESENTED
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
     inputStyling.push(cssInvalid);
-    //shouldBeValidated is used if state element has "validation" -- will be used on other pages
+    //errorStyling.push(cssErrorMsg)    
   }
+ 
   
   input.propTypes = {
-    invalid: PropTypes.input,
-    shouldBeValidated: PropTypes.string,
+    invalid: PropTypes.bool,
+    shouldBeValidated: PropTypes.object,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
     elementConfig: PropTypes.object,
@@ -60,7 +63,6 @@ const input = ( props ) => {
       {...props.elementConfig}
       value={props.value}
       onChange={props.changed} />;
-      
     break;
 
   case ( 'list' ):
@@ -93,14 +95,20 @@ const input = ( props ) => {
     );
     break;
 
-  case ( 'text' ):
-    inputElement = <p
-      className={inputStyling.join(' ')}
-      {...props.elementConfig}
-      value={props.value}
-      onChange={props.changed} 
-    />;
-    break;
+    // case ( 'listErrors' ):
+    //   inputElement = ( 
+    //     <ul 
+    //       className={errorStyling.join(' ')}
+    //       value={props.value}
+    //       onChange={props.changed}>
+    //       {props.elementConfig.errors.map(option => (
+    //         <li key={option.value} value={option.value}>
+    //           {option.displayValue}
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   );
+    //   break;
 
   default:
     inputElement = <input
