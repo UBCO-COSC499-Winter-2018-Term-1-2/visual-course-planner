@@ -87,7 +87,7 @@ export class LoginInterface extends Component {
         isValid = pattern.test(value) && isValid;
         //console.log(isValid);
         isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
-
+       
       }
 
       return isValid;

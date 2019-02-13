@@ -113,7 +113,7 @@ class CreateAccountMenu extends Component {
       //end of menu
 
       formIsValid: false,
-      loading: false
+      loading: false,
     }// end of state
 
 
@@ -129,14 +129,24 @@ class CreateAccountMenu extends Component {
       } 
 
       if (rules.minLength) {
+        const {password, confirmPassword} = value;
+        const matches = password === confirmPassword;
         isValid = value.length >= rules.minLength && isValid;
         // console.log("minlength: " + isValid);
         if(name === 'password'){
           isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
+          //isValid === matches ? this.setError("password", "Passwords must match") : this.removeError("password");
+        
         } else if (name === 'confirmPassword'){
           isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
+          //isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+        
         }
-       
+
+        isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+        console.log("VALUES: "+ matches);
+        console.log("Password: "+ value );
+        console.log("Confirm Password: "+ confirmPassword);
       }
 
       if (rules.isEmail) {
@@ -147,13 +157,16 @@ class CreateAccountMenu extends Component {
 
       }
 
-      if(rules.passMatch){
-        const {password, confirmPassword} = this.state;
-        const matches = password === confirmPassword;
-        isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+      // if(rules.passMatch){
+      //   const {password, confirmPassword} = value;
+      //   const matches = password === confirmPassword;
+      //   isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+      //   isValid === matches ? this.setError("password", "Passwords must match") : this.removeError("password");
         
-      }
-
+      //   console.log("VALUES: "+ matches);
+      //   console.log("Password: "+ password);
+      //   console.log("Confirm Password: "+ confirmPassword);
+      // }
 
       return isValid;
     }
@@ -197,6 +210,8 @@ class CreateAccountMenu extends Component {
     for (let formElementIdentifier in this.state.createAccountMenu) {
       formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
     }
+
+
     //let formData = new FormData();
     // for (let formElementIdentifier in this.state.createAccountMenu) {
     //   formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
