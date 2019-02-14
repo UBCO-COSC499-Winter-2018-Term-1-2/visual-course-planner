@@ -16,38 +16,87 @@ class Main extends Component {
     isCourseListOpen: false,
     showSnackbar : false,
     currentPlan: {
-      courses: [
-        {
-          id: 100,
-          code: "COSC 111",
-          standingRequirement: 0,
-          coRequisites: [],
-          preRequisites: [],
-          year: 2018,
-          session: "W",
-          term: 1
+      sessions: {
+        byId: {
+          "0": {
+            year: "2018",
+            season: "W",
+            terms: [ "1", "2" ]
+          },
+          "1": {
+            year: "2019",
+            season: "S",
+            terms: [ "3", "4" ]
+          },
+          "2": {
+            year: "2019",
+            season: "W",
+            terms: [ "5", "6" ]
+          }
         },
-        {
-          id: 101,
-          code: "COSC 121",
-          standingRequirement: 0,
-          coRequisites: [],
-          preRequisites: [ { code: "COSC 111" } ],
-          year: 2018,
-          session: "W",
-          term: 2
+        allIds: [ "0", "1", "2" ]
+      },
+      terms: {
+        byId: {
+          "1": {
+            session: "0",
+            number: 1,
+            courses: [ "100" ]
+          },
+          "2": {
+            session: "0",
+            number: 2,
+            courses: [ "101" ]
+          },
+          "3": {
+            session: "1",
+            number: 1,
+            courses: [ ]
+          },
+          "4": {
+            session: "1",
+            number: 2,
+            courses: [ ]
+          },
+          "5": {
+            session: "2",
+            number: 1,
+            courses: [ ]
+          },
+          "6": {
+            session: "2",
+            number: 2,
+            courses: [ "102" ]
+          }
         },
-        {
-          id: 102,
-          code: "COSC 341",
-          standingRequirement: 3,
-          coRequisites: [],
-          preRequisites: [],
-          year: 2019,
-          session: "W",
-          term: 2
-        }
-      ],
+        allIds: [ "1", "2", "3", "4", "5", "6" ]
+      },
+      courses: {
+        byId: {
+          "100": {
+            code: "COSC 222",
+            standingRequirement: 2,
+            term: "1",
+            coRequisites: [],
+            preRequisites: []
+          },
+          "101": {
+            code: "COSC 310",
+            standingRequirement: 3,
+            term: "2",
+            coRequisites: [],
+            preRequisites: [ "COSC 121" ]
+          },
+          "102": {
+            code: "COSC 305",
+            standingRequirement: 3,
+            term: "6",
+            coRequisites: [],
+            preRequisites: []
+          }
+        },
+        allIds: [ "100", "101", "102" ]
+      },
       id: 0,
       name: "My Plan",
       specialization: {
@@ -85,15 +134,8 @@ class Main extends Component {
     });
   }
 
-  updatePlanCourses = (courses) => {
-    this.setState(prevState => {
-      return {
-        currentPlan: {
-          ...prevState.currentPlan,
-          courses: courses
-        }
-      };
-    });
+  updatePlan = (plan) => {
+    this.setState({ currentPlan: plan });
   }
 
   showSnackbar = () => {
@@ -125,7 +167,7 @@ class Main extends Component {
           closeCourseList={this.closeCourseListSidebar}
           plan={this.state.currentPlan}
           user={this.state.user}
-          updatePlanCourses={this.updatePlanCourses}
+          updatePlan={this.updatePlan}
           showSnackbar={this.state.showSnackbar}
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}

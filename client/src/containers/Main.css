@@ -14,7 +14,7 @@
   color: #e4e4e4;
 }
 
-#planner-area {
+#planner-area-container {
   position: relative;
   grid-area: planner;
   background-color: #262427;
@@ -54,7 +54,7 @@
   display: block;
 }
 
-.student-name {
+.student-info-text {
   margin: 0;
   color: #e4e4e4;
 }

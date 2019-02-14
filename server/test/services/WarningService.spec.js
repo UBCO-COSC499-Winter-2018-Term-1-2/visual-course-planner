@@ -148,13 +148,16 @@ describe("WarningService", () => {
         code: "COSC 121",
         standingRequirement: 0,
         coRequisites: [],
-        preRequisites: [ { code: "COSC 111" } ],
-        year: "2018",
-        term: "1"
+        preRequisites: [ "COSC 111" ],
       };
   
       let plan = {
-        courses: [courseNoPrereq]
+        courses: {
+          byId:{
+            "0": courseNoPrereq
+          },
+          allIds: ["0"]
+        } 
       };
   
       const expectedWarnings = [

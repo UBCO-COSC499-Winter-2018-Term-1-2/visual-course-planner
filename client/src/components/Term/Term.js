@@ -14,7 +14,7 @@ class Term extends Component {
           key={course.id}
           course={course}
           type="required"
-          sourceTerm={this.props.term}
+          sourceTermId={this.props.termId}
           onDragStart={this.props.onCourseDragStart} />
       );
     }
@@ -24,9 +24,9 @@ class Term extends Component {
     return (
       <div className="term-container"
         onDragOver={this.props.onCourseDragOver}
-        onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}
+        onDrop={(e) => this.props.onCourseDrop(e, this.props.termId)}
       >
-        <h3 className="term-heading">Term {this.props.term.number}</h3>
+        <h3 className="term-heading">{this.props.title}</h3>
         <div className="courses-container">
           <this.renderCourses />
         </div>
@@ -36,7 +36,8 @@ class Term extends Component {
 }
 
 Term.propTypes = {
-  term: PropTypes.object.isRequired,
+  termId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   coursesContained: PropTypes.array.isRequired,
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,

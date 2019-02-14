@@ -1,0 +1,24 @@
+.session {
+  display: flex;
+  flex-direction: row;
+  height: calc(100% - 4em);
+}
+
+.session-container {
+  position: relative;
+  display: flex;
+  overflow: auto;
+  height: 100%;
+}
+
+.session-container > .session-wrapper:not(:last-child) {
+  border-right: 2px solid grey;
+}
+
+.session > .term-container:not(:last-child) {
+  border-right: 2px solid grey;
+}
+
+.main-column-header {
+  text-align: center;
+}
