@@ -2,23 +2,36 @@ import React, { Component } from 'react';
 import '../PreviousCourses/PreviousCourses.css';
 import { Link } from 'react-router-dom';
 import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
-
-// NOTES:
-// Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
-//correct formatting
+import axios from 'axios';
 
 
-const COURSES = [
-  {id: 1, name: 'FRENCH 11'},
-  {id: 2, name: 'FRENCH 12'},
-  {id: 249, name: 'SPANISH 11'},
-  {id: 250, name: 'GERMAN 12'}
-];
-
+// const COURSES = [
+//   {id: 1, name: 'FRENCH 11'},
+//   {id: 2, name: 'FRENCH 12'},
+//   {id: 249, name: 'SPANISH 11'},
+//   {id: 250, name: 'GERMAN 12'}
+// ];
 
 class previousCourses extends Component {
 
-      state = {selectedCourses: []}
+      state = {
+        selectedCourses: [],
+        offeredCourses: [
+          {id: 1, name: 'FRENCH 11'},
+          {id: 2, name: 'FRENCH 12'},
+          {id: 249, name: 'SPANISH 11'},
+          {id: 250, name: 'GERMAN 12'}
+        ],
+      }
+
+      offeredUniCourses() {
+        //URL NEEDS TO CHANGE
+        axios.get(`https://jsonplaceholder.typicode.com/users`)
+          .then(res => {
+            const offeredCourses = res.data;
+            this.setState({ offeredCourses });
+          });
+      }
 
       handleDeselect(index) {
         var selectedCourses = this.state.selectedCourses.slice();
@@ -30,6 +43,21 @@ class previousCourses extends Component {
         this.setState({selectedCourses});
       }
     
+      handleSubmit = (event) => {
+        event.preventDefault();
+
+        const takenCourses = {
+          selectedCourses: this.state.selectedCourses,
+        };
+        //URL NEEDS TO CHANGE
+        axios.post(`https://jsonplaceholder.typicode.com/users`, { takenCourses })
+          .then(res => {
+            console.log(res);
+            console.log(res.data);
+          });
+
+      }
+
       render(){
 
         var {selectedCourses} = this.state;
@@ -53,7 +81,7 @@ class previousCourses extends Component {
                
               <FilteredMultiSelect
                 onChange={this.handleSelectionChange}
-                options={COURSES}
+                options={this.state.offeredCourses}
                 selectedOptions={selectedCourses}
                 textProp="name"
                 valueProp="id"
@@ -61,18 +89,23 @@ class previousCourses extends Component {
                 placeholder="Course Name.."
                 className="ubco-offered-courses-list"
               />
+              
               <div className="added-courses">
-                {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
-                {selectedCourses.length > 0 && 
-                <ul>
-                  {selectedCourses.map((ship, i) => 
-                    <li key={ship.id}>
-                      {`${ship.name} `}
-                      <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
-                      &times;
-                      </button>
-                    </li>)}
-                </ul>}
+                <form onSubmit={this.handleSubmit}>
+                  {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
+                  {selectedCourses.length > 0 && 
+                  <ul>
+                    {selectedCourses.map((ship, i) => 
+                      <li key={ship.id}>
+                        {`${ship.name} `}
+
+                        <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
+                        &times;
+                        </button>
+
+                      </li>)}
+                  </ul>}
+                </form>
               </div>
                     
               <div className="btn-div">
