@@ -96,9 +96,34 @@ router.post('/login', (req, res, next) => {
 
 
 router.post('/signup/coursehistory', async (req, res) => {
-  console.log(req.body);
+
+  if(Object.keys(req.body).length === 0){
+    console.log('no courses selected, nothing stored');
+    res.status(200).send('no course history selected');
+}else{
+  // console.log(req.body);
+  // console.log(req.body.length);
+  var courses = {};
+  for(var key in req.body) {
+    if(req.body.hasOwnProperty(key)){
+      courses[key] = req.body[key];
+    }
+  }
+  //console.log(courses);
+  // var test = {
+  // uid: req.body.uid,
+  // cid: req.body.course
+  // };
+  for(var i in courses) {
+    console.log(courses[i]);
+    await user.insertCourses(courses[i]);
+}
+
+  res.status(200).send('course(s) inserted for user');
+}
 
 });
+
 
 
 
