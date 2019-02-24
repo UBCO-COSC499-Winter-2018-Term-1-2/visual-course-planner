@@ -6,7 +6,7 @@ import { Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Input from '../Input/input';
-//import axios from 'axios';
+import axios from 'axios';
 //import validationWarning from '../WarningSnackbar/WarningSnackbar';
 
 
@@ -129,25 +129,25 @@ class CreateAccountMenu extends Component {
       } 
 
       if (rules.minLength) {
-        const {password, confirmPassword} = value;
-        const matches = password === confirmPassword;
         isValid = value.length >= rules.minLength && isValid;
-        // console.log("minlength: " + isValid);
         if(name === 'password'){
           isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
-          //isValid === matches ? this.setError("password", "Passwords must match") : this.removeError("password");
-        
         } else if (name === 'confirmPassword'){
           isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
-          //isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-        
         }
-
-        isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-        console.log("VALUES: "+ matches);
-        console.log("Password: "+ value );
-        console.log("Confirm Password: "+ confirmPassword);
       }
+
+      if (!rules.matches){
+        const passValue = value;
+        const confirmPassValue = value;
+        isValid = passValue === confirmPassValue && isValid;
+        isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+
+        console.log("Testing Password Value (mario): "+ value ); 
+  
+
+      }
+      
 
       if (rules.isEmail) {
         const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -156,17 +156,6 @@ class CreateAccountMenu extends Component {
         isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
 
       }
-
-      // if(rules.passMatch){
-      //   const {password, confirmPassword} = value;
-      //   const matches = password === confirmPassword;
-      //   isValid === matches ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-      //   isValid === matches ? this.setError("password", "Passwords must match") : this.removeError("password");
-        
-      //   console.log("VALUES: "+ matches);
-      //   console.log("Password: "+ password);
-      //   console.log("Confirm Password: "+ confirmPassword);
-      // }
 
       return isValid;
     }
@@ -217,16 +206,16 @@ class CreateAccountMenu extends Component {
     //   formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     // }
    
-    // axios.post( '/api/users', formData )
-    //   .then( response => {
-    //     this.setState( { loading: false } );
-    //     //this.props.history.push('/');
-    //     console.log(response);
-    //   } )
-    //   .catch( error => {
-    //     this.setState( { loading: false } );
-    //     console.log(error);
-    //   } );
+    axios.post( '/api/users', formData )
+      .then( response => {
+        this.setState( { loading: false } );
+        //this.props.history.push('/');
+        console.log(response);
+      } )
+      .catch( error => {
+        this.setState( { loading: false } );
+        console.log(error);
+      } );
   
   }
 
@@ -260,6 +249,18 @@ class CreateAccountMenu extends Component {
     this.props.history.push('/course-history');
   }
 
+  //CHECK IF PASSWORDS HAVE THE SAME INPUT
+  passMatch =  (id) =>  {
+    //const pass = 'password';
+    //const confirmPass = 'confirmPassword';
+    if (id == 'password' || id == 'confirmPassword'){
+      console.log('taylor!');
+      //if(this.password.value !== this.confirmPassword.value) {
+      // console.log('yoshiiiiii!');
+      //} 
+    }
+  }
+
   render(){
     const formElementsArray = [];
     for (let key in this.state.createAccountMenu) {
@@ -284,7 +285,7 @@ class CreateAccountMenu extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
               name={formElement.config.name}
-              label={formElement.config.label}
+              label={formElement.config.label} 
             />
             {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
           </div>
