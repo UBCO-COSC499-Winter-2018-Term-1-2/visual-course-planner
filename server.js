@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const degrees = require('./server/src/routes/api/degrees');
-const signup = require('./server/src/routes/api/users');
+const users = require('./server/src/routes/api/users');
 const courses = require('./server/src/routes/api/courses');
+const terms = require('./server/src/routes/api/terms');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 
@@ -23,8 +24,9 @@ app.use(bodyParser.json());
 app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
 app.use('/api/degrees', degrees);
-app.use('/api/users', signup);
+app.use('/api/users', users);
 app.use('/api/courses', courses);
+app.use('/api/terms', terms);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

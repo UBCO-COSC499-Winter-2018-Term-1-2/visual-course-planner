@@ -5,13 +5,13 @@ db.query = promisify(db.query);
 
 module.exports = {
   async getSessionById(id) {
-    const sessionResults = await db.query("SELECT id FROM session WHERE id = ?", [id]);
+    const sessionResults = await db.query("SELECT * FROM session WHERE id = ?", [id]);
     return sessionResults[0];
   },
 
   async getSession(year, season) {
-    const sessionResults = await db.query("SELECT id FROM session WHERE startYear = ? AND season = ?", [year, season]);
-    return sessionResults;
+    const sessionResults = await db.query("SELECT * FROM session WHERE startYear = ? AND season = ?", [year, season]);
+    return sessionResults[0];
   },
 
   async createSession(year, season) {

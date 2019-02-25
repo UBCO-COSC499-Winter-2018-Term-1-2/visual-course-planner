@@ -4,8 +4,8 @@ const Session = require('../models/Session');
 module.exports = {
   async sessionExists(year, season) {
     const sessionResults = await Session.getSession(year, season);
-    if (sessionResults.length > 0) {
-      return sessionResults[0];
+    if (sessionResults) {
+      return sessionResults;
     }
     return false;
     

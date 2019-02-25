@@ -23,7 +23,9 @@ class Term extends Component {
   render() {
     return (
       <div className="term-container"
-        onDragOver={this.props.onCourseDragOver}
+        onDragOver={(e) => {
+          this.props.onCourseDragOver(e, this.props.termId);
+        }}
         onDrop={(e) => this.props.onCourseDrop(e, this.props.termId)}
       >
         <h3 className="term-heading">{this.props.title}</h3>

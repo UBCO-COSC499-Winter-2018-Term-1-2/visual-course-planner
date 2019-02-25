@@ -18,26 +18,24 @@ class PlannerArea extends Component {
   getNextTerm(currentTerm) {
     let nextTermNumber;
     let nextTermYear = currentTerm.year;
-    let nextTermSession = "W";
+    let nextTermSeason = "W";
 
     if (currentTerm.number === 1) {
       nextTermNumber = 2;
-      nextTermSession = currentTerm.session;
+      nextTermSeason = currentTerm.session;
     } else {
       if (currentTerm.session == "W") {
         nextTermYear = currentTerm.year + 1;
-        nextTermSession = "S";
+        nextTermSeason = "S";
       }
       nextTermNumber = 1;
     }
-    const nextTermId = currentTerm.id + 1;
     
     const nextTerm = {
-      id: nextTermId,
       coursesContained: [],
       year: nextTermYear,
       number: nextTermNumber,
-      session: nextTermSession
+      season: nextTermSeason
     };
 
     return nextTerm;
@@ -53,9 +51,16 @@ class PlannerArea extends Component {
       });
   }
 
+  addTermToPlan() {
+    const latestTerm = this.props.plan.terms.allIds[this.props.plan.terms.allIds.length - 1];
+    const nextTerm = this.getNextTerm(latestTerm);
+    const findTerm = axios.get(`/api/terms?year=${nextTerm.year}&season=${nextTerm.season}&number=${nextTerm.number}`);
+    findTerm;
+  }
+
   objectsAreSame(x, y) {
-    var objectsAreSame = true;
-    for(var propertyName in x) {
+    let objectsAreSame = true;
+    for(let propertyName in x) {
       if(x[propertyName] !== y[propertyName]) {
         objectsAreSame = false;
         break;
@@ -70,8 +75,8 @@ class PlannerArea extends Component {
     if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
       same = false;
     } else {
-      for (let i = 0; i < prevProps.plan.courses.length; i++) {
-        if (!this.objectsAreSame(prevProps.plan.courses[i], this.props.plan.courses[i])) {
+      for (let course in prevProps.plan.courses.byId) {
+        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
           same = false;
         }
       }
@@ -109,7 +114,11 @@ class PlannerArea extends Component {
   }
 
   //drag over event handler for term component - passed in as prop
-  onCourseDragOver = (e) => {
+  onCourseDragOver = (e, termId) => {
+    if (!termId) {
+      return;
+    }
+    // const term = this.props.plan.terms.byId[termId];
     e.preventDefault();
   }
 

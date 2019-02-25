@@ -28,7 +28,7 @@ module.exports = {
 
   async getCourses() {
     const courseInfoResults = await db.query(`
-      SELECT course.id AS id, code, credits, name, description, standingRequirement, session.startYear, session.season, term.num AS term,
+      SELECT course.id AS id, code, credits, name, description, standingRequirement, session.startYear, session.season, term.num AS termNumber, term.id AS termId,
         GROUP_CONCAT(cir.rid) AS preRequisites,
         GROUP_CONCAT(cic.rid) AS coRequisites
       FROM course
