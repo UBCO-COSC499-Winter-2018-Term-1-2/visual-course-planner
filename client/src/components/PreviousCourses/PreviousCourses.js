@@ -17,10 +17,10 @@ class previousCourses extends Component {
       state = {
         selectedCourses: [],
         offeredCourses: [
-          {id: 1, name: 'FRENCH 11'},
-          {id: 2, name: 'FRENCH 12'},
-          {id: 249, name: 'SPANISH 11'},
-          {id: 250, name: 'GERMAN 12'}
+          {name: 'FRENCH 11'},
+          {name: 'FRENCH 12'},
+          { name: 'SPANISH 11'},
+          { name: 'GERMAN 12'}
         ],
       }
 
@@ -84,7 +84,7 @@ class previousCourses extends Component {
                 options={this.state.offeredCourses}
                 selectedOptions={selectedCourses}
                 textProp="name"
-                valueProp="id"
+                valueProp="name"
                 buttonText="Add Course"
                 placeholder="Course Name.."
                 className="ubco-offered-courses-list"
@@ -95,9 +95,9 @@ class previousCourses extends Component {
                   {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
                   {selectedCourses.length > 0 && 
                   <ul>
-                    {selectedCourses.map((ship, i) => 
-                      <li key={ship.id}>
-                        {`${ship.name} `}
+                    {selectedCourses.map((course, i) => 
+                      <li key={i}>
+                        {`${course.name} `}
 
                         <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
                         &times;
