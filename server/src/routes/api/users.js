@@ -136,6 +136,20 @@ router.post('/:id/coursehistory', async (req, res) => {
 }
 });
 
+router.get('/:id/coursehistory', async (req, res) => {
+  let user_Id = req.params.id;
+  if(await user.getCourses(user_Id).length == 0){
+    console.log('no course history found for user');
+    res.status(200).send('no course history found for user')
+  }else{
+    let courses = await user.getCourses(courses[i]);
+    console.log(courses);
+  }
+
+  
+
+});
+
 /**
  * @route POST api/logout
  * @desc end the users session

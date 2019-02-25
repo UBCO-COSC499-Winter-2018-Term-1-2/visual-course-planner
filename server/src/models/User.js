@@ -70,6 +70,17 @@ class User {
       });  
   }
 
+  async getCourses(id) {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT cid FROM user_course_info WHERE uid = ?", [id]);
+    } catch (err) {
+      throw err;
+    }
+
+    return rows[0];
+
+  }
 
 
 }
