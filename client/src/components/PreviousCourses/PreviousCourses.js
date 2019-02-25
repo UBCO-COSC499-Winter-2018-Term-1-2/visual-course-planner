@@ -4,29 +4,21 @@ import { Link } from 'react-router-dom';
 import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
 import axios from 'axios';
 
-
-// const COURSES = [
-//   {id: 1, name: 'FRENCH 11'},
-//   {id: 2, name: 'FRENCH 12'},
-//   {id: 249, name: 'SPANISH 11'},
-//   {id: 250, name: 'GERMAN 12'}
-// ];
-
-class previousCourses extends Component {
+class PreviousCourses extends Component {
 
       state = {
         selectedCourses: [],
         offeredCourses: [
-          {name: 'FRENCH 11'},
-          {name: 'FRENCH 12'},
-          { name: 'SPANISH 11'},
-          { name: 'GERMAN 12'}
+          { code: 'FRENCH 11' },
+          { code: 'FRENCH 12' },
+          { code: 'SPANISH 11' },
+          { code: 'GERMAN 12' }
         ],
+        userId: 1
       }
 
       offeredUniCourses() {
-        //URL NEEDS TO CHANGE
-        axios.get(`https://jsonplaceholder.typicode.com/users`)
+        axios.get(`/api/users/${this.state.userId}/coursehistory`)
           .then(res => {
             const offeredCourses = res.data;
             this.setState({ offeredCourses });
@@ -49,8 +41,8 @@ class previousCourses extends Component {
         const takenCourses = {
           selectedCourses: this.state.selectedCourses,
         };
-        //URL NEEDS TO CHANGE
-        axios.post(`https://jsonplaceholder.typicode.com/users`, { takenCourses })
+
+        axios.post(`/api/users/${this.state.userId}/coursehistory`, { takenCourses })
           .then(res => {
             console.log(res);
             console.log(res.data);
@@ -73,11 +65,6 @@ class previousCourses extends Component {
               For an accurate Degree Plan, please select all courses 
               you have previously taken and have received credits for.
               </p>
-              
-              {/* <ol className="course-list"> */}
-              {/* {form}  */}
-              {/* </ol> */}
-
                
               <FilteredMultiSelect
                 onChange={this.handleSelectionChange}
@@ -97,7 +84,7 @@ class previousCourses extends Component {
                   <ul>
                     {selectedCourses.map((course, i) => 
                       <li key={i}>
-                        {`${course.name} `}
+                        {`${course.code} `}
 
                         <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
                         &times;
@@ -126,4 +113,4 @@ class previousCourses extends Component {
 }
     
   
-export default previousCourses;
+export default PreviousCourses;
