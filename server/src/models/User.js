@@ -78,7 +78,7 @@ class User {
       throw err;
     }
 
-    return rows[0];
+    return rows;
 
   }
 

@@ -136,17 +136,31 @@ router.post('/:id/coursehistory', async (req, res) => {
 }
 });
 
+/**
+ * @route GET api/users/coursehistory
+ * @desc Retreive all user course history
+ * @access Private
+ */ 
+
 router.get('/:id/coursehistory', async (req, res) => {
   let user_Id = req.params.id;
-  if(await user.getCourses(user_Id).length == 0){
+  if(await user.getCourses(user_Id) <= 0){
     console.log('no course history found for user');
     res.status(200).send('no course history found for user')
   }else{
-    let courses = await user.getCourses(courses[i]);
-    console.log(courses);
-  }
 
-  
+    let query_courses = [];
+    let user_courses = [];
+    query_courses = await user.getCourses(user_Id); 
+    // console.log(query_courses);
+    // this gave an odd 'rowdatapacket' output, so extracted every cid into a new array --> user_courses[]
+    for(let i in query_courses){
+      user_courses[i] = query_courses[i].cid;
+    }
+      console.log(user_courses);
+      res.status(200).send("fetching all user courses: " + user_courses);
+
+  }
 
 });
 
