@@ -17,14 +17,6 @@ class PreviousCourses extends Component {
         userId: 1
       }
 
-      offeredUniCourses() {
-        axios.get(`/api/users/${this.state.userId}/coursehistory`)
-          .then(res => {
-            const offeredCourses = res.data;
-            this.setState({ offeredCourses });
-          });
-      }
-
       handleDeselect(index) {
         var selectedCourses = this.state.selectedCourses.slice();
         selectedCourses.splice(index, 1);
@@ -47,10 +39,19 @@ class PreviousCourses extends Component {
             console.log(res);
             console.log(res.data);
           });
-
       }
 
-      render(){
+      componentDidMount() {
+        axios.get(`/api/users/${this.state.userId}/coursehistory`)
+          .then(res => {
+            const offeredCourses = res.data;
+            this.setState({ offeredCourses });
+          });
+        
+        this.setState({userId: sessionStorage.getItem("userId")});
+      }
+
+      render() {
 
         var {selectedCourses} = this.state;
         
