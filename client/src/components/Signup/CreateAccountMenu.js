@@ -8,156 +8,156 @@ import axios from 'axios';
 
 class CreateAccountMenu extends Component {
   
-    state = {      
-      validationWarnings: [],
-      createAccountMenu: {
-        fName: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: '* First Name'
-          },
-          value: '',
-          validation: {
-            required: true
-          },
-          label: '',
-          valid: false,
-          inputElementTouched: false 
+  state = {      
+    validationWarnings: [],
+    createAccountMenu: {
+      fName: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: '* First Name'
         },
-        lName: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: '* Last Name'
-          },
-          value: '',
-          validation: {
-            required: true
-          },
-          label: '',
-          valid: false,
-          inputElementTouched: false 
+        value: '',
+        validation: {
+          required: true
         },
-        email: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: '* Email'
-          },
-          value: '',
-          validation: {
-            required: true,
-            isEmail: true,
-          },
-          label: '',
-          name: 'email',
-          valid: false,
-          inputElementTouched: false 
-        },
-        password: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'password',
-            placeholder: '* Password'
-          },
-          value: '',
-          validation: {
-            required: true,
-            minLength: 5,
-            passMatch: true,
-          },
-          name: 'password',
-          valid: false,
-          inputElementTouched: false 
-        },
-        confirmPassword: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'password',
-            placeholder: '* Confirm Password'
-          },
-          value: '',
-          validation: {
-            required: true,
-            minLength: 5,
-            passMatch: true,
-          },
-          name: 'confirmPassword',
-          valid: false,
-          inputElementTouched: false 
-        },
+        label: '',
+        valid: false,
+        inputElementTouched: false 
       },
-      //error state (form validation)
-      errors:{
-        email: {
-          hasError: false
+      lName: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: '* Last Name'
         },
-        fName: {
-          hasError: false
+        value: '',
+        validation: {
+          required: true
         },
-        lName: {
-          hasError: false
-        },
-        password: {
-          hasError: false
-        },
-        confirmPassword: {
-          hasError: false
-        },
+        label: '',
+        valid: false,
+        inputElementTouched: false 
       },
-      //end of menu
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: '* Email'
+        },
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true,
+        },
+        label: '',
+        name: 'email',
+        valid: false,
+        inputElementTouched: false 
+      },
+      password: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'password',
+          placeholder: '* Password'
+        },
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          passMatch: true,
+        },
+        name: 'password',
+        valid: false,
+        inputElementTouched: false 
+      },
+      confirmPassword: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'password',
+          placeholder: '* Confirm Password'
+        },
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          passMatch: true,
+        },
+        name: 'confirmPassword',
+        valid: false,
+        inputElementTouched: false 
+      },
+    },
+    //error state (form validation)
+    errors:{
+      email: {
+        hasError: false
+      },
+      fName: {
+        hasError: false
+      },
+      lName: {
+        hasError: false
+      },
+      password: {
+        hasError: false
+      },
+      confirmPassword: {
+        hasError: false
+      },
+    },
+    //end of menu
 
-      formIsValid: false,
-      loading: false
-    }// end of state
+    formIsValid: false,
+    loading: false
+  }// end of state
 
 
-    checkValidity(value, rules, name) {
-      let isValid = true;
-      if(!rules){
-        return true;
-      }
-        
-      if(rules.required){
-        isValid = value.trim() !== '' && isValid;
-        //isValid === false ? this.setError("inputRequired", "All fields are required") : this.removeError("inputRequired");
-      } 
-
-      if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid;
-        // console.log("minlength: " + isValid);
-        if(name === 'password'){
-          isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
-        } else if (name === 'confirmPassword'){
-          isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
-        }
-       
-      }
-
-      if (rules.isEmail) {
-        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        isValid = pattern.test(value) && isValid;
-        //console.log(isValid);
-        isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
-
-      }
-
-      // if(rules.passMatch){
-      //   const pass = value;
-      //   const confirmPass = value;
-      //   if (pass === confirmPass){
-      //     isValid = pass === confirmPass && isValid;
-      //   } else {
-      //     isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-      //   }
-      //console.log("Pass: " + this.password.value);
-      //console.log("PassCon: " + confirmPass);
-      // }
-
-
-      return isValid;
+  checkValidity(value, rules, name) {
+    let isValid = true;
+    if(!rules){
+      return true;
     }
+      
+    if(rules.required){
+      isValid = value.trim() !== '' && isValid;
+      //isValid === false ? this.setError("inputRequired", "All fields are required") : this.removeError("inputRequired");
+    } 
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+      // console.log("minlength: " + isValid);
+      if(name === 'password'){
+        isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
+      } else if (name === 'confirmPassword'){
+        isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
+      }
+      
+    }
+
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+      //console.log(isValid);
+      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+
+    }
+
+    // if(rules.passMatch){
+    //   const pass = value;
+    //   const confirmPass = value;
+    //   if (pass === confirmPass){
+    //     isValid = pass === confirmPass && isValid;
+    //   } else {
+    //     isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
+    //   }
+    //console.log("Pass: " + this.password.value);
+    //console.log("PassCon: " + confirmPass);
+    // }
+
+
+    return isValid;
+  }
 
 
   setError = (element, message) => {
@@ -241,7 +241,7 @@ class CreateAccountMenu extends Component {
     this.props.history.push('/course-history');
   }
 
-  render(){
+  render() {
     const formElementsArray = [];
     for (let key in this.state.createAccountMenu) {
       formElementsArray.push({
@@ -278,7 +278,7 @@ class CreateAccountMenu extends Component {
       </form>
     );
     
-    return(
+    return (
 
       //RETURN LOGIN MENU HERE
       <div>

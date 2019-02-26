@@ -12,136 +12,118 @@ import axios from 'axios';
 
 export class LoginInterface extends Component {
  
-    state = {
-      loginMenu: {
-        email: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: 'Email'
-          },
-          value: '',
-          validation: {
-            required: true,
-            isEmail: true,
-          },
-          valid: false,
-          inputElementTouched: false 
+  state = {
+    loginMenu: {
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Email'
         },
-        password: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'password',
-            placeholder: 'Password'
-          },
-          value: '',
-          validation: {
-            required: true,
-            minLength: 5,
-          },
-          valid: false,
-          inputElementTouched: false 
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true,
         },
         valid: false,
         inputElementTouched: false 
       },
-      //error state (form validation)
-      errors:{
-        email: {
-          hasError: false
+      password: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'password',
+          placeholder: 'Password'
         },
-        fName: {
-          hasError: false
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
         },
-        lName: {
-          hasError: false
-        },
-        password: {
-          hasError: false
-        },
-        confirmPassword: {
-          hasError: false
-        },
+        valid: false,
+        inputElementTouched: false 
       },
-      formIsValid: false,
-      loading: false
+      valid: false,
+      inputElementTouched: false 
+    },
+    //error state (form validation)
+    errors:{
+      email: {
+        hasError: false
+      },
+      fName: {
+        hasError: false
+      },
+      lName: {
+        hasError: false
+      },
+      password: {
+        hasError: false
+      },
+      confirmPassword: {
+        hasError: false
+      },
+    },
+    formIsValid: false,
+    loading: false
+  }
+
+  checkValidity(value, rules) {
+    let isValid = true;
+    
+
+    if(rules.required){
+      isValid = value.trim() !== '' && isValid;
+
     }
 
-    checkValidity(value, rules) {
-      let isValid = true;
-      
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+      console.log("minlength: " + isValid);
+      isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
+    }
 
-      if(rules.required){
-        isValid = value.trim() !== '' && isValid;
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+      //console.log(isValid);
+      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
 
-      }
-
-      if (rules.minLength) {
-        isValid = value.length >= rules.minLength && isValid;
-        console.log("minlength: " + isValid);
-        isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
-      }
-
-      if (rules.isEmail) {
-        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        isValid = pattern.test(value) && isValid;
-        //console.log(isValid);
-        isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
-
-      }
+    }
+  
 
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
+  }
     
-    setError = (element, message) => {
-      //console.log("Setting error");
-      this.setState(prevState => {
-        return {
-          ...prevState,
-          errors: {
-            ...prevState.errors,
-            [element]: {
-              hasError: true,
-              message: message
-            }
+  setError = (element, message) => {
+    //console.log("Setting error");
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: true,
+            message: message
           }
-        };
-      });
-    }
-  
-    removeError = (element) => {
-      this.setState(prevState => {
-        return {
-          ...prevState,
-          errors: {
-            ...prevState.errors,
-            [element]: {
-              hasError: false,
-            }
-          }
-        };
-      });
-    }
-
-
-    handler = ( event ) => {
-      event.preventDefault();
-      this.setState( { loading: true } );
-      
-      //this is log send user input to send to database.
-      const menuData = {};
-      for (let formElementIdentifier in this.state.loginMenu) {
-        menuData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
-      }
-      // this needs to be changed to validate user login info... Handling Form Submission Video on udemy.comn 
-      const menu = {
-        // ingredients: this.props.ingredients,
-        // price: this.props.price,
-        menuData: menuData
+        }
       };
+    });
+  }
 
-    return isValid;
+  removeError = (element) => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: false,
+          }
+        }
+      };
+    });
   }
 
   handler = (e) => {
