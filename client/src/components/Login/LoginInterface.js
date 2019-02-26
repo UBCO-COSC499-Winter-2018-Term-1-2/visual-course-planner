@@ -5,8 +5,12 @@ import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
+//import { Route, BrowserRouter as Router } from 'react-router-dom';
+//port Main from '../../containers/Main';
+//import Button from '../Button/button.js';
 
-class LoginInterface extends Component {
+
+export class LoginInterface extends Component {
  
   state = {
     loginMenu: {
@@ -18,7 +22,8 @@ class LoginInterface extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          isEmail: true,
         },
         valid: false,
         inputElementTouched: false 
@@ -31,27 +36,96 @@ class LoginInterface extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          minLength: 5,
         },
         valid: false,
         inputElementTouched: false 
       },
-  
+      valid: false,
+      inputElementTouched: false 
+    },
+    //error state (form validation)
+    errors:{
+      email: {
+        hasError: false
+      },
+      fName: {
+        hasError: false
+      },
+      lName: {
+        hasError: false
+      },
+      password: {
+        hasError: false
+      },
+      confirmPassword: {
+        hasError: false
+      },
     },
     formIsValid: false,
-    loading: false,
+    loading: false
   }
 
   checkValidity(value, rules) {
     let isValid = true;
+    
+
+    if(rules.required){
+      isValid = value.trim() !== '' && isValid;
+
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+      console.log("minlength: " + isValid);
+      isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
+    }
+
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+      //console.log(isValid);
+      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+
+    }
+      
 
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
-
-    return isValid;
+  }
+    
+  setError = (element, message) => {
+    //console.log("Setting error");
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: true,
+            message: message
+          }
+        }
+      };
+    });
   }
 
+  removeError = (element) => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: false,
+          }
+        }
+      };
+    });
+  }
+  
   handler = (e) => {
     e.preventDefault();
     this.setState( { loading: true } );
@@ -116,50 +190,64 @@ class LoginInterface extends Component {
     
   }
 
-  render() {
-    const formElementsArray = [];
-    for (let key in this.state.loginMenu) {
-      formElementsArray.push({
-        id: key,
-        config: this.state.loginMenu[key]
-      });
+    //LINKS FORM BTN TO PAGE SPECIFED
+    onNavigationVCPMain = () => {
+      this.props.history.push('/main');
     }
-    
-    //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-    //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-    let form = (
-      <form>
-        {formElementsArray.map(formElement => (
-          <Input 
-            key={formElement.id}
-            id={formElement.id}
-            elementType={formElement.config.elementType}
-            elementConfig={formElement.config.elementConfig}
-            value={formElement.config.value}
-            invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-            shouldBeValidated={formElement.config.validation.required}
-            inputElementTouched={formElement.config.inputElementTouched}
-            changed={(event) => this.inputChangeHandler(event, formElement.id)} />
-        ))}
-        <button className="defaultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Login</button> 
-        <button className="open-diff-menubtn" ><Link to = "/signup">Create Account</Link></button> 
-      </form>
-    );
 
 
-    return(
-      //RETURN LOGIN MENU HERE
-      <div className="menu">
-        <h1 className="login-heading">Visual Course Planner</h1>
-        {form}     
-      </div> 
+    render(){
+      const formElementsArray = [];
+      for (let key in this.state.loginMenu) {
+        formElementsArray.push({
+          id: key,
+          config: this.state.loginMenu[key]
+        });
+      }
+      
+      //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
+      //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
+      let form = (
+        <form onSubmit={this.handler}>
+          {formElementsArray.map(formElement => (
+            <div key={formElement.id}>
+              <Input 
+                //  key={formElement.id}
+                elementType={formElement.config.elementType}
+                elementConfig={formElement.config.elementConfig}
+                value={formElement.config.value}
+                invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
+                shouldBeValidated={formElement.config.validation.required}
+                inputElementTouched={formElement.config.inputElementTouched}
+                changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+              />
+              {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
+            </div>  
+          ))}
+          
+          <button className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
+          <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
+          {/*    <Link to = "/main"> */}
+        </form>
+      );
 
-    );
-  }
+
+      return (
+        //RETURN LOGIN MENU HERE
+        <div className="menu">
+          <h1 className="login-heading">Visual Course Planner</h1>
+          <div className= "overlay"></div>
+          {form} 
+          
+              
+        </div> 
+      );
+    }
 } //end of class 
 
 LoginInterface.propTypes = {
-  history: PropTypes.object
+  toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
+  history: PropTypes.object,
 };
 
 export default withRouter(LoginInterface);
