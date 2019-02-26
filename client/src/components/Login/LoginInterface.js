@@ -41,9 +41,7 @@ export class LoginInterface extends Component {
         },
         valid: false,
         inputElementTouched: false 
-      },
-      valid: false,
-      inputElementTouched: false 
+      }
     },
     //error state (form validation)
     errors:{
@@ -94,6 +92,7 @@ export class LoginInterface extends Component {
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
+    return isValid;
   }
     
   setError = (element, message) => {
@@ -218,7 +217,7 @@ export class LoginInterface extends Component {
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
               invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-              shouldBeValidated={formElement.config.validation}
+              shouldBeValidated={formElement.config.validation.required}
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             />
@@ -226,7 +225,7 @@ export class LoginInterface extends Component {
           </div>  
         ))}
         
-        <button className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
         <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>
