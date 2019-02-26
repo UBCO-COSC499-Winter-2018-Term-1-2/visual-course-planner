@@ -7,14 +7,6 @@ const passport = require('passport');
 
 router.use(expressValidator()); // put the use in server.js and also import through npm?
 
-const redirectLogin = (req, res, next) => {
-  if (!req.session.userId){
-    res.redirect('/login');
-  }else{
-    next();
-  }
-};
-
 //user model
 const User = require('../../models/User');
 const user = new User();
@@ -161,9 +153,9 @@ router.get('/:id/coursehistory', async (req, res) => {
  * @access Private
  */
 
-router.post('/logout',redirectLogin, async (req, res) => {
+// router.post('/logout',redirectLogin, async (req, res) => {
 
-  console.log(req.session);
-});
+//   console.log(req.session);
+// });
 
 module.exports = router;
