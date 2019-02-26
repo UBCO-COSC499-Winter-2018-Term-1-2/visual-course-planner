@@ -9,11 +9,11 @@ router.use(expressValidator()); // put the use in server.js and also import thro
 
 const redirectLogin = (req, res, next) => {
   if (!req.session.userId){
-    res.redirect('/login')
+    res.redirect('/login');
   }else{
-    next()
+    next();
   }
-}
+};
 
 //user model
 const User = require('../../models/User');
@@ -115,25 +115,25 @@ router.post('/login', (req, res, next) => {
  */ 
 
 router.post('/:id/coursehistory', async (req, res) => {
-  if(Object.keys(req.body).length === 0){
+  if (Object.keys(req.body).length === 0){
     console.log('no courses selected, nothing stored');
     res.status(200).send('no course history selected');
-  }else{
-  let user_Id = req.params.id;
-  let courses = [];
-  for(let key in req.body) {
-    courses[key] = {
-      uid:user_Id,
-      cid: req.body[key]
+  } else {
+    let userId = req.params.id;
+    let courses = [];
+    for (let key in req.body) {
+      courses.push({
+        uid: userId,
+        cid: req.body[key]
+      });
     }
+    console.log(courses);
+    for (let i in courses) {
+      console.log(courses[i]);
+      await user.insertCourse(courses[i]);
+    }
+    res.status(200).send('course(s) inserted for user');
   }
-  console.log(courses);
-  for(let i in courses) {
-    console.log(courses[i]);
-    await user.insertCourses(courses[i]);
-}
-  res.status(200).send('course(s) inserted for user');
-}
 });
 
 /**
@@ -143,25 +143,16 @@ router.post('/:id/coursehistory', async (req, res) => {
  */ 
 
 router.get('/:id/coursehistory', async (req, res) => {
-  let user_Id = req.params.id;
-  if(await user.getCourses(user_Id) <= 0){
+  let userId = req.params.id;
+
+  if (await user.getCourses(userId) <= 0){
     console.log('no course history found for user');
-    res.status(200).send('no course history found for user')
-  }else{
-
-    let query_courses = [];
-    let user_courses = [];
-    query_courses = await user.getCourses(user_Id); 
-    // console.log(query_courses);
-    // this gave an odd 'rowdatapacket' output, so extracted every cid into a new array --> user_courses[]
-    for(let i in query_courses){
-      user_courses[i] = query_courses[i].cid;
-    }
-      console.log(user_courses);
-      res.status(200).send("fetching all user courses: " + user_courses);
-
+    res.status(200).send('no course history found for user');
+  } else {
+    const courses = await user.getCourses(userId); 
+    console.log(courses);
+    res.status(200).send("fetching all user courses: " + courses);
   }
-
 });
 
 /**
@@ -173,7 +164,6 @@ router.get('/:id/coursehistory', async (req, res) => {
 router.post('/logout',redirectLogin, async (req, res) => {
 
   console.log(req.session);
- 
-  });
+});
 
 module.exports = router;
