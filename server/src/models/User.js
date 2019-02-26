@@ -22,12 +22,11 @@ class User {
 
   async insertUser(newUser) {
     
-    db
-      .query("INSERT INTO user SET ?", newUser)
-      .then(
-
-        console.log("user inserted")
-      )
+    return db.query("INSERT INTO user SET ?", newUser)
+      .then(rows => {
+        console.log("user inserted", newUser);
+        return rows.insertId;
+      })
       .catch(err => {
         throw err;
       });  

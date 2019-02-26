@@ -88,8 +88,7 @@ router.post('/login', (req, res, next) => {
     if (err) {
       console.error(err);
     }
-    return info;
-    //res.send({...info, user});
+    res.send({...info, user});
   })(req, res, next);
   
 });

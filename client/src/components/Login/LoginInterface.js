@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
@@ -40,7 +40,6 @@ class LoginInterface extends Component {
     },
     formIsValid: false,
     loading: false,
-    isLoggedIn: false
   }
 
   checkValidity(value, rules) {
@@ -69,7 +68,12 @@ class LoginInterface extends Component {
         console.log("no errors::");
         const user = response.data.user;
         console.log(user);
-        this.setState({ isLoggedIn: true });
+        sessionStorage.setItem("userId", user.id);
+        // set session user id
+        // course into term, plus minus course
+        // use session not state
+        console.log(sessionStorage.getItem("userId"));
+        this.props.history.push("/main");
       })
       .catch( error => {
         this.setState( { loading: false } );
@@ -84,14 +88,8 @@ class LoginInterface extends Component {
         } else if (error.request){
           console.log('ERROR', error.message);
         }
-        console.log(error.config);
+        console.log(error);
       } );
-  }
-
-  redirect = () => {
-    if (this.state.isLoggedIn) {
-      return <Redirect to="/main"/>;
-    }
   }
 
   //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
@@ -139,12 +137,12 @@ class LoginInterface extends Component {
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-            shouldBeValidated={formElement.config.validation}
+            shouldBeValidated={formElement.config.validation.required}
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
-        <button className="deafultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Login</button> 
-        <button className="open-diff-menubtn" ><Link to = "/create-account">Create Account</Link></button> 
+        <button className="defaultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Login</button> 
+        <button className="open-diff-menubtn" ><Link to = "/signup">Create Account</Link></button> 
       </form>
     );
 
@@ -153,7 +151,6 @@ class LoginInterface extends Component {
       //RETURN LOGIN MENU HERE
       <div className="menu">
         <h1 className="login-heading">Visual Course Planner</h1>
-        {this.redirect()}
         {form}     
       </div> 
 
@@ -162,7 +159,7 @@ class LoginInterface extends Component {
 } //end of class 
 
 LoginInterface.propTypes = {
-  toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
+  history: PropTypes.object
 };
 
-export default LoginInterface;
+export default withRouter(LoginInterface);

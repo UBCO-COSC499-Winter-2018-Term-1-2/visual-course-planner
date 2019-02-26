@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-// import React from 'react';
 import '../Login/LoginInterface.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
+import { PropTypes } from 'prop-types';
 
-
-// const CreateAccountMenu = () => {
-
-class CreateAccountMenu extends Component {
+class SignupInterface extends Component {
 
   state = {
     createAccountMenu: {
@@ -107,6 +104,10 @@ class CreateAccountMenu extends Component {
     axios.post( '/api/users/signup', formData )
       .then( response => {
         this.setState( { loading: false } );
+        if (response.status === 200) {
+          sessionStorage.setItem('userId', response.data);
+          this.props.history.push('/course-history');
+        }
         console.log(response);
       } )
       .catch( error => {
@@ -161,12 +162,12 @@ class CreateAccountMenu extends Component {
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-            shouldBeValidated={formElement.config.validation}
+            shouldBeValidated={formElement.config.validation.required}
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
         
-        <button className="deafultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Create Account</button> 
+        <button className="defaultbtn" onClick={this.handler} disabled={!this.state.formIsValid}>Create Account</button> 
         <button className="open-diff-menubtn" ><Link to = "/login">Login</Link></button> 
       </form>
     );
@@ -183,5 +184,8 @@ class CreateAccountMenu extends Component {
   }
 }
 
+SignupInterface.propTypes = {
+  history: PropTypes.object
+};
 
-export default CreateAccountMenu;
+export default withRouter(SignupInterface);
