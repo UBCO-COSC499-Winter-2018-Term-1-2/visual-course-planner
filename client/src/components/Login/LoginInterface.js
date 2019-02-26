@@ -141,9 +141,6 @@ export class LoginInterface extends Component {
         const user = response.data.user;
         console.log(user);
         sessionStorage.setItem("userId", user.id);
-        // set session user id
-        // course into term, plus minus course
-        // use session not state
         console.log(sessionStorage.getItem("userId"));
         this.props.history.push("/main");
       })
