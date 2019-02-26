@@ -59,7 +59,7 @@ class User {
 
   async insertCourses(courses) {
 
-        db
+    db
       .query("INSERT INTO user_course_info SET ?", courses)
       .then(
         console.log("Course(s) succesfully inserted into db for user")
@@ -68,7 +68,6 @@ class User {
         throw err;
       });  
   }
-
 
 
 }
