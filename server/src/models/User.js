@@ -57,18 +57,29 @@ class User {
 
   }
 
-  async insertCourses(courses) {
-
-    db
-      .query("INSERT INTO user_course_info SET ?", courses)
-      .then(
-        console.log("Course(s) succesfully inserted into db for user")
-      )
+  async insertCourse(course) {
+    return db
+      .query("INSERT INTO user_course_info SET ?", course)
+      .then(rows => {
+        console.log("Course(s) succesfully inserted into db for user");
+        return rows.insertId;
+      })
       .catch(err => {
         throw err;
       });  
   }
 
+  async getCourses(id) {
+    let rows = [];
+    try {
+      rows = await db.query("SELECT cid FROM user_course_info WHERE uid = ?", [id]);
+    } catch (err) {
+      throw err;
+    }
+
+    return rows;
+
+  }
 
 }
 

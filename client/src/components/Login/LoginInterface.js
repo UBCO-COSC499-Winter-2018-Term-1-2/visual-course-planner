@@ -41,9 +41,7 @@ export class LoginInterface extends Component {
         },
         valid: false,
         inputElementTouched: false 
-      },
-      valid: false,
-      inputElementTouched: false 
+      }
     },
     //error state (form validation)
     errors:{
@@ -89,11 +87,11 @@ export class LoginInterface extends Component {
       isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
 
     }
-      
-
+  
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
+    return isValid;
   }
     
   setError = (element, message) => {
@@ -190,59 +188,60 @@ export class LoginInterface extends Component {
     
   }
 
-    //LINKS FORM BTN TO PAGE SPECIFED
-    onNavigationVCPMain = () => {
-      this.props.history.push('/main');
+  //LINKS FORM BTN TO PAGE SPECIFED
+  onNavigationVCPMain = () => {
+    this.props.history.push('/main');
+  }
+
+
+  render() {
+    const formElementsArray = [];
+    for (let key in this.state.loginMenu) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.loginMenu[key]
+      });
     }
+    
+    //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
+    //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
+    let form = (
+      <form onSubmit={this.handler}>
+        {formElementsArray.map(formElement => (
+          <div key={formElement.id}>
+            <Input 
+              //  key={formElement.id}
+              elementType={formElement.config.elementType}
+              elementConfig={formElement.config.elementConfig}
+              value={formElement.config.value}
+              invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
+              shouldBeValidated={formElement.config.validation.required}
+              inputElementTouched={formElement.config.inputElementTouched}
+              changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+            />
+            {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
+          </div>  
+        ))}
+        
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
+        <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
+        {/*    <Link to = "/main"> */}
+      </form>
+    );
 
 
-    render(){
-      const formElementsArray = [];
-      for (let key in this.state.loginMenu) {
-        formElementsArray.push({
-          id: key,
-          config: this.state.loginMenu[key]
-        });
-      }
-      
-      //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-      //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-      let form = (
-        <form onSubmit={this.handler}>
-          {formElementsArray.map(formElement => (
-            <div key={formElement.id}>
-              <Input 
-                //  key={formElement.id}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-                shouldBeValidated={formElement.config.validation.required}
-                inputElementTouched={formElement.config.inputElementTouched}
-                changed={(event) => this.inputChangeHandler(event, formElement.id)} 
-              />
-              {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
-            </div>  
-          ))}
-          
-          <button className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
-          <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
-          {/*    <Link to = "/main"> */}
-        </form>
-      );
+    return (
+      //RETURN LOGIN MENU HERE
+      <div className="menu">
+        <h1 className="login-heading">Visual Course Planner</h1>
+        <div className= "overlay"></div>
+        {form} 
+        
+            
+      </div> 
 
-
-      return (
-        //RETURN LOGIN MENU HERE
-        <div className="menu">
-          <h1 className="login-heading">Visual Course Planner</h1>
-          <div className= "overlay"></div>
-          {form} 
-          
-              
-        </div> 
-      );
-    }
+    );
+  }
 } //end of class 
 
 LoginInterface.propTypes = {

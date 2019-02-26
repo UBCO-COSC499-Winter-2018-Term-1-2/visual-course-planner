@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
 import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
-import axios from 'axios';
 import { PropTypes } from 'prop-types';
+import axios from 'axios';
 
 class SignupInterface extends Component {
-
-  state = {
+  
+  state = {      
+    validationWarnings: [],
     createAccountMenu: {
       fName: {
         elementType: 'input',
@@ -19,92 +20,94 @@ class SignupInterface extends Component {
         validation: {
           required: true
         },
-        lName: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: '* Last Name'
-          },
-          value: '',
-          validation: {
-            required: true
-          },
-          label: '',
-          valid: false,
-          inputElementTouched: false 
-        },
-        email: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'text',
-            placeholder: '* Email'
-          },
-          value: '',
-          validation: {
-            required: true,
-            isEmail: true,
-          },
-          label: '',
-          name: 'email',
-          valid: false,
-          inputElementTouched: false 
-        },
-        password: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'password',
-            placeholder: '* Password'
-          },
-          value: '',
-          validation: {
-            required: true,
-            minLength: 5,
-            passMatch: true,
-          },
-          name: 'password',
-          valid: false,
-          inputElementTouched: false 
-        },
-        confirmPassword: {
-          elementType: 'input',
-          elementConfig: {
-            type: 'password',
-            placeholder: '* Confirm Password'
-          },
-          value: '',
-          validation: {
-            required: true,
-            minLength: 5,
-            passMatch: true,
-          },
-          name: 'confirmPassword',
-          valid: false,
-          inputElementTouched: false 
-        },
+        label: '',
+        valid: false,
+        inputElementTouched: false
       },
-      //error state (form validation)
-      errors:{
-        email: {
-          hasError: false
+      lName: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: '* Last Name'
         },
-        fName: {
-          hasError: false
+        value: '',
+        validation: {
+          required: true
         },
-        lName: {
-          hasError: false
-        },
-        password: {
-          hasError: false
-        },
-        confirmPassword: {
-          hasError: false
-        },
+        label: '',
+        valid: false,
+        inputElementTouched: false 
       },
-      //end of menu
-
-      formIsValid: false,
-      loading: false
-    }
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: '* Email'
+        },
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true,
+        },
+        label: '',
+        name: 'email',
+        valid: false,
+        inputElementTouched: false 
+      },
+      password: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'password',
+          placeholder: '* Password'
+        },
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          passMatch: true,
+        },
+        name: 'password',
+        valid: false,
+        inputElementTouched: false 
+      },
+      confirmPassword: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'password',
+          placeholder: '* Confirm Password'
+        },
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          passMatch: true,
+        },
+        name: 'confirmPassword',
+        valid: false,
+        inputElementTouched: false 
+      },
+    },
+    //error state (form validation)
+    errors:{
+      email: {
+        hasError: false
+      },
+      fName: {
+        hasError: false
+      },
+      lName: {
+        hasError: false
+      },
+      password: {
+        hasError: false
+      },
+      confirmPassword: {
+        hasError: false
+      },
+    },
+    //end of menu
+    formIsValid: false,
+    loading: false
   }// end of state
 
 
@@ -240,7 +243,7 @@ class SignupInterface extends Component {
     this.props.history.push('/course-history');
   }
 
-  render(){
+  render() {
     const formElementsArray = [];
     for (let key in this.state.createAccountMenu) {
       formElementsArray.push({
@@ -276,7 +279,7 @@ class SignupInterface extends Component {
       </form>
     );
     
-    return(
+    return (
 
       //RETURN LOGIN MENU HERE
       <div>
