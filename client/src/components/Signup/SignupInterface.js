@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
+import { PropTypes } from 'prop-types';
 import axios from 'axios';
 
-
-class CreateAccountMenu extends Component {
+class SignupInterface extends Component {
   
   state = {      
     validationWarnings: [],
@@ -23,7 +22,7 @@ class CreateAccountMenu extends Component {
         },
         label: '',
         valid: false,
-        inputElementTouched: false 
+        inputElementTouched: false
       },
       lName: {
         elementType: 'input',
@@ -107,7 +106,6 @@ class CreateAccountMenu extends Component {
       },
     },
     //end of menu
-
     formIsValid: false,
     loading: false
   }// end of state
@@ -202,6 +200,10 @@ class CreateAccountMenu extends Component {
     axios.post( '/api/users/signup', formData )
       .then( response => {
         this.setState( { loading: false } );
+        if (response.status === 200) {
+          sessionStorage.setItem('userId', response.data);
+          this.props.history.push('/course-history');
+        }
         console.log(response);
       } )
       .catch( error => {
@@ -261,7 +263,7 @@ class CreateAccountMenu extends Component {
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
               invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-              shouldBeValidated={formElement.config.validation}
+              shouldBeValidated={formElement.config.validation.required}
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
               name={formElement.config.name}
@@ -271,7 +273,6 @@ class CreateAccountMenu extends Component {
           </div>
         ))}
     
-        {/* <Link to = "/course-history"><button className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link>  */}
         <button  className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
         <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
@@ -292,12 +293,9 @@ class CreateAccountMenu extends Component {
     );
   }
 }
-CreateAccountMenu.propTypes = {
-  history: PropTypes.object,
-  invalid: PropTypes.bool,
-  shouldBeValidated: PropTypes.object,
-  inputElementTouched: PropTypes.bool,
 
+SignupInterface.propTypes = {
+  history: PropTypes.object
 };
 
-export default CreateAccountMenu;
+export default withRouter(SignupInterface);

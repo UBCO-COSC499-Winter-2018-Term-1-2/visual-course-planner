@@ -33,11 +33,11 @@ router.post('/signup', async (req, res) => {
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
-  if(errors){
+  if (errors) {
     console.log(errors);
     res.status(500).send(errors);
 
-  }else{ 
+  } else {
         
     const existUser = await user.checkUser(email);
         
@@ -94,8 +94,7 @@ router.post('/login', (req, res, next) => {
     if (err) {
       console.error(err);
     }
-    return info;
-    //res.send({...info, user});
+    res.send({...info, user});
   })(req, res, next);
   
 });

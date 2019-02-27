@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
@@ -88,7 +88,6 @@ export class LoginInterface extends Component {
 
     }
   
-
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
@@ -124,7 +123,7 @@ export class LoginInterface extends Component {
       };
     });
   }
-
+  
   handler = (e) => {
     e.preventDefault();
     this.setState( { loading: true } );
@@ -141,7 +140,9 @@ export class LoginInterface extends Component {
         console.log("no errors::");
         const user = response.data.user;
         console.log(user);
-        this.setState({ isLoggedIn: true });
+        sessionStorage.setItem("userId", user.id);
+        console.log(sessionStorage.getItem("userId"));
+        this.props.history.push("/main");
       })
       .catch( error => {
         this.setState( { loading: false } );
@@ -156,14 +157,8 @@ export class LoginInterface extends Component {
         } else if (error.request){
           console.log('ERROR', error.message);
         }
-        console.log(error.config);
+        console.log(error);
       } );
-  }
-
-  redirect = () => {
-    if (this.state.isLoggedIn) {
-      return <Redirect to="/main"/>;
-    }
   }
 
   //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
@@ -249,7 +244,6 @@ export class LoginInterface extends Component {
 LoginInterface.propTypes = {
   toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
   history: PropTypes.object,
-
 };
 
-export default LoginInterface;
+export default withRouter(LoginInterface);
