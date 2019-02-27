@@ -5,7 +5,7 @@ db.query = promisify(db.query);
 
 class User {
   async changePassword (id,user) {
-    db
+    return db
     .query("UPDATE user SET password WHERE uid = ?" , [id])
     .then(rows => {
         return rows;
@@ -16,7 +16,7 @@ class User {
     
 }
 async updateUser (id, user) {
-    db.
+   return db.
     query("UPDATE user SET email = ?, firstname = ?, lastname = ? WHERE uid = ?" , [user.email, user.firstname, user.lastname, id])
     .then(rows => {
         return rows;

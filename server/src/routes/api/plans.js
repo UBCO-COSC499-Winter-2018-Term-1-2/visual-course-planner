@@ -35,5 +35,18 @@ router.post('/:id/favourite' , (req,res) => {
     }
   });
 });
-    
+
+
+router.get('/:id', (req, res) => {
+  
+  Plan.getNotes(User, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("No notes");
+    }
+  });
+});
+
+
 module.exports = router;
