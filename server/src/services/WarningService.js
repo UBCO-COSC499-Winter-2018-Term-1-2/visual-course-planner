@@ -72,7 +72,6 @@ function getCoreqWarnings(plan, course) {
       const courseSession = plan.sessions.byId[courseTerm.session];
       const courseYearTerm = courseSession.year + courseSession.season + courseTerm.number;
 
-
       if (reqYearTerm > courseYearTerm) {
         warnings.push({
           message: `${req.code} needs to be in the same term as ${course.code}, or earlier.`,
@@ -101,7 +100,7 @@ function getSpecificCoursesSpecializationWarning(plan, requirement) {
   let warning = [];
   requirement.courses.split(',').map(course => course.trim()).forEach(reqCode => {
     /* Check for specific course requirement */
-    const planCourse = getPlanCourse(plan, {code: reqCode});
+    const planCourse = getPlanCourse(plan, reqCode);
     if (planCourse !== null) {
       creditsNeeded -= parseInt(planCourse.credits);
     }
