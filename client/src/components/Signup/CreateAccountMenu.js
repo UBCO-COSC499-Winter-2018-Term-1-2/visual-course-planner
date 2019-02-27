@@ -138,12 +138,16 @@ class CreateAccountMenu extends Component {
       }
 
       if (!rules.matches){
+
+        
         const passValue = value;
-        const confirmPassValue = value;
-        isValid = passValue === confirmPassValue && isValid;
+        const confirmPassValue =  value;
+        isValid = (passValue == confirmPassValue) && isValid;
         isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
 
         console.log("Testing Password Value (mario): "+ value ); 
+        console.log("Testing pass value: "+ passValue ); 
+        console.log("Testing confirm value: "+ confirmPassValue );
   
 
       }
@@ -200,6 +204,9 @@ class CreateAccountMenu extends Component {
       formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
     }
 
+    const { password, confirmPassword } = this.state;
+    const matches = password === confirmPassword; 
+    matches ? alert("matched") : alert("no match");
 
     //let formData = new FormData();
     // for (let formElementIdentifier in this.state.createAccountMenu) {
@@ -286,13 +293,14 @@ class CreateAccountMenu extends Component {
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
               name={formElement.config.name}
               label={formElement.config.label} 
+
             />
             {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
           </div>
         ))}
     
         {/* <Link to = "/course-history"><button className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link>  */}
-        <button  className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+        <button  type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
         <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
       </form>
