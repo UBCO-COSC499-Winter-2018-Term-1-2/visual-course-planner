@@ -79,7 +79,7 @@ export class LoginInterface extends Component {
       if (rules.minLength) {
         isValid = value.length >= rules.minLength && isValid;
         console.log("minlength: " + isValid);
-        isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
+        isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("email");
       }
 
       if (rules.isEmail) {
