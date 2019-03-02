@@ -1,0 +1,39 @@
+/* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
+.Button{
+    width: 50%;
+    padding: 1em 1em;
+    margin: 2em auto;
+    box-sizing: border-box;
+    font-size: 1em;
+    /* text-align: center; */
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    /* display: block; */
+    display: flex;
+    flex-direction: column-reverse;
+    cursor: pointer;
+
+}
+
+.Button:hover {
+    background-color: #84bd00; 
+    color: black;
+}
+
+.Button:disabled{
+    cursor: not-allowed;
+
+}
+.Button:first-of-type {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.Success {
+    color: #5C9210;
+}
+
+.Danger {
+    color: #944317;
+}

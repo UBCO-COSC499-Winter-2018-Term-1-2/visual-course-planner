@@ -5,8 +5,7 @@
   color: black;
   text-align: center;
   width: 6em;
-  margin: 0.5em;
-  padding-top: 0em;
+  margin: 1em auto 1em auto;
   cursor: pointer;
 }
 
@@ -15,7 +14,6 @@
 }
 
 .course-code{
-  padding: 0;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
