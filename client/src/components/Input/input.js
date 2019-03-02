@@ -3,13 +3,13 @@ import styling from '../Input/input.css';
 import PropTypes from 'prop-types';
 //import { config } from '@fortawesome/fontawesome-svg-core';
 
-const input = ( props ) => {
+const Input = ( props ) => {
   let inputElement = null;
   let cssInputElement = "input-element";
   let cssInvalid = "invalid";
   let greenTitle = "green-title";
-  let cssSelectItems ="select-items";
-  let cssCourseList ="course-list";
+  let cssSelectItems = "select-items";
+  let cssCourseList = "course-list";
   
   //let cssHideErrors = 'warning-msg';
 
@@ -24,9 +24,9 @@ const input = ( props ) => {
   }
  
   
-  input.propTypes = {
+  Input.propTypes = {
     invalid: PropTypes.bool,
-    shouldBeValidated: PropTypes.object,
+    shouldBeValidated: PropTypes.bool,
     inputElementTouched: PropTypes.bool,
     elementType: PropTypes.string,
     elementConfig: PropTypes.object,
@@ -34,6 +34,7 @@ const input = ( props ) => {
     changed: PropTypes.func,
     label: PropTypes.string,
     title: PropTypes.string,
+    id: PropTypes.string
   };
 
 
@@ -44,6 +45,8 @@ const input = ( props ) => {
       className={inputStyling.join(' ')}
       {...props.elementConfig}
       value={props.value}
+      name={props.id}
+      id={props.id}
       onChange={props.changed} />;
     break;
 
@@ -112,4 +115,4 @@ const input = ( props ) => {
 
 };
 
-export default input;
+export default Input;
