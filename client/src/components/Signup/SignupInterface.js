@@ -232,7 +232,7 @@ inputChangeHandler = (event, inputIdentifier) => {
 
 //LINKS FORM BTN TO PAGE SPECIFED
 onNavigation = () => {
-  this.props.history.push('/course-history');
+  this.props.history.push('/confirm-email');
 }
 
 
