@@ -118,7 +118,7 @@
 
 .student-buttons-container {
   position: absolute;
-  min-width: 130px;
+  /* min-width: 130px; */
   bottom: 1em;
 }
 

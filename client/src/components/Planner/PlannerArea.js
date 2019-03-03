@@ -83,8 +83,9 @@ class PlannerArea extends Component {
     } else {
       latestSession = mostRecentSession;
       latestSession.id = mostRecentSessionId;
-      console.log('samee session', latestSession);
+      console.log('same session', latestSession);
     }
+    console.log({"executing next term request": {latestSession, nextTermInfo}});
     const nextTermRequest = await axios.get(`/api/terms?sessionId=${latestSession.id}&number=${nextTermInfo.number}`);
     const nextTerm = nextTermRequest.data;
     plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);

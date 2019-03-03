@@ -14,10 +14,15 @@ router.get('/', async (req, res) => {
   let term = await Term.getTerm(number, sessionId);
   if (!term) {
     const termId = await Term.createTerm(number, sessionId);
-    term = await Term.getTerm(termId);
-    console.log("Created term:", term , termId);
+    console.log({"Created term:": termId });
+    try {
+      term = await Term.getTermById(termId);
+    } catch(e) {
+      console.error(e);
+    }
+    console.log({"Retrieving created term:": term });
   }
-  console.log("Found term", term);
+  console.log({"Found term": term});
   term.courses = [];
   term.id = term.id.toString();
   res.send(term);
