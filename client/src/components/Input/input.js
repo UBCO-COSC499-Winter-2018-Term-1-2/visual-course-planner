@@ -107,7 +107,6 @@ const Input = ( props ) => {
     />;
     break;
 
-
   default:
     inputElement = <input
       className={styling.InputElement}
