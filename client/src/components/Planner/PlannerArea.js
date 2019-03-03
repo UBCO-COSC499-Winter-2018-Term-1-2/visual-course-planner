@@ -15,17 +15,17 @@ class PlannerArea extends Component {
 
   trashDragCounter = 0;
 
-  getNextTerm(currentTerm) {
+  getNextTerm(latestTerm, latestSession) {
     let nextTermNumber;
-    let nextTermYear = currentTerm.year;
+    let nextTermYear = latestSession.year;
     let nextTermSeason = "W";
 
-    if (currentTerm.number === 1) {
+    if (latestTerm.number === 1) {
       nextTermNumber = 2;
-      nextTermSeason = currentTerm.session;
+      nextTermSeason = latestSession.season;
     } else {
-      if (currentTerm.session == "W") {
-        nextTermYear = currentTerm.year + 1;
+      if (latestSession.season == "W") {
+        nextTermYear = parseInt(latestSession.year) + 1;
         nextTermSeason = "S";
       }
       nextTermNumber = 1;
@@ -51,11 +51,48 @@ class PlannerArea extends Component {
       });
   }
 
-  addTermToPlan() {
-    const latestTerm = this.props.plan.terms.allIds[this.props.plan.terms.allIds.length - 1];
-    const nextTerm = this.getNextTerm(latestTerm);
-    const findTerm = axios.get(`/api/terms?year=${nextTerm.year}&season=${nextTerm.season}&number=${nextTerm.number}`);
-    findTerm;
+  addTermToPlan = async () => {
+    // set initial session to random one
+    const plan = {...this.props.plan};
+    let mostRecentSessionId = plan.sessions.allIds[0];
+
+    for (const sessionId in plan.sessions.byId) {
+      const currentSession = plan.sessions.byId[sessionId];
+      const currentSessionDate = currentSession.year + currentSession.season;
+      const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+      console.log(mostRecentSession);
+      const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
+      console.log(currentSessionDate, mostRecentSessionDate);
+      if (currentSessionDate > mostRecentSessionDate) {
+        console.log("Earlier");
+        mostRecentSessionId = sessionId;
+      }
+    }
+
+    const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+    const latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
+    const nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
+    console.log("Adding term: ", nextTermInfo);
+    let latestSession;
+    if (nextTermInfo.year !== mostRecentSession.year || nextTermInfo.season !== mostRecentSession.season) {
+      const latestSessionRequest = await axios.get(`/api/sessions?year=${nextTermInfo.year}&season=${nextTermInfo.season}`);
+      latestSession = latestSessionRequest.data;
+      plan.sessions.byId[latestSession.id] = latestSession;
+      console.log('need more session', latestSession);
+      plan.sessions.allIds.push(latestSession.id);
+    } else {
+      latestSession = mostRecentSession;
+      latestSession.id = mostRecentSessionId;
+      console.log('samee session', latestSession);
+    }
+    const nextTermRequest = await axios.get(`/api/terms?sessionId=${latestSession.id}&number=${nextTermInfo.number}`);
+    const nextTerm = nextTermRequest.data;
+    plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
+    plan.terms.byId[nextTerm.id] = nextTerm;
+    plan.terms.allIds.push(nextTerm.id);
+    console.log(plan);
+    this.props.updatePlan(plan);
+    
   }
 
   objectsAreSame(x, y) {
@@ -238,13 +275,17 @@ class PlannerArea extends Component {
         />
 
         <div
-          className="floating-icon"
+          className="floating-icon remove-course"
           onDragEnter={this.onCourseDragEnterTrash}
           onDragLeave={this.onCourseDragLeaveTrash}
           onDragOver={this.onCourseDragOverTrash}
           onDrop={this.onCourseDropTrash}
         >
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
+        </div>
+
+        <div className='floating-icon add-term' onClick={this.addTermToPlan}>
+          <FontAwesomeIcon icon="plus-circle" />
         </div>
 
       </div>

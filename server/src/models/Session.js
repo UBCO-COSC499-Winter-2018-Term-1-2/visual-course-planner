@@ -10,12 +10,12 @@ module.exports = {
   },
 
   async getSession(year, season) {
-    const sessionResults = await db.query("SELECT * FROM session WHERE startYear = ? AND season = ?", [year, season]);
+    const sessionResults = await db.query("SELECT * FROM session WHERE year = ? AND season = ?", [year, season]);
     return sessionResults[0];
   },
 
   async createSession(year, season) {
-    const results = await db.query("INSERT INTO session (startYear, season) VALUES (?, ?)", [year, season]);
+    const results = await db.query("INSERT INTO session (year, season) VALUES (?, ?)", [year, season]);
     return results.insertId;
   }
 };

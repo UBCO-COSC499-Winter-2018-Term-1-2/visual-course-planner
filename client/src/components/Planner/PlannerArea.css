@@ -26,6 +26,15 @@
 .floating-icon {
   position: absolute;
   font-size: 2em;
+
+}
+
+.floating-icon.remove-course {
   bottom: 1em;
+  right: 2em;
+}
+
+.floating-icon.add-term {
+  top: 1em;
   right: 2em;
 }

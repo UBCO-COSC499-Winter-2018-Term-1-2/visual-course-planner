@@ -7,6 +7,7 @@ const users = require('./server/src/routes/api/users');
 const degrees = require('./server/src/routes/api/degrees');
 const courses = require('./server/src/routes/api/courses');
 const terms = require('./server/src/routes/api/terms');
+const sessions = require('./server/src/routes/api/sessions');
 const path = require('path');
 const fileUpload = require('express-fileupload');
 const passport = require('passport');
@@ -53,6 +54,8 @@ app.use('/api/users', users);
 app.use('/api/degrees', degrees);
 app.use('/api/courses', courses);
 app.use('/api/terms', terms);
+app.use('/api/sessions', sessions);
+
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

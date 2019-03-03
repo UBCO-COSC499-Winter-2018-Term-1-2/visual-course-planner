@@ -37,7 +37,7 @@
 
 #note-area {
   grid-area: note-area;
-  background-color: #262427;
+  background-color: #1a191b;
 }
 
 .sidebar-info-area {
@@ -97,7 +97,7 @@
 }
 
 .notes-text-area {
-  background-color: black;
+  background-color: #262427;
   color: #e4e4e4;
   border: none;
   height: 71%;

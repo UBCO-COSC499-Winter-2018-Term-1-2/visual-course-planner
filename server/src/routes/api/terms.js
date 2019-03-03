@@ -1,27 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const Term = require('../../models/Term');
-const Session = require('../../models/Session');
 
 
 /**
  * @route GET api/terms?
- * @desc Get a course
+ * @desc Get a term
  * @access Private
  */
 router.get('/', async (req, res) => {
-  const year = req.query.year;
-  const season = req.query.season;
+  const sessionId = req.query.sessionId;
   const number = req.query.number;
-  const session = await Session.getSession(year, season);
-  if (!session) {
-    res.status(404).send("Session does not exist");
-  }
-  const term = await Term.getTerm(number, session["id"]);
+  let term = await Term.getTerm(number, sessionId);
   if (!term) {
-    res.status(404).send("Term does not exist");
+    const termId = await Term.createTerm(number, sessionId);
+    term = await Term.getTerm(termId);
+    console.log("Created term:", term , termId);
   }
   console.log("Found term", term);
+  term.courses = [];
+  term.id = term.id.toString();
   res.send(term);
 });
 

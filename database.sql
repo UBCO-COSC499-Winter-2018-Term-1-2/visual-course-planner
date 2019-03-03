@@ -84,9 +84,9 @@ CREATE TABLE exception_course_info (
 );
 
 CREATE TABLE session (
-  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  startYear CHAR(4),
-  season    CHAR(1)
+  id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  year    CHAR(4),
+  season  CHAR(1)
 );
 
 CREATE TABLE user (
@@ -121,7 +121,7 @@ CREATE TABLE plan (
 
 CREATE TABLE term (
   id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  num INT,
+  number INT,
   sid INT,
 
   FOREIGN KEY (sid)
@@ -279,3 +279,6 @@ INSERT INTO course_info (id, credits) VALUES ("COSC 310", 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 320", 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);
 INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
+
+INSERT INTO session (year, season) VALUES ("2018", "W");
+INSERT INTO term (number, sid) VALUES ("1", 1)
