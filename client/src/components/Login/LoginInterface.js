@@ -217,7 +217,7 @@ export class LoginInterface extends Component {
         ))}
         
         <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
-        <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
+        <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>
     );
