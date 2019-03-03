@@ -29,7 +29,7 @@ class Main extends Component {
       terms: {
         byId: {
           "1": {
-            session: "0",
+            session: "1",
             number: 1,
             courses: [ "100" ]
           }

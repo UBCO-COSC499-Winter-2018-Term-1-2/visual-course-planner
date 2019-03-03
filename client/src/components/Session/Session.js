@@ -4,10 +4,6 @@ import Term from '../Term/Term';
 import './Session.css';
 
 class Session extends Component {
-  state = {
-
-  }
-
 
   render() {
     const terms = this.props.terms.map(term => {
@@ -19,6 +15,7 @@ class Session extends Component {
         onCourseDragOver={this.props.onCourseDragOver}
         onCourseDragStart={this.props.onCourseDragStart}
         onCourseDrop={this.props.onCourseDrop}
+        removeTerm={this.props.removeTerm}
       />;
     });
     return (
@@ -37,7 +34,8 @@ Session.propTypes = {
   terms: PropTypes.array.isRequired,
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,
-  onCourseDrop: PropTypes.func.isRequired
+  onCourseDrop: PropTypes.func.isRequired,
+  removeTerm: PropTypes.func.isRequired
 };
 
 export default Session;

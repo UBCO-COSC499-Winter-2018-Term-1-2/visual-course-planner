@@ -54,24 +54,45 @@ class PlannerArea extends Component {
   addTermToPlan = async () => {
     // set initial session to random one
     const plan = {...this.props.plan};
-    let mostRecentSessionId = plan.sessions.allIds[0];
+    let mostRecentSession = {};
+    let mostRecentSessionId = {};
+    let latestTerm = {};
 
-    for (const sessionId in plan.sessions.byId) {
-      const currentSession = plan.sessions.byId[sessionId];
-      const currentSessionDate = currentSession.year + currentSession.season;
-      const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
-      console.log(mostRecentSession);
-      const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
-      console.log(currentSessionDate, mostRecentSessionDate);
-      if (currentSessionDate > mostRecentSessionDate) {
-        console.log("Earlier");
-        mostRecentSessionId = sessionId;
+    if (plan.sessions.allIds.length === 0) {
+      mostRecentSession = await axios.get('/api/sessions/current');
+      mostRecentSession = mostRecentSession.data;
+      console.trace(mostRecentSession);
+      plan.sessions.byId[mostRecentSession.id] = mostRecentSession;
+      console.log('No sessions found adding current', mostRecentSession);
+      plan.sessions.allIds.push(mostRecentSession.id);
+      mostRecentSessionId = mostRecentSession.id;
+    } else {
+      mostRecentSessionId = plan.sessions.allIds[0];
+      for (const sessionId in plan.sessions.byId) {
+        const currentSession = plan.sessions.byId[sessionId];
+        const currentSessionDate = currentSession.year + currentSession.season;
+        const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+        console.log(mostRecentSession);
+        const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
+        console.log(currentSessionDate, mostRecentSessionDate);
+        if (currentSessionDate > mostRecentSessionDate) {
+          console.log("Earlier");
+          mostRecentSessionId = sessionId;
+        }
       }
+      mostRecentSession = plan.sessions.byId[mostRecentSessionId];
     }
-
-    const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
-    const latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
-    const nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
+    
+    latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
+    let nextTermInfo = {};
+    if (latestTerm) {
+      nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
+    } else {
+      nextTermInfo.coursesContained = [];
+      nextTermInfo.year = mostRecentSession.year;
+      nextTermInfo.season = mostRecentSession.season;
+      nextTermInfo.number = 1;
+    }
     console.log("Adding term: ", nextTermInfo);
     let latestSession;
     if (nextTermInfo.year !== mostRecentSession.year || nextTermInfo.season !== mostRecentSession.season) {
@@ -94,6 +115,44 @@ class PlannerArea extends Component {
     console.log(plan);
     this.props.updatePlan(plan);
     
+  }
+
+  removeTermFromPlan = async (termId) => {
+    const plan = { ...this.props.plan};
+    console.log({plan});
+    const { courses, session } = plan.terms.byId[termId];
+    console.log({"removing ": {termId, courses, session}});
+
+    // Remove courses
+    plan.courses.allIds = plan.courses.allIds.filter(id => courses.indexOf(id) === -1);
+    const newCoursesById = plan.courses.byId;
+    for (let course in courses) {
+      delete newCoursesById[course];
+    }
+    plan.courses.byId = newCoursesById;
+
+    // Remove session
+    const previousSessionsById = plan.sessions.byId;
+    const previousSession = previousSessionsById[session];
+    console.trace({ previousSessionsById, session });
+
+    if (previousSession.terms.length === 1) {
+      delete previousSessionsById[session];
+      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== session);
+    } else {
+      const newTerms = [ ...previousSession.terms];
+      
+      newTerms.splice(previousSession.terms.indexOf(termId), 1);
+      previousSession.terms = newTerms;
+      plan.sessions.byId[session] = previousSession;
+    }
+
+    // Remove term
+    const previousTermsById = { ...plan.terms.byId };
+    delete previousTermsById[termId];
+    plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
+
+    this.props.updatePlan(plan);
   }
 
   objectsAreSame(x, y) {
@@ -128,6 +187,7 @@ class PlannerArea extends Component {
   renderTerms = () => {
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
+      console.log({...this.props.plan.sessions, sessionId });
       const terms = session.terms.map(termId => {
         const term = this.props.plan.terms.byId[termId];
         const courses = term.courses.map(courseId => {
@@ -142,6 +202,7 @@ class PlannerArea extends Component {
         onCourseDragOver={this.onCourseDragOver}
         onCourseDrop={this.onCourseDrop}
         onCourseDragStart={this.onCourseDragStart}
+        removeTerm={this.removeTermFromPlan}
       />;
     });
     return (

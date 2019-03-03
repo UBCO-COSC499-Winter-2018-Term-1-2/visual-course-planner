@@ -25,6 +25,8 @@ router.get('/', async (req, res) => {
   console.log({"Found term": term});
   term.courses = [];
   term.id = term.id.toString();
+  term.session = term.sid.toString();
+  delete term.sid;
   res.send(term);
 });
 

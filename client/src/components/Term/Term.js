@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Term.css';
 import Course from '../Course/Course';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Term extends Component {
 
@@ -28,6 +29,9 @@ class Term extends Component {
         }}
         onDrop={(e) => this.props.onCourseDrop(e, this.props.termId)}
       >
+        <div className="remove-term container" onClick={() => {this.props.removeTerm(this.props.termId);}} >
+          <FontAwesomeIcon icon="times" className="remove-term"/>
+        </div>
         <h3 className="term-heading">{this.props.title}</h3>
         <div className="courses-container">
           <this.renderCourses />
@@ -43,7 +47,8 @@ Term.propTypes = {
   coursesContained: PropTypes.array.isRequired,
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,
-  onCourseDrop: PropTypes.func.isRequired
+  onCourseDrop: PropTypes.func.isRequired,
+  removeTerm: PropTypes.func.isRequired
 };
 
 export default Term;
