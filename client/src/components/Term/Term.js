@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Term.css';
 import Course from '../Course/Course';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Term extends Component {
 
@@ -11,10 +12,10 @@ class Term extends Component {
     return (this.props.coursesContained.map((course) => {
       return (
         <Course
-          key={course.code}
+          key={course.id}
           course={course}
           type="required"
-          sourceTerm={this.props.term}
+          sourceTermId={this.props.termId}
           onDragStart={this.props.onCourseDragStart} />
       );
     }
@@ -23,10 +24,15 @@ class Term extends Component {
   render() {
     return (
       <div className="term-container"
-        onDragOver={this.props.onCourseDragOver}
-        onDrop={(e) => this.props.onCourseDrop(e, this.props.term)}
+        onDragOver={(e) => {
+          this.props.onCourseDragOver(e, this.props.termId);
+        }}
+        onDrop={(e) => this.props.onCourseDrop(e, this.props.termId)}
       >
-        <h3 className="term-heading">Term {this.props.term.number}</h3>
+        <div className="remove-term container" onClick={() => {this.props.removeTerm(this.props.termId);}} >
+          <FontAwesomeIcon icon="times" className="remove-term"/>
+        </div>
+        <h3 className="term-heading">{this.props.title}</h3>
         <div className="courses-container">
           <this.renderCourses />
         </div>
@@ -36,11 +42,13 @@ class Term extends Component {
 }
 
 Term.propTypes = {
-  term: PropTypes.object.isRequired,
+  termId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   coursesContained: PropTypes.array.isRequired,
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,
-  onCourseDrop: PropTypes.func.isRequired
+  onCourseDrop: PropTypes.func.isRequired,
+  removeTerm: PropTypes.func.isRequired
 };
 
 export default Term;
