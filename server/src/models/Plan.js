@@ -25,18 +25,14 @@ class Plan {
 
   }
 
-  async favouritePlan(pid, uid) {
-    return db
-      .query("UPDATE plan SET isFavourite = true WHERE id = ? and uid = ?", [pid, uid])
-
-
+  async setFavourite(pid, fav) {
+    return db.query("UPDATE plan SET isFavourite = ? WHERE id = ?", [fav, pid])
       .then(rows => {
         return rows;
       })
       .catch(err => {
         throw err;
       });
-
   }
 
 
@@ -53,11 +49,30 @@ class Plan {
   }
 
 
-  async saveNotes(id) {
+  async saveNotes(id, desc) {
     return db
-      .query("UPDATE plan SET description WHERE id = ?", [id]);
+      .query("UPDATE plan SET description = ? WHERE id = ?", [desc, id]);
+  }
 
 
+  async getCourseFromPlan(cid, pid) {
+    return db.query("SELECT * FROM plan_course WHERE cid = ? AND pid = ?", [cid, pid])
+      .then(results => {
+        return results[0];
+      })
+      .catch(err => {
+        throw err;
+      });
+  }
+
+  async setPlanCourse(cid, pid) {
+    return db.query("INSERT INTO plan_course VALUES (?, ?)", [pid, cid])
+      .then(results => {
+        return results;
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 }
 

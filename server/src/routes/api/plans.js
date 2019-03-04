@@ -50,5 +50,33 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.post('/:id/save', async (req, res) => {
+  const planId = req.params.id;
+  const plan = req.body.plan;
+  const notes = plan.description;
+  const isFavourite = plan.isFavourite;
+  const name = plan.name;
+
+  const courseIds = plan.courses.allIds;
+  const termIds = plan.terms.allIds;
+  const sessionIds = plan.terms.allIds;
+
+  for (let courseId in courseIds) {
+    const course = Plan.getCourseFromPlan(courseId, planId);
+    if (!course) {
+      try {
+        await Plan.setPlanCourse(courseId, planId);
+      } catch (e) {
+        console.error({"Error occured while adding plan courses": e});
+      }
+    }
+  }
+
+  await Plan.saveNotes(planId, notes);
+  await Plan.favouritePlan(planId, isFavourite);
+  await Plan.setName(planId, name);
+ 
+});
+
 
 module.exports = router;

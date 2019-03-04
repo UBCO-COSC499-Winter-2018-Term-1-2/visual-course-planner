@@ -55,7 +55,7 @@ class Main extends Component {
       specialization: {
         id: 1,
         name: "Major in Computer Science"
-      }
+      },
     },
     user: {
       name: "Leonardo",
@@ -114,6 +114,19 @@ class Main extends Component {
     });
   }
 
+  onDescriptionChange = (e) => {
+    const desc = e.target.value;
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        currentPlan: {
+          ...prevState.currentPlan,
+          description: desc
+        }
+      };
+    });
+  }
+
   showSnackbar = () => {
     this.setState({ showSnackbar: true });
   }
@@ -133,7 +146,7 @@ class Main extends Component {
       <div id="main">
         <StudentInfo user={this.state.user}/>
         <PlanList/>
-        <NoteArea/>
+        <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         <PlannerHeader
           planName={this.state.currentPlan.name}
           toggleSidebar={this.toggleCourseListSidebarHandler}
