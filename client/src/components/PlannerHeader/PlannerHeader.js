@@ -9,16 +9,19 @@ import WarningSummary from '../WarningSummary/WarningSummary';
 
 const PlannerHeader = (props) => {
   return (
-    <div className="planner-header-wrapper" id="planner-header">
-      <PlanName name={props.planName}/>
-      <FavouriteBtn favourite={true}/>
-      <OptimizeBtn click={props.optimize}/>
-      <WarningSummary
-        click={props.showWarning}
-        numberOfWarnings={props.numberOfWarnings}
-        user={props.user}
-      />
-      <SideBarToggleButton click={props.toggleSidebar}/>
+    <div  id="planner-header">
+      <PlanName onChange={props.onNameChange}>{props.planName}</PlanName>
+      <div className="planner-header-wrapper">
+        <FavouriteBtn favourite={true}/>
+        <OptimizeBtn click={props.optimize}/>
+        <WarningSummary
+          click={props.showWarning}
+          numberOfWarnings={props.numberOfWarnings}
+          user={props.user}
+        />
+        <SideBarToggleButton click={props.toggleSidebar}/>
+      </div>
+      
     </div>
   );
 };
@@ -29,7 +32,8 @@ PlannerHeader.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
   showWarning: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired
+  numberOfWarnings: PropTypes.number.isRequired,
+  onNameChange: PropTypes.func.isRequired
 };
 
 export default PlannerHeader;

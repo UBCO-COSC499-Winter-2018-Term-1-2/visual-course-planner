@@ -101,6 +101,19 @@ class Main extends Component {
     });
   }
 
+  onNameChange = (e) => {
+    const name = e.target.value;
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        currentPlan: {
+          ...prevState.currentPlan,
+          name: name
+        }
+      };
+    });
+  }
+
   showSnackbar = () => {
     this.setState({ showSnackbar: true });
   }
@@ -128,6 +141,7 @@ class Main extends Component {
           showWarning={this.showSnackbar}
           numberOfWarnings={this.state.warnings.length}
           user={this.state.user}
+          onNameChange={this.onNameChange}
         />
         <PlannerArea 
           plan={this.state.currentPlan}
