@@ -1,5 +1,31 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/User');
+const userChange = require('../../models/User');
+
+router.post('/:id/changePassword', (req, res) => {
+  const UserId = req.params.id;
+  userChange.changePassword(UserId, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("Couldn't change password");
+    }
+  });
+});
+
+router.post('/:id/updateUserInfo', (req, res) => {
+  const UserId = req.params.id;
+  userChange.updateUser(UserId, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("Couldn't change info");
+    }
+  });
+});
+
+module.exports = router;
 const bcrypt = require('bcryptjs');
 const expressValidator = require('express-validator');
 const passport = require('passport');
@@ -8,7 +34,7 @@ const passport = require('passport');
 router.use(expressValidator()); // put the use in server.js and also import through npm?
 
 //user model
-const User = require('../../models/User');
+
 const user = new User();
 
 /**

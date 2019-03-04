@@ -8,6 +8,7 @@ const degrees = require('./server/src/routes/api/degrees');
 const courses = require('./server/src/routes/api/courses');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+const plans = require('./server/src/routes/api/plans');
 const passport = require('passport');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
@@ -48,7 +49,8 @@ app.use(passport.session());
 // Use routes
 app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
-app.use('/api/users', users);
+app.use('/api/users', users );
+app.use('/api/plans', plans);
 app.use('/api/degrees', degrees);
 app.use('/api/courses', courses);
 

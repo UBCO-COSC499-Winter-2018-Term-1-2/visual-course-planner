@@ -117,6 +117,7 @@ CREATE TABLE user (
 
 CREATE TABLE plan (
   id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(500),
   time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   description VARCHAR(500),
   isDefault   BOOLEAN DEFAULT false,
