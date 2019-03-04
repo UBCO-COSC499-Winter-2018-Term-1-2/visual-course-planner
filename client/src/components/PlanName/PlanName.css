@@ -4,8 +4,8 @@
   border: 1px solid #1a191b;
   background-color: #1a191b;
   padding: 0.135em 0.1em;
-  font-weight: bold;
   font-size: 1.5em;
+  font-weight: normal;
   margin: 0;
 }
 
@@ -20,7 +20,7 @@ input#plan-name-heading {
   background-color: black;
   box-sizing: border-box;
   height: 1.5em;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 1.5em;
   font-family: Helvetica;
 }
