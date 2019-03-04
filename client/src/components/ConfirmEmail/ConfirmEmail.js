@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import './ConfirmEmail.css';
 import '../Signup/CreateAccountMenu';
-// import CreateAccountMenu from '../Signup/CreateAccountMenu';
 import PropTypes from 'prop-types';
-//import { Link } from 'react-router-dom';
+
 import Input from '../Input/input';
 import axios from 'axios';
-//mport { promises } from 'fs';
-
 
 class ConfirmEmail extends Component {
  
@@ -83,20 +80,12 @@ class ConfirmEmail extends Component {
         });
       }
       
-      //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-      //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
       let form = (
         <form onSubmit={this.handler}>
           {formElementsArray.map(formElement => (
             <Input 
               key={formElement.id}
-              //elementType={formElement.config.elementType}
-              //elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              //invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-              //shouldBeValidated={formElement.config.validation}
-              //inputElementTouched={formElement.config.inputElementTouched}
-              //changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+              value={formElement.config.value} 
             />
           ))}
         </form>
@@ -107,7 +96,6 @@ class ConfirmEmail extends Component {
         //RETURN LOGIN MENU HERE
         <div className="menu">
           <h1 className="login-heading">Registration Successful</h1>
-          {/* {form}      */}
           <p className='msg-text'>Thank you for registering with the Visual Course Planner!
            An email has been sent out to {form} </p>
           <p className='msg-text'>Please confirm your email to proceed. </p>
@@ -118,7 +106,7 @@ class ConfirmEmail extends Component {
 } //end of class 
 
 ConfirmEmail.propTypes = {
-  toggleMenu: PropTypes.func, //MAKE SURE TO ADD . isRequired!!!
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 export default ConfirmEmail;
