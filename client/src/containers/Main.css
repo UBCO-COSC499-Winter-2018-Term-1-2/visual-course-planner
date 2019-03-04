@@ -14,7 +14,7 @@
   color: #e4e4e4;
 }
 
-#planner-area {
+#planner-area-container {
   position: relative;
   grid-area: planner;
   background-color: #262427;
@@ -37,7 +37,7 @@
 
 #note-area {
   grid-area: note-area;
-  background-color: #262427;
+  background-color: #1a191b;
 }
 
 .sidebar-info-area {
@@ -54,7 +54,7 @@
   display: block;
 }
 
-.student-name {
+.student-info-text {
   margin: 0;
   color: #e4e4e4;
 }
@@ -97,7 +97,7 @@
 }
 
 .notes-text-area {
-  background-color: black;
+  background-color: #262427;
   color: #e4e4e4;
   border: none;
   height: 71%;
@@ -118,7 +118,7 @@
 
 .student-buttons-container {
   position: absolute;
-  min-width: 130px;
+  /* min-width: 130px; */
   bottom: 1em;
 }
 

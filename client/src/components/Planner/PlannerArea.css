@@ -15,17 +15,26 @@
 }
 
 #term-view::-webkit-scrollbar {
-    height: 0.4em;
+  height: 0.4em;
 }
 
 #term-view::-webkit-scrollbar-thumb {
-    border-radius: 2em;
-    background-color: #1a191b;
+  border-radius: 2em;
+  background-color: #1a191b;
 }
 
-#session-container {
-  flex: 1;
-  display: flex;
-  overflow: auto;
-  position: relative;
+.floating-icon {
+  position: absolute;
+  font-size: 2em;
+
+}
+
+.floating-icon.remove-course {
+  bottom: 1em;
+  right: 2em;
+}
+
+.floating-icon.add-term {
+  top: 1em;
+  right: 2em;
 }
