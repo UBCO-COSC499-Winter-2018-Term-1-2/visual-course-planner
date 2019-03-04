@@ -256,7 +256,7 @@ render(){
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-            shouldBeValidated={formElement.config.validation}
+            shouldBeValidated={formElement.config.validation.required}
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             name={formElement.config.name}
@@ -266,8 +266,6 @@ render(){
           {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
         </div>
       ))}
-  
-      {/* <Link to = "/course-history"><button className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link>  */}
       <button  type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
       <button type= "button" className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
@@ -291,9 +289,6 @@ render(){
 
 SignupInterface.propTypes = {
   history: PropTypes.object,
-  invalid: PropTypes.bool,
-  shouldBeValidated: PropTypes.bool,
-  inputElementTouched: PropTypes.bool,
 };
 
 export default withRouter(SignupInterface);
