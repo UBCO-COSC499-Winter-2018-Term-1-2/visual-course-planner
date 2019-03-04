@@ -4,28 +4,28 @@ db.query = promisify(db.query);
 
 
 class User {
-  async changePassword (id,user) {
+  async changePassword(id) {
     return db
-    .query("UPDATE user SET password WHERE uid = ?" , [id])
-    .then(rows => {
+      .query("UPDATE user SET password WHERE uid = ?", [id])
+      .then(rows => {
         return rows;
       })
-        .catch(err => {
+      .catch(err => {
         throw err;
       });
-    
-}
-async updateUser (id, user) {
-   return db.
-    query("UPDATE user SET email = ?, firstname = ?, lastname = ? WHERE uid = ?" , [user.email, user.firstname, user.lastname, id])
-    .then(rows => {
+
+  }
+  async updateUser(id, user) {
+    return db.
+      query("UPDATE user SET email = ?, firstname = ?, lastname = ? WHERE uid = ?", [user.email, user.firstname, user.lastname, id])
+      .then(rows => {
         return rows;
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         throw err;
-    });
-    
-}
+      });
+
+  }
 
   async checkUser(email) {
     let rows = [];
@@ -35,7 +35,7 @@ async updateUser (id, user) {
       throw err;
     }
 
-    if (rows.length > 0){
+    if (rows.length > 0) {
       return true;
     } else {
       return false;
@@ -44,7 +44,7 @@ async updateUser (id, user) {
   }
 
   async insertUser(newUser) {
-    
+
     db
       .query("INSERT INTO user SET ?", newUser)
       .then(
@@ -53,7 +53,7 @@ async updateUser (id, user) {
       )
       .catch(err => {
         throw err;
-      });  
+      });
   }
 
 }
