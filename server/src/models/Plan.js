@@ -5,9 +5,9 @@ db.query = promisify(db.query);
 
 class Plan {
 
-  async getPlanForUser(uid, pid) {
+  async getPlan(pid) {
     return db
-      .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id WHERE plan.uid = ? AND plan.id = ?", [uid, pid])
+      .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id plan.id = ?", [pid])
 
       .then(rows => {
         return rows;
@@ -19,15 +19,15 @@ class Plan {
 
 
   async getPlanList(id) {
-    const plans = await db.query("SELECT * FROM plan WHERE uid = ?", [id]);
+    const plans = await db.query("SELECT id, title FROM plan WHERE id = ?", [id]);
     return plans;
 
 
   }
 
-  async planMakeFav(id) {
+  async favouritePlan(pid, uid) {
     return db
-      .query("UPDATE SET isfavourite = true FROM plan WHERE uid = ?", [id])
+      .query("UPDATE plan SET isFavourite = true WHERE id = ? and uid = ?", [pid, uid])
 
 
       .then(rows => {
@@ -55,7 +55,7 @@ class Plan {
 
   async saveNotes(id) {
     return db
-      .query("UPDATE description FROM plan WHERE id = ?", [id]);
+      .query("UPDATE plan SET description WHERE id = ?", [id]);
 
 
   }
