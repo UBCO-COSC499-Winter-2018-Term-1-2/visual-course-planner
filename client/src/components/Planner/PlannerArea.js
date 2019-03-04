@@ -4,6 +4,7 @@ import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import Semester from '../Semester/Semester';
 import './PlannerArea.css';
+import {SteppedLineTo} from 'react-lineto';
 
 class PlannerArea extends Component {
 
@@ -14,6 +15,7 @@ class PlannerArea extends Component {
       {
         number: "1",
         coursesContained: ["COSC 111", "COSC 122"],
+        targetCourse: ["COSC 121", "COSC 123"],
         year: "2018",
         session: "W"
 
@@ -21,6 +23,7 @@ class PlannerArea extends Component {
       {
         number: "2",
         coursesContained: ["COSC 121", "COSC 123"],
+        targetCourse: ["COSC 222", "COSC 211"],
         year: "2019",
         session: "W"
 
@@ -28,6 +31,7 @@ class PlannerArea extends Component {
       {
         number: "3",
         coursesContained: ["COSC 222", "COSC 211"],
+        targetCourse: ["COSC 221", "MATH 200"],
         year: "2019",
         session: "W"
 
@@ -35,6 +39,7 @@ class PlannerArea extends Component {
       {
         number: "4",
         coursesContained: ["COSC 221", "MATH 200"],
+        targetCourse: ["COSC 304", "COSC 360"],
         year: "2020",
         session: "W"
 
@@ -42,6 +47,7 @@ class PlannerArea extends Component {
       {
         number: "5",
         coursesContained: ["COSC 304", "COSC 360"],
+        targetCourse: ["COSC 320", "COSC 341"],
         year: "2018",
         session: "W"
 
@@ -49,6 +55,7 @@ class PlannerArea extends Component {
       {
         number: "6",
         coursesContained: ["COSC 320", "COSC 341"],
+        targetCourse: ["COSC 445", "COSC 328"],
         year: "2018",
         session: "W"
 
@@ -56,6 +63,7 @@ class PlannerArea extends Component {
       {
         number: "7",
         coursesContained: ["COSC 445", "COSC 328"],
+        targetCourse: ["COSC 421", "COSC 499"],
         year: "2018",
         session: "W"
 
@@ -63,6 +71,7 @@ class PlannerArea extends Component {
       {
         number: "8",
         coursesContained: ["COSC 421", "COSC 499"],
+        targetCourse: ["", ""],
         year: "2018",
         session: "W"
       }
@@ -77,6 +86,28 @@ class PlannerArea extends Component {
         this.courseRefs.set(course, courseRef);
       });
     });
+  }
+
+  courseArrows = [];
+
+  generateCourseArrows = () => {
+    this.state.defaultTerms.forEach((term) => {
+      for (let i = 0; i < term.coursesContained.length; i++) {
+        const sourceCourse = term.coursesContained[i];
+        const targetCourse = term.targetCourse[i];
+
+        let sourceXY = this.courseRefs.get(sourceCourse).current.getBoundingClientRect().right;
+        let targetXY = this.courseRefs.get(targetCourse).current.getBoundingClientRect().left;
+        
+        let arrow = <SteppedLineTo fromAnchor = {sourceXY} toAnchor = {targetXY} orientation = "h" />;
+
+        this.courseArrows[i] = arrow;
+
+        
+      }
+    }
+
+    ); 
   }
 
   //rendering semester components by mapping defaulTerms state variable
@@ -207,7 +238,7 @@ class PlannerArea extends Component {
         <div id="session-container">
 
         </div>
-        {console.log(this.courseRefs.get("COSC 360"))}
+        {console.log(this.courseArrows)}
       </div>
     );
   }
