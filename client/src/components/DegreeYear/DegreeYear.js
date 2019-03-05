@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './DegreeYear.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
@@ -105,6 +106,35 @@ class DegreeYear extends Component {
   
   handleSelectionChange = (selectedDegrees) => {
     this.setState({selectedDegrees});
+  }
+
+  getDegrees = async () => {
+    return axios.get('/api/degrees')
+      .then(response => { return response.data; })
+      .catch(error => {
+        console.error(error);
+        return [];
+      });
+  }
+
+  componentDidMount = async () => {
+    let degrees = await this.getDegrees();
+    degrees = degrees.map(degree => { return { value: degree.id, displayValue: degree.name};});
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        form: {
+          ...prevState.form,
+          degree: {
+            ...prevState.form.degree,
+            elementConfig: {
+              options: degrees
+            }
+          }
+        }
+      };
+    });
+
   }
   
   render(){
