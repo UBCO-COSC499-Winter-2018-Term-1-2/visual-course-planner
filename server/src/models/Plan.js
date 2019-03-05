@@ -50,8 +50,10 @@ class Plan {
 
 
   async saveNotes(id, desc) {
-    return db
-      .query("UPDATE plan SET description = ? WHERE id = ?", [desc, id]);
+    return db.query("UPDATE plan SET description = ? WHERE id = ?", [desc, id])
+      .then(res => {
+        return res;
+      });
   }
 
 
@@ -72,6 +74,13 @@ class Plan {
       })
       .catch(err => {
         throw err;
+      });
+  }
+
+  async setName(id, name) {
+    return db.query("UPDATE plan SET title = ? WHERE id = ?", [name. id])
+      .then(res => {
+        return res;
       });
   }
 }

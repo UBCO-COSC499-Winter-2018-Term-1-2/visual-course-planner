@@ -54,6 +54,7 @@ class Main extends Component {
         id: 1,
         name: "Major in Computer Science"
       },
+      description: ""
     },
     user: {
       name: "Leonardo",
