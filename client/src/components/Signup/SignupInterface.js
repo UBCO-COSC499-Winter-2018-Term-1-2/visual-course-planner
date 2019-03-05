@@ -22,7 +22,7 @@ class SignupInterface extends Component {
         },
         label: '',
         valid: false,
-        inputElementTouched: false
+        inputElementTouched: false 
       },
       lName: {
         elementType: 'input',
@@ -49,7 +49,6 @@ class SignupInterface extends Component {
           required: true,
           isEmail: true,
         },
-        label: '',
         name: 'email',
         valid: false,
         inputElementTouched: false 
@@ -64,8 +63,8 @@ class SignupInterface extends Component {
         validation: {
           required: true,
           minLength: 5,
-          passMatch: true,
         },
+        errorName: 'Password',
         name: 'password',
         valid: false,
         inputElementTouched: false 
@@ -80,8 +79,9 @@ class SignupInterface extends Component {
         validation: {
           required: true,
           minLength: 5,
-          passMatch: true,
+          matches: 'password',
         },
+        errorName: 'Your confirming password',
         name: 'confirmPassword',
         valid: false,
         inputElementTouched: false 
@@ -90,28 +90,30 @@ class SignupInterface extends Component {
     //error state (form validation)
     errors:{
       email: {
-        hasError: false
+        errors: {}
       },
       fName: {
-        hasError: false
+        errors: {}
       },
       lName: {
-        hasError: false
+        errors: {}
       },
       password: {
-        hasError: false
+        errors: {}
       },
       confirmPassword: {
-        hasError: false
+        errors: {}
+
       },
     },
     //end of menu
+
     formIsValid: false,
-    loading: false
+    loading: false,
   }// end of state
 
 
-  checkValidity(value, rules, name) {
+  checkValidity(value, rules, name, errorName) {
     let isValid = true;
     if(!rules){
       return true;
@@ -119,183 +121,174 @@ class SignupInterface extends Component {
       
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-      //isValid === false ? this.setError("inputRequired", "All fields are required") : this.removeError("inputRequired");
+      //isValid === false ? this.addError("inputRequired", "All fields are required") : this.removeError("inputRequired");
     } 
 
+    if (rules.matches){
+      const needsToMatch = this.state.createAccountMenu[rules.matches].value;
+      const matches = value === needsToMatch; 
+      console.log(value);
+      console.log(needsToMatch);
+      isValid === !matches ? this.addError(name, "Passwords must match", 'match') : this.removeError(name, 'match');
+    }
+    
     if (rules.minLength) {
       isValid = value.length >= rules.minLength && isValid;
-      // console.log("minlength: " + isValid);
-      if(name === 'password'){
-        isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
-      } else if (name === 'confirmPassword'){
-        isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
-      }
-      
+      isValid === false ? this.addError(name, `${errorName} must be longer than 5 characters`, 'length') : this.removeError(name, 'length');
     }
 
     if (rules.isEmail) {
       const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
       isValid = pattern.test(value) && isValid;
       //console.log(isValid);
-      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+      isValid === false ? this.addError("email", "Please insert a valid email address", 'email') : this.removeError("email", 'email');
 
     }
-
-    // if(rules.passMatch){
-    //   const pass = value;
-    //   const confirmPass = value;
-    //   if (pass === confirmPass){
-    //     isValid = pass === confirmPass && isValid;
-    //   } else {
-    //     isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-    //   }
-    //console.log("Pass: " + this.password.value);
-    //console.log("PassCon: " + confirmPass);
-    // }
-
 
     return isValid;
   }
 
 
-  setError = (element, message) => {
-    //console.log("Setting error");
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          [element]: {
-            hasError: true,
-            message: message
-          }
+addError = (element, message, type) => {
+  //console.log("Setting error");
+  this.setState(prevState => {
+    let elementErrors = prevState.errors[element].errors;
+    elementErrors[type] = message;
+    return {
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [element]: {
+          errors: elementErrors
         }
-      };
+      }
+    };
+  });
+}
+
+removeError = (element, type) => {
+  this.setState(prevState => {
+    let elementErrors = prevState.errors[element].errors;
+    delete elementErrors[type];
+    return {
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        [element]: {
+          errors: elementErrors
+        }
+      }
+    };
+  });
+}
+
+handler = ( event ) => {
+  //console.log('handler')
+  event.preventDefault();
+  
+  const formData ={};
+  for (let formElementIdentifier in this.state.createAccountMenu) {
+    formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
+  }
+ 
+  axios.post( '/api/users', formData )
+    .then( response => {
+      this.setState( { loading: false } );
+      //this.props.history.push('/');
+      console.log(response);
+    } )
+    .catch( error => {
+      this.setState( { loading: false } );
+      console.log(error);
+    } );
+
+}
+
+//THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
+//IE. EMAIL AND PASSWORD.
+inputChangeHandler = (event, inputIdentifier) => {
+  //console.log(event.target.value); //prints values to console
+  const updatedCreateAccountMenu = {
+    ...this.state.createAccountMenu
+  };
+  const updatedMenuElement = { 
+    ...updatedCreateAccountMenu[inputIdentifier]
+  };
+  updatedMenuElement.value = event.target.value;
+
+  //CHECKS IF EACH STATE HAS A VALUE
+  updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, updatedMenuElement.name, updatedMenuElement.errorName);
+  updatedMenuElement.inputElementTouched = true;
+  updatedCreateAccountMenu[inputIdentifier] = updatedMenuElement;
+
+  
+  let formIsValid = true;
+  for (let inputIdentifier in updatedCreateAccountMenu){
+    formIsValid = updatedCreateAccountMenu[inputIdentifier].valid && formIsValid;
+  }
+  this.setState({createAccountMenu: updatedCreateAccountMenu, formIsValid: formIsValid});
+ 
+}
+
+//LINKS FORM BTN TO PAGE SPECIFED
+onNavigation = () => {
+  this.props.history.push('/confirm-email');
+}
+
+
+render(){
+  const formElementsArray = [];
+  for (let key in this.state.createAccountMenu) {
+    formElementsArray.push({
+      id: key,
+      config: this.state.createAccountMenu[key]
     });
   }
-
-  removeError = (element) => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          [element]: {
-            hasError: false,
-          }
-        }
-      };
-    });
-  }
-
-  handler = ( event ) => {
-    //console.log('handler')
-    event.preventDefault();
-    
-    const formData ={};
-    for (let formElementIdentifier in this.state.createAccountMenu) {
-      formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
-    }
-    console.log(formData);
-    axios.post( '/api/users/signup', formData )
-      .then( response => {
-        this.setState( { loading: false } );
-        if (response.status === 200) {
-          sessionStorage.setItem('userId', response.data);
-          this.props.history.push('/course-history');
-        }
-        console.log(response);
-      } )
-      .catch( error => {
-        this.setState( { loading: false } );
-        console.log(error);
-      } );
   
-  }
+  //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
+  //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
+  let form = (
+    <form onSubmit={this.handler}>
+      {formElementsArray.map(formElement => (
+        <div key={formElement.id}>
+          <Input 
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
+            shouldBeValidated={formElement.config.validation.required}
+            inputElementTouched={formElement.config.inputElementTouched}
+            changed={(event) => this.inputChangeHandler(event, formElement.id)} 
+            name={formElement.config.name}
+            label={formElement.config.label} 
 
-  //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
-  //IE. EMAIL AND PASSWORD.
-  inputChangeHandler = (event, inputIdentifier) => {
-    //console.log(event.target.value); //prints values to console
-    const updatedCreateAccountMenu = {
-      ...this.state.createAccountMenu
-    };
-    const updatedMenuElement = { 
-      ...updatedCreateAccountMenu[inputIdentifier]
-    };
-    updatedMenuElement.value = event.target.value;
+          />
+          {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
+        </div>
+      ))}
+      <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+      <button type="button" className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
-    //CHECKS IF EACH STATE HAS A VALUE
-    updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, updatedMenuElement.name);
-    updatedMenuElement.inputElementTouched = true;
-    updatedCreateAccountMenu[inputIdentifier] = updatedMenuElement;
-    
-    let formIsValid = true;
-    for (let inputIdentifier in updatedCreateAccountMenu){
-      formIsValid = updatedCreateAccountMenu[inputIdentifier].valid && formIsValid;
-    }
-    this.setState({createAccountMenu: updatedCreateAccountMenu, formIsValid: formIsValid});
-   
-  }
+    </form>
+  );
   
-  //LINKS FORM BTN TO PAGE SPECIFED
-  onNavigation = () => {
-    this.props.history.push('/course-history');
-  }
+  return(
 
-  render() {
-    const formElementsArray = [];
-    for (let key in this.state.createAccountMenu) {
-      formElementsArray.push({
-        id: key,
-        config: this.state.createAccountMenu[key]
-      });
-    }
-    
-    //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-    //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-    let form = (
-      <form onSubmit={this.handler}>
-        {formElementsArray.map(formElement => (
-          <div key={formElement.id}>
-            <Input 
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-              shouldBeValidated={formElement.config.validation.required}
-              inputElementTouched={formElement.config.inputElementTouched}
-              changed={(event) => this.inputChangeHandler(event, formElement.id)} 
-              name={formElement.config.name}
-              label={formElement.config.label}
-            />
-            {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
-          </div>
-        ))}
-    
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
-        <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
+    //RETURN LOGIN MENU HERE
+    <div>
+      <div className="menu">
+        <h1 className="login-heading">Visual Course Planner</h1>
+        {form}  
+      </div> 
 
-      </form>
-    );
-    
-    return (
+    </div>
 
-      //RETURN LOGIN MENU HERE
-      <div>
-        <div className="menu">
-          <h1 className="login-heading">Visual Course Planner</h1>
-          {form}  
-        </div> 
-
-      </div>
-
-    );
-  }
+  );
+}
 }
 
 SignupInterface.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 export default withRouter(SignupInterface);

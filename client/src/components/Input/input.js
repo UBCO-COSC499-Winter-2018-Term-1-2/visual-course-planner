@@ -20,8 +20,7 @@ const Input = ( props ) => {
   
   //IF A FORMELEMENT IS LEFT EMPTY = ERRORS PRESENTED
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
-    inputStyling.push(cssInvalid);
-    //errorStyling.push(cssErrorMsg)    
+    inputStyling.push(cssInvalid);   
   }
  
   
@@ -97,20 +96,6 @@ const Input = ( props ) => {
       </select>
     );
     break;
-    // case ( 'listErrors' ):
-    //   inputElement = ( 
-    //     <ul 
-    //       className={errorStyling.join(' ')}
-    //       value={props.value}
-    //       onChange={props.changed}>
-    //       {props.elementConfig.errors.map(option => (
-    //         <li key={option.value} value={option.value}>
-    //           {option.displayValue}
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   );
-    //   break;
 
   default:
     inputElement = <input
