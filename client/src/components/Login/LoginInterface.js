@@ -71,13 +71,12 @@ export class LoginInterface extends Component {
 
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-
     }
 
     if (rules.minLength) {
       isValid = value.length >= rules.minLength && isValid;
       console.log("minlength: " + isValid);
-      isValid === false ? this.setError("email", "Password must be longer than 5 characters") : this.removeError("email");
+      isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("email");
     }
 
     if (rules.isEmail) {
@@ -85,12 +84,9 @@ export class LoginInterface extends Component {
       isValid = pattern.test(value) && isValid;
       //console.log(isValid);
       isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+        
+    }
 
-    }
-  
-    if(rules.required){
-      isValid = value.trim() !== '' && isValid;
-    }
     return isValid;
   }
     
@@ -221,7 +217,7 @@ export class LoginInterface extends Component {
         ))}
         
         <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
-        <Link to = "/create-account"><button className="open-diff-menubtn" >Create Account</button></Link>
+        <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>
     );
