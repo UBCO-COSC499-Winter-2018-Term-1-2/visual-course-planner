@@ -273,7 +273,7 @@ class SignupInterface extends Component {
           </div>
         ))}
     
-        <button  className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
         <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
       </form>

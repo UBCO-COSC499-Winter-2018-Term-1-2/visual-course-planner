@@ -3,7 +3,7 @@ const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
 
-class Plan {
+module.exports = {
 
   async getPlan(pid) {
     return db
@@ -15,16 +15,13 @@ class Plan {
       .catch(err => {
         throw err;
       });
-  }
-
-
+  },
   async getPlanList(id) {
     const plans = await db.query("SELECT id, title FROM plan WHERE id = ?", [id]);
     return plans;
 
 
-  }
-
+  },
   async setFavourite(pid, fav) {
     return db.query("UPDATE plan SET isFavourite = ? WHERE id = ?", [fav, pid])
       .then(rows => {
@@ -33,9 +30,7 @@ class Plan {
       .catch(err => {
         throw err;
       });
-  }
-
-
+  },
   async getNotes(id) {
     return db
       .query("SELECT description FROM plan WHERE id = ?", [id])
@@ -46,17 +41,13 @@ class Plan {
       .catch(err => {
         throw err;
       });
-  }
-
-
+  },
   async saveNotes(id, desc) {
     return db.query("UPDATE plan SET description = ? WHERE id = ?", [desc, id])
       .then(res => {
         return res;
       });
-  }
-
-
+  },
   async getCourseFromPlan(cid, pid) {
     return db.query("SELECT * FROM plan_course WHERE cid = ? AND pid = ?", [cid, pid])
       .then(results => {
@@ -65,8 +56,7 @@ class Plan {
       .catch(err => {
         throw err;
       });
-  }
-
+  },
   async setPlanCourse(cid, pid) {
     return db.query("INSERT INTO plan_course VALUES (?, ?)", [pid, cid])
       .then(results => {
@@ -75,14 +65,11 @@ class Plan {
       .catch(err => {
         throw err;
       });
-  }
-
+  },
   async setName(id, name) {
-    return db.query("UPDATE plan SET title = ? WHERE id = ?", [name. id])
+    return db.query("UPDATE plan SET title = ? WHERE id = ?", [name, id])
       .then(res => {
         return res;
       });
   }
-}
-
-module.exports = Plan;
+};

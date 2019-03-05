@@ -7,7 +7,7 @@ class NoteArea extends Component {
       <div id="note-area">
         <div className="sidebar-info-area-end">
           <h3 className="sidebar-header">Notes</h3>
-          <textarea className="notes-text-area focus-element" onChange={this.props.onChange}>{this.props.children}</textarea>
+          <textarea className="notes-text-area focus-element" onChange={this.props.onChange} value={this.props.children}></textarea>
         </div>
       </div>
     );

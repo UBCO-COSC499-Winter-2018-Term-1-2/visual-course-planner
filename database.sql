@@ -283,3 +283,6 @@ INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
 
 INSERT INTO session (year, season) VALUES ("2018", "W");
 INSERT INTO term (number, sid) VALUES ("1", 1)
+
+INSERT INTO user ();
+INSERT INTO plan (title, isFavourite, description, uid, did) VALUES ("test plan", true, "test desc", 1, 1);

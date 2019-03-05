@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import PlannerArea from '../components/Planner/PlannerArea';
 import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
@@ -122,6 +123,15 @@ class Main extends Component {
 
   closeSnackbar = () => {
     this.setState({ showSnackbar: false });
+  }
+
+  savePlan = async () => {
+    const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
+    console.log(response.status);
+  }
+
+  componentDidUpdate = async () => {
+    await this.savePlan();
   }
 
   render() {

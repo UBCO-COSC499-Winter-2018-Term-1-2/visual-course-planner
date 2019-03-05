@@ -60,7 +60,7 @@ router.post('/:id/save', async (req, res) => {
   const courseIds = plan.courses.allIds;
 
   for (let courseId in courseIds) {
-    const course = Plan.getCourseFromPlan(courseId, planId);
+    const course = await Plan.getCourseFromPlan(courseId, planId);
     if (!course) {
       try {
         await Plan.setPlanCourse(courseId, planId);
@@ -71,12 +71,12 @@ router.post('/:id/save', async (req, res) => {
   }
   try { // should probably use a transaction
     await Plan.saveNotes(planId, notes);
-    await Plan.favouritePlan(planId, isFavourite);
+    await Plan.setFavourite(planId, isFavourite);
     await Plan.setName(planId, name);
-    res.send(200).send("Saved planId " + planId);
+    res.status(200).send("Saved planId " + planId);
   } catch(e) {
     console.error({"failed to save": e});
-    res.send(500).send("Failed to save");
+    res.status(500).send("Failed to save");
   }
 });
 

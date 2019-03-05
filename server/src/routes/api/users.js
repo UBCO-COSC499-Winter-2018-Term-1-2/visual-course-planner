@@ -93,9 +93,11 @@ router.post('/signup', async (req, res) => {
           
           try{
             await user.insertUser(newUser);
+            console.log("User was created");
             res.status(200).send("New user was created.");
           }
           catch(err) {
+            console.error("User was not created");
             res.status(500).send("User was not created. Error with db." + err);
           }
 
