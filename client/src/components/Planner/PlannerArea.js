@@ -41,16 +41,6 @@ class PlannerArea extends Component {
     return nextTerm;
   }
 
-  updateWarnings() {
-    this.getWarnings()
-      .then(warnings => {
-        this.props.setWarnings(warnings);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
   addTermToPlan = async () => {
     // set initial session to random one
     const plan = {...this.props.plan};
@@ -166,23 +156,6 @@ class PlannerArea extends Component {
     return objectsAreSame;
   }
 
-  componentDidUpdate(prevProps) {
-    let same = true;
-    
-    if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
-      same = false;
-    } else {
-      for (let course in prevProps.plan.courses.byId) {
-        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
-          same = false;
-        }
-      }
-    }
-    if (!same) {
-      this.updateWarnings();
-    }
-  }
-
   //rendering term components by mapping defaultTerms state variable
   renderTerms = () => {
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
@@ -274,6 +247,16 @@ class PlannerArea extends Component {
     }
   }
 
+  updateWarnings() {
+    this.getWarnings()
+      .then(warnings => {
+        this.props.setWarnings(warnings);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
   onCourseDragEnterTrash = (e) => {
     e.preventDefault();
     this.trashDragCounter++;
@@ -317,6 +300,23 @@ class PlannerArea extends Component {
 
   componentDidMount() {
     this.updateWarnings();
+  }
+
+  componentDidUpdate(prevProps) {
+    let same = true;
+    
+    if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
+      same = false;
+    } else {
+      for (let course in prevProps.plan.courses.byId) {
+        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
+          same = false;
+        }
+      }
+    }
+    if (!same) {
+      this.updateWarnings();
+    }
   }
 
   render() {
