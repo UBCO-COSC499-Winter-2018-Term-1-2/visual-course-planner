@@ -17,16 +17,6 @@ body{
     margin: 10% auto;   
 }
 
-/* .input-element{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 1em 0;
-    box-sizing: border-box;
-    font-size: 1em;
-    color: #9c9b9d;
-    background-color: #333035;
-    border: none;
-} */
 
 .input-element:focus{
     border: none;
@@ -117,14 +107,8 @@ a:hover {
 
 
 .warning-msg{
-    color:  red;
-    /* font-weight: normal;
-    font-size: 1em;
-    /* background-color: #333035; */
-    /* border: none;
-    width: 31em;
-    resize: none;  */
+    color:  white;
     list-style-type: none;
-    /* text-transform: uppercase; */
+
 }
 

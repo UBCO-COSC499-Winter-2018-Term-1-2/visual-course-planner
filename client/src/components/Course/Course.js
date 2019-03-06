@@ -4,11 +4,13 @@ import './Course.css';
 
 class Course extends Component{
   render(){
+    console.log(this.props.course.id);
+    console.log("This course " +JSON.stringify(this.props.course) + " has this code " + this.props.course.code);
     return (
       <div 
         className={this.props.type == "required" ? "course-required" : "course-elective"}
         draggable
-        onDragStart={(e) => this.props.onDragStart(e, this.props.course, this.props.sourceTerm)}>
+        onDragStart={(e) => this.props.onDragStart(e, this.props.course, this.props.sourceTermId)}>
         <h5 className="course-code">{this.props.course.code}</h5>
       </div>
     );
@@ -18,7 +20,7 @@ class Course extends Component{
 Course.propTypes = {
   course: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
-  sourceTerm: PropTypes.object.isRequired,
+  sourceTermId: PropTypes.string,
   onDragStart: PropTypes.func.isRequired
 };
 

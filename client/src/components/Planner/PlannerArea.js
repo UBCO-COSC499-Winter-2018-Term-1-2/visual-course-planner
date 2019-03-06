@@ -1,90 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
-import Term from '../Term/Term';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
+import Session from '../Session/Session';
 import axios from 'axios';
 import './PlannerArea.css';
 
 class PlannerArea extends Component {
 
   state = {
-    terms: [
-    ]
+    trashColour: "white"
   }
 
-  insertCoursesIntoTerms = () => {
-    let terms = [{
-      id: 1,
-      coursesContained: [],
-      year: 2018,
-      session: "W",
-      number: 1
-    }];
+  trashDragCounter = 0;
 
-    this.props.plan.courses.forEach(course => {
-      terms = terms.concat(this.getTermsForCourse(terms, course));
-      const indexOfTerm = terms.findIndex(existingTerm => course.term === existingTerm.number && course.year === existingTerm.year && course.session === existingTerm.session);
-      if (indexOfTerm === -1) {
-        console.error(`Couldn't find term after creating it. \nTerms: ${JSON.stringify(terms)}\nCourse: ${JSON.stringify(course)}`);
-      }
-      terms[indexOfTerm].coursesContained.push(course);
-    }); 
-
-    return terms;
-  }
-
-  getTermsForCourse(currentTerms, course) {
-    let termsToAdd = [];
-    const indexOfTerm = currentTerms.findIndex(existingTerm =>  {
-      console.log(`Comparing ${JSON.stringify(existingTerm)} with ${JSON.stringify(course)}`);
-
-      return course.term === existingTerm.number && course.year === existingTerm.year && course.term === existingTerm.number;
-    });
-    if (indexOfTerm !== -1) {
-      return [];
-    } else {
-      let lastTerm = {};
-      lastTerm = currentTerms[currentTerms.length - 1];
-
-      while(lastTerm.number != course.term || lastTerm.year != course.year || lastTerm.session != course.session) {
-
-        console.log("Term not found, adding term after term: " + JSON.stringify(lastTerm));
-        
-        const nextTerm = this.getNextTerm(lastTerm, course);
-        termsToAdd.push(nextTerm);
-        lastTerm = nextTerm; 
-
-        console.log("Added term: " + JSON.stringify(nextTerm));
-        console.log("Terms to add: " + JSON.stringify(termsToAdd));
-      }
-      return termsToAdd;
-    }
-  }
-    
-
-  getNextTerm(currentTerm) {
+  getNextTerm(latestTerm, latestSession) {
     let nextTermNumber;
-    let nextTermYear = currentTerm.year;
-    let nextTermSession = "W";
+    let nextTermYear = latestSession.year;
+    let nextTermSeason = "W";
 
-    if (currentTerm.number === 1) {
+    if (latestTerm.number === 1) {
       nextTermNumber = 2;
-      nextTermSession = currentTerm.session;
+      nextTermSeason = latestSession.season;
     } else {
-      if (currentTerm.session == "W") {
-        nextTermYear = currentTerm.year + 1;
-        nextTermSession = "S";
+      if (latestSession.season == "W") {
+        nextTermYear = parseInt(latestSession.year) + 1;
+        nextTermSeason = "S";
       }
       nextTermNumber = 1;
     }
-    const nextTermId = currentTerm.id + 1;
     
     const nextTerm = {
-      id: nextTermId,
       coursesContained: [],
       year: nextTermYear,
       number: nextTermNumber,
-      session: nextTermSession
+      season: nextTermSeason
     };
 
     return nextTerm;
@@ -100,9 +51,113 @@ class PlannerArea extends Component {
       });
   }
 
+  addTermToPlan = async () => {
+    // set initial session to random one
+    const plan = {...this.props.plan};
+    let mostRecentSession = {};
+    let mostRecentSessionId = {};
+    let latestTerm = {};
+
+    if (plan.sessions.allIds.length === 0) {
+      mostRecentSession = await axios.get('/api/sessions/current');
+      mostRecentSession = mostRecentSession.data;
+      console.trace(mostRecentSession);
+      plan.sessions.byId[mostRecentSession.id] = mostRecentSession;
+      console.log('No sessions found adding current', mostRecentSession);
+      plan.sessions.allIds.push(mostRecentSession.id);
+      mostRecentSessionId = mostRecentSession.id;
+    } else {
+      mostRecentSessionId = plan.sessions.allIds[0];
+      for (const sessionId in plan.sessions.byId) {
+        const currentSession = plan.sessions.byId[sessionId];
+        const currentSessionDate = currentSession.year + currentSession.season;
+        const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+        console.log(mostRecentSession);
+        const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
+        console.log(currentSessionDate, mostRecentSessionDate);
+        if (currentSessionDate > mostRecentSessionDate) {
+          console.log("Earlier");
+          mostRecentSessionId = sessionId;
+        }
+      }
+      mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+    }
+    
+    latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
+    let nextTermInfo = {};
+    if (latestTerm) {
+      nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
+    } else {
+      nextTermInfo.coursesContained = [];
+      nextTermInfo.year = mostRecentSession.year;
+      nextTermInfo.season = mostRecentSession.season;
+      nextTermInfo.number = 1;
+    }
+    console.log("Adding term: ", nextTermInfo);
+    let latestSession;
+    if (nextTermInfo.year !== mostRecentSession.year || nextTermInfo.season !== mostRecentSession.season) {
+      const latestSessionRequest = await axios.get(`/api/sessions?year=${nextTermInfo.year}&season=${nextTermInfo.season}`);
+      latestSession = latestSessionRequest.data;
+      plan.sessions.byId[latestSession.id] = latestSession;
+      console.log('need more session', latestSession);
+      plan.sessions.allIds.push(latestSession.id);
+    } else {
+      latestSession = mostRecentSession;
+      latestSession.id = mostRecentSessionId;
+      console.log('same session', latestSession);
+    }
+    console.log({"executing next term request": {latestSession, nextTermInfo}});
+    const nextTermRequest = await axios.get(`/api/terms?sessionId=${latestSession.id}&number=${nextTermInfo.number}`);
+    const nextTerm = nextTermRequest.data;
+    plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
+    plan.terms.byId[nextTerm.id] = nextTerm;
+    plan.terms.allIds.push(nextTerm.id);
+    console.log(plan);
+    this.props.updatePlan(plan);
+    
+  }
+
+  removeTermFromPlan = async (termId) => {
+    const plan = { ...this.props.plan};
+    console.log({plan});
+    const { courses, session } = plan.terms.byId[termId];
+    console.log({"removing ": {termId, courses, session}});
+
+    // Remove courses
+    plan.courses.allIds = plan.courses.allIds.filter(id => courses.indexOf(id) === -1);
+    const newCoursesById = plan.courses.byId;
+    for (let course in courses) {
+      delete newCoursesById[course];
+    }
+    plan.courses.byId = newCoursesById;
+
+    // Remove session
+    const previousSessionsById = plan.sessions.byId;
+    const previousSession = previousSessionsById[session];
+    console.trace({ previousSessionsById, session });
+
+    if (previousSession.terms.length === 1) {
+      delete previousSessionsById[session];
+      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== session);
+    } else {
+      const newTerms = [ ...previousSession.terms];
+      
+      newTerms.splice(previousSession.terms.indexOf(termId), 1);
+      previousSession.terms = newTerms;
+      plan.sessions.byId[session] = previousSession;
+    }
+
+    // Remove term
+    const previousTermsById = { ...plan.terms.byId };
+    delete previousTermsById[termId];
+    plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
+
+    this.props.updatePlan(plan);
+  }
+
   objectsAreSame(x, y) {
-    var objectsAreSame = true;
-    for(var propertyName in x) {
+    let objectsAreSame = true;
+    for(let propertyName in x) {
       if(x[propertyName] !== y[propertyName]) {
         objectsAreSame = false;
         break;
@@ -115,73 +170,90 @@ class PlannerArea extends Component {
     let same = true;
     
     if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
-      this.updateWarnings();
+      same = false;
     } else {
-      for (let i = 0; i < prevProps.plan.courses.length; i++) {
-        if (!this.objectsAreSame(prevProps.plan.courses[i], this.props.plan.courses[i])) {
+      for (let course in prevProps.plan.courses.byId) {
+        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
           same = false;
         }
       }
-      if (!same) {
-        this.updateWarnings();
-      }
     }
-  }
-
-  // When we drag a course into the plan, it will have a term associated with it. When its dropped, we can just call map plan to terms
-  mapPlanToTerms = () => {
-    console.log("Mapping plan to terms...");
-    return this.insertCoursesIntoTerms();
+    if (!same) {
+      this.updateWarnings();
+    }
   }
 
   //rendering term components by mapping defaultTerms state variable
   renderTerms = () => {
-    const terms = this.mapPlanToTerms().map((term) => (
-      <Term
-        key={term.id}
-        term={term}
-        coursesContained={term.coursesContained}
+    const sessions = this.props.plan.sessions.allIds.map(sessionId => {
+      const session = this.props.plan.sessions.byId[sessionId];
+      console.log({...this.props.plan.sessions, sessionId });
+      const terms = session.terms.map(termId => {
+        const term = this.props.plan.terms.byId[termId];
+        const courses = term.courses.map(courseId => {
+          return { ...this.props.plan.courses.byId[courseId], id: courseId };
+        });
+        return { ...term, id: termId, courses };
+      });
+      return <Session
+        key={sessionId}
+        session={session}
+        terms={terms}
         onCourseDragOver={this.onCourseDragOver}
-        onCourseDragStart={this.onCourseDragStart.bind(this)}
         onCourseDrop={this.onCourseDrop}
-      />
-    ));
+        onCourseDragStart={this.onCourseDragStart}
+        removeTerm={this.removeTermFromPlan}
+      />;
+    });
     return (
-      <div id="term-view">
-        {terms}
+      <div className="session-container">
+        {sessions}
       </div>
     );
   }
 
   //drag over event handler for term component - passed in as prop
-  onCourseDragOver = (e) => {
+  onCourseDragOver = (e, termId) => {
+    if (!termId) {
+      return;
+    }
+    // const term = this.props.plan.terms.byId[termId];
     e.preventDefault();
   }
 
   //drag start event handler for course component - passed in as prop via Term
   onCourseDragStart = (e, course, sourceTerm) => {
+    console.log("Setting course for drag" + JSON.stringify(course));
     e.dataTransfer.setData("course", JSON.stringify(course));
-    e.dataTransfer.setData("sourceTerm", JSON.stringify(sourceTerm));
+    if(sourceTerm) {
+      e.dataTransfer.setData("sourceTermId", sourceTerm);
+    }
   }
 
   //on drop event handler for term component
-  //need to implement removing course from source term
   //need to implement rejection of duplicate courses in a term
-  onCourseDrop = (e, targetTerm) => {
+  onCourseDrop = (e, targetTermId) => {
+    let incomingCourse = JSON.parse(e.dataTransfer.getData("course"));
+    let sourceTermId = e.dataTransfer.getData("sourceTermId");
+    const plan = { ...this.props.plan };
 
-    let movedCourse = JSON.parse(e.dataTransfer.getData("course"));
+    if (!sourceTermId) {
+      console.log("Adding course to plan", incomingCourse);
+      plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
+      plan.courses.allIds.push(incomingCourse.id.toString());
+      plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+      delete incomingCourse.id;
 
-    movedCourse.term = targetTerm.number;
-    movedCourse.year = targetTerm.year;
-    movedCourse.session = targetTerm.session;
+      this.props.updatePlan(plan);
+    } else {
+      console.log("Moving course already in plan", incomingCourse);
+      const courses = plan.terms.byId[sourceTermId].courses;
+      courses.splice(courses.indexOf(incomingCourse.id), 1);
+      plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
+      console.log("Moved Course: " + JSON.stringify(incomingCourse));
 
-    console.log("Moved Course: " + JSON.stringify(movedCourse));
-    let courses = [ ...this.props.plan.courses];
-    const updatedCourseIndex = this.props.plan.courses.findIndex(x => x.code === movedCourse.code);
-    courses.splice(updatedCourseIndex, 1);
-    courses = [ ...courses, movedCourse];
-    console.log(courses);
-    this.props.updatePlanCourses(courses);
+      this.props.updatePlan(plan);
+    }  
   }
 
   getWarnings = async () => {
@@ -199,7 +271,48 @@ class PlannerArea extends Component {
       
     } catch(err) {
       console.log(err);
-    }  
+    }
+  }
+
+  onCourseDragEnterTrash = (e) => {
+    e.preventDefault();
+    this.trashDragCounter++;
+    console.log("Enter trash");
+    this.setState({
+      trashColour: "#c5980f"
+    });
+  }
+
+  onCourseDragLeaveTrash = () => {
+    this.trashDragCounter--;
+    console.log("leave trash", this.trashDragCounter);
+    if (this.trashDragCounter === 0) {
+      this.setState({
+        trashColour: "white"
+      });
+    }
+  }
+
+  onCourseDragOverTrash = (e) => {
+    e.preventDefault();
+  }
+
+  onCourseDropTrash = (e) => {
+    e.preventDefault();
+    this.trashDragCounter = 0;
+    let incomingCourse = JSON.parse(e.dataTransfer.getData("course"));
+    let sourceTermId = e.dataTransfer.getData("sourceTermId");
+    const plan = { ...this.props.plan };
+
+    const courses = plan.terms.byId[sourceTermId].courses;
+    courses.splice(courses.indexOf(incomingCourse.id), 1);
+    plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+    
+    this.props.updatePlan(plan);
+    this.setState({
+      trashColour: "white"
+    });
+    
   }
 
   componentDidMount() {
@@ -208,16 +321,35 @@ class PlannerArea extends Component {
 
   render() {
     return (
-      <div id="planner-area">
-        <div id="session-container">
-          <this.renderTerms />
-        </div>
+      <div id="planner-area-container">
+        <this.renderTerms />
+
+        <CourseListSideBar 
+          isOpen={this.props.isCourseListOpen} 
+          close={this.props.closeCourseList}
+          onCourseDragStart={this.onCourseDragStart.bind(this)}
+        />
 
         <WarningSnackbar
           showSnackbar={this.props.showSnackbar}
           closeSnackbar={this.props.closeSnackbar}
           warnings={this.props.warnings}
         />
+
+        <div
+          className="floating-icon remove-course"
+          onDragEnter={this.onCourseDragEnterTrash}
+          onDragLeave={this.onCourseDragLeaveTrash}
+          onDragOver={this.onCourseDragOverTrash}
+          onDrop={this.onCourseDropTrash}
+        >
+          <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
+        </div>
+
+        <div className='floating-icon add-term' onClick={this.addTermToPlan}>
+          <FontAwesomeIcon icon="plus-circle" />
+        </div>
+
       </div>
     );
   }
@@ -228,9 +360,11 @@ PlannerArea.propTypes = {
   user: PropTypes.object.isRequired,
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,
-  updatePlanCourses: PropTypes.func.isRequired,
+  updatePlan: PropTypes.func.isRequired,
   setWarnings: PropTypes.func.isRequired,
-  warnings: PropTypes.array.isRequired
+  warnings: PropTypes.array.isRequired,
+  closeCourseList: PropTypes.func.isRequired,
+  isCourseListOpen: PropTypes.bool.isRequired
 };
 
 export default PlannerArea;
