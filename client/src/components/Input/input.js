@@ -20,8 +20,7 @@ const Input = ( props ) => {
   
   //IF A FORMELEMENT IS LEFT EMPTY = ERRORS PRESENTED
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
-    inputStyling.push(cssInvalid);
-    //errorStyling.push(cssErrorMsg)    
+    inputStyling.push(cssInvalid);   
   }
   
 
@@ -98,6 +97,7 @@ const Input = ( props ) => {
     );
     break;
 
+
   case ( 'text' ):
     inputElement = <p
       className={inputStyling.join(' ')}
@@ -106,6 +106,7 @@ const Input = ( props ) => {
       onChange={props.changed} 
     />;
     break;
+
 
   default:
     inputElement = <input
