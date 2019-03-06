@@ -36,7 +36,9 @@ class Main extends Component {
       },
       name: "test",
       specialization: {},
-      description: ""
+      description: "",
+      isFavourite: false,
+      id: 1
     },
     user: {
       name: "test",
@@ -51,11 +53,23 @@ class Main extends Component {
 
   closeCourseListSidebar = () => {
     this.setState({ isCourseListOpen: false });
-  };
+  }
 
   optimizeHandler = () => {
     console.log("Optimize button clicked");
     //optimize button logic goes here
+  }
+
+  toggleFavourite = () => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        currentPlan: {
+          ...prevState.currentPlan,
+          isFavourite: !prevState.currentPlan.isFavourite
+        }
+      };
+    });
   }
 
   createPlanHandler = () => {
@@ -108,7 +122,7 @@ class Main extends Component {
 
   savePlan = async () => {
     const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
-    console.log(response.status);
+    console.log(response);
   }
 
   componentDidUpdate = async () => {
@@ -122,7 +136,7 @@ class Main extends Component {
         <PlanList/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
-          <FavouriteBtn favourite={true}/>
+          <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
           <OptimizeBtn click={this.optimizeHandler}/>
           <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
           <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen}/>
