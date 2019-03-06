@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 class ConfirmEmail extends Component {
   
   render(){
+
     return(
       //RETURN LOGIN MENU HERE
       <div className="menu">

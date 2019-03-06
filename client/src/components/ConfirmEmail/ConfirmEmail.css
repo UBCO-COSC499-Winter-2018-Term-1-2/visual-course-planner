@@ -17,56 +17,6 @@ body{
     margin: 10% auto;   
 }
 
-/* .input-element{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 1em 0;
-    box-sizing: border-box;
-    font-size: 1em;
-    color: #9c9b9d;
-    background-color: #333035;
-    border: none;
-} */
-
-.input-element:focus{
-    border: none;
-}
-
-.deafultbtn{
-    width: 50%;
-    padding: 1em 1em;
-    margin: 2em auto;
-    box-sizing: border-box;
-    font-size: 1em;
-    text-align: center;
-    color: #9c9b9d;
-    background-color: #333035;
-    border: none;
-    display: block;
-    cursor: pointer;
-
-}
-
-.deafultbtn:hover {
-    background-color: #84bd00; 
-    color: black;
-}
-
-.deafultbtn:disabled{
-    cursor: not-allowed;
-
-}
-
-/* THIS BTN IS TO OPEN DIFFERENT MENU THEN WHAT IS ACTIVE*/
-.open-diff-menubtn{
-    background:none;
-    border:none; 
-    cursor: pointer;
-    color: #84bd00;
-    font-size: 1em;
-    display: block;
-}
-
 .msg-text{
      color: #9c9b9d;
      text-align: center;
