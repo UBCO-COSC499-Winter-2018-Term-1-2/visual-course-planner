@@ -9,6 +9,7 @@ import Signup from './components/Signup/SignupInterface';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
 import UserProfile from "./components/UserProfile/profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
+import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
 import DegreeYear from "./components/DegreeYear/DegreeYear";
 
 const protectedComponent = (component) => {
@@ -19,17 +20,21 @@ const protectedComponent = (component) => {
   return <Redirect to='/login'/>;
 };
 
+
 const routing = (
   <Router>
     <div>
       <Route exact path="/" component={Login} />
       <Route path="/main" render={(props) => protectedComponent(<Main {...props}/>)} />
       <Route path="/login" component={Login} />
+
       <Route path="/signup" component={Signup} />
       <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
       <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
       <Route path="/degree-year-selection" render={(props) => protectedComponent(<DegreeYear {...props}/>)} />
+      <Route path="/confirm-email" render={(props) => protectedComponent(<ConfirmEmail {...props}/>)} />
+
     </div>
   </Router>
 );
