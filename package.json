@@ -4,16 +4,20 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "csv-parse": "^4.1.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "csv-parse": "^4.1.0",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
     "express-validator": "^5.3.1",
     "i": "^0.3.6",
     "mysql": "^2.16.0",
     "npm": "^6.4.1",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "request": "^2.88.0",
+    "request-x-ray": "^0.1.4",
+    "x-ray": "^2.3.3"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
