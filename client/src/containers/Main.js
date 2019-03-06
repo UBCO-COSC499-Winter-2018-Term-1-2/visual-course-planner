@@ -4,33 +4,70 @@ import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
-import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
-import Backdrop from '../components/Backdrop/Backdrop';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+
+// Font Awesome Icon Imports
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle);
 
 class Main extends Component {
   state = {
-    drawerOpen : false,
+    isCourseListOpen: false,
     showSnackbar : false,
     currentPlan: {
-      courses: [],
+      sessions: {
+        byId: {
+          "1": {
+            year: "2018",
+            season: "W",
+            terms: [ "1" ]
+          }
+        },
+        allIds: [ "1" ]
+      },
+      terms: {
+        byId: {
+          "1": {
+            session: "1",
+            number: 1,
+            courses: [ "100" ]
+          }
+        },
+        allIds: [ "1" ]
+      },
+      courses: {
+        byId: {
+          "100": {
+            code: "COSC 222",
+            standingRequirement: 2,
+            term: "0",
+            coRequisites: [],
+            preRequisites: []
+          }
+        },
+        allIds: [ "100" ]
+      },
       id: 0,
-      name: "BA Major Computer Science"
+      name: "My Plan",
+      specialization: {
+        id: 1,
+        name: "Major in Computer Science"
+      }
     },
     user: {
-      name: "Leonardo"
-    }
-
+      name: "Leonardo",
+      yearStanding: 1
+    },
+    warnings: []
   }
 
-  toggleCourseListSidebarHandler = () => {
-    const isOpen = this.state.drawerOpen;
-    this.setState(
-      {drawerOpen : !isOpen}
-    );
+  openCourseListSidebar = () => {
+    this.setState({ isCourseListOpen : true });
   }
 
   closeCourseListSidebar = () => {
-    this.setState({drawerOpen: false});
+    this.setState({ isCourseListOpen: false });
   };
 
   optimizeHandler = () => {
@@ -38,32 +75,55 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
+  setNumberOfWarnings = (number) => {
+    this.setState({numberOfWarnings: number});
+  }
+
+  setWarnings = (warnings) => {
+    this.setState({
+      warnings: warnings
+    });
+  }
+
+  updatePlan = (plan) => {
+    this.setState({ currentPlan: plan });
+  }
+
+  showSnackbar = () => {
+    this.setState({ showSnackbar: true });
+  }
+
+  closeSnackbar = () => {
+    this.setState({ showSnackbar: false });
+  }
+
   render() {
-    let backdrop;
-
-    if(this.state.drawerOpen){
-      backdrop = <Backdrop click={this.closeCourseListSidebar}/>;
-    }
-
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea/>
-        <PlannerArea 
-          plan={this.state.currentPlan}
-          toggleSidebar={this.toggleCourseListSidebarHandler}
+        <PlannerHeader
+          planName={this.state.currentPlan.name}
+          openCourseList={this.openCourseListSidebar}
+          closeCourseList={this.closeCourseListSidebar}
+          isCourseListOpen={this.state.isCourseListOpen}
           optimize={this.optimizeHandler}
+          showWarning={this.showSnackbar}
+          numberOfWarnings={this.state.warnings.length}
           user={this.state.user}
         />
-       
-        {/*'courseTitle','courseInfo' should come from the database */}
-        <CourseListSideBar 
-          show={this.state.drawerOpen} 
-          close={this.closeCourseListSidebar}
-          courseTitle="COSC 111"
-          courseInfo="This Course is the best course with the best prof Dr.Abdallah." />
-        {backdrop}
+        <PlannerArea
+          isCourseListOpen={this.state.isCourseListOpen}
+          closeCourseList={this.closeCourseListSidebar}
+          plan={this.state.currentPlan}
+          user={this.state.user}
+          updatePlan={this.updatePlan}
+          showSnackbar={this.state.showSnackbar}
+          closeSnackbar={this.closeSnackbar}
+          warnings={this.state.warnings}
+          setWarnings={this.setWarnings}
+        />    
       </div>
     );
   }

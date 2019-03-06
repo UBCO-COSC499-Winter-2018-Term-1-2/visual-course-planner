@@ -1,17 +1,17 @@
-.warning-summary-wrapper{
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
+.warning-summary-wrapper {
+  display: flex;
+  flex-direction: row;
 }
 
-#warning-icon{
-    color: #c5980f;
+#warning-icon {
+  color: #c5980f;
 }
 
-.warning-icon-container, .warning-notification-container{
-    padding: 0.2em;
+.warning-icon-container, .warning-notification-container {
+  padding: 0.2em;
 }
 
-#warning-notification{
-    color: #c5980f;
+#warning-notification {
+  color: #c5980f;
+  cursor: pointer;
 }

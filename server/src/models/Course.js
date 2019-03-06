@@ -1,34 +1,61 @@
 const promisify = require('util').promisify;
-const db = require('../dbconnection');
+const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
 
-class Course {
+module.exports = {
+  async insertCourse(code, termId) {
+    console.log("inserting " + code);
+    const results = await db.query("INSERT INTO course (code) VALUES (?)", [code, termId]);
+    const courseId = results.insertId;
 
-  async getRequirementsForCourse(id) {
-    db
-      .query("SELECT c2.code FROM course c1 JOIN course_requirement ON cid = c1.id JOIN course c2 ON rid = c2.id WHERE c2.id = ?", [id])
-      .then(rows => {
-        return rows;
-      })
-      .catch(err => {
-        throw err;
-      });
-  }
+    await db.query("INSERT INTO course_term VALUES (?, ?)", [courseId, termId]);
+
+    return courseId;
+  },
 
   async getCourse(id) {
-    // todo: build up course object from requirements and course info (look at data model to see what we need)
     db
-      .query("SELECT * FROM course WHERE course.id = ?", [id])
+      .query("SELECT * FROM course_info WHERE course.id = ?", [id])
       .then(rows => {
-        return rows;
+        return rows[0];
       })
       .catch(err => {
         throw err;
-      });  
+      }); 
+      
+  },
+
+  async getCourses() {
+    const courseInfoResults = await db.query(`
+      SELECT course.id AS id, code, credits, name, description, standingRequirement, session.year, session.season, term.number AS termNumber, term.id AS termId,
+        GROUP_CONCAT(cir.rid) AS preRequisites,
+        GROUP_CONCAT(cic.rid) AS coRequisites
+      FROM course
+      JOIN course_term ON course.id = course_term.cid
+      JOIN term ON course_term.tid = term.id
+      JOIN session ON term.sid = session.id
+      JOIN course_info AS ci ON course.code = ci.id
+      LEFT JOIN course_info_requirement AS cir ON ci.id = cir.cid
+      LEFT JOIN course_info_corequirement AS cic ON ci.id = cic.cid
+      GROUP BY course.id, session.year, session.season, termId`);
+
+
+    courseInfoResults.forEach(course => {
+      if (course.preRequisites === null) {
+        course.preRequisites = [];
+      }
+      if (course.coRequisites === null) {
+        course.coRequisites = [];
+      }
+      
+    });
+    console.log(courseInfoResults);
+    return courseInfoResults;
+  },
+
+  async getCourseInfo(code) {
+    const courseInfoResults = await db.query("SELECT * FROM course_info WHERE id = ?", [code]);
+    return courseInfoResults;
   }
-  
-
-}
-
-export default Course;
+};

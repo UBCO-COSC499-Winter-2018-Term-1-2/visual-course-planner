@@ -1,0 +1,19 @@
+.course-required, .course-elective{
+  background-color: #888786;
+  border: 0.1em solid #fb9a9a;
+  border-radius: 0.2em;
+  color: black;
+  text-align: center;
+  width: 6em;
+  margin: 1em auto 1em auto;
+  cursor: pointer;
+}
+
+.course-elective{
+  border: 0.1em solid #00ffff;
+}
+
+.course-code{
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}

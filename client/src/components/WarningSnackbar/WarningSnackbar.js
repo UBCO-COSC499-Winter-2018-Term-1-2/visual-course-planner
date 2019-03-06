@@ -17,25 +17,39 @@ class WarningSnackbar extends Component {
   }
 
   WarningMessageList = () => {
+    let warnings;
     if (this.props.warnings.length > 0) {
-      return this.props.warnings.map((warning, index) =>
-        <div className="warning-message-container" key={index}>
-          {/* <h3>{warning.course}</h3> */}
-          <p>{warning.message}</p>
+      // Map warnings to array of warning messagee fragments
+      // need to convert from \n to <p>
+      let messageParts = [];
+      warnings = this.props.warnings.forEach(warning => {
+        messageParts.push(warning.message.split('\n'));
+      });
+      
+      // Build the jsx elements
+      warnings = messageParts.map((message, idx) => (
+        <div className="warning-message-container" key={idx}>
+          {message.map( (fragment, index) => (<p key={index}>{fragment}</p>))}
         </div>
-      );
+      ));
     } else {
-      return  (
+      warnings = (
         <div className="warning-message-container">
-          {/* <h3>{warning.course}</h3> */}
           <p>No warnings.</p>
         </div>
       );
     }
+    console.log(warnings);
+    return (
+      <div className="warning-list-container">
+        {warnings}
+      </div>
+    );
   }
+
   render() {
     return (
-      <div className={this.props.showSnackbar ? "warning-snackbar-wrapper-show" : "warning-snackbar-wrapper"}>
+      <div className={this.props.showSnackbar ? "warning-snackbar-wrapper show" : "warning-snackbar-wrapper"}>
         <div className="warning-snackbar-container">
           <this.CloseButton/>
           <this.WarningMessageList/>

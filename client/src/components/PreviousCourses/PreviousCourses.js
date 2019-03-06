@@ -8,31 +8,31 @@ import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
 //correct formatting
 
 
-const CULTURE_SHIPS = [
-  {id: 1, name: '5*Gelish-Oplule'},
-  {id: 2, name: '7*Uagren'},
-  {id: 249, name: 'Zero Gravitas'},
-  {id: 250, name: 'Zoologist'}
+const COURSES = [
+  {id: 1, name: 'FRENCH 11'},
+  {id: 2, name: 'FRENCH 12'},
+  {id: 249, name: 'SPANISH 11'},
+  {id: 250, name: 'GERMAN 12'}
 ];
 
 
 class previousCourses extends Component {
 
-      state = {selectedShips: []}
+      state = {selectedCourses: []}
 
       handleDeselect(index) {
-        var selectedShips = this.state.selectedShips.slice();
-        selectedShips.splice(index, 1);
-        this.setState({selectedShips});
+        var selectedCourses = this.state.selectedCourses.slice();
+        selectedCourses.splice(index, 1);
+        this.setState({selectedCourses});
       }
     
-      handleSelectionChange = (selectedShips) => {
-        this.setState({selectedShips});
+      handleSelectionChange = (selectedCourses) => {
+        this.setState({selectedCourses});
       }
     
       render(){
 
-        var {selectedShips} = this.state;
+        var {selectedCourses} = this.state;
         
         return(      
           <div>
@@ -53,8 +53,8 @@ class previousCourses extends Component {
                
               <FilteredMultiSelect
                 onChange={this.handleSelectionChange}
-                options={CULTURE_SHIPS}
-                selectedOptions={selectedShips}
+                options={COURSES}
+                selectedOptions={selectedCourses}
                 textProp="name"
                 valueProp="id"
                 buttonText="Add Course"
@@ -62,10 +62,10 @@ class previousCourses extends Component {
                 className="ubco-offered-courses-list"
               />
               <div className="added-courses">
-                {selectedShips.length === 0 && <p><i>(Nothing selected yet)</i></p>}
-                {selectedShips.length > 0 && 
-                <ul className="yoshii">
-                  {selectedShips.map((ship, i) => 
+                {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
+                {selectedCourses.length > 0 && 
+                <ul>
+                  {selectedCourses.map((ship, i) => 
                     <li key={ship.id}>
                       {`${ship.name} `}
                       <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
@@ -76,8 +76,10 @@ class previousCourses extends Component {
               </div>
                     
               <div className="btn-div">
-                <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
-                <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+
+                <Link to = "/main"><button className="green-borderbtn">Submit</button></Link>
+                <Link to = "/main"><button className="exit-green-borderbtn">Exit</button></Link>
+
               </div>
 
             </div> 

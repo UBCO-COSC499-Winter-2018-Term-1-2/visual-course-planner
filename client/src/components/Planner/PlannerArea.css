@@ -1,0 +1,40 @@
+#term-view {
+  display: flex;
+  margin-top: 1em;
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100vw;
+}
+
+#term-view > .term-container {
+  border-right: 1px dotted grey;
+}
+
+#term-view:last-child {
+  border-right: none;
+}
+
+#term-view::-webkit-scrollbar {
+  height: 0.4em;
+}
+
+#term-view::-webkit-scrollbar-thumb {
+  border-radius: 2em;
+  background-color: #1a191b;
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 2em;
+
+}
+
+.floating-icon.remove-course {
+  bottom: 1em;
+  right: 2em;
+}
+
+.floating-icon.add-term {
+  top: 1em;
+  right: 2em;
+}
