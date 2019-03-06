@@ -13,9 +13,9 @@ DROP TABLE IF EXISTS credit_requirement;
 DROP TABLE IF EXISTS user_course_info;
 DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS session;
-DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS plan;
+DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS course_info;
@@ -263,6 +263,7 @@ CREATE TABLE plan_term (
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
 
+  PRIMARY KEY (pid, tid)
 );
 
 INSERT INTO course_info (id, credits) VALUES ("ENGL 112", 3);
@@ -298,9 +299,14 @@ INSERT INTO course_info (id, credits) VALUES ("COSC 320", 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);
 INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
 
+INSERT INTO course_info_requirement VALUES ("COSC 121", "COSC 111");
+INSERT INTO course_info_requirement VALUES ("COSC 222", "COSC 121");
+INSERT INTO course_info_requirement VALUES ("COSC 310", "COSC 222");
+
 INSERT INTO session (year, season) VALUES ("2018", "W");
 INSERT INTO term (number, sid) VALUES (1, 1);
 INSERT INTO degree (name) VALUES ("Test degree");
+INSERT INTO specialization (name, did) VALUES ("Test spec", 1);
 
 INSERT INTO user (email, password, firstname, lastname) VALUES ("mackenziesalloum@gmail.com", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "test", "test");
-INSERT INTO plan (title, isFavourite, description, uid, did) VALUES ("test plan", true, "test desc", 1, 1);
+INSERT INTO plan (title, isFavourite, description, uid, sid) VALUES ("test plan", true, "test desc", 1, 1);
