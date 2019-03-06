@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS plan_term;
 DROP TABLE IF EXISTS credit_requirement_course_info;
 DROP TABLE IF EXISTS exception_course_info;
 DROP TABLE IF EXISTS specialization_credit_requirement;

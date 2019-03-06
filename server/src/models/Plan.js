@@ -11,13 +11,30 @@ module.exports = {
   async getPlan(pid) {
     console.log("getting plan " + pid);
     return db
-      .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id WHERE plan.id = ?", [pid])
+      .query("SELECT id, time, title, description, isFavourite FROM plan WHERE plan.id = ?", [pid])
       .then(rows => {
         return rows;
       })
       .catch(err => {
         throw err;
       });
+  },
+  async getPlanCourses(pid) {
+    const planCourses = await db.query(`
+      SELECT course.id AS courseId, GROUP_CONCAT(cir.rid) AS prerequisites, GROUP_CONCAT(cic.rid) as corequisites, code, standingRequirement, course_term.tid AS term, 
+      FROM plan_course
+      JOIN course ON cid = course.id
+      JOIN course_info ON course.code = course_info.id
+      JOIN course_term ON course.id = course_term.cid,
+      LEFT JOIN course_info_requirement AS cir ON course.code = cir.cid
+      LEFT JOIN course_info_corequirement AS cic ON course.code = cic.cid
+      WHERE pid = ?
+      GROUP BY course.id`, [pid]);
+    return planCourses;
+  },
+  async getPlanTerms(pid) {
+    const planCourses = await db.query("SELECT * FROM plan_term JOIN term ON tid = term.id JOIN session ON term.sid = session.id WHERE pid = ?", [pid]);
+    return planCourses;
   },
   async getPlanList(uid) {
     const plans = await db.query("SELECT id, title, isFavourite FROM plan WHERE uid = ?", [uid]);

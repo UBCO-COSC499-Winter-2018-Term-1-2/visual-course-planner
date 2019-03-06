@@ -2,16 +2,78 @@ const express = require('express');
 const router = express.Router();
 const Plan = require('../../models/Plan');
 
+const arrayToObject = (array) => array.reduce((obj, item) => {
+  obj[item.id] = item;
+  return obj;
+}, {});
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const planId = req.params.id;
-  Plan.getPlan(planId)
-    .then(plans => {
-      res.send(plans);
-    })
-    .catch(err => {
-      console.error({"Couldn't retrieve plan": err});
+  try {
+    const plan = await Plan.getPlan(planId);
+
+    const courses = await Plan.getPlanCourses(planId);
+    const courseIds = courses.map(course => course.courseId);
+    const coursesById = arrayToObject(courses.map(course => {
+      return {
+        id: course.courseId,
+        preRequisites: course.prerequisites.split(','),
+        coRequisites: course.corequisites.split(','),
+        standingRequirement: course.standingRequirement,
+        term: course.term,
+        code: course.code
+      };
+    }));
+
+    const terms = await Plan.getPlanTerms(planId);
+    const termIds = terms.map(term => term.id);
+    const termsById = arrayToObject(terms.map(term => {
+      return {
+        id: term.tid,
+        number: term.number,
+        session: term.sid,
+        courses: courses.filter(course => course.term === term.id).map(course => course.courseId)
+      };
+    }));
+
+    const sessions = terms.map(term => {
+      return {
+        id: term.sid,
+        term: term.id,
+        year: term.year,
+        season: term.season
+      };
     });
+    const sessionIds = sessions.map(session => session.id);
+    const sessionsById = arrayToObject(sessions);
+
+
+    let formattedPlan = {
+      courses: {
+        byId: coursesById,
+        allIds: courseIds
+      },
+      sessions: {
+        byId: sessionsById,
+        allIds: sessionIds
+      },
+      terms: {
+        byId: termsById,
+        allIds: termIds
+      },
+      name: plan.title,
+      description: plan.description,
+      specialization: plan.sid,
+      isFavourite: plan.isFavourite,
+      id: plan.id
+    };
+
+    res.send(formattedPlan);
+
+  } catch(e) {
+    console.error({"Couldn't retrieve plan": e});
+    res.status(500).send("Couldn't retrieve plan");
+  }
 });
 
 router.get('/user/:id', async (req, res) => {

@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     res.status(500).send("Did not receive user.");
   } else {
     try {
-      const specReqs = await Specialization.getSpecializationRequirements(req.body.plan.specialization.id);
+      const specReqs = await Specialization.getSpecializationRequirements(req.body.plan.specialization);
       const warnings = warningService.getWarnings(req.body.plan, req.body.user, specReqs);
       res.send(warnings);
     } catch (e) {
