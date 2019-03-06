@@ -45,8 +45,10 @@ router.post('/new', async (req, res) => {
   try {
     const planId = await Plan.createPlan(userId, "untitled", "", degreeId);
     res.status(200).send("Plan created: " + planId);
+    console.log("Plan created: " + planId);
   } catch (e) {
     res.status(500).send({"Error occured": e});
+    console.error(e);
   }
 });
 
@@ -75,6 +77,7 @@ router.post('/:id/save', async (req, res) => {
     if (!course) {
       try {
         await Plan.setPlanCourse(courseId, planId);
+        // TODO: need to make sure course are removed as well
       } catch (e) {
         console.error({"Error occured while saving plan courses": e});
       }

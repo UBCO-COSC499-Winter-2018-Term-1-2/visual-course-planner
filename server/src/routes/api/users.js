@@ -68,9 +68,8 @@ router.post('/signup', async (req, res) => {
     const existUser = await user.checkUser(email);
         
     if(existUser === true){
-
+      console.error("User already exists");
       res.status(500).send("User already exists. Did not create user.");
-
     }else{
 
       bcrypt.genSalt(10, function(err, salt){
@@ -80,21 +79,19 @@ router.post('/signup', async (req, res) => {
           }
 
           const hashPassword = hash;
-          var newUser = {
-                        
+          var newUser = {     
             email: req.body.email,
             password: hashPassword,
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
             standing: 0
-                
           };
           
           try{
-            await user.insertUser(newUser);
-            console.log("User was created");
-            res.status(200).send("New user was created.");
+            const userId = await user.insertUser(newUser);
+            console.log("User was created: " + userId);
+            res.status(200).send({userId, email: newUser.email});
           }
           catch(err) {
             console.error("User was not created");

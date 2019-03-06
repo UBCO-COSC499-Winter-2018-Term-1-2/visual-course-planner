@@ -5,7 +5,7 @@ db.query = promisify(db.query);
 
 module.exports = {
   async createPlan(userId, name, desc, did) {
-    const result = await db.query("INSERT INTO plan (uid, title, description, did) VALUES (?,?,?,?)", [userId, name, desc, did]);
+    const result = await db.query("INSERT INTO plan (title, description, uid, did) VALUES (?,?,?,?)", [name, desc, userId, did]);
     return result.insertId;
   },
   async getPlan(pid) {

@@ -282,7 +282,8 @@ INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);
 INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
 
 INSERT INTO session (year, season) VALUES ("2018", "W");
-INSERT INTO term (number, sid) VALUES (1, 1)
+INSERT INTO term (number, sid) VALUES (1, 1);
+INSERT INTO degree (name) VALUES ("Test degree");
 
 INSERT INTO user (email, password, firstname, lastname) VALUES ("mackenziesalloum@gmail.com", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "test", "test");
 INSERT INTO plan (title, isFavourite, description, uid, did) VALUES ("test plan", true, "test desc", 1, 1);

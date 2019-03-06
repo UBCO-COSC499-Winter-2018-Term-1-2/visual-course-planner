@@ -195,8 +195,8 @@ handler = (event) => {
     .then( response => {
       this.setState( { loading: false } );
       if (response.status === 200) {
-        sessionStorage.setItem('userId', response.data);
-        this.redirectToConfirmEmail();
+        sessionStorage.setItem('userId', response.data.userId);
+        this.redirectToConfirmEmail(response.data.email);
       }
       console.log(response);
     })
@@ -234,8 +234,13 @@ inputChangeHandler = (event, inputIdentifier) => {
 }
 
 //LINKS FORM BTN TO PAGE SPECIFED
-redirectToConfirmEmail = () => {
-  this.props.history.push('/confirm-email');
+redirectToConfirmEmail = (email) => {
+  this.props.history.push({
+    pathname: '/confirm-email',
+    state: {
+      email: email
+    }
+  });
 }
 
 

@@ -61,17 +61,6 @@ class DegreeYear extends Component {
   
     return isValid;
   }
-  
-  handler = ( event ) => {
-    event.preventDefault();
-    this.setState( { loading: true } );
-    
-    //this is log send user input to send to database.
-    const menuData = {};
-    for (let formElementIdentifier in this.state.form) {
-      menuData[formElementIdentifier] = this.state.form[formElementIdentifier].value;
-    }
-  }
 
   //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
   //IE. EMAIL AND PASSWORD.
@@ -120,7 +109,9 @@ class DegreeYear extends Component {
     e.preventDefault();
     const userId = sessionStorage.getItem('userId');
     const degreeId = this.state.form.degree.value;
-    await axios.post(`/api/plans/new`, {userId, degreeId})
+    const data = {userId: userId, degreeId: degreeId};
+    console.log({"submitting info": data});
+    await axios.post(`/api/plans/new`, data)
       .then(response => {
         return response.data.insertId;
       })
@@ -164,7 +155,7 @@ class DegreeYear extends Component {
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form onSubmit={this.handler}>
+      <form>
         {formElementsArray.map(formElement => (
           <Input 
             label={formElement.config.label}
