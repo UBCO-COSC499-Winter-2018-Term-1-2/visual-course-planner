@@ -121,12 +121,12 @@ function getCategorySpecializationWarning(plan, requirement) {
   let warnings = [];
   let creditsRemaining = parseInt(requirement.credits);
   let courseSet = new Set();
-  plan.courses.forEach(course => {
+  plan.courses.allIds.forEach(course => {
     if (courseFitsCategoryRequirement(course, requirement)) {
-      if (!courseSet.has(course.code)) {
-        creditsRemaining -= course.credits;
+      if (!courseSet.has(course)) {
+        creditsRemaining -= plan.courses.byId[course].credits;
       }
-      courseSet.add(course.code);
+      courseSet.add(course);
     }
   });
 
@@ -148,10 +148,10 @@ function courseFitsCategoryRequirement(course, requirement) {
     if (words[0] === "UPPER") {
       // is upper level
       if (courseIsUpperLevel(course)) {
-        if (words[1] === course.code.split(' ')[0]){
+        if (words[1] === course.split(' ')[0]){
           // is a course code
           return true;
-        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(course.code.split(' ')[0])) {
+        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(course.split(' ')[0])) {
           // is an area descriptor
           return true;
         } else if (words[1] === 'GENERAL') {
@@ -167,7 +167,7 @@ function courseFitsCategoryRequirement(course, requirement) {
     } else if (areas.hasOwnProperty(words[0])) {
       if (words.length === 1) {
         // is an single word area descriptor
-        if (areas[words[0]].codes.includes(course.code.split(' ')[0])) {
+        if (areas[words[0]].codes.includes(course.split(' ')[0])) {
           return true;
         } else {
           return false;
@@ -180,7 +180,7 @@ function courseFitsCategoryRequirement(course, requirement) {
 
 
 function courseIsUpperLevel(course) {
-  return parseInt(course.code.split(' ')[1]) >= 300;
+  return parseInt(course.split(' ')[1]) >= 300;
 }
 
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import PlannerArea from '../components/Planner/PlannerArea';
 import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
@@ -75,6 +76,10 @@ class Main extends Component {
   optimizeHandler = () => {
     console.log("Optimize button clicked");
     //optimize button logic goes here
+  }
+
+  createPlanHandler = () => {
+    this.props.history.push('/degree-year-selection');
   }
 
   setNumberOfWarnings = (number) => {
@@ -166,5 +171,9 @@ class Main extends Component {
     );
   }
 }
+
+Main.propTypes = {
+  history: PropTypes.object
+};
 
 export default Main;

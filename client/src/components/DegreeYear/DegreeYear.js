@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './DegreeYear.css';
-import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 
 class DegreeYear extends Component {
@@ -117,6 +116,19 @@ class DegreeYear extends Component {
       });
   }
 
+  submitDegreeInformation = async (e) => {
+    e.preventDefault();
+    const userId = sessionStorage.getItem('userId');
+    const degreeId = this.state.form.degree.value;
+    await axios.post(`/api/plans/new`, {userId, degreeId})
+      .then(response => {
+        return response.data.insertId;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   componentDidMount = async () => {
     let degrees = await this.getDegrees();
     degrees = degrees.map(degree => { return { value: degree.id, displayValue: degree.name};});
@@ -163,12 +175,13 @@ class DegreeYear extends Component {
             invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
             shouldBeValidated={formElement.config.validation.required}
             inputElementTouched={formElement.config.inputElementTouched}
-            changed={(event) => this.inputChangeHandler(event, formElement.id)} />
+            changed={(event) => this.inputChangeHandler(event, formElement.id)}
+          />
         ))}
 
 
         <div className="btn-div">
-          <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+          <button type="button" className="green-borderbtn" onClick={this.submitDegreeInformation}>Submit</button> 
         </div>
 
       </form>

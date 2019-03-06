@@ -182,25 +182,28 @@ removeError = (element, type) => {
   });
 }
 
-handler = ( event ) => {
-  //console.log('handler')
+handler = (event) => {
   event.preventDefault();
   
   const formData ={};
   for (let formElementIdentifier in this.state.createAccountMenu) {
     formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
   }
- 
-  axios.post( '/api/users', formData )
+  console.log(formData);
+  
+  axios.post( '/api/users/signup', formData )
     .then( response => {
       this.setState( { loading: false } );
-      //this.props.history.push('/');
+      if (response.status === 200) {
+        sessionStorage.setItem('userId', response.data);
+        this.redirectToConfirmEmail();
+      }
       console.log(response);
-    } )
+    })
     .catch( error => {
       this.setState( { loading: false } );
       console.log(error);
-    } );
+    });
 
 }
 
@@ -231,7 +234,7 @@ inputChangeHandler = (event, inputIdentifier) => {
 }
 
 //LINKS FORM BTN TO PAGE SPECIFED
-onNavigation = () => {
+redirectToConfirmEmail = () => {
   this.props.history.push('/confirm-email');
 }
 
@@ -248,7 +251,7 @@ render(){
   //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
   //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
   let form = (
-    <form onSubmit={this.handler}>
+    <form>
       {formElementsArray.map(formElement => (
         <div key={formElement.id}>
           <Input 
@@ -266,7 +269,7 @@ render(){
           {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
         </div>
       ))}
-      <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+      <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Create Account</button>
       <button type="button" className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
     </form>

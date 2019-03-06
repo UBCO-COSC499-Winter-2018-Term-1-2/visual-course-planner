@@ -38,6 +38,17 @@ router.post('/:pid/user/:uid/favourite', (req, res) => {
     });
 });
 
+router.post('/new', async (req, res) => {
+  const userId = req.body.userId;
+  const degreeId = req.body.degreeId;
+
+  try {
+    const planId = await Plan.createPlan(userId, "untitled", "", degreeId);
+    res.status(200).send("Plan created: " + planId);
+  } catch (e) {
+    res.status(500).send({"Error occured": e});
+  }
+});
 
 router.get('/:id', (req, res) => {
   const UserId = req.params.id;
@@ -65,7 +76,7 @@ router.post('/:id/save', async (req, res) => {
       try {
         await Plan.setPlanCourse(courseId, planId);
       } catch (e) {
-        console.error({"Error occured while adding plan courses": e});
+        console.error({"Error occured while saving plan courses": e});
       }
     }
   }

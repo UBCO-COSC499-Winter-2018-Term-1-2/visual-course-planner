@@ -4,7 +4,10 @@ db.query = promisify(db.query);
 
 
 module.exports = {
-
+  async createPlan(userId, name, desc, did) {
+    const result = await db.query("INSERT INTO plan (uid, title, description, did) VALUES (?,?,?)", [userId, name, desc, did]);
+    return result.insertId;
+  },
   async getPlan(pid) {
     return db
       .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id plan.id = ?", [pid])
@@ -19,8 +22,6 @@ module.exports = {
   async getPlanList(id) {
     const plans = await db.query("SELECT id, title FROM plan WHERE id = ?", [id]);
     return plans;
-
-
   },
   async setFavourite(pid, fav) {
     return db.query("UPDATE plan SET isFavourite = ? WHERE id = ?", [fav, pid])
