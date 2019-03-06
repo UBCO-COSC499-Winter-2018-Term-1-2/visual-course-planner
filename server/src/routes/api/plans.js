@@ -26,7 +26,8 @@ router.get('/:id', async (req, res) => {
     }));
 
     const terms = await Plan.getPlanTerms(planId);
-    const termIds = terms.map(term => term.id);
+    console.log({"Loading terms": terms});
+    const termIds = terms.map(term => term.tid);
     const termsById = arrayToObject(terms.map(term => {
       return {
         id: term.tid,
@@ -36,16 +37,16 @@ router.get('/:id', async (req, res) => {
       };
     }));
 
-    const sessions = terms.map(term => {
-      return {
-        id: term.sid,
-        term: term.id,
-        year: term.year,
-        season: term.season
-      };
-    });
+    const sessions = await Plan.getPlanSessions(planId);
     const sessionIds = sessions.map(session => session.id);
-    const sessionsById = arrayToObject(sessions);
+    const sessionsById = arrayToObject(sessions.map(session => {
+      return {
+        id: session.id,
+        terms: session.terms.split(','),
+        year: session.year,
+        season: session.season
+      };
+    }));
 
 
     let formattedPlan = {
@@ -64,10 +65,11 @@ router.get('/:id', async (req, res) => {
       name: plan.title,
       description: plan.description,
       specialization: plan.sid,
-      isFavourite: plan.isFavourite,
+      isFavourite: plan.isFavourite === 1,
       id: plan.id
     };
 
+    console.log({"Sending plan": formattedPlan});
     res.send(formattedPlan);
 
   } catch(e) {
@@ -144,7 +146,6 @@ router.post('/:id/save', async (req, res) => {
   const name = plan.name;
 
   const courseIds = plan.courses.allIds;
-  console.log({"Checking ids": courseIds});
   for (let courseId of courseIds) {
     console.log(courseId);
     const course = await Plan.getCourseFromPlan(courseId, planId);
@@ -163,6 +164,9 @@ router.post('/:id/save', async (req, res) => {
     await Plan.saveNotes(planId, notes);
     await Plan.setFavourite(planId, isFavourite);
     await Plan.setName(planId, name);
+    if (plan.terms.allIds.length > 0) {
+      await Plan.setTerms(planId, plan.terms.allIds);
+    }
     res.status(200).send("Saved planId " + planId);
   } catch(e) {
     console.error({"failed to save": e});

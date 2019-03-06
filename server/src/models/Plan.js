@@ -11,9 +11,9 @@ module.exports = {
   async getPlan(pid) {
     console.log("getting plan " + pid);
     return db
-      .query("SELECT id, time, title, description, isFavourite FROM plan WHERE plan.id = ?", [pid])
+      .query("SELECT id, time, title, description, isFavourite, sid FROM plan WHERE plan.id = ?", [pid])
       .then(rows => {
-        return rows;
+        return rows[0];
       })
       .catch(err => {
         throw err;
@@ -21,20 +21,24 @@ module.exports = {
   },
   async getPlanCourses(pid) {
     const planCourses = await db.query(`
-      SELECT course.id AS courseId, GROUP_CONCAT(cir.rid) AS prerequisites, GROUP_CONCAT(cic.rid) as corequisites, code, standingRequirement, course_term.tid AS term, 
+      SELECT course.id AS courseId, GROUP_CONCAT(cir.rid) AS prerequisites, GROUP_CONCAT(cic.rid) as corequisites, code, standingRequirement, course_term.tid AS term
       FROM plan_course
       JOIN course ON cid = course.id
       JOIN course_info ON course.code = course_info.id
-      JOIN course_term ON course.id = course_term.cid,
+      JOIN course_term ON course.id = course_term.cid
       LEFT JOIN course_info_requirement AS cir ON course.code = cir.cid
       LEFT JOIN course_info_corequirement AS cic ON course.code = cic.cid
       WHERE pid = ?
-      GROUP BY course.id`, [pid]);
+      GROUP BY course.id, course_term.tid`, [pid]);
     return planCourses;
   },
   async getPlanTerms(pid) {
-    const planCourses = await db.query("SELECT * FROM plan_term JOIN term ON tid = term.id JOIN session ON term.sid = session.id WHERE pid = ?", [pid]);
-    return planCourses;
+    const planTerms = await db.query("SELECT * FROM plan_term JOIN term ON tid = term.id JOIN session ON term.sid = session.id WHERE pid = ?", [pid]);
+    return planTerms;
+  },
+  async getPlanSessions(pid) {
+    const planSessions = await db.query("SELECT session.id AS id, session.year, session.season, GROUP_CONCAT(plan_term.tid) AS terms FROM plan_term JOIN term ON tid = term.id JOIN session ON term.sid = session.id WHERE pid = ? GROUP BY session.id", [pid]);
+    return planSessions;
   },
   async getPlanList(uid) {
     const plans = await db.query("SELECT id, title, isFavourite FROM plan WHERE uid = ?", [uid]);
@@ -94,5 +98,11 @@ module.exports = {
       .then(res => {
         return res;
       });
+  },
+  async setTerms(id, terms) {
+    await db.query("DELETE FROM plan_term WHERE pid = ?", [id]);
+    const termObjs = terms.map(term => [id, term]);
+    console.log({"TERM OBJECTS:":termObjs});
+    await db.query("INSERT INTO plan_term VALUES ?", [termObjs]);
   }
 };

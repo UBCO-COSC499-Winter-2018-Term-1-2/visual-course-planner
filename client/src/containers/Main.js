@@ -35,7 +35,7 @@ class Main extends Component {
         allIds: []
       },
       name: "test",
-      specialization: {},
+      specialization: 1,
       description: "",
       isFavourite: false,
       id: 1
@@ -131,8 +131,8 @@ class Main extends Component {
     console.log(planId);
     const response = await axios.get(`/api/plans/${planId}`);
     const plan = response.data;
-    console.log(plan);
-    if (plan.length > 0) {
+    console.log("loading plan", plan);
+    if (plan) {
       this.setState({currentPlan: plan});
     }
   }
@@ -152,6 +152,7 @@ class Main extends Component {
     const planResponse = await axios.get(`/api/plans/user/${user.id}`);
     console.log({plans: planResponse.data});
     this.setState({planList: planResponse.data});
+    await this.loadPlan(planResponse.data[0].id);
   }
 
   render() {
