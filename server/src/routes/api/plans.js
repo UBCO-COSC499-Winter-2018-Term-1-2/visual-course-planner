@@ -41,6 +41,15 @@ router.post('/:pid/user/:uid/favourite', (req, res) => {
 router.post('/new', async (req, res) => {
   const userId = req.body.userId;
   const degreeId = req.body.degreeId;
+  if (!degreeId) {
+    res.send("Need to set degreeId");
+    return;
+  }
+
+  if (!userId) {
+    res.send("Need to set userId");
+    return;
+  }
 
   try {
     const planId = await Plan.createPlan(userId, "untitled", "", degreeId);
@@ -76,6 +85,7 @@ router.post('/:id/save', async (req, res) => {
     const course = await Plan.getCourseFromPlan(courseId, planId);
     if (!course) {
       try {
+        console.log("Saving course " + courseId + " in plan: " + planId);
         await Plan.setPlanCourse(courseId, planId);
         // TODO: need to make sure course are removed as well
       } catch (e) {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './DegreeYear.css';
 import Input from '../Input/input';
+import PropTypes from 'prop-types';
 
 class DegreeYear extends Component {
 
@@ -111,13 +112,15 @@ class DegreeYear extends Component {
     const degreeId = this.state.form.degree.value;
     const data = {userId: userId, degreeId: degreeId};
     console.log({"submitting info": data});
-    await axios.post(`/api/plans/new`, data)
+    const planId = await axios.post(`/api/plans/new`, data)
       .then(response => {
         return response.data.insertId;
       })
       .catch(error => {
         console.log(error);
       });
+
+    this.props.history.push({ pathname: '/main', state: {newPlan: planId}});
   }
 
   componentDidMount = async () => {
@@ -131,7 +134,10 @@ class DegreeYear extends Component {
           degree: {
             ...prevState.form.degree,
             elementConfig: {
-              options: degrees
+              options: [
+                { value: '', displayValue: "Choose degree" },
+                ...degrees
+              ]
             }
           }
         }
@@ -198,6 +204,9 @@ class DegreeYear extends Component {
     );
   }
 }
-    
+
+DegreeYear.propTypes = {
+  history: PropTypes.object
+};
   
 export default DegreeYear;
