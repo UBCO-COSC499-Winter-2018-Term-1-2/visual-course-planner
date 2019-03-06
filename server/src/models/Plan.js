@@ -19,9 +19,14 @@ module.exports = {
         throw err;
       });
   },
-  async getPlanList(id) {
-    const plans = await db.query("SELECT id, title FROM plan WHERE id = ?", [id]);
-    return plans;
+  async getPlanList(uid) {
+    const plans = await db.query("SELECT id, title, isFavourite FROM plan WHERE uid = ?", [uid]);
+    return plans.map(plan => {
+      return {
+        ...plan,
+        isFavourite: plan.isFavourite === 0 ? false : true
+      };
+    });
   },
   async setFavourite(pid, fav) {
     return db.query("UPDATE plan SET isFavourite = ? WHERE id = ?", [fav, pid])

@@ -44,7 +44,8 @@ class Main extends Component {
       name: "test",
       yearStanding: 0
     },
-    warnings: []
+    warnings: [],
+    planList: []
   }
 
   openCourseListSidebar = () => {
@@ -122,18 +123,35 @@ class Main extends Component {
 
   savePlan = async () => {
     const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
-    console.log(response);
+    console.log(response.data);
+  }
+
+  loadPlan = async () => {
+
   }
 
   componentDidUpdate = async () => {
     await this.savePlan();
   }
 
+  componentDidMount = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const userResponse = await axios.get(`/api/users/${userId}`);
+    const user = userResponse.data;
+    console.log({"current user": user});
+    this.setState({
+      user: user
+    });
+    const planResponse = await axios.get(`/api/plans/user/${user.id}`);
+    console.log({plans: planResponse.data});
+    this.setState({planList: planResponse.data});
+  }
+
   render() {
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
-        <PlanList/>
+        <PlanList plans={this.state.planList}/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
           <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>

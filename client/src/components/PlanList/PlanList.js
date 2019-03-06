@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-
-class PlannerList extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      favourites: ["BA Major in Comp Sci"],
-      plans: ["BSc Major in Comp Sci"]
-    };
-  }
-
-
+class PlanList extends Component {
   render() {
-    const listFavourites = this.state.favourites.map((name) => <li key={name}>{name}</li>);
-    const listPlans = this.state.plans.map((name) => <li key={name}>{name}</li>);
+    console.log(this.props.plans);
+    const favouritePlans = this.props.plans
+      .filter(plan => plan.isFavourite === true)
+      .map((plan) => <li key={plan.id}>{plan.title}</li>);
+    const nonfavouritePlans = this.props.plans
+      .filter(plan => plan.isFavourite === false)
+      .map((plan) => <li key={plan.id}>{plan.title}</li>);
     return (
       <div id="plan-list">
         <div className="sidebar-info-area">
-          <h3 className="sidebar-header">DEGREE PLANS</h3>
+          <h3 className="sidebar-header">Degree Plans</h3>
           <h4 className="sidebar-header">Favourites</h4>
           <ul>
-            {listFavourites}
+            {favouritePlans}
           </ul>
           <h4 className="sidebar-header">Plans</h4>
           <ul>
-            {listPlans}
+            {nonfavouritePlans}
           </ul>
         </div>
       </div>
@@ -32,4 +28,8 @@ class PlannerList extends Component {
   }
 }
 
-export default PlannerList;
+PlanList.propTypes = {
+  plans: PropTypes.array
+};
+
+export default PlanList;

@@ -14,15 +14,17 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.get('/user/:id', (req, res) => {
-
-  Plan.getPlanList(req.params.id)
-    .then(plan => {
-      res.send(plan);
-    })
-    .catch(err => {
-      console.error({"Couldn't retrieve plan": err });
-    });
+router.get('/user/:id', async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId);
+  try {
+    const plans = await Plan.getPlanList(userId);
+    console.log({"plans": plans});
+    res.send(plans);
+  } catch(e) {
+    console.error({"Couldn't retrieve plan list": e });
+    res.status(500).send({"Couldn't retrieve plan list": e });
+  }
 });
 
 router.post('/:pid/user/:uid/favourite', (req, res) => {
