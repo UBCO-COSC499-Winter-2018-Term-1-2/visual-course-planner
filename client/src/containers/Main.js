@@ -154,11 +154,7 @@ class Main extends Component {
           <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
           <FavouriteBtn favourite={true}/>
           <OptimizeBtn click={this.optimizeHandler}/>
-          <WarningSummary
-            click={this.showWarning}
-            numberOfWarnings={this.numberOfWarnings}
-            user={this.state.user}
-          />
+          <WarningSummary click={this.showWarning} numberOfWarnings={this.numberOfWarnings} user={this.state.user} />
           <BackdropButton open={this.openCourseList} close={this.closeCourseList} isOpen={this.isCourseListOpen}/>
         </PlannerHeader>
         <PlannerArea
