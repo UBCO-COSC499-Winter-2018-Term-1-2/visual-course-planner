@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './PlanList.css';
 
 class PlanList extends Component {
   render() {
     console.log(this.props.plans);
+
     const favouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === true)
-      .map((plan) => <li key={plan.id}>{plan.title}</li>);
+      .map((plan) => <li onClick={() => {this.props.loadPlan(plan.id);}} className="plan-list-item favourite" key={plan.id}>{plan.title}</li>);
+
     const nonfavouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === false)
-      .map((plan) => <li key={plan.id}>{plan.title}</li>);
+      .map((plan) => <li onClick={() => {this.props.loadPlan(plan.id);}} className="plan-list-item" key={plan.id}>{plan.title}</li>);
+
     return (
       <div id="plan-list">
         <div className="sidebar-info-area">
@@ -29,7 +33,8 @@ class PlanList extends Component {
 }
 
 PlanList.propTypes = {
-  plans: PropTypes.array
+  plans: PropTypes.array,
+  loadPlan: PropTypes.func.isRequired
 };
 
 export default PlanList;

@@ -9,9 +9,9 @@ module.exports = {
     return result.insertId;
   },
   async getPlan(pid) {
+    console.log("getting plan " + pid);
     return db
-      .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id plan.id = ?", [pid])
-
+      .query("SELECT * FROM plan JOIN plan_course ON plan.id = plan_course.pid JOIN course ON plan_course.cid = course.id WHERE plan.id = ?", [pid])
       .then(rows => {
         return rows;
       })

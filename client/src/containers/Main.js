@@ -42,7 +42,7 @@ class Main extends Component {
     },
     user: {
       name: "test",
-      yearStanding: 0
+      standing: 0
     },
     warnings: [],
     planList: []
@@ -126,8 +126,15 @@ class Main extends Component {
     console.log(response.data);
   }
 
-  loadPlan = async () => {
-
+  loadPlan = async (planId) => {
+    await this.savePlan();
+    console.log(planId);
+    const response = await axios.get(`/api/plans/${planId}`);
+    const plan = response.data;
+    console.log(plan);
+    if (plan.length > 0) {
+      this.setState({currentPlan: plan});
+    }
   }
 
   componentDidUpdate = async () => {
@@ -151,7 +158,7 @@ class Main extends Component {
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
-        <PlanList plans={this.state.planList}/>
+        <PlanList plans={this.state.planList} loadPlan={this.loadPlan}/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
           <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>

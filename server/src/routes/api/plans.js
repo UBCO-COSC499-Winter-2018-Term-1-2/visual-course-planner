@@ -82,9 +82,11 @@ router.post('/:id/save', async (req, res) => {
   const name = plan.name;
 
   const courseIds = plan.courses.allIds;
-
-  for (let courseId in courseIds) {
+  console.log({"Checking ids": courseIds});
+  for (let courseId of courseIds) {
+    console.log(courseId);
     const course = await Plan.getCourseFromPlan(courseId, planId);
+    console.log("got course from plan ",course);
     if (!course) {
       try {
         console.log("Saving course " + courseId + " in plan: " + planId);
