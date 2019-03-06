@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import PlannerArea from '../components/Planner/PlannerArea';
 import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
-import PlanName from '../components/PlanName/PlanName';
 import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
 import BackdropButton from '../components/BackdropButton/BackdropButton';
 import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn'; 
@@ -24,48 +23,24 @@ class Main extends Component {
     showSnackbar : false,
     currentPlan: {
       sessions: {
-        byId: {
-          "1": {
-            year: "2018",
-            season: "W",
-            terms: [ "1" ]
-          }
-        },
-        allIds: [ "1" ]
+        byId: {},
+        allIds: []
       },
       terms: {
-        byId: {
-          "1": {
-            session: "1",
-            number: 1,
-            courses: [ "100" ]
-          }
-        },
-        allIds: [ "1" ]
+        byId: {},
+        allIds: []
       },
       courses: {
-        byId: {
-          "100": {
-            code: "COSC 222",
-            standingRequirement: 2,
-            term: "0",
-            coRequisites: [],
-            preRequisites: []
-          }
-        },
-        allIds: [ "100" ]
+        byId: {},
+        allIds: []
       },
-      id: 0,
-      name: "My Plan",
-      specialization: {
-        id: 1,
-        name: "Major in Computer Science"
-      },
+      name: "test",
+      specialization: {},
       description: ""
     },
     user: {
-      name: "Leonardo",
-      yearStanding: 1
+      name: "test",
+      yearStanding: 0
     },
     warnings: []
   }
@@ -85,10 +60,6 @@ class Main extends Component {
 
   createPlanHandler = () => {
     this.props.history.push('/degree-year-selection');
-  }
-
-  setNumberOfWarnings = (number) => {
-    this.setState({numberOfWarnings: number});
   }
 
   setWarnings = (warnings) => {
@@ -150,12 +121,11 @@ class Main extends Component {
         <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
-        <PlannerHeader>
-          <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
+        <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
           <FavouriteBtn favourite={true}/>
           <OptimizeBtn click={this.optimizeHandler}/>
-          <WarningSummary click={this.showWarning} numberOfWarnings={this.numberOfWarnings} user={this.state.user} />
-          <BackdropButton open={this.openCourseList} close={this.closeCourseList} isOpen={this.isCourseListOpen}/>
+          <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
+          <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen}/>
         </PlannerHeader>
         <PlannerArea
           isCourseListOpen={this.state.isCourseListOpen}
