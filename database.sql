@@ -107,15 +107,15 @@ CREATE TABLE plan (
   isDefault   BOOLEAN DEFAULT false,
   isFavourite BOOLEAN DEFAULT false,
   uid         INT,
-  did         INT,
+  sid         INT,
 
   FOREIGN KEY (uid)
     REFERENCES user(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION,
   
-  FOREIGN KEY (did)
-    REFERENCES degree(id)
+  FOREIGN KEY (sid)
+    REFERENCES specialization(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
@@ -246,6 +246,22 @@ CREATE TABLE user_course_info (
     ON DELETE NO ACTION,
 
   PRIMARY KEY (uid, cid)
+);
+
+CREATE TABLE plan_term (
+  pid INT,
+  tid INT,
+
+  FOREIGN KEY (pid)
+    REFERENCES plan(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  FOREIGN KEY (tid)
+    REFERENCES term(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
 );
 
 INSERT INTO course_info (id, credits) VALUES ("ENGL 112", 3);
