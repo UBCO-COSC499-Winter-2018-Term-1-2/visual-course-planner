@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './ConfirmEmail.css';
-import '../Signup/CreateAccountMenu';
 import PropTypes from 'prop-types';
 
 import Input from '../Input/input';
