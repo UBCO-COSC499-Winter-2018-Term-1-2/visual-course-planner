@@ -4,6 +4,11 @@ import PropTypes from 'prop-types';
 import PlannerArea from '../components/Planner/PlannerArea';
 import StudentInfo from '../components/StudentInfo/StudentInfo';
 import PlanList from '../components/PlanList/PlanList';
+import PlanName from '../components/PlanName/PlanName';
+import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
+import BackdropButton from '../components/BackdropButton/BackdropButton';
+import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn'; 
+import WarningSummary from '../components/WarningSummary/WarningSummary';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -145,17 +150,17 @@ class Main extends Component {
         <StudentInfo user={this.state.user}/>
         <PlanList/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
-        <PlannerHeader
-          planName={this.state.currentPlan.name}
-          openCourseList={this.openCourseListSidebar}
-          closeCourseList={this.closeCourseListSidebar}
-          isCourseListOpen={this.state.isCourseListOpen}
-          optimize={this.optimizeHandler}
-          showWarning={this.showSnackbar}
-          numberOfWarnings={this.state.warnings.length}
-          user={this.state.user}
-          onNameChange={this.onNameChange}
-        />
+        <PlannerHeader>
+          <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
+          <FavouriteBtn favourite={true}/>
+          <OptimizeBtn click={this.optimizeHandler}/>
+          <WarningSummary
+            click={this.showWarning}
+            numberOfWarnings={this.numberOfWarnings}
+            user={this.state.user}
+          />
+          <BackdropButton open={this.openCourseList} close={this.closeCourseList} isOpen={this.isCourseListOpen}/>
+        </PlannerHeader>
         <PlannerArea
           isCourseListOpen={this.state.isCourseListOpen}
           closeCourseList={this.closeCourseListSidebar}
