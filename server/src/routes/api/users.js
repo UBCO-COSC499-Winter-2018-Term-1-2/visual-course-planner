@@ -147,6 +147,25 @@ router.get('/:id/coursehistory', async (req, res) => {
 });
 
 /**
+ * @route GET api/users/coursehistory
+ * @desc Retreive all user course history
+ * @access Private
+ */ 
+
+router.get('/:id/userinfo', async (req, res) => {
+  let userId = 1;
+
+  if (await user.getUserById(userId) <= 0){
+    console.log('no user info found');
+    res.status(200).send('no info found for user');
+  } else {
+    const userInfo = await user.getUserById(userId); 
+    console.log(userInfo);
+    res.status(200).send({message: "fetching all user info", user: userInfo});
+  }
+});
+
+/**
  * @route POST api/logout
  * @desc end the users session
  * @access Private
