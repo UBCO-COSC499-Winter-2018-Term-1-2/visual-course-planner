@@ -27,7 +27,15 @@ router.get('/:id', (req, res) => {
 router.get('/', (req, res) => {
   Course.getCourses()
     .then(data => {
-      res.send(data);
+      const courses = data.map(course => {
+        return {
+          ...course,
+          preRequisites: course.preRequisites ? course.preRequisites.split(',') : [],
+          coRequisites: course.coRequisites ? course.coRequisites.split(',') : []
+        };
+      });
+      console.log("GET api/courses", courses);
+      res.send(courses);
     })
     .catch(err => {
       console.error("Couldnt get courses: " + err);

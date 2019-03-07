@@ -293,7 +293,7 @@ INSERT INTO course_info (id, credits) VALUES ("COSC 222", 3);
 INSERT INTO course_info (id, credits) VALUES ("MATH 200", 3);
 INSERT INTO course_info (id, credits) VALUES ("MATH 221", 3);
 INSERT INTO course_info (id, credits) VALUES ("STAT 230", 3);
-INSERT INTO course_info (id, credits) VALUES ("COSC 304", 3);
+INSERT INTO course_info (id, credits, standingRequirement) VALUES ("COSC 304", 3, 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 310", 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 320", 3);
 INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);

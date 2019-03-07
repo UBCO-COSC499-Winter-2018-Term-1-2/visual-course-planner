@@ -13,9 +13,10 @@ const CATEGORY_TYPE = require('../models/Specialization').CATEGORY_TYPE;
 
 function getStandingWarnings(user, course) {
   let warnings = [];
-  if (user.yearStanding < course.standingRequirement) {
+  console.log(user.standing, course.standingRequirement);
+  if (user.standing < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.yearStanding}.`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
       type: "standing"
     });
   }
@@ -24,6 +25,7 @@ function getStandingWarnings(user, course) {
 
 function getPrereqWarnings(plan, course) {
   let warnings = [];
+  console.trace(course);
   const requirements = course.preRequisites;
   requirements.forEach(reqCode => {
     const req = getPlanCourse(plan, reqCode);

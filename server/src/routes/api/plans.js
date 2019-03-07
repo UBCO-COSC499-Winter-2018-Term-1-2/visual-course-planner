@@ -17,8 +17,8 @@ router.get('/:id', async (req, res) => {
     const coursesById = arrayToObject(courses.map(course => {
       return {
         id: course.courseId,
-        preRequisites: course.prerequisites.split(','),
-        coRequisites: course.corequisites.split(','),
+        preRequisites: course.prerequisites ? course.prerequisites.split(',') : [],
+        coRequisites: course.corequisites ? course.corequisites.split(',') : [],
         standingRequirement: course.standingRequirement,
         term: course.term,
         code: course.code
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
         id: term.tid,
         number: term.number,
         session: term.sid,
-        courses: courses.filter(course => course.term === term.id).map(course => course.courseId)
+        courses: courses.filter(course => course.term === term.tid).map(course => course.courseId)
       };
     }));
 

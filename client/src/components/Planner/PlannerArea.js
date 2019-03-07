@@ -160,7 +160,6 @@ class PlannerArea extends Component {
   renderTerms = () => {
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
-      console.log({...this.props.plan.sessions, sessionId });
       const terms = session.terms.map(termId => {
         const term = this.props.plan.terms.byId[termId];
         const courses = term.courses.map(courseId => {
@@ -229,34 +228,6 @@ class PlannerArea extends Component {
     }  
   }
 
-  getWarnings = async () => {
-    try {
-      const response = await axios.post('api/warnings', 
-        {
-          plan: this.props.plan,
-          user: this.props.user
-        },
-        {
-          headers: { "Content-Type": "application/json" }
-        }
-      );
-      return response.data;
-      
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
-  updateWarnings() {
-    this.getWarnings()
-      .then(warnings => {
-        this.props.setWarnings(warnings);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
   onCourseDragEnterTrash = (e) => {
     e.preventDefault();
     this.trashDragCounter++;
@@ -289,6 +260,7 @@ class PlannerArea extends Component {
 
     const courses = plan.terms.byId[sourceTermId].courses;
     courses.splice(courses.indexOf(incomingCourse.id), 1);
+    delete plan.courses.byId[incomingCourse.id];
     plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
     
     this.props.updatePlan(plan);
@@ -296,27 +268,6 @@ class PlannerArea extends Component {
       trashColour: "white"
     });
     
-  }
-
-  componentDidMount() {
-    this.updateWarnings();
-  }
-
-  componentDidUpdate(prevProps) {
-    let same = true;
-    
-    if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
-      same = false;
-    } else {
-      for (let course in prevProps.plan.courses.byId) {
-        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
-          same = false;
-        }
-      }
-    }
-    if (!same) {
-      this.updateWarnings();
-    }
   }
 
   render() {
@@ -361,7 +312,6 @@ PlannerArea.propTypes = {
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,
   updatePlan: PropTypes.func.isRequired,
-  setWarnings: PropTypes.func.isRequired,
   warnings: PropTypes.array.isRequired,
   closeCourseList: PropTypes.func.isRequired,
   isCourseListOpen: PropTypes.bool.isRequired

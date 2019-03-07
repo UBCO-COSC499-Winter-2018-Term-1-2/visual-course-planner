@@ -77,14 +77,29 @@ class Main extends Component {
     this.props.history.push('/degree-year-selection');
   }
 
-  setWarnings = (warnings) => {
-    this.setState({
-      warnings: warnings
-    });
+  updateWarnings = async () => {
+    let warnings = [];
+    try {
+      const response = await axios.post('api/warnings', 
+        {
+          plan: this.state.currentPlan,
+          user: this.state.user
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      warnings = response.data;
+    } catch(err) {
+      console.log(err);
+    }
+
+    console.log("setting warnings", warnings);
+    this.setState({warnings: warnings});
   }
 
   updatePlan = (plan) => {
-    this.setState({ currentPlan: plan });
+    this.setState({ currentPlan: plan }, this.updateWarnings);
   }
 
   onNameChange = (e) => {
@@ -137,6 +152,13 @@ class Main extends Component {
     }
   }
 
+  getPlanList = async (userId) => {
+    const planResponse = await axios.get(`/api/plans/user/${userId}`);
+    const plans = planResponse.data;
+    console.log({plans: plans});
+    return plans;
+  }
+
   componentDidUpdate = async () => {
     await this.savePlan();
   }
@@ -149,10 +171,11 @@ class Main extends Component {
     this.setState({
       user: user
     });
-    const planResponse = await axios.get(`/api/plans/user/${user.id}`);
-    console.log({plans: planResponse.data});
-    this.setState({planList: planResponse.data});
-    await this.loadPlan(planResponse.data[0].id);
+    const planList = await this.getPlanList(userId);
+    this.setState({planList: planList});
+    if (planList.length > 0) {
+      await this.loadPlan(planList[0].id);
+    }
   }
 
   render() {
@@ -176,7 +199,6 @@ class Main extends Component {
           showSnackbar={this.state.showSnackbar}
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
-          setWarnings={this.setWarnings}
         />    
       </div>
     );
