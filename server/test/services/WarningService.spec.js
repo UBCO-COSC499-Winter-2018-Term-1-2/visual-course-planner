@@ -125,7 +125,7 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 1
+        standing: 1
       };
   
       let courseNoPrereq = {
@@ -159,7 +159,7 @@ describe("WarningService", () => {
     it("should return a standing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 2
+        standing: 2
       };
 
       let course = {
@@ -194,7 +194,7 @@ describe("WarningService", () => {
     it("should return a coreq missing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 3
+        standing: 3
       };
 
       let course = {
