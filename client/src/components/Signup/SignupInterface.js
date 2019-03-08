@@ -103,7 +103,6 @@ class SignupInterface extends Component {
       },
       confirmPassword: {
         errors: {}
-
       },
     },
     //end of menu
