@@ -89,11 +89,31 @@ class profile extends Component {
         },
       
       }, //end of profile menu
+
+      //error state (form validation)
+      errors:{
+        email: {
+          errors: {}
+        },
+        fName: {
+          errors: {}
+        },
+        lName: {
+          errors: {}
+        },
+        password: {
+          errors: {}
+        },
+        confirmPassword: {
+          errors: {}
+
+        },
+      },
       formIsValid: false,
       loading: false
     }
     
-    checkValidity(value, rules) {
+    checkValidity(value, rules, name, errorName) {
       let isValid = true;
       if(!rules){
         return true;
@@ -101,23 +121,66 @@ class profile extends Component {
         
       if(rules.required){
         isValid = value.trim() !== '' && isValid;
+        //isValid === false ? this.addError("inputRequired", "All fields are required") : this.removeError("inputRequired");
       } 
-
+  
+      if (rules.matches){
+        const needsToMatch = this.state.createAccountMenu[rules.matches].value;
+        const matches = value === needsToMatch; 
+        console.log(value);
+        console.log(needsToMatch);
+        isValid === !matches ? this.addError(name, "Passwords must match", 'match') : this.removeError(name, 'match');
+      }
+      
       if (rules.minLength) {
         isValid = value.length >= rules.minLength && isValid;
-        console.log("minlength: " + isValid);
-        console.log("passwword value: " + value);
+        isValid === false ? this.addError(name, `${errorName} must be longer than 5 characters`, 'length') : this.removeError(name, 'length');
       }
-
-      // if(rules.passDiff){
-      //   const pass = value;
-      //   const confirmPass = value;
-      //   isValid = (pass !== confirmPass) && isValid;
-      //   console.log("Passes are different!!: " + isValid);
-      // }
-    
+  
+      if (rules.isEmail) {
+        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        isValid = pattern.test(value) && isValid;
+        //console.log(isValid);
+        isValid === false ? this.addError("email", "Please insert a valid email address", 'email') : this.removeError("email", 'email');
+  
+      }
+  
       return isValid;
     }
+
+    addError = (element, message, type) => {
+      //console.log("Setting error");
+      this.setState(prevState => {
+        let elementErrors = prevState.errors[element].errors;
+        elementErrors[type] = message;
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              errors: elementErrors
+            }
+          }
+        };
+      });
+    }
+    
+    removeError = (element, type) => {
+      this.setState(prevState => {
+        let elementErrors = prevState.errors[element].errors;
+        delete elementErrors[type];
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              errors: elementErrors
+            }
+          }
+        };
+      });
+    }
+
       handler = ( event ) => {
         event.preventDefault();
         this.setState( { loading: true } );
@@ -161,9 +224,9 @@ class profile extends Component {
             config: this.state.profileMenu[key]
           });
         }
+
+        ///Response.data.user.email. -------------------------------------------------
         
-        //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-        //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
         let form = (
           <form onSubmit={this.handler}>
             {formElementsArray.map(formElement => (
