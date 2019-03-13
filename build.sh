@@ -12,13 +12,18 @@ npm i -g npm@6
 # Enforce linting
 npm run lint
 
+# Run server tests
+npm run server-test
+
+cd client
+
 # Switch to current node version
 nvm use
 
 # Install deps
-( npm ci && cd client && npm ci )
+npm ci
 
-# Run server tests
+# Runs tests
 npm run test
 
 # Build project
