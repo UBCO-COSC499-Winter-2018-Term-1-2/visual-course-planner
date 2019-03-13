@@ -5,7 +5,7 @@ const expressValidator = require('express-validator');
 const passport = require('passport');
 
 
-router.use(expressValidator()); // put the use in server.js and also import through npm?
+router.use(expressValidator());
 
 //user model
 const User = require('../../models/User');
@@ -142,7 +142,7 @@ router.get('/:id/coursehistory', async (req, res) => {
   } else {
     const courses = await user.getCourses(userId); 
     console.log(courses);
-    res.status(200).send("fetching all user courses: " + courses);
+    res.status(200).send({message: "fetching all user course history", course: courses});
   }
 });
 
