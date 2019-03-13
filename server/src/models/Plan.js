@@ -2,7 +2,6 @@ const promisify = require('util').promisify;
 const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
-
 module.exports = {
   async createPlan(userId, name, desc, sid) {
     const result = await db.query("INSERT INTO plan (title, description, uid, sid) VALUES (?,?,?,?)", [name, desc, userId, sid]);
@@ -76,7 +75,7 @@ module.exports = {
       });
   },
   async getCourseFromPlan(cid, pid) {
-    return db.query("SELECT * FROM plan_course WHERE cid = ? AND pid = ?", [cid, pid])
+    return db.query("SELECT pid, cid FROM plan_course WHERE cid = ? AND pid = ?", [cid, pid])
       .then(results => {
         return results[0];
       })
@@ -100,9 +99,16 @@ module.exports = {
       });
   },
   async setTerms(id, terms) {
+    console.log({["Deleting terms in " + id]: terms});
     await db.query("DELETE FROM plan_term WHERE pid = ?", [id]);
     const termObjs = terms.map(term => [id, term]);
-    console.log({"TERM OBJECTS:":termObjs});
-    await db.query("INSERT INTO plan_term VALUES ?", [termObjs]);
+    if (termObjs.length > 0) {
+      console.log({"TERM OBJECTS:":termObjs});
+      await db.query("INSERT INTO plan_term VALUES ?", [termObjs]);
+    }
+  },
+
+  async removeCourses(pid) {
+    await db.query("DELETE FROM plan_course WHERE pid = ?", [pid]);
   }
 };

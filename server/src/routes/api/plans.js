@@ -146,10 +146,12 @@ router.post('/:id/save', async (req, res) => {
   const name = plan.name;
 
   const courseIds = plan.courses.allIds;
+  Plan.removeCourses(planId);
   for (let courseId of courseIds) {
     console.log(courseId);
+
+    // Check if plan has course in it
     const course = await Plan.getCourseFromPlan(courseId, planId);
-    console.log("got course from plan ",course);
     if (!course) {
       try {
         console.log("Saving course " + courseId + " in plan: " + planId);
@@ -164,9 +166,8 @@ router.post('/:id/save', async (req, res) => {
     await Plan.saveNotes(planId, notes);
     await Plan.setFavourite(planId, isFavourite);
     await Plan.setName(planId, name);
-    if (plan.terms.allIds.length > 0) {
-      await Plan.setTerms(planId, plan.terms.allIds);
-    }
+    await Plan.setTerms(planId, plan.terms.allIds);
+    
     res.status(200).send("Saved planId " + planId);
   } catch(e) {
     console.error({"failed to save": e});

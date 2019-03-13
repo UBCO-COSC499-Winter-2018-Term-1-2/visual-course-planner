@@ -81,7 +81,9 @@ class Main extends Component {
   }
 
   updatePlan = (plan) => {
-    console.log({"Updating plan": plan});
+    console.log({message: "Updating plan",
+      "old plan": this.state.currentPlan,
+      "new plan": plan});
     this.setState({ currentPlan: plan }, this.updateWarnings);
   }
 

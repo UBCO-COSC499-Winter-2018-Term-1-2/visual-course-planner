@@ -13,7 +13,7 @@ class PlannerArea extends Component {
     trashColour: "white"
   }
 
-  trashDragCounter = 0;
+  trashDragCounter = 0; // Needed for trash drag n drop
 
   getNextTerm(latestTerm, latestSession) {
     let nextTermNumber;
@@ -42,6 +42,7 @@ class PlannerArea extends Component {
   }
 
   addTermToPlan = async () => {
+    console.log("Adding term to plan...");
     // set initial session to random one
     const plan = {...this.props.plan};
     let mostRecentSession = {};
@@ -104,7 +105,8 @@ class PlannerArea extends Component {
     plan.terms.allIds.push(nextTerm.id);
     console.log(plan);
     this.props.updatePlan(plan);
-    
+    console.log("Added term to plan");
+
   }
 
   removeTermFromPlan = async (termId) => {
@@ -219,17 +221,15 @@ class PlannerArea extends Component {
       plan.courses.allIds.push(incomingCourse.id.toString());
       plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
       delete incomingCourse.id;
-
-      this.props.updatePlan(plan);
     } else {
       console.log("Moving course already in plan", incomingCourse);
       const courses = plan.terms.byId[sourceTermId].courses;
       courses.splice(courses.indexOf(incomingCourse.id), 1);
       plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
       console.log("Moved Course: " + JSON.stringify(incomingCourse));
-
-      this.props.updatePlan(plan);
-    }  
+    }
+    
+    this.props.updatePlan(plan);
   }
 
   onCourseDragEnterTrash = (e) => {
