@@ -59,12 +59,6 @@ class Plan {
 
 
   }
-
-  render(){
-    <div> 
-    <button className="sidebar-button">New Degree Plan -> </button>
-    </div>
-  }
 }
 
 module.exports = Plan;
