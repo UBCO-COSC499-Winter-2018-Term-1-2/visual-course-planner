@@ -20,6 +20,7 @@ module.exports = {
       }
 
       const session = await sessionService.ensureSession(element.year, element.season);
+      console.log("Session exists: ", session);
   
       // ensure term exists
       const term = await termService.ensureTerm(element.term, session.id);

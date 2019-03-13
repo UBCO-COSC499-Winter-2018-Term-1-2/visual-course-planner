@@ -5,7 +5,7 @@ import '../Login/LoginInterface.css';
 import { Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Input from '../Input/input';
-//import axios from 'axios';
+import axios from 'axios';
 //import validationWarning from '../WarningSnackbar/WarningSnackbar';
 
 class CreateAccountMenu extends Component {
@@ -67,7 +67,6 @@ class CreateAccountMenu extends Component {
           validation: {
             required: true,
             minLength: 5,
-            passMatch: true,
           },
           name: 'password',
           valid: false,
@@ -83,7 +82,7 @@ class CreateAccountMenu extends Component {
           validation: {
             required: true,
             minLength: 5,
-            passMatch: true,
+            matches: 'password',
           },
           name: 'confirmPassword',
           valid: false,
@@ -93,25 +92,26 @@ class CreateAccountMenu extends Component {
       //error state (form validation)
       errors:{
         email: {
-          hasError: false
+          errors: {}
         },
         fName: {
-          hasError: false
+          errors: {}
         },
         lName: {
-          hasError: false
+          errors: {}
         },
         password: {
-          hasError: false
+          errors: {}
         },
         confirmPassword: {
-          hasError: false
+          errors: {}
+
         },
       },
       //end of menu
 
       formIsValid: false,
-      loading: false
+      loading: false,
     }// end of state
 
 
@@ -123,69 +123,61 @@ class CreateAccountMenu extends Component {
         
       if(rules.required){
         isValid = value.trim() !== '' && isValid;
-        //isValid === false ? this.setError("inputRequired", "All fields are required") : this.removeError("inputRequired");
+        //isValid === false ? this.addError("inputRequired", "All fields are required") : this.removeError("inputRequired");
       } 
 
+      if (rules.matches){
+        const needsToMatch = this.state.createAccountMenu[rules.matches].value;
+        const matches = value === needsToMatch; 
+        console.log(value);
+        console.log(needsToMatch);
+        isValid === !matches ? this.addError(name, "Passwords must match", 'match') : this.removeError(name, 'match');
+      }
+      
       if (rules.minLength) {
         isValid = value.length >= rules.minLength && isValid;
-        // console.log("minlength: " + isValid);
-        if(name === 'password'){
-          isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("password");
-        } else if (name === 'confirmPassword'){
-          isValid === false ? this.setError("confirmPassword", "Password must be longer than 5 characters") : this.removeError("confirmPassword");
-        }
-       
+        isValid === false ? this.addError(name, `${name} must be longer than 5 characters`, 'length') : this.removeError(name, 'length');
       }
 
       if (rules.isEmail) {
         const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
         isValid = pattern.test(value) && isValid;
         //console.log(isValid);
-        isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+        isValid === false ? this.addError("email", "Please insert a valid email address", 'email') : this.removeError("email", 'email');
 
       }
-
-      // if(rules.passMatch){
-      //   const pass = value;
-      //   const confirmPass = value;
-      //   if (pass === confirmPass){
-      //     isValid = pass === confirmPass && isValid;
-      //   } else {
-      //     isValid === false ? this.setError("confirmPassword", "Passwords must match") : this.removeError("confirmPassword");
-      //   }
-      //console.log("Pass: " + this.password.value);
-      //console.log("PassCon: " + confirmPass);
-      // }
-
 
       return isValid;
     }
 
 
-  setError = (element, message) => {
+  addError = (element, message, type) => {
     //console.log("Setting error");
     this.setState(prevState => {
+      let elementErrors = prevState.errors[element].errors;
+      elementErrors[type] = message;
       return {
         ...prevState,
         errors: {
           ...prevState.errors,
           [element]: {
-            hasError: true,
-            message: message
+            errors: elementErrors
           }
         }
       };
     });
   }
 
-  removeError = (element) => {
+  removeError = (element, type) => {
     this.setState(prevState => {
+      let elementErrors = prevState.errors[element].errors;
+      delete elementErrors[type];
       return {
         ...prevState,
         errors: {
           ...prevState.errors,
           [element]: {
-            hasError: false,
+            errors: elementErrors
           }
         }
       };
@@ -200,21 +192,23 @@ class CreateAccountMenu extends Component {
     for (let formElementIdentifier in this.state.createAccountMenu) {
       formData[formElementIdentifier] = this.state.createAccountMenu[formElementIdentifier].value;
     }
+
+   
     //let formData = new FormData();
     // for (let formElementIdentifier in this.state.createAccountMenu) {
     //   formData.append(formElementIdentifier, this.state.createAccountMenu[formElementIdentifier].value);
     // }
    
-    // axios.post( '/api/users', formData )
-    //   .then( response => {
-    //     this.setState( { loading: false } );
-    //     //this.props.history.push('/');
-    //     console.log(response);
-    //   } )
-    //   .catch( error => {
-    //     this.setState( { loading: false } );
-    //     console.log(error);
-    //   } );
+    axios.post( '/api/users', formData )
+      .then( response => {
+        this.setState( { loading: false } );
+        //this.props.history.push('/');
+        console.log(response);
+      } )
+      .catch( error => {
+        this.setState( { loading: false } );
+        console.log(error);
+      } );
   
   }
 
@@ -234,6 +228,7 @@ class CreateAccountMenu extends Component {
     updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, updatedMenuElement.name);
     updatedMenuElement.inputElementTouched = true;
     updatedCreateAccountMenu[inputIdentifier] = updatedMenuElement;
+
     
     let formIsValid = true;
     for (let inputIdentifier in updatedCreateAccountMenu){
@@ -247,6 +242,7 @@ class CreateAccountMenu extends Component {
   onNavigation = () => {
     this.props.history.push('/course-history');
   }
+
 
   render(){
     const formElementsArray = [];
@@ -272,15 +268,16 @@ class CreateAccountMenu extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
               name={formElement.config.name}
-              label={formElement.config.label}
+              label={formElement.config.label} 
+
             />
-            {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
+            {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
           </div>
         ))}
     
         {/* <Link to = "/course-history"><button className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button></Link>  */}
-        <button  className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
-        <button className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
+        <button  type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigation}>Create Account</button>
+        <button type= "button" className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
       </form>
     );

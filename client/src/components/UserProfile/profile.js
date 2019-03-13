@@ -173,7 +173,7 @@ class profile extends Component {
           //RETURN LOGIN MENU HERE
           <div>
             <div className="profile-menu">
-              <h1 className="yellow-title">Users Name </h1>
+              <h1 className="yellow-title">Profile </h1>
               {form} 
               
               

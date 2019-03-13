@@ -19,9 +19,17 @@ class WarningSnackbar extends Component {
   WarningMessageList = () => {
     let warnings;
     if (this.props.warnings.length > 0) {
-      warnings = this.props.warnings.map((warning, index) => (
-        <div className="warning-message-container" key={index}>
-          <p>{warning.message}</p>
+      // Map warnings to array of warning messagee fragments
+      // need to convert from \n to <p>
+      let messageParts = [];
+      warnings = this.props.warnings.forEach(warning => {
+        messageParts.push(warning.message.split('\n'));
+      });
+      
+      // Build the jsx elements
+      warnings = messageParts.map((message, idx) => (
+        <div className="warning-message-container" key={idx}>
+          {message.map( (fragment, index) => (<p key={index}>{fragment}</p>))}
         </div>
       ));
     } else {
@@ -31,12 +39,14 @@ class WarningSnackbar extends Component {
         </div>
       );
     }
+    console.log(warnings);
     return (
       <div className="warning-list-container">
         {warnings}
       </div>
     );
   }
+
   render() {
     return (
       <div className={this.props.showSnackbar ? "warning-snackbar-wrapper show" : "warning-snackbar-wrapper"}>
