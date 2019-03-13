@@ -4,7 +4,7 @@
   width: 15em;
   background-color: #c5980f; 
   color: black;
-  text-align: center; 
+  text-align: left; 
   border-radius: 0.2em;
   padding: 0.2em; 
   position: absolute; 
@@ -67,4 +67,10 @@
   padding: 0;
   margin: 0;
   overflow: hidden;
+  padding: 0 1em;
+  margin-bottom: 1em;
+}
+
+.warning-message-container p {
+  margin: 0;
 }

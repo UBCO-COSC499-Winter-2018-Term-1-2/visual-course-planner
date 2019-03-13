@@ -10,9 +10,13 @@ router.post('/', async (req, res) => {
   } else if (!req.body.hasOwnProperty('user')) {
     res.status(500).send("Did not receive user.");
   } else {
-    const specReqs = await Specialization.getSpecializationRequirements(req.body.plan.specialization.id);
-    const warnings = warningService.getWarnings(req.body.plan, req.body.user, specReqs);
-    res.send(warnings);
+    try {
+      const specReqs = await Specialization.getSpecializationRequirements(req.body.plan.specialization.id);
+      const warnings = warningService.getWarnings(req.body.plan, req.body.user, specReqs);
+      res.send(warnings);
+    } catch (e) {
+      console.error(e);
+    }
   }
 });
 

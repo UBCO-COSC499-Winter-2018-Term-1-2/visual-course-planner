@@ -1,5 +1,31 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/User');
+const userChange = require('../../models/User');
+
+router.post('/:id/changePassword', (req, res) => {
+  const UserId = req.params.id;
+  userChange.changePassword(UserId, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("Couldn't change password");
+    }
+  });
+});
+
+router.post('/:id/updateUserInfo', (req, res) => {
+  const UserId = req.params.id;
+  userChange.updateUser(UserId, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("Couldn't change info");
+    }
+  });
+});
+
+module.exports = router;
 const bcrypt = require('bcryptjs');
 const expressValidator = require('express-validator');
 const passport = require('passport');
@@ -8,7 +34,7 @@ const passport = require('passport');
 router.use(expressValidator());
 
 //user model
-const User = require('../../models/User');
+
 const user = new User();
 
 /**
@@ -134,14 +160,14 @@ router.post('/:id/coursehistory', async (req, res) => {
  */ 
 
 router.get('/:id/coursehistory', async (req, res) => {
-  let userId = req.params.id;
+  let userId = 1;
 
   if (await user.getCourses(userId) <= 0){
     console.log('no course history found for user');
     res.status(200).send('no course history found for user');
   } else {
     const courses = await user.getCourses(userId); 
-    console.log(courses);
+    console.log(courses[0]);
     res.status(200).send({message: "fetching all user course history", course: courses});
   }
 });
