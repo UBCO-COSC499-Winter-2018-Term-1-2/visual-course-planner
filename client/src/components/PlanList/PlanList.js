@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './PlanList.css';
+import NewPlanButton from '../Planner/NewPlanButton';
 
 class PlanList extends Component {
   render() {
@@ -26,6 +27,7 @@ class PlanList extends Component {
           <ul>
             {nonfavouritePlans}
           </ul>
+          <NewPlanButton onClick={this.props.newPlan} />
         </div>
       </div>
     );
@@ -34,7 +36,8 @@ class PlanList extends Component {
 
 PlanList.propTypes = {
   plans: PropTypes.array,
-  loadPlan: PropTypes.func.isRequired
+  loadPlan: PropTypes.func.isRequired,
+  newPlan: PropTypes.func.isRequired
 };
 
 export default PlanList;

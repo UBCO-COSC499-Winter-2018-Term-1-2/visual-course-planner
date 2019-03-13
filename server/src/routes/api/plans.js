@@ -175,7 +175,7 @@ router.post('/:id/save', async (req, res) => {
   }
 });
 
-router.delete(':/id', (req, res) => {
+router.delete(':/id', async (req, res) => {
   const planId = req.params.id;
 
   await Plan.deletePlan(planId);

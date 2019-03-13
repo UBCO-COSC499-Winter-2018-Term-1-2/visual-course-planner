@@ -12,10 +12,10 @@ import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Font Awesome Icon Imports
-library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle);
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt);
 
 class Main extends Component {
   state = {
@@ -170,11 +170,15 @@ class Main extends Component {
     }
   }
 
+  newPlan = async () => {
+    this.props.history.push('/degree-year-selection');
+  }
+
   render() {
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
-        <PlanList plans={this.state.planList} loadPlan={this.loadPlan}/>
+        <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan}/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
