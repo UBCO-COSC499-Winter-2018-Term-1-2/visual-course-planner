@@ -142,7 +142,6 @@ class Main extends Component {
   getPlanList = async (userId) => {
     const planResponse = await axios.get(`/api/plans/user/${userId}`);
     const plans = planResponse.data;
-    console.log({plans: plans});
     return plans;
   }
 

@@ -4,7 +4,7 @@ import './PlanList.css';
 
 class PlanList extends Component {
   render() {
-    console.log(this.props.plans);
+    console.log({message: "PlanLists plans", plans: this.props.plans});
 
     const favouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === true)

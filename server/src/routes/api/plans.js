@@ -13,36 +13,36 @@ router.get('/:id', async (req, res) => {
     const plan = await Plan.getPlan(planId);
 
     const courses = await Plan.getPlanCourses(planId);
-    const courseIds = courses.map(course => course.courseId);
+    const courseIds = courses.map(course => course.courseId.toString());
     const coursesById = arrayToObject(courses.map(course => {
       return {
-        id: course.courseId,
+        id: course.courseId.toString(),
         preRequisites: course.prerequisites ? course.prerequisites.split(',') : [],
         coRequisites: course.corequisites ? course.corequisites.split(',') : [],
         standingRequirement: course.standingRequirement,
-        term: course.term,
+        term: course.term.toString(),
         code: course.code
       };
     }));
 
     const terms = await Plan.getPlanTerms(planId);
     console.log({"Loading terms": terms});
-    const termIds = terms.map(term => term.tid);
+    const termIds = terms.map(term => term.tid.toString());
     const termsById = arrayToObject(terms.map(term => {
       return {
-        id: term.tid,
+        id: term.tid.toString(),
         number: term.number,
-        session: term.sid,
-        courses: courses.filter(course => course.term === term.tid).map(course => course.courseId)
+        session: term.sid.toString(),
+        courses: courses.filter(course => course.term === term.tid).map(course => course.courseId.toString())
       };
     }));
 
     const sessions = await Plan.getPlanSessions(planId);
-    const sessionIds = sessions.map(session => session.id);
+    const sessionIds = sessions.map(session => session.id.toString());
     const sessionsById = arrayToObject(sessions.map(session => {
       return {
-        id: session.id,
-        terms: session.terms.split(','),
+        id: session.id.toString(),
+        terms: session.terms.split(',').map(id => id.toString()),
         year: session.year,
         season: session.season
       };

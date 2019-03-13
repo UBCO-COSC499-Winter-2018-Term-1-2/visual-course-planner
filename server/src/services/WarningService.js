@@ -25,7 +25,6 @@ function getStandingWarnings(user, course) {
 
 function getPrereqWarnings(plan, course) {
   let warnings = [];
-  console.trace(course);
   const requirements = course.preRequisites;
   requirements.forEach(reqCode => {
     const req = getPlanCourse(plan, reqCode);

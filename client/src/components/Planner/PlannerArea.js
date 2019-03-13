@@ -112,37 +112,37 @@ class PlannerArea extends Component {
   removeTermFromPlan = async (termId) => {
     const plan = { ...this.props.plan};
     console.log({plan});
-    const { courses, session } = plan.terms.byId[termId];
-    console.log({"removing ": {termId, courses, session}});
+    const termCourses = plan.terms.byId[termId].courses;
+    const termSessionId = plan.terms.byId[termId].session;
+    console.log({"removing ": {termId, termCourses, termSessionId}});
 
     // Remove courses
-    plan.courses.allIds = plan.courses.allIds.filter(id => courses.indexOf(id) === -1);
+    plan.courses.allIds = plan.courses.allIds.filter(id => termCourses.indexOf(id) === -1);
     const newCoursesById = plan.courses.byId;
-    for (let course in courses) {
+    for (let course in termCourses) {
       delete newCoursesById[course];
     }
     plan.courses.byId = newCoursesById;
 
     // Remove session
-    const previousSessionsById = plan.sessions.byId;
-    const previousSession = previousSessionsById[session];
-    console.trace({ previousSessionsById, session });
+    const previousSession = { ...plan.sessions.byId[termSessionId]};
 
     if (previousSession.terms.length === 1) {
-      delete previousSessionsById[session];
-      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== session);
-    } else {
-      const newTerms = [ ...previousSession.terms];
+      delete plan.sessions.byId[termSessionId];
+      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== termSessionId);
       
-      newTerms.splice(previousSession.terms.indexOf(termId), 1);
-      previousSession.terms = newTerms;
-      plan.sessions.byId[session] = previousSession;
+    } else {
+      const newSessionTerms = [ ...previousSession.terms];
+      
+      newSessionTerms.splice(previousSession.terms.indexOf(termId), 1);
+      previousSession.terms = newSessionTerms;
+      plan.sessions.byId[termSessionId] = previousSession;
     }
 
     // Remove term
-    const previousTermsById = { ...plan.terms.byId };
-    delete previousTermsById[termId];
+    delete plan.terms.byId[termId];
     plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
+    console.log("plan should not have " + termId, plan);
 
     this.props.updatePlan(plan);
   }
@@ -228,7 +228,7 @@ class PlannerArea extends Component {
       plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
       console.log("Moved Course: " + JSON.stringify(incomingCourse));
     }
-    
+
     this.props.updatePlan(plan);
   }
 
