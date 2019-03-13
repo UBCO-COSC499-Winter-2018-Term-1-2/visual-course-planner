@@ -158,6 +158,10 @@ class PlannerArea extends Component {
 
   //rendering term components by mapping defaultTerms state variable
   renderTerms = () => {
+    if (!Object.keys(this.props.plan).length) {
+      return;
+    }
+    console.log(this.props.plan);
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
       const terms = session.terms.map(termId => {
@@ -273,7 +277,7 @@ class PlannerArea extends Component {
   render() {
     return (
       <div id="planner-area-container">
-        <this.renderTerms />
+        {this.renderTerms()}
 
         <CourseListSideBar 
           isOpen={this.props.isCourseListOpen} 
@@ -307,7 +311,7 @@ class PlannerArea extends Component {
 }
 
 PlannerArea.propTypes = {
-  plan: PropTypes.object.isRequired,
+  plan: PropTypes.object,
   user: PropTypes.object.isRequired,
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,

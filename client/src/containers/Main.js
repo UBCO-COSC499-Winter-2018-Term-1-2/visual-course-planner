@@ -21,25 +21,7 @@ class Main extends Component {
   state = {
     isCourseListOpen: false,
     showSnackbar : false,
-    currentPlan: {
-      sessions: {
-        byId: {},
-        allIds: []
-      },
-      terms: {
-        byId: {},
-        allIds: []
-      },
-      courses: {
-        byId: {},
-        allIds: []
-      },
-      name: "test",
-      specialization: 1,
-      description: "",
-      isFavourite: false,
-      id: 1
-    },
+    currentPlan: {},
     user: {
       name: "test",
       standing: 0
@@ -99,6 +81,7 @@ class Main extends Component {
   }
 
   updatePlan = (plan) => {
+    console.log({"Updating plan": plan});
     this.setState({ currentPlan: plan }, this.updateWarnings);
   }
 
@@ -137,12 +120,14 @@ class Main extends Component {
   }
 
   savePlan = async () => {
-    const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
-    console.log(response.data);
+    if (this.shouldRenderPlan()) {
+      console.log({"Saving current plan = ": this.state.currentPlan} );
+      const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
+      console.log(response.data);
+    }
   }
 
   loadPlan = async (planId) => {
-    await this.savePlan();
     console.log(planId);
     const response = await axios.get(`/api/plans/${planId}`);
     const plan = response.data;
@@ -178,28 +163,37 @@ class Main extends Component {
     }
   }
 
+  shouldRenderPlan = () => {
+    if (Object.keys(this.state.currentPlan).length !== 0) {
+      return true;
+    }
+  }
+
   render() {
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
         <PlanList plans={this.state.planList} loadPlan={this.loadPlan}/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
-        <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
-          <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
-          <OptimizeBtn click={this.optimizeHandler}/>
-          <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
-          <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen}/>
-        </PlannerHeader>
-        <PlannerArea
-          isCourseListOpen={this.state.isCourseListOpen}
-          closeCourseList={this.closeCourseListSidebar}
-          plan={this.state.currentPlan}
-          user={this.state.user}
-          updatePlan={this.updatePlan}
-          showSnackbar={this.state.showSnackbar}
-          closeSnackbar={this.closeSnackbar}
-          warnings={this.state.warnings}
-        />    
+        {this.shouldRenderPlan() &&
+          <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
+            <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
+            <OptimizeBtn click={this.optimizeHandler}/>
+            <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
+            <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />
+          </PlannerHeader>}
+        {this.shouldRenderPlan() &&
+          <PlannerArea
+            isCourseListOpen={this.state.isCourseListOpen}
+            closeCourseList={this.closeCourseListSidebar}
+            plan={this.state.currentPlan}
+            user={this.state.user}
+            updatePlan={this.updatePlan}
+            showSnackbar={this.state.showSnackbar}
+            closeSnackbar={this.closeSnackbar}
+            warnings={this.state.warnings}
+          />}
+        {!this.shouldRenderPlan() && <div className="centered">Create a plan to get started!</div>}
       </div>
     );
   }
