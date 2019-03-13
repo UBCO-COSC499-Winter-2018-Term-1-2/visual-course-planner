@@ -34,5 +34,20 @@ router.get('/', (req, res) => {
     });
 });
 
+/**
+ * @route GET api/courses/info
+ * @desc Get all course
+ * @access Private
+ */
+router.get('/info', (req, res) => {
+  Course.getAllCourseInfo()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.error("Couldnt get courses: " + err);
+    });
+});
+
 
 module.exports = router;

@@ -30,9 +30,8 @@ class PreviousCourses extends Component {
       handleSubmit = (event) => {
         event.preventDefault();
 
-        const takenCourses = {
-          selectedCourses: this.state.selectedCourses,
-        };
+        const takenCourses = this.state.selectedCourses;
+        
 
         axios.post(`/api/users/${this.state.userId}/coursehistory`, { takenCourses })
           .then(res => {
@@ -42,7 +41,7 @@ class PreviousCourses extends Component {
       }
 
       componentDidMount() {
-        axios.get(`/api/users/${this.state.userId}/coursehistory`)
+        axios.get(`/api/courses/info`)
           .then(res => {
             const offeredCourses = res.data;
             this.setState({ offeredCourses });
