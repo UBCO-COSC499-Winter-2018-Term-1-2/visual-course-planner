@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './PlanList.css';
 import NewPlanButton from '../Planner/NewPlanButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PlanList extends Component {
   render() {
@@ -9,11 +10,32 @@ class PlanList extends Component {
 
     const favouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === true)
-      .map((plan) => <li onClick={() => {this.props.loadPlan(plan.id);}} className="plan-list-item favourite" key={plan.id}>{plan.title}</li>);
+      .map((plan) =>
+        <li
+          onClick={() => {this.props.loadPlan(plan.id);}}
+          className="plan-list-item favourite"
+          key={plan.id}
+        >
+          {plan.title}
+          <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
+            <FontAwesomeIcon icon="times" className="delete-button"/>
+          </div>
+        </li>);
 
     const nonfavouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === false)
-      .map((plan) => <li onClick={() => {this.props.loadPlan(plan.id);}} className="plan-list-item" key={plan.id}>{plan.title}</li>);
+      .map((plan) =>
+        <li
+          onClick={() => {this.props.loadPlan(plan.id);}}
+          className="plan-list-item favourite"
+          key={plan.id}
+        >
+          {plan.title}
+          <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
+            <FontAwesomeIcon icon="times" className="delete-button"/>
+          </div>
+        </li>);
+
 
     return (
       <div id="plan-list">
@@ -37,7 +59,8 @@ class PlanList extends Component {
 PlanList.propTypes = {
   plans: PropTypes.array,
   loadPlan: PropTypes.func.isRequired,
-  newPlan: PropTypes.func.isRequired
+  newPlan: PropTypes.func.isRequired,
+  deletePlan: PropTypes.func.isRequired
 };
 
 export default PlanList;

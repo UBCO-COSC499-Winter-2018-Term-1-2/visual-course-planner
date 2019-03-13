@@ -11,7 +11,10 @@ router.get('/:id', async (req, res) => {
   const planId = req.params.id;
   try {
     const plan = await Plan.getPlan(planId);
-
+    if (!plan) {
+      res.status(200).send({});
+      return;
+    }
     const courses = await Plan.getPlanCourses(planId);
     const courseIds = courses.map(course => course.courseId.toString());
     const coursesById = arrayToObject(courses.map(course => {
@@ -70,7 +73,7 @@ router.get('/:id', async (req, res) => {
     };
 
     console.log({"Sending plan": formattedPlan});
-    res.send(formattedPlan);
+    res.status(200).send(formattedPlan);
 
   } catch(e) {
     console.error({"Couldn't retrieve plan": e});
@@ -175,7 +178,7 @@ router.post('/:id/save', async (req, res) => {
   }
 });
 
-router.delete(':/id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const planId = req.params.id;
 
   await Plan.deletePlan(planId);

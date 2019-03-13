@@ -113,6 +113,6 @@ module.exports = {
   },
 
   async deletePlan(pid) {
-    await db.query("DELETE FROM plan WHERE pid = ?", [pid]);
+    await db.query("DELETE FROM plan WHERE id = ?", [pid]);
   }
 };

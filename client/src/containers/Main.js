@@ -43,7 +43,7 @@ class Main extends Component {
     //optimize button logic goes here
   }
 
-  toggleFavourite = () => {
+  toggleFavourite = async () => {
     this.setState(prevState => {
       return {
         ...prevState,
@@ -52,7 +52,15 @@ class Main extends Component {
           isFavourite: !prevState.currentPlan.isFavourite
         }
       };
+    }, async () => {
+      await this.savePlan();
+      const newPlanList = await this.getPlanList(this.state.user.id);
+      console.log("New list of plans", newPlanList);
+  
+      this.setState({planList: newPlanList});
     });
+
+    
   }
 
   createPlanHandler = () => {
@@ -174,11 +182,19 @@ class Main extends Component {
     this.props.history.push('/degree-year-selection');
   }
 
+
+  deletePlan = async (id) => {
+    await axios.delete(`/api/plans/${id}`);
+    const newPlanList = await this.getPlanList(this.state.user.id);
+    console.log("New list of plans", newPlanList);
+
+    this.setState({planList: newPlanList});
+  }
   render() {
     return (
       <div id="main">
         <StudentInfo user={this.state.user}/>
-        <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan}/>
+        <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
         <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>

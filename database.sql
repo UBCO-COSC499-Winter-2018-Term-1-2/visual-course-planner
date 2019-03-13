@@ -113,7 +113,7 @@ CREATE TABLE plan (
   FOREIGN KEY (uid)
     REFERENCES user(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
   
   FOREIGN KEY (sid)
     REFERENCES specialization(id)

@@ -2,3 +2,10 @@
   cursor: pointer;
   color: #84bd00;
 }
+.plan-list-item:hover > .delete-button.container {
+  display: inline-block
+}
+
+.plan-list-item {
+  position: relative;
+}
