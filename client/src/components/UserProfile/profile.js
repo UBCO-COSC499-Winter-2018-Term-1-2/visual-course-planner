@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../UserProfile/profile.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 // NOTES:
 // Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
