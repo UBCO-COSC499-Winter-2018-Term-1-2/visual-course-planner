@@ -139,7 +139,7 @@ CREATE TABLE plan_course (
   FOREIGN KEY (pid)
     REFERENCES plan(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
 
   FOREIGN KEY (cid)
     REFERENCES course(id)
@@ -256,7 +256,7 @@ CREATE TABLE plan_term (
   FOREIGN KEY (pid)
     REFERENCES plan(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
 
   FOREIGN KEY (tid)
     REFERENCES term(id)

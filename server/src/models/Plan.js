@@ -110,5 +110,9 @@ module.exports = {
 
   async removeCourses(pid) {
     await db.query("DELETE FROM plan_course WHERE pid = ?", [pid]);
+  },
+
+  async deletePlan(pid) {
+    await db.query("DELETE FROM plan WHERE pid = ?", [pid]);
   }
 };

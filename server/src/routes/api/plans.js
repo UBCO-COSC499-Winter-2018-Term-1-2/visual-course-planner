@@ -175,5 +175,11 @@ router.post('/:id/save', async (req, res) => {
   }
 });
 
+router.delete(':/id', (req, res) => {
+  const planId = req.params.id;
+
+  await Plan.deletePlan(planId);
+  res.status(200).send("Plan " + planId + " was deleted");
+});
 
 module.exports = router;
