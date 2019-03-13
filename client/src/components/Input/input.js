@@ -22,8 +22,8 @@ const Input = ( props ) => {
   if (props.invalid && props.shouldBeValidated && props.inputElementTouched){
     inputStyling.push(cssInvalid);   
   }
- 
   
+
   Input.propTypes = {
     invalid: PropTypes.bool,
     shouldBeValidated: PropTypes.bool,
@@ -96,6 +96,17 @@ const Input = ( props ) => {
       </select>
     );
     break;
+
+
+  case ( 'text' ):
+    inputElement = <p
+      className={inputStyling.join(' ')}
+      {...props.elementConfig}
+      value={props.value}
+      onChange={props.changed} 
+    />;
+    break;
+
 
   default:
     inputElement = <input
