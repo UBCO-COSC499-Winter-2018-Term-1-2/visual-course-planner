@@ -181,6 +181,25 @@ class profile extends Component {
       });
     }
 
+    getUserInfo = async() => {
+      const userID = sessionStorage.get('userId');
+      const userInfo = await axios.get(`/api/users/${userID}/userinfo`);
+      this.setState(prevState =>  {
+        return {
+          ...prevState, 
+          profileMenu: {
+            ...prevState.profileMenu,
+            fName: {...prevState.profileMenu.fName , value : userInfo.firstname },
+            lName: {...prevState.profileMenu.lName , value : userInfo.lastname },
+          }
+        };
+      });
+    }
+
+    async componentDidMount (){
+      this.getUserInfo();
+    }
+
       handler = ( event ) => {
         event.preventDefault();
         this.setState( { loading: true } );
@@ -213,10 +232,9 @@ class profile extends Component {
           formIsValid = updatedProfileMenu[inputIdentifier].valid && formIsValid;
         }
         this.setState({profileMenu: updatedProfileMenu, formIsValid: formIsValid});
-       
       }
     
-      render(){
+      render() {
         const formElementsArray = [];
         for (let key in this.state.profileMenu) {
           formElementsArray.push({
