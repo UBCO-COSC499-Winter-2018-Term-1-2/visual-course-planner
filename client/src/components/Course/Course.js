@@ -4,8 +4,6 @@ import './Course.css';
 
 class Course extends Component{
   render(){
-    console.log(this.props.course.id);
-    console.log("This course " +JSON.stringify(this.props.course) + " has this code " + this.props.course.code);
     return (
       <div 
         className={this.props.type == "required" ? "course-required" : "course-elective"}
