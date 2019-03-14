@@ -32,7 +32,7 @@ const routing = (
       <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
       <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
-      <Route path="/degree-year-selection" render={(props) => protectedComponent(<DegreeYear {...props}/>)} />
+      <Route path="/degree-selection" render={(props) => protectedComponent(<DegreeYear {...props}/>)} />
       <Route path="/confirm-email" render={(props) => protectedComponent(<ConfirmEmail {...props}/>)} />
     </div>
   </Router>
