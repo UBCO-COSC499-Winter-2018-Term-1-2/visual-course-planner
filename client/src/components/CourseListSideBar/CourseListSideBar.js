@@ -41,7 +41,6 @@ class CourseListSideBar extends React.Component {
 
   render() {
     const courseList = this.state.filteredCourses.map(course => {
-      console.log("Rendering course on sidebar: " + JSON.stringify(course));
       return (
         <Course
           key={course.id}

@@ -6,9 +6,7 @@ describe("WarningService", () => {
 
   describe('#courseFitsCategoryRequirements', () => {
     it('should return false for not fitting upper area, wrong code', () => {
-      const course = {
-        code: "ENGL 341"
-      };
+      const course = "ENGL 341";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -22,9 +20,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting upper area, wrong level', () => {
-      const course = {
-        code: "MATH 241"
-      };
+      const course = "MATH 241";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -38,9 +34,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting upper area', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -54,9 +48,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting upper elective', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER GENERAL',
@@ -71,9 +63,7 @@ describe("WarningService", () => {
 
 
     it('should return true for fitting upper code', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER COSC',
@@ -87,9 +77,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting upper code', () => {
-      const course = {
-        code: "MATH 341"
-      };
+      const course = "MATH 341";
   
       const requirement = {
         category: 'UPPER COSC',
@@ -103,9 +91,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting area', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'SCIENCE',
@@ -119,9 +105,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting area', () => {
-      const course = {
-        code: "ENGL 341"
-      };
+      const course = "ENGL 341";
   
       const requirement = {
         category: 'SCIENCE',
@@ -141,7 +125,7 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 1
+        standing: 1
       };
   
       let courseNoPrereq = {
@@ -175,7 +159,7 @@ describe("WarningService", () => {
     it("should return a standing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 2
+        standing: 2
       };
 
       let course = {
@@ -210,7 +194,7 @@ describe("WarningService", () => {
     it("should return a coreq missing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 3
+        standing: 3
       };
 
       let course = {

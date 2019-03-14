@@ -15,9 +15,12 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const expressValidator = require('express-validator');
 
 
 const app = express();
+
+app.use(expressValidator());
 
 // Express Middleware
 app.use(express.json());

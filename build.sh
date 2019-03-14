@@ -13,7 +13,7 @@ npm i -g npm@6
 npm run lint
 
 # Run server tests
-npm run test
+npm run server-test
 
 cd client
 
@@ -24,7 +24,7 @@ nvm use
 npm ci
 
 # Runs tests
-npm test
+npm run test
 
 # Build project
 npm run build

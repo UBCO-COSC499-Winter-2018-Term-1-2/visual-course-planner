@@ -28,7 +28,7 @@ module.exports = {
 
   async getCourses() {
     const courseInfoResults = await db.query(`
-      SELECT course.id AS id, code, credits, name, description, standingRequirement, session.year, session.season, term.number AS termNumber, term.id AS termId,
+      SELECT course.id AS id, code, credits, name, description, standingRequirement, session.year, session.season, term.number AS termNumber, term.id AS term,
         GROUP_CONCAT(cir.rid) AS preRequisites,
         GROUP_CONCAT(cic.rid) AS coRequisites
       FROM course
@@ -38,18 +38,9 @@ module.exports = {
       JOIN course_info AS ci ON course.code = ci.id
       LEFT JOIN course_info_requirement AS cir ON ci.id = cir.cid
       LEFT JOIN course_info_corequirement AS cic ON ci.id = cic.cid
-      GROUP BY course.id, session.year, session.season, termId`);
+      GROUP BY course.id, session.year, session.season, term`);
 
 
-    courseInfoResults.forEach(course => {
-      if (course.preRequisites === null) {
-        course.preRequisites = [];
-      }
-      if (course.coRequisites === null) {
-        course.coRequisites = [];
-      }
-      
-    });
     console.log(courseInfoResults);
     return courseInfoResults;
   },
