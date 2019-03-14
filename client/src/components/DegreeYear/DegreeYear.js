@@ -26,9 +26,7 @@ class DegreeYear extends Component {
           valid: true,
           inputElementTouched: false 
         },
-        
-      
-      }, //end of profile menu
+      }, //end of degree year
       formIsValid: false,
       loading: false,
       // selectedDegrees: []
