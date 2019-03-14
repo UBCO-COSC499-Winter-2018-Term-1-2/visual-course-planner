@@ -39,7 +39,6 @@ class WarningSnackbar extends Component {
         </div>
       );
     }
-    console.log(warnings);
     return (
       <div className="warning-list-container">
         {warnings}

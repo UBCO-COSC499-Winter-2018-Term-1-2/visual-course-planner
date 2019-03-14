@@ -1,13 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs'); 
-
-//user model
 const User = require('../models/User');
-const user = new User();
 
 module.exports = function(passport){
-//local strategy
-passport.use(new LocalStrategy({
+  
+  //local strategy
+  passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
   },
@@ -17,7 +15,7 @@ passport.use(new LocalStrategy({
     // match email
     let userExists = false;
     try {
-      userExists = await user.checkUser(email);
+      userExists = await User.checkUser(email);
     }
     catch(err) {
       done("Error with db." + err);
@@ -26,7 +24,7 @@ passport.use(new LocalStrategy({
       console.log('no user found');
       return done(null, false, {message: 'no user found'});
     } else {
-      const loggedInUser = await user.getUser(email);
+      const loggedInUser = await User.getUser(email);
       bcrypt.compare(password, loggedInUser.password, function(err, isMatch){ 
       
         if (err) {

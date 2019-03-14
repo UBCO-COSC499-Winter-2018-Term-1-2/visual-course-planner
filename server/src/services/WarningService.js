@@ -13,9 +13,10 @@ const CATEGORY_TYPE = require('../models/Specialization').CATEGORY_TYPE;
 
 function getStandingWarnings(user, course) {
   let warnings = [];
-  if (user.yearStanding < course.standingRequirement) {
+  console.log(user.standing, course.standingRequirement);
+  if (user.standing < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.yearStanding}.`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
       type: "standing"
     });
   }
@@ -121,8 +122,8 @@ function getCategorySpecializationWarning(plan, requirement) {
   let warnings = [];
   let creditsRemaining = parseInt(requirement.credits);
   let courseSet = new Set();
-  plan.courses.forEach(course => {
-    if (courseFitsCategoryRequirement(course, requirement)) {
+  plan.courses.allIds.map(id => plan.courses.byId[id]).forEach(course => {
+    if (courseFitsCategoryRequirement(course.code, requirement)) {
       if (!courseSet.has(course.code)) {
         creditsRemaining -= course.credits;
       }
@@ -141,17 +142,17 @@ function getCategorySpecializationWarning(plan, requirement) {
 }
 
 // this is the order in which we check
-function courseFitsCategoryRequirement(course, requirement) {
+function courseFitsCategoryRequirement(courseCode, requirement) {
   if (requirement.type === CATEGORY_TYPE) {
     const words = requirement.category.split(" ");
 
     if (words[0] === "UPPER") {
       // is upper level
-      if (courseIsUpperLevel(course)) {
-        if (words[1] === course.code.split(' ')[0]){
+      if (courseIsUpperLevel(courseCode)) {
+        if (words[1] === courseCode.split(' ')[0]){
           // is a course code
           return true;
-        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(course.code.split(' ')[0])) {
+        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(courseCode.split(' ')[0])) {
           // is an area descriptor
           return true;
         } else if (words[1] === 'GENERAL') {
@@ -167,7 +168,7 @@ function courseFitsCategoryRequirement(course, requirement) {
     } else if (areas.hasOwnProperty(words[0])) {
       if (words.length === 1) {
         // is an single word area descriptor
-        if (areas[words[0]].codes.includes(course.code.split(' ')[0])) {
+        if (areas[words[0]].codes.includes(courseCode.split(' ')[0])) {
           return true;
         } else {
           return false;
@@ -180,7 +181,7 @@ function courseFitsCategoryRequirement(course, requirement) {
 
 
 function courseIsUpperLevel(course) {
-  return parseInt(course.code.split(' ')[1]) >= 300;
+  return parseInt(course.split(' ')[1]) >= 300;
 }
 
 

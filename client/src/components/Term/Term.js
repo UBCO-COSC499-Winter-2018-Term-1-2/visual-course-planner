@@ -29,8 +29,8 @@ class Term extends Component {
         }}
         onDrop={(e) => this.props.onCourseDrop(e, this.props.termId)}
       >
-        <div className="remove-term container" onClick={() => {this.props.removeTerm(this.props.termId);}} >
-          <FontAwesomeIcon icon="times" className="remove-term"/>
+        <div className="delete-button container" onClick={() => {this.props.removeTerm(this.props.termId);}} >
+          <FontAwesomeIcon icon="times" className="delete-button"/>
         </div>
         <h3 className="term-heading">{this.props.title}</h3>
         <div className="courses-container">
