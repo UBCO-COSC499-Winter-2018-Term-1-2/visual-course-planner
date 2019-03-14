@@ -84,6 +84,19 @@ export class LoginInterface extends Component {
       isValid = pattern.test(value) && isValid;
       //console.log(isValid);
       isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+
+      if (isValid === true){
+        axios.get('api/users', this.state.loginMenu.email)
+          .then((email) => {
+            if (email > 0){
+            //email exisits
+              this.removeError("email");
+            } else {
+              //console.log ('email does not exist');
+              this.setError("email", "No account is registered with this email");
+            }
+          });
+      }
         
     }
 
@@ -129,6 +142,7 @@ export class LoginInterface extends Component {
     for (let formElementIdentifier in this.state.loginMenu) {
       loginData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
     }
+
 
     axios.post( '/api/users/login', loginData )
       .then(response => {
