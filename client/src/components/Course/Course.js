@@ -9,11 +9,13 @@ class Course extends Component{
       code : props.code,
       type: props.type
     };
-    //this.myRef = this.props.courseRef;
+
   }
+  
   render(){
     return (
       <div 
+        id={this.state.code.split(" ").join("")}
         className={this.props.type == "required" ? "course-required" : "course-elective"}
         draggable
         onDragStart={(e) => this.props.onDragStart(e, this.state.code, this.props.sourceTerm)}

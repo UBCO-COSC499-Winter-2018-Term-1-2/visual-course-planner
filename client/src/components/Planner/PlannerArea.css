@@ -1,7 +1,7 @@
 #semester-view{
   display: flex;
-  overflow-x: auto;
-
+  overflow-x: hidden;
+  scroll-behavior: smooth;
   max-width: 100vw;
 }
 

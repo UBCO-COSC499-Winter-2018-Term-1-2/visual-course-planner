@@ -5,6 +5,7 @@
   flex-direction: column;
   min-width: 25%;
   max-width: 25%;
+  z-index: 1;
 }
 
 .term-heading{

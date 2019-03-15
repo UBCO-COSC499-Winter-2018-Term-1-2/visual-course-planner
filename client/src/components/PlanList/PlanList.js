@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './PlanList.css';
 
 
 class PlannerArea extends Component {

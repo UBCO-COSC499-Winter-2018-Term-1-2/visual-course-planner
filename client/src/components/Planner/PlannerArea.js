@@ -4,7 +4,8 @@ import PlannerHeader from '../PlannerHeader/PlannerHeader';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import Semester from '../Semester/Semester';
 import './PlannerArea.css';
-import {SteppedLineTo} from 'react-lineto';
+import Arrow from 'react-dom-arrow';
+import ScrollButton from '../ScrollButton/ScrollButton';
 
 class PlannerArea extends Component {
 
@@ -71,13 +72,15 @@ class PlannerArea extends Component {
       {
         number: "8",
         coursesContained: ["COSC 421", "COSC 499"],
-        targetCourse: ["", ""],
+        targetCourse: ["COSC 445", "COSC 328"],
         year: "2018",
         session: "W"
       }
-    ]
+    ],
+    courseArrows: []
   }
   courseRefs = new Map();
+  scrollRef = React.createRef();
 
   generateCourseRefs = () => {
     this.state.defaultTerms.forEach((term) => {
@@ -88,30 +91,58 @@ class PlannerArea extends Component {
     });
   }
 
-  courseArrows = [];
+  tempcourseArrows = [];
 
   generateCourseArrows = () => {
     this.state.defaultTerms.forEach((term) => {
       for (let i = 0; i < term.coursesContained.length; i++) {
-        const sourceCourse = term.coursesContained[i];
-        const targetCourse = term.targetCourse[i];
+        let courseIndex = 0;
+        const sourceCourse = term.coursesContained[courseIndex];
+        const targetCourse = term.targetCourse[courseIndex];
 
-        let sourceXY = this.courseRefs.get(sourceCourse).current.getBoundingClientRect().right;
-        let targetXY = this.courseRefs.get(targetCourse).current.getBoundingClientRect().left;
-        
-        let arrow = <SteppedLineTo fromAnchor = {sourceXY} toAnchor = {targetXY} orientation = "h" />;
+        this.tempcourseArrows.push(
+          {
+            fromSelector: '#' + sourceCourse.split(" ").join(""),
+            fromSide: 'right',
+            toSelector: '#' + targetCourse.split(" ").join(""),
+            toSide: 'left',
+            color: 'white',
+            stroke: 2
+          }
+        );
 
-        this.courseArrows[i] = arrow;
+        /*
+        this.state.courseArrows.push( 
+          <SteppedLineTo from="" to="" 
+            fromAnchor = {sourceXY.toString()} 
+            toAnchor = {targetXY.toString()} />);
+            */
 
+        courseIndex++;
         
       }
-    }
+    }); 
+  }
 
-    ); 
+  //render arrows
+  renderCourseArrows = () => {
+    return(this.state.courseArrows.map((arrow) => {
+      console.log("gui");
+      return(
+        <Arrow 
+          key={arrow.fromSelector + 'to' + arrow.toSelector}
+          fromSelector={arrow.fromSelector}
+          fromSide={arrow.fromSide}
+          toSelector={arrow.toSelector}
+          toSide={arrow.toSide}
+          color={arrow.color}
+          stroke={arrow.stroke}  />);
+    }));
   }
 
   //rendering semester components by mapping defaulTerms state variable
   renderSemesters = () => {
+    this.generateCourseRefs();
     return (this.state.defaultTerms.map((term) =>
       <Semester
         key={term.number}
@@ -134,6 +165,8 @@ class PlannerArea extends Component {
   onCourseDragStart = (e, courseCode, sourceTerm) => {
     e.dataTransfer.setData("courseCode", courseCode);
     e.dataTransfer.setData("sourceTerm", sourceTerm);
+
+    this.generateCourseArrows();
   }
 
   //on drop event handler for semester component
@@ -189,7 +222,6 @@ class PlannerArea extends Component {
         });
       }
     });
-
     console.log(this.state);
   }
 
@@ -212,10 +244,28 @@ class PlannerArea extends Component {
     alert(element);
   }
 
+  // create scroll button onclick handler
+  scrollButtonClickHandler = (e, scrollRef, direction) => {
+    let scrollItem = scrollRef.current;
+    let scrollDirection = direction;
+
+    scrollDirection == "left" ? (scrollItem.scrollLeft -= 250) : (scrollItem.scrollLeft += 250); 
+  }
+
+  componentDidMount(){
+    this.generateCourseArrows();
+    //console.log(this.state.courseArrows);
+    //this.renderCourseArrows();
+    this.setState({courseArrows: this.tempcourseArrows});
+    console.log(this.state.courseArrows);
+    console.log(this.scrollRef);
+  }
+
   render() {
-    this.generateCourseRefs();
+    
     return (
       <div id="planner-area">
+        
         <PlannerHeader
           plan={this.props.plan}
           toggleSidebar={this.props.toggleSidebar}
@@ -226,8 +276,20 @@ class PlannerArea extends Component {
           user={this.props.user}
         />
 
-        <div id="semester-view">
+        <div id="semester-view" ref={this.scrollRef}>
           <this.renderSemesters />
+        </div>
+
+        <div id="scroll-button-container">
+          <ScrollButton 
+            direction="left" 
+            scrollItem={this.scrollRef} 
+            onClick={this.scrollButtonClickHandler.bind(this)} />
+          
+          <ScrollButton 
+            direction="right" 
+            scrollItem={this.scrollRef} 
+            onClick={this.scrollButtonClickHandler.bind(this)}/>
         </div>
 
         <WarningSnackbar
@@ -235,10 +297,9 @@ class PlannerArea extends Component {
           closeSnackbar={this.closeSnackbar}
           warnings={this.state.warnings}
         />
-        <div id="session-container">
-
-        </div>
-        {console.log(this.courseArrows)}
+        <div id="session-container"></div>
+        
+        <this.renderCourseArrows /> 
       </div>
     );
   }
