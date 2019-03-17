@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
@@ -196,8 +196,8 @@ export class adminInterface extends Component {
   }
 
   //LINKS FORM BTN TO PAGE SPECIFED
-  onNavigationVCPMain = () => {
-    this.props.history.push('/main');
+  onNavigationVCPAdmin = () => {
+    this.props.history.push('/admin');
   }
 
 
@@ -230,7 +230,7 @@ export class adminInterface extends Component {
           </div>  
         ))}
         
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPAdmin}>Login</button>
       </form>
     );
 
