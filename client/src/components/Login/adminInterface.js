@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
@@ -13,7 +13,7 @@ import axios from 'axios';
 export class adminInterface extends Component {
  
   state = {
-    adminloginMenu: {
+    adminLoginMenu: {
       email: {
         elementType: 'input',
         elementConfig: {
@@ -22,7 +22,8 @@ export class adminInterface extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          isEmail: true,
         },
         valid: false,
         inputElementTouched: false 
@@ -35,11 +36,30 @@ export class adminInterface extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          minLength: 5,
         },
         valid: false,
         inputElementTouched: false 
       }
+    },
+    //error state (form validation)
+    errors:{
+      email: {
+        hasError: false
+      },
+      fName: {
+        hasError: false
+      },
+      lName: {
+        hasError: false
+      },
+      password: {
+        hasError: false
+      },
+      confirmPassword: {
+        hasError: false
+      },
     },
     formIsValid: false,
     loading: false
@@ -47,26 +67,82 @@ export class adminInterface extends Component {
 
   checkValidity(value, rules) {
     let isValid = true;
-    if(!rules){
-      return true;
-    }
-      
+    
+
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-    } 
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+      console.log("minlength: " + isValid);
+      isValid === false ? this.setError("password", "Password must be longer than 5 characters") : this.removeError("email");
+    }
+
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+      //console.log(isValid);
+      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
+
+      if (isValid === true){
+        axios.get('api/users', this.state.adminLoginMenu.email)
+          .then((email) => {
+            if (email > 0){
+            //email exisits
+              this.removeError("email");
+            } else {
+              //console.log ('email does not exist');
+              this.setError("email", "No account is registered with this email");
+            }
+          });
+      }
+        
+    }
 
     return isValid;
   }
+    
+  setError = (element, message) => {
+    //console.log("Setting error");
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: true,
+            message: message
+          }
+        }
+      };
+    });
+  }
 
+  removeError = (element) => {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [element]: {
+            hasError: false,
+          }
+        }
+      };
+    });
+  }
+  
   handler = (e) => {
     e.preventDefault();
     this.setState( { loading: true } );
     
     //this is log send user input to send to database.
     const loginData = {};
-    for (let formElementIdentifier in this.state.adminloginMenu) {
-      loginData[formElementIdentifier] = this.state.adminloginMenu[formElementIdentifier].value;
+    for (let formElementIdentifier in this.state.adminLoginMenu) {
+      loginData[formElementIdentifier] = this.state.adminLoginMenu[formElementIdentifier].value;
     }
+
 
     axios.post( '/api/users/login', loginData )
       .then(response => {
@@ -99,39 +175,45 @@ export class adminInterface extends Component {
   //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
     console.log(event.target.value); //prints values to console
-    const updatedAdminloginMenu = {
-      ...this.state.adminloginMenu
+    const updatedAdminLoginMenu = {
+      ...this.state.adminLoginMenu
     };
     const updatedMenuElement = { 
-      ...updatedAdminloginMenu[inputIdentifier]
+      ...updatedAdminLoginMenu[inputIdentifier]
     };
     updatedMenuElement.value = event.target.value;
     //CHECKS IF EACH STATE HAS A VALUE
     updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation);
     updatedMenuElement.inputElementTouched = true;
-    updatedAdminloginMenu[inputIdentifier] = updatedMenuElement;
+    updatedAdminLoginMenu[inputIdentifier] = updatedMenuElement;
     
     let formIsValid = true;
-    for (let inputIdentifier in updatedAdminloginMenu){
-      formIsValid = updatedAdminloginMenu[inputIdentifier].valid && formIsValid;
+    for (let inputIdentifier in updatedAdminLoginMenu){
+      formIsValid = updatedAdminLoginMenu[inputIdentifier].valid && formIsValid;
     }
-    this.setState({adminloginMenu: updatedAdminloginMenu, formIsValid: formIsValid});
+    this.setState({adminLoginMenu: updatedAdminLoginMenu, formIsValid: formIsValid});
     
   }
 
+  //LINKS FORM BTN TO PAGE SPECIFED
+  onNavigationVCPMain = () => {
+    this.props.history.push('/main');
+  }
+
+
   render() {
     const formElementsArray = [];
-    for (let key in this.state.adminloginMenu) {
+    for (let key in this.state.adminLoginMenu) {
       formElementsArray.push({
         id: key,
-        config: this.state.adminloginMenu[key]
+        config: this.state.adminLoginMenu[key]
       });
     }
     
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + adminInterface.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form>
+      <form onSubmit={this.handler}>
         {formElementsArray.map(formElement => (
           <div key={formElement.id}>
             <Input 
@@ -144,9 +226,11 @@ export class adminInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             />
+            {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
           </div>  
         ))}
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Login</button>
+        
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
       </form>
     );
 
@@ -171,4 +255,4 @@ adminInterface.propTypes = {
   history: PropTypes.object,
 };
 
-export default withRouter(adminInterface);
+export default withRouter(adminInterface);   
