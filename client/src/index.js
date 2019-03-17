@@ -5,12 +5,14 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
+import AdminLogin from "./components/Login/adminInterface";
 import Signup from './components/Signup/SignupInterface';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
 import UserProfile from "./components/UserProfile/profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
 import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
 import DegreeYear from "./components/DegreeYear/DegreeYear";
+
 
 const protectedComponent = (component) => {
   console.log("checking auth");
@@ -27,7 +29,7 @@ const routing = (
       <Route exact path="/" component={Login} />
       <Route path="/main" render={(props) => protectedComponent(<Main {...props}/>)} />
       <Route path="/login" component={Login} />
-
+      <Route path="/admin-login" component={AdminLogin} />
       <Route path="/signup" component={Signup} />
       <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />

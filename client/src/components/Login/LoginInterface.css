@@ -10,6 +10,13 @@ body{
    
 }
 
+.admin-txt {
+    text-align: center;
+    color: #c5980f;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
 .menu{
     background-color: #201e21;
     width: 50%;
