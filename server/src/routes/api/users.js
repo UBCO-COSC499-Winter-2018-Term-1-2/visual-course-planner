@@ -144,10 +144,10 @@ router.post('/:id/coursehistory', async (req, res) => {
   } else {
     let userId = req.params.id;
     let courses = [];
-    for (let key in req.body) {
+    for (let course in req.body.takenCourses) {
       courses.push({
         uid: userId,
-        cid: req.body[key]
+        cid: course.code
       });
     }
     console.log(courses);

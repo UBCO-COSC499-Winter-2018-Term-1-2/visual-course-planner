@@ -4,11 +4,9 @@ import '../Login/LoginInterface.css';
 //import Button from '../Button/button';
 import { Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 import Input from '../Input/input';
 import axios from 'axios';
 //import validationWarning from '../WarningSnackbar/WarningSnackbar';
-
 
 class CreateAccountMenu extends Component {
   

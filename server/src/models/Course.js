@@ -48,5 +48,10 @@ module.exports = {
   async getCourseInfo(code) {
     const courseInfoResults = await db.query("SELECT * FROM course_info WHERE id = ?", [code]);
     return courseInfoResults;
-  }
+  },
+  async getAllCourseInfo() {
+    const courseInfoResults = await db.query("SELECT * FROM course_info");
+    return courseInfoResults;
+  },
+
 };
