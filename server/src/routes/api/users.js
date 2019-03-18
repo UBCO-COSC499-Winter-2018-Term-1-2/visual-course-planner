@@ -190,5 +190,23 @@ router.get('/:id/userinfo', async (req, res) => {
   }
 });
 
+/**
+ * @route GET api/users/useremail
+ * @desc Retreive status if user exists with email
+ * @access Private
+ */ 
+
+router.get('/:email/useremail', async (req, res) => {
+  let uEmail = req.params.email;
+  const userEmail = await user.checkUser(uEmail); 
+  if (userEmail === true){
+    console.log('User found!');
+    res.status(200).send('User found!');
+  } else {
+    console.log('no user found with email: ' + uEmail);
+    res.status(200).send('no user found with email: ' + uEmail);
+  }
+});
+
 
 module.exports = router;
