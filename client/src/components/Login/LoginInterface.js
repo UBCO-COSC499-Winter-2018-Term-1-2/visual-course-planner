@@ -22,8 +22,7 @@ export class LoginInterface extends Component {
         },
         value: '',
         validation: {
-          required: true,
-          isEmail: true,
+          required: true
         },
         valid: false,
         inputElementTouched: false 
@@ -36,30 +35,11 @@ export class LoginInterface extends Component {
         },
         value: '',
         validation: {
-          required: true,
-          minLength: 5,
+          required: true
         },
         valid: false,
         inputElementTouched: false 
       }
-    },
-    //error state (form validation)
-    errors:{
-      email: {
-        hasError: false
-      },
-      fName: {
-        hasError: false
-      },
-      lName: {
-        hasError: false
-      },
-      password: {
-        hasError: false
-      },
-      confirmPassword: {
-        hasError: false
-      },
     },
     formIsValid: false,
     loading: false
@@ -67,8 +47,10 @@ export class LoginInterface extends Component {
 
   checkValidity(value, rules) {
     let isValid = true;
-    
-
+    if(!rules){
+      return true;
+    }
+      
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
     }
@@ -102,37 +84,7 @@ export class LoginInterface extends Component {
 
     return isValid;
   }
-    
-  setError = (element, message) => {
-    //console.log("Setting error");
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          [element]: {
-            hasError: true,
-            message: message
-          }
-        }
-      };
-    });
-  }
 
-  removeError = (element) => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          [element]: {
-            hasError: false,
-          }
-        }
-      };
-    });
-  }
-  
   handler = (e) => {
     e.preventDefault();
     this.setState( { loading: true } );
@@ -195,12 +147,6 @@ export class LoginInterface extends Component {
     
   }
 
-  //LINKS FORM BTN TO PAGE SPECIFED
-  onNavigationVCPMain = () => {
-    this.props.history.push('/main');
-  }
-
-
   render() {
     const formElementsArray = [];
     for (let key in this.state.loginMenu) {
@@ -213,7 +159,7 @@ export class LoginInterface extends Component {
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form onSubmit={this.handler}>
+      <form>
         {formElementsArray.map(formElement => (
           <div key={formElement.id}>
             <Input 
@@ -226,11 +172,9 @@ export class LoginInterface extends Component {
               inputElementTouched={formElement.config.inputElementTouched}
               changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             />
-            {this.state.errors[formElement.id].hasError && <p className ="warning-msg">{this.state.errors[formElement.id].message}</p> }
           </div>  
         ))}
-        
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.onNavigationVCPMain}>Login</button>
+        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Login</button>
         <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>

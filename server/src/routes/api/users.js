@@ -1,15 +1,48 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
-const expressValidator = require('express-validator');
 const passport = require('passport');
 
+router.get('/:id', async (req, res) => {
+  const userId = parseInt(req.params.id);
+  try {
+    const user = await User.getUserById(userId);
+    console.log(user);
+    res.status(200).send({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      id: user.id,
+      standing: user.standing
+    });
+  } catch(e) {
+    console.error(e);
+    res.status(500).send(e);
+  }
+});
 
-router.use(expressValidator()); // put the use in server.js and also import through npm?
+router.post('/:id/changePassword', async (req, res) => {
+  const UserId = req.params.id;
+  await User.changePassword(UserId)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.error("Couldn't change password", err);
+    });
+});
 
-//user model
-const User = require('../../models/User');
-const user = new User();
+router.post('/:id/updateUserInfo', (req, res) => {
+  const UserId = req.params.id;
+  User.updateUser(UserId, (err, data) => {
+    if (err == null) {
+      res.send(data);
+    } else {
+      console.error("Couldn't change info");
+    }
+  });
+});
 
 /**
  * @route POST api/users/signup
@@ -39,12 +72,11 @@ router.post('/signup', async (req, res) => {
 
   } else {
         
-    const existUser = await user.checkUser(email);
+    const existUser = await User.checkUser(email);
         
     if(existUser === true){
-
+      console.error("User already exists");
       res.status(500).send("User already exists. Did not create user.");
-
     }else{
 
       bcrypt.genSalt(10, function(err, salt){
@@ -54,22 +86,22 @@ router.post('/signup', async (req, res) => {
           }
 
           const hashPassword = hash;
-          var newUser = {
-                        
+          var newUser = {     
             email: req.body.email,
             password: hashPassword,
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
             standing: 0
-                
           };
           
           try{
-            await user.insertUser(newUser);
-            res.status(200).send("New user was created.");
+            const userId = await User.insertUser(newUser);
+            console.log("User was created: " + userId);
+            res.status(200).send({userId, email: newUser.email});
           }
           catch(err) {
+            console.error("User was not created");
             res.status(500).send("User was not created. Error with db." + err);
           }
 
@@ -112,16 +144,16 @@ router.post('/:id/coursehistory', async (req, res) => {
   } else {
     let userId = req.params.id;
     let courses = [];
-    for (let key in req.body) {
+    for (let course in req.body.takenCourses) {
       courses.push({
         uid: userId,
-        cid: req.body[key]
+        cid: course.code
       });
     }
     console.log(courses);
     for (let i in courses) {
       console.log(courses[i]);
-      await user.insertCourse(courses[i]);
+      await User.insertCourse(courses[i]);
     }
     res.status(200).send('course(s) inserted for user');
   }
@@ -136,11 +168,11 @@ router.post('/:id/coursehistory', async (req, res) => {
 router.get('/:id/coursehistory', async (req, res) => {
   let userId = req.params.id;
 
-  if (await user.getCourses(userId) <= 0){
+  if (await User.getCourses(userId) <= 0){
     console.log('no course history found for user');
     res.status(200).send('no course history found for user');
   } else {
-    const courses = await user.getCourses(userId); 
+    const courses = await User.getCourses(userId); 
     console.log(courses);
     res.status(200).send("fetching all user courses: " + courses);
   }

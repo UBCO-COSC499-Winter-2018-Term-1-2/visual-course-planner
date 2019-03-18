@@ -1,35 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './PlannerHeader.css';
 import PlanName from '../PlanName/PlanName';
-import FavouriteBtn from '../FavouriteBtn/FavouriteBtn';
-import SideBarToggleButton from '../SideBarToggleButton/SideBarToggleButton';
-import OptimizeBtn from '../OptimizeBtn/OptimizeBtn'; 
-import WarningSummary from '../WarningSummary/WarningSummary';
+import './PlannerHeader.css';
 
-const PlannerHeader = (props) => {
-  return (
-    <div className="planner-header-wrapper" id="planner-header">
-      <PlanName name={props.planName}/>
-      <FavouriteBtn favourite={true}/>
-      <OptimizeBtn click={props.optimize}/>
-      <WarningSummary
-        click={props.showWarning}
-        numberOfWarnings={props.numberOfWarnings}
-        user={props.user}
-      />
-      <SideBarToggleButton click={props.toggleSidebar}/>
-    </div>
-  );
-};
+class PlannerHeader extends Component {
+
+  render() {
+    return (
+      <div id="planner-header">
+        <PlanName onChange={this.props.onTitleChange}>{this.props.title}</PlanName>
+        <div className="planner-header-wrapper" >
+          {this.props.children}
+        </div>
+      </div>
+    );
+  }
+}
 
 PlannerHeader.propTypes = {
-  planName: PropTypes.string.isRequired,
-  optimize: PropTypes.func.isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-  showWarning: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  numberOfWarnings: PropTypes.number.isRequired
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  title: PropTypes.string,
+  onTitleChange: PropTypes.func
 };
 
 export default PlannerHeader;

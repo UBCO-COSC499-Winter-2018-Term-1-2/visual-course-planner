@@ -1,0 +1,25 @@
+body{
+
+    background-color: #262427;
+    font-family: Helvetica;
+}
+
+.login-heading {
+    text-align: center;
+    color: #ffffff;
+   
+}
+
+.menu{
+    background-color: #201e21;
+    width: 50%;
+    padding: 2em 4em;
+    margin: 10% auto;   
+}
+
+.msg-text{
+     color: #9c9b9d;
+     text-align: center;
+}
+
+

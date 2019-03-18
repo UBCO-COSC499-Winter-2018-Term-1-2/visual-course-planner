@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SideBarToggleButton from '../../src/components/SideBarToggleButton/SideBarToggleButton';
+import BackdropButton from '../../src/components/BackdropButton/BackdropButton';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<SideBarToggleButton />, div);
+  ReactDOM.render(<BackdropButton />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
