@@ -104,7 +104,11 @@ export class LoginInterface extends Component {
         console.log(user);
         sessionStorage.setItem("userId", user.id);
         console.log(sessionStorage.getItem("userId"));
-        this.props.history.push("/main");
+        if (user.isAdmin)
+          this.props.history.push("/admin");
+        else
+          this.props.history.push("/main");
+
       })
       .catch( error => {
         this.setState( { loading: false } );
