@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../UserProfile/profile.css';
-// import '../Login/LoginInterface.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
 
@@ -18,7 +17,7 @@ class profile extends Component {
             type: 'text',
             placeholder: '* First Name'
           },
-          label: 'USERS NAME',
+          label: 'MY NAME',
           value: '',
           validation: {
             required: true
@@ -159,9 +158,12 @@ class profile extends Component {
                 inputElementTouched={formElement.config.inputElementTouched}
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
-            <div className="btn-div">
-              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
+            <h4 className="green-title">Change/add courses to current course history</h4>
+            <Link to ="course-history"><button className="course-historybtn">My Course History → </button></Link>
+           
+            <div className="btn-div"> 
               <button className="green-borderbtn"><Link to = "/main">Submit</Link></button> 
+              <button className="exit-green-borderbtn"><Link to = "/main">Exit</Link></button> 
             </div>
           </form>
         );
@@ -171,8 +173,9 @@ class profile extends Component {
           //RETURN LOGIN MENU HERE
           <div>
             <div className="profile-menu">
-              <h1 className="yellow-title">Users Name </h1>
+              <h1 className="yellow-title">Profile </h1>
               {form} 
+              
               
             </div> 
           </div>
@@ -184,18 +187,3 @@ class profile extends Component {
     
   
 export default profile;
-
-{/* <div>
-          <h1 className="yellow-title">Users Name </h1>
-          <h4 className="green-title">Users Name </h4>
-            <input type="text" name="fname" placeholder="* First Name"/>
-            <input type="text" name="lname" placeholder="* Last Name"/>   
-            <h4 className="green-title">Change Password</h4>
-            <input type="text" name="pass" placeholder="* Password"/> 
-            <input type="text" name="pass" placeholder="* Re-Enter Password"/> 
-            <h4 className="green-title">Current year standing</h4>
-            <h4 className="green-title">link to change which courses a student has taken</h4>
-        
-
-            <button className="green-borderbtn">Save + Submit</button> 
-          </div> */}

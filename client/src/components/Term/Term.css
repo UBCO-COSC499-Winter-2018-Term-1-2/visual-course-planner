@@ -1,0 +1,50 @@
+.term-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 7em;
+  max-width: 15%;
+  position: relative;
+}
+
+.term-heading {
+  color: #84bd00;
+  align-self: center;
+  font-weight: lighter;
+  margin-bottom: 0.1em;
+}
+
+.courses-container {
+  height: 65vh;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.delete-button {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 0.75em;
+}
+
+.delete-button.container {
+  display: none;
+  font-size: 0.5em;
+  background-color: red;
+  border-radius: 1.5em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+}
+
+.term-container:hover > .delete-button.container {
+  display: inline-block
+}
+
+.delete-button.container:hover {
+  color: grey;
+  background-color: darkred;
+  cursor: pointer;
+}

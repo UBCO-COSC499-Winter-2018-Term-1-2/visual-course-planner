@@ -1,42 +1,26 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-
-//const solidHeart = <FontAwesomeIcon icon={["fa","heart"]}  size="2x" />;
-// const hollowHeart = <FontAwesomeIcon icon={["fas","plus"]} className="hollow-heart" />;
-//^ THIS SHIT DOESNT FUCKING WORK
+import './FavouriteBtn.css';
 
 class FavouriteBtn extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      isFavourite: props.favourite
-    };
+
+  render(){
+    return(
+      <div className="fav-plan-btn-container"  onClick={this.props.onClick}>
+        <FontAwesomeIcon
+          icon="heart"
+          size="2x"
+          className= {this.props.isFavourite ? "fav-icon-red" : "fav-icon-grey" }/>
+      </div>
+    );
   }
 
-    toggleFavouriteHandler = () => {
-      const isFavourite = this.state.isFavourite;
-      this.setState({isFavourite: !isFavourite});
-      //will need more functionality here
-    }
-    
-
-    render(){
-      return(
-        <div className="fav-plan-btn-container"  onClick={this.toggleFavouriteHandler}> 
-          <FontAwesomeIcon 
-            icon="heart" 
-            size="2x" 
-            className= {this.state.isFavourite ? "fav-icon-red" : "fav-icon-grey" }/> 
-        </div>
-      );
-    }
-    
 }
 
 FavouriteBtn.propTypes = {
-  favourite: PropTypes.bool.isRequired,
-
+  isFavourite: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 export default FavouriteBtn;
