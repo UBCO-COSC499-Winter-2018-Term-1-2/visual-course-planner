@@ -210,6 +210,18 @@ class profile extends Component {
         for (let formElementIdentifier in this.state.profileMenu) {
           menuData[formElementIdentifier] = this.state.profileMenu[formElementIdentifier].value;
         }
+
+
+        axios.post( '/api/users', menuData )
+          .then( response => {
+            this.setState( { loading: false } );
+            //this.props.history.push('/');
+            console.log(response);
+          } )
+          .catch( error => {
+            this.setState( { loading: false } );
+            console.log(error);
+          } );
       }
     
       //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
