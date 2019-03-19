@@ -68,7 +68,7 @@ export class LoginInterface extends Component {
       isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
 
       if (isValid === true){
-        axios.get('api/users', this.state.loginMenu.email)
+        axios.get('api/users/email')
           .then((email) => {
             if (email > 0){
             //email exisits
