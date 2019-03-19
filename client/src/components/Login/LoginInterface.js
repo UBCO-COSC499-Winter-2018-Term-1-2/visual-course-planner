@@ -71,12 +71,13 @@ export class LoginInterface extends Component {
     axios.post( '/api/users/login', loginData )
       .then(response => {
         this.setState( { loading: false } );
-        console.log("no errors::");
         const user = response.data.user;
-        console.log(user);
-        sessionStorage.setItem("userId", user.id);
-        console.log(sessionStorage.getItem("userId"));
-        this.props.history.push("/main");
+        if (user) {
+          sessionStorage.setItem("userId", user.id);
+          this.props.history.push("/main");
+        } else {
+          console.log(response.data.message);
+        }
       })
       .catch( error => {
         this.setState( { loading: false } );
