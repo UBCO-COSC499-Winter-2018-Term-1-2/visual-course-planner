@@ -95,6 +95,7 @@ class DegreeYear extends Component {
       formData.append(formElementIdentifier, this.state.form[formElementIdentifier].value);
     }
     formData.append("userId", userId);
+    formData.append("degreeId", this.state.form.degree.value);
     console.log({"submitting info": formData});
 
     const planId = await axios.post(`/api/plans/new`, formData)

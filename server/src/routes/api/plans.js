@@ -108,15 +108,19 @@ router.post('/:pid/user/:uid/favourite', (req, res) => {
 });
 
 router.post('/new', async (req, res) => {
+  console.log("Creating new plan");
   const userId = req.body.userId;
   const degreeId = req.body.degreeId;
   if (!degreeId) {
-    res.send("Need to set degreeId");
+    console.log("no degree id");
+    res.status(500).send("Need to set degreeId");
     return;
   }
 
   if (!userId) {
-    res.send("Need to set userId");
+    console.log("no user id");
+
+    res.status(500).send("Need to set userId");
     return;
   }
 
