@@ -12,42 +12,37 @@ import ScrollButton from '../ScrollButton/ScrollButton';
 class PlannerArea extends Component {
 
   state = {
-    trashColour: "white"
+    trashColour: "white",
+    courseArrows: []
   }
    
   scrollRef = React.createRef();
 
-  tempcourseArrows = [];
-
-  generateCourseArrows = () => {
-    this.state.defaultTerms.forEach((term) => {
-      for (let i = 0; i < term.coursesContained.length; i++) {
-        let courseIndex = 0;
-        const sourceCourse = term.coursesContained[courseIndex];
-        const targetCourse = term.targetCourse[courseIndex];
-
-        this.tempcourseArrows.push(
-          {
-            fromSelector: '#' + sourceCourse.split(" ").join(""),
-            fromSide: 'right',
-            toSelector: '#' + targetCourse.split(" ").join(""),
-            toSide: 'left',
-            color: 'white',
-            stroke: 2
-          }
-        );
-
-        /*
-        this.state.courseArrows.push( 
-          <SteppedLineTo from="" to="" 
-            fromAnchor = {sourceXY.toString()} 
-            toAnchor = {targetXY.toString()} />);
-            */
-
-        courseIndex++;
-        
-      }
-    }); 
+  tempcourseArrows = []
+  
+  generateCourseArrows = (plan) => {
+    this.tempcourseArrows.length = 0;
+    plan.terms.allIds.map(termId => plan.terms.byId[termId]).forEach((term) => {
+      term.courses.forEach(courseId => {
+        const course = plan.courses.byId[courseId];
+        console.log("Generating arrows for " + courseId);
+        course.preRequisites.forEach(preReqId => {
+          const preReqsIds = plan.courses.allIds.map(id => plan.courses.byId[id]).filter(course => course.code === preReqId);
+          
+          console.log("generating arrow for " + preReqId);
+          preReqsIds.forEach(preReqId => {
+            this.tempcourseArrows.push({
+              fromSelector: '#course' + preReqId.id,
+              fromSide: 'right',
+              toSelector: '#course' + courseId,
+              toSide: 'left',
+              color: 'white',
+              stroke: 2
+            });
+          });
+        });      
+      });
+    });
   }
 
   //render arrows
@@ -65,11 +60,7 @@ class PlannerArea extends Component {
           stroke={arrow.stroke}  />);
     }));
   }
-
-  //rendering semester components by mapping defaulTerms state variable
   
-  
-
   trashDragCounter = 0; // Needed for trash drag n drop
 
   getNextTerm(latestTerm, latestSession) {
@@ -98,7 +89,7 @@ class PlannerArea extends Component {
     return nextTerm;
   }
 
-  addTermToPlan = async () => {
+  addTermToPlan = async (cb) => {
     console.log("Adding term to plan...");
     // set initial session to random one
     const plan = {...this.props.plan};
@@ -163,7 +154,9 @@ class PlannerArea extends Component {
     console.log(plan);
     this.props.updatePlan(plan);
     console.log("Added term to plan");
-
+    if (cb) {
+      cb();
+    }
   }
 
   removeTermFromPlan = async (termId) => {
@@ -241,7 +234,7 @@ class PlannerArea extends Component {
       />;
     });
     return (
-      <div className="session-container">
+      <div className="session-container" ref={this.scrollRef}>
         {sessions}
       </div>
     );
@@ -263,8 +256,12 @@ class PlannerArea extends Component {
     if(sourceTerm) {
       e.dataTransfer.setData("sourceTermId", sourceTerm);
     }
-    this.generateCourseArrows();
-
+    // this.setState({courseArrows: this.generateCourseArrows(this.props.plan)});
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
   }
 
   //on drop event handler for term component
@@ -289,6 +286,11 @@ class PlannerArea extends Component {
     }
 
     this.props.updatePlan(plan);
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
   }
 
   onCourseDragEnterTrash = (e) => {
@@ -330,28 +332,31 @@ class PlannerArea extends Component {
     this.setState({
       trashColour: "white"
     });
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
     
-  }
-
-  showElementCoordinates = (e, courseRef) => {
-    let element = courseRef.current.getBoundingClientRect().left;
-    alert(element);
   }
 
   // create scroll button onclick handler
   scrollButtonClickHandler = (e, scrollRef, direction) => {
-    let scrollItem = scrollRef.current;
+    let scrollItem = this.scrollRef.current;
     let scrollDirection = direction;
 
     scrollDirection == "left" ? (scrollItem.scrollLeft -= 250) : (scrollItem.scrollLeft += 250); 
   }
 
+  scrollToRight = () => {
+    this.scrollRef.current.scrollLeft += 1000;
+  }
+
   componentDidMount(){
-    this.generateCourseArrows();
-    //console.log(this.state.courseArrows);
-    //this.renderCourseArrows();
-    this.setState({courseArrows: this.tempcourseArrows});
-    console.log(this.state.courseArrows);
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
     console.log(this.scrollRef);
   }
 
@@ -397,7 +402,7 @@ class PlannerArea extends Component {
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>
 
-        <div className='floating-icon add-term' onClick={this.addTermToPlan}>
+        <div className='floating-icon add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
           <FontAwesomeIcon icon="plus-circle" />
         </div>
 

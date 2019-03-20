@@ -2,8 +2,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  min-width: 7em;
-  max-width: 15%;
+  min-width: 50%;
+  max-width: 50%;
   position: relative;
 }
 

@@ -138,12 +138,14 @@ router.post('/login', (req, res, next) => {
  */ 
 
 router.post('/:id/coursehistory', async (req, res) => {
+  console.log("hit course hist route");
   if (Object.keys(req.body).length === 0){
     console.log('no courses selected, nothing stored');
     res.status(200).send('no course history selected');
   } else {
     let userId = req.params.id;
     let courses = [];
+    console.log({"body": req.body});
     for (let course in req.body.takenCourses) {
       courses.push({
         uid: userId,

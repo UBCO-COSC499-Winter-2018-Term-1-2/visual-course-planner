@@ -3,23 +3,14 @@ import './ScrollButton.css';
 import PropTypes from 'prop-types';
 
 class ScrollButton extends Component {
-  
-  constructor(props){
-    super();
-    this.direction = props.direction;
-    this.scrollItem = props.scrollItem;
-    this.onclickHandler = props.onClick;
-
-  }
 
   render(){
     return(
       <button 
-        className = {this.direction == "left" ? "left" : "right" }
-        scrollItem = {this.scrollItem}
-        onClick = {(e) => this.onclickHandler(e, this.scrollItem, this.direction)}>
+        className = {this.props.direction == "left" ? "left" : "right" }
+        onClick = {(e) => this.props.onClick(e, this.props.scrollItem, this.props.direction)}>
         
-        {this.direction == "left" ? "<" : ">"}
+        {this.props.direction === "left" ? "<" : ">"}
       
       </button>
     );

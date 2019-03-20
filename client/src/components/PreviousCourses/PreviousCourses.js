@@ -44,6 +44,7 @@ class PreviousCourses extends Component {
         axios.get(`/api/courses/info`)
           .then(res => {
             const offeredCourses = res.data;
+            console.log(offeredCourses);
             this.setState({ offeredCourses });
           });
         
@@ -70,8 +71,8 @@ class PreviousCourses extends Component {
                 onChange={this.handleSelectionChange}
                 options={this.state.offeredCourses}
                 selectedOptions={selectedCourses}
-                textProp="name"
-                valueProp="name"
+                textProp="id"
+                valueProp="id"
                 buttonText="Add Course"
                 placeholder="Course Name.."
                 className="ubco-offered-courses-list"
@@ -84,7 +85,7 @@ class PreviousCourses extends Component {
                   <ul>
                     {selectedCourses.map((course, i) => 
                       <li key={i}>
-                        {`${course.code} `}
+                        {`${course.id} `}
 
                         <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
                         &times;
