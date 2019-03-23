@@ -137,31 +137,31 @@ class AdminPortal extends Component {
 
   render() {
     const specializationForm = 
-    <div className="specialization-form-container">
-      <div className="admin-specialization-input">
-        <label htmlFor="specialization-name-input">Specialization Name:</label>
-        <input type="text" placeholder="e.g. Major in Computer Science" id="specialization-name-input" className="admin-text-input focus-element" onChange={this.handleSpecName}/>
-      </div>
-      <p>For</p>
-      { this.state.degrees.length > 0 && 
-      <div className="admin-radio-input">
-        <input type="radio" name="isNewDegree" value="false" id="existing-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "false"}/>
-        <label htmlFor="existing-degree-radio" className="admin-radio-label">
-            Existing degree
-        </label>
-        <select id="degree-select" className="admin-select-input" onChange={this.handleDegreeSelect}>
-          {this.state.degrees.map(s => <option value={s.id} key={s.id}>{s.name}</option>)};
-        </select>
-        <p>Or</p>
-      </div> }
-      <div className="admin-radio-input">
-        <input type="radio" name="isNewDegree" value="true" id="new-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "true"}/>
-        <label htmlFor="new-degree-radio" className="admin-radio-label">
-            New degree
-        </label>
-        <input type="text" placeholder="e.g. Bachelor of Science" onChange={this.handleDegreeNameChange} id="new-degree-input" className="admin-text-input focus-element"/>
-      </div>
-    </div>;
+      <div className="specialization-form-container">
+        <div className="admin-specialization-input">
+          <label htmlFor="specialization-name-input">Specialization Name:</label>
+          <input type="text" placeholder="e.g. Major in Computer Science" id="specialization-name-input" className="admin-text-input focus-element" onChange={this.handleSpecName}/>
+        </div>
+        <p>For</p>
+        { this.state.degrees.length > 0 && 
+        <div className="admin-radio-input">
+          <input type="radio" name="isNewDegree" value="false" id="existing-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "false"}/>
+          <label htmlFor="existing-degree-radio" className="admin-radio-label">
+              Existing degree
+          </label>
+          <select id="degree-select" className="admin-select-input" onChange={this.handleDegreeSelect}>
+            {this.state.degrees.map(s => <option value={s.id} key={s.id}>{s.name}</option>)};
+          </select>
+          <p>Or</p>
+        </div> }
+        <div className="admin-radio-input">
+          <input type="radio" name="isNewDegree" value="true" id="new-degree-radio" onChange={this.handleChangeNewDegree} checked={this.state.isNewDegree == "true"} />
+          <label htmlFor="new-degree-radio" className="admin-radio-label">
+              New degree
+          </label>
+          <input type="text" placeholder="e.g. Bachelor of Science" onChange={this.handleDegreeNameChange} id="new-degree-input" className="admin-text-input focus-element" onFocus={()=> this.setState({isNewDegree: "true"})} />
+        </div>
+      </div>;
 
     return (
       <div className="admin-portal-parent-wrapper">
@@ -207,17 +207,12 @@ class AdminPortal extends Component {
               {this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT && specializationForm}
             </div>
           </div>
-            
-                   
-          <div className="admin-comment-input-container admin-portal-element">
-            <textarea className="comments-input focus-element" placeholder="Comments..."></textarea>
-          </div>
                    
           <div className="admin-submit-container admin-portal-element">
             <button className="submit-file-btn" onClick={this.submitFile}>Upload</button>
             <p className="admin-submit-disclaimer-para">
               Uploaded information affects students&#39; ability to create their course plan.
-              It is recommended to keep information up to date. 
+              It is recommended to keep information up-to-date. 
             </p>
           </div>  
         </div>
