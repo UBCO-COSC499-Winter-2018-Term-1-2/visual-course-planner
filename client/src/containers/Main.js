@@ -10,6 +10,8 @@ import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn';
 import WarningSummary from '../components/WarningSummary/WarningSummary';
 import './Main.css';
 import NoteArea from '../components/Notes/NoteArea';
+import SidebarArea from './SidebarArea';
+import Sidebar from './Sidebar';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
 import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
@@ -190,12 +192,23 @@ class Main extends Component {
 
     this.setState({planList: newPlanList});
   }
+  
   render() {
     return (
       <div id="main">
-        <StudentInfo user={this.state.user}/>
-        <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
-        <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
+        <Sidebar>
+          <SidebarArea>
+            <StudentInfo user={this.state.user}/>
+          </SidebarArea>
+          <SidebarArea>
+            <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
+          </SidebarArea>
+          {this.shouldRenderPlan() && 
+            <SidebarArea>
+              <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
+            </SidebarArea>}
+        </Sidebar>
+        
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
             <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>

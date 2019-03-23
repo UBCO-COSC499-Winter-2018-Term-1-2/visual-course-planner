@@ -197,12 +197,14 @@ class PlannerArea extends Component {
     }
     // const term = this.props.plan.terms.byId[termId];
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   }
 
   //drag start event handler for course component - passed in as prop via Term
   onCourseDragStart = (e, course, sourceTerm) => {
     console.log("Setting course for drag" + JSON.stringify(course));
     e.dataTransfer.setData("course", JSON.stringify(course));
+    e.dataTransfer.effectAllowed = "move";
     if(sourceTerm) {
       e.dataTransfer.setData("sourceTermId", sourceTerm);
     }

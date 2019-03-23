@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './AdminPortal.css';
 import axios from 'axios';
+import StudentInfo from '../StudentInfo/StudentInfo';
 
 const ADMIN_COURSE_DOCUMENT = 'courses';
 const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
@@ -8,7 +9,7 @@ const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
 class AdminPortal extends Component {
 
   state = {
-    name: "Samantha Jones",
+    user: {},
     selectedFile: null, 
     loaded: 0,
     documentType: "courses",
@@ -135,6 +136,11 @@ class AdminPortal extends Component {
     });
   }
 
+  componentDidMount = async () => {
+    const userResponse = await axios.get('/api/users/' + sessionStorage.getItem('userId'));
+    this.setState({user: userResponse.data});
+  }
+
   render() {
     const specializationForm = 
       <div className="specialization-form-container">
@@ -166,17 +172,7 @@ class AdminPortal extends Component {
     return (
       <div className="admin-portal-parent-wrapper">
                 
-        <div className="admin-acc-logout-wrapper">
-          <div className="admin-acc-logout-container">
-            <div className="admin-username-container">
-              <p className="username"> User: {this.state.name}</p> {/*use generic username component*/}
-            </div>
-            <div className="admin-logoutBtn-container">
-              <button className="logout-button">Logout</button> {/*use generic logout component button*/}
-            </div>
-            {/* <CourseListSideBar></CourseListSideBar> */}
-          </div>
-        </div>
+        <StudentInfo user={this.state.user} align="right"/>
                 
         <h1 className="admin-heading admin-portal-element">Admin Portal</h1>
                 
@@ -214,7 +210,7 @@ class AdminPortal extends Component {
               Uploaded information affects students&#39; ability to create their course plan.
               It is recommended to keep information up-to-date. 
             </p>
-          </div>  
+          </div> 
         </div>
       </div>
     );
