@@ -7,20 +7,20 @@
   position: relative;
 }
 
- .term-heading {
+.term-heading {
   color: #84bd00;
   align-self: center;
   font-weight: lighter;
   margin-bottom: 0.1em;
 }
 
- .courses-container {
+.courses-container {
   height: 65vh;
   justify-content: center;
   max-width: 100%;
 }
 
-.remove-term {
+.delete-button {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -29,7 +29,7 @@
   line-height: 0.75em;
 }
 
-.remove-term.container {
+.delete-button.container {
   display: none;
   font-size: 0.5em;
   background-color: red;
@@ -39,11 +39,11 @@
   top: 0.5em;
 }
 
-.term-container:hover > .remove-term.container {
+.term-container:hover > .delete-button.container {
   display: inline-block
 }
 
-.remove-term.container:hover {
+.delete-button.container:hover {
   color: grey;
   background-color: darkred;
   cursor: pointer;

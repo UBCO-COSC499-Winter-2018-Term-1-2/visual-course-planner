@@ -2,23 +2,20 @@ import React, { Component } from 'react';
 import '../PreviousCourses/PreviousCourses.css';
 import { Link } from 'react-router-dom';
 import FilteredMultiSelect from '../FilterMultiSelect/multiSelectMenu.js';
+import axios from 'axios';
 
-// NOTES:
-// Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
-//correct formatting
+class PreviousCourses extends Component {
 
-
-const COURSES = [
-  {id: 1, name: 'FRENCH 11'},
-  {id: 2, name: 'FRENCH 12'},
-  {id: 249, name: 'SPANISH 11'},
-  {id: 250, name: 'GERMAN 12'}
-];
-
-
-class previousCourses extends Component {
-
-      state = {selectedCourses: []}
+      state = {
+        selectedCourses: [],
+        offeredCourses: [
+          { code: 'FRENCH 11' },
+          { code: 'FRENCH 12' },
+          { code: 'SPANISH 11' },
+          { code: 'GERMAN 12' }
+        ],
+        userId: 1
+      }
 
       handleDeselect(index) {
         var selectedCourses = this.state.selectedCourses.slice();
@@ -30,7 +27,30 @@ class previousCourses extends Component {
         this.setState({selectedCourses});
       }
     
-      render(){
+      handleSubmit = (event) => {
+        event.preventDefault();
+
+        const takenCourses = this.state.selectedCourses;
+        
+
+        axios.post(`/api/users/${this.state.userId}/coursehistory`, { takenCourses })
+          .then(res => {
+            console.log(res);
+            console.log(res.data);
+          });
+      }
+
+      componentDidMount() {
+        axios.get(`/api/courses/info`)
+          .then(res => {
+            const offeredCourses = res.data;
+            this.setState({ offeredCourses });
+          });
+        
+        this.setState({userId: sessionStorage.getItem("userId")});
+      }
+
+      render() {
 
         var {selectedCourses} = this.state;
         
@@ -45,34 +65,34 @@ class previousCourses extends Component {
               For an accurate Degree Plan, please select all courses 
               you have previously taken and have received credits for.
               </p>
-              
-              {/* <ol className="course-list"> */}
-              {/* {form}  */}
-              {/* </ol> */}
-
                
               <FilteredMultiSelect
                 onChange={this.handleSelectionChange}
-                options={COURSES}
+                options={this.state.offeredCourses}
                 selectedOptions={selectedCourses}
                 textProp="name"
-                valueProp="id"
+                valueProp="name"
                 buttonText="Add Course"
                 placeholder="Course Name.."
                 className="ubco-offered-courses-list"
               />
+              
               <div className="added-courses">
-                {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
-                {selectedCourses.length > 0 && 
-                <ul>
-                  {selectedCourses.map((ship, i) => 
-                    <li key={ship.id}>
-                      {`${ship.name} `}
-                      <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
-                      &times;
-                      </button>
-                    </li>)}
-                </ul>}
+                <form onSubmit={this.handleSubmit}>
+                  {selectedCourses.length === 0 && <p><i>(Nothing selected yet)</i></p>}
+                  {selectedCourses.length > 0 && 
+                  <ul>
+                    {selectedCourses.map((course, i) => 
+                      <li key={i}>
+                        {`${course.code} `}
+
+                        <button className="remove-coursebtn" type="button" onClick={() => this.handleDeselect(i)}>
+                        &times;
+                        </button>
+
+                      </li>)}
+                  </ul>}
+                </form>
               </div>
                     
               <div className="btn-div">
@@ -93,4 +113,4 @@ class previousCourses extends Component {
 }
     
   
-export default previousCourses;
+export default PreviousCourses;

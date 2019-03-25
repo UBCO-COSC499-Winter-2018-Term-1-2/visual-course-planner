@@ -13,7 +13,7 @@ class PlannerArea extends Component {
     trashColour: "white"
   }
 
-  trashDragCounter = 0;
+  trashDragCounter = 0; // Needed for trash drag n drop
 
   getNextTerm(latestTerm, latestSession) {
     let nextTermNumber;
@@ -41,17 +41,8 @@ class PlannerArea extends Component {
     return nextTerm;
   }
 
-  updateWarnings() {
-    this.getWarnings()
-      .then(warnings => {
-        this.props.setWarnings(warnings);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
   addTermToPlan = async () => {
+    console.log("Adding term to plan...");
     // set initial session to random one
     const plan = {...this.props.plan};
     let mostRecentSession = {};
@@ -114,43 +105,44 @@ class PlannerArea extends Component {
     plan.terms.allIds.push(nextTerm.id);
     console.log(plan);
     this.props.updatePlan(plan);
-    
+    console.log("Added term to plan");
+
   }
 
   removeTermFromPlan = async (termId) => {
     const plan = { ...this.props.plan};
     console.log({plan});
-    const { courses, session } = plan.terms.byId[termId];
-    console.log({"removing ": {termId, courses, session}});
+    const termCourses = plan.terms.byId[termId].courses;
+    const termSessionId = plan.terms.byId[termId].session;
+    console.log({"removing ": {termId, termCourses, termSessionId}});
 
     // Remove courses
-    plan.courses.allIds = plan.courses.allIds.filter(id => courses.indexOf(id) === -1);
+    plan.courses.allIds = plan.courses.allIds.filter(id => termCourses.indexOf(id) === -1);
     const newCoursesById = plan.courses.byId;
-    for (let course in courses) {
+    for (let course in termCourses) {
       delete newCoursesById[course];
     }
     plan.courses.byId = newCoursesById;
 
     // Remove session
-    const previousSessionsById = plan.sessions.byId;
-    const previousSession = previousSessionsById[session];
-    console.trace({ previousSessionsById, session });
+    const previousSession = { ...plan.sessions.byId[termSessionId]};
 
     if (previousSession.terms.length === 1) {
-      delete previousSessionsById[session];
-      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== session);
-    } else {
-      const newTerms = [ ...previousSession.terms];
+      delete plan.sessions.byId[termSessionId];
+      plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== termSessionId);
       
-      newTerms.splice(previousSession.terms.indexOf(termId), 1);
-      previousSession.terms = newTerms;
-      plan.sessions.byId[session] = previousSession;
+    } else {
+      const newSessionTerms = [ ...previousSession.terms];
+      
+      newSessionTerms.splice(previousSession.terms.indexOf(termId), 1);
+      previousSession.terms = newSessionTerms;
+      plan.sessions.byId[termSessionId] = previousSession;
     }
 
     // Remove term
-    const previousTermsById = { ...plan.terms.byId };
-    delete previousTermsById[termId];
+    delete plan.terms.byId[termId];
     plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
+    console.log("plan should not have " + termId, plan);
 
     this.props.updatePlan(plan);
   }
@@ -166,28 +158,14 @@ class PlannerArea extends Component {
     return objectsAreSame;
   }
 
-  componentDidUpdate(prevProps) {
-    let same = true;
-    
-    if (prevProps.plan.courses.length !== this.props.plan.courses.length) {
-      same = false;
-    } else {
-      for (let course in prevProps.plan.courses.byId) {
-        if (!this.objectsAreSame(prevProps.plan.courses.byId[course], this.props.plan.courses.byId[course])) {
-          same = false;
-        }
-      }
-    }
-    if (!same) {
-      this.updateWarnings();
-    }
-  }
-
   //rendering term components by mapping defaultTerms state variable
   renderTerms = () => {
+    if (!Object.keys(this.props.plan).length) {
+      return;
+    }
+    console.log(this.props.plan);
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
-      console.log({...this.props.plan.sessions, sessionId });
       const terms = session.terms.map(termId => {
         const term = this.props.plan.terms.byId[termId];
         const courses = term.courses.map(courseId => {
@@ -243,35 +221,15 @@ class PlannerArea extends Component {
       plan.courses.allIds.push(incomingCourse.id.toString());
       plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
       delete incomingCourse.id;
-
-      this.props.updatePlan(plan);
     } else {
       console.log("Moving course already in plan", incomingCourse);
       const courses = plan.terms.byId[sourceTermId].courses;
       courses.splice(courses.indexOf(incomingCourse.id), 1);
       plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
       console.log("Moved Course: " + JSON.stringify(incomingCourse));
-
-      this.props.updatePlan(plan);
-    }  
-  }
-
-  getWarnings = async () => {
-    try {
-      const response = await axios.post('api/warnings', 
-        {
-          plan: this.props.plan,
-          user: this.props.user
-        },
-        {
-          headers: { "Content-Type": "application/json" }
-        }
-      );
-      return response.data;
-      
-    } catch(err) {
-      console.log(err);
     }
+
+    this.props.updatePlan(plan);
   }
 
   onCourseDragEnterTrash = (e) => {
@@ -306,6 +264,7 @@ class PlannerArea extends Component {
 
     const courses = plan.terms.byId[sourceTermId].courses;
     courses.splice(courses.indexOf(incomingCourse.id), 1);
+    delete plan.courses.byId[incomingCourse.id];
     plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
     
     this.props.updatePlan(plan);
@@ -315,14 +274,10 @@ class PlannerArea extends Component {
     
   }
 
-  componentDidMount() {
-    this.updateWarnings();
-  }
-
   render() {
     return (
       <div id="planner-area-container">
-        <this.renderTerms />
+        {this.renderTerms()}
 
         <CourseListSideBar 
           isOpen={this.props.isCourseListOpen} 
@@ -356,12 +311,11 @@ class PlannerArea extends Component {
 }
 
 PlannerArea.propTypes = {
-  plan: PropTypes.object.isRequired,
+  plan: PropTypes.object,
   user: PropTypes.object.isRequired,
   showSnackbar: PropTypes.bool.isRequired,
   closeSnackbar: PropTypes.func.isRequired,
   updatePlan: PropTypes.func.isRequired,
-  setWarnings: PropTypes.func.isRequired,
   warnings: PropTypes.array.isRequired,
   closeCourseList: PropTypes.func.isRequired,
   isCourseListOpen: PropTypes.bool.isRequired

@@ -8,24 +8,6 @@ class DegreeYear extends Component {
   //FORM INITIAL SETUP ::
     state = {
       DegreeYear: {
-        currentYear: {
-          elementType: 'select',
-          elementConfig: {
-            options:[
-              {value: '1', displayValue: '1'},
-              {value: '2', displayValue: '2'},
-              {value: '3', displayValue: '3'},
-              {value: '4', displayValue: '4'}
-            ]
-          },
-          validation: {
-            required: true
-          },
-          label: 'CURRENT YEAR STANDING',
-          value: '',
-          valid: true,
-          inputElementTouched: false 
-        },
         degree: {
           elementType: 'select',
           elementConfig: {
@@ -71,6 +53,7 @@ class DegreeYear extends Component {
           menuData[formElementIdentifier] = this.state.DegreeYear[formElementIdentifier].value;
         }
       }
+
     
       //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
       //IE. EMAIL AND PASSWORD.
@@ -148,12 +131,11 @@ class DegreeYear extends Component {
           //RETURN FORM (CURRENT STANDING YEAR)
           <div>
             <div className="degree-year-menu">
-              <h1 className="yellow-title">Degree And Year </h1>
+              <h1 className="yellow-title">Degree Selection </h1>
               <label className="green-title">Select All That Apply</label>
               
               <p className="msg-text">
-              Please select your current year standing and the desired degree 
-              you wish to enroll in at the Univeristy of British Columbia Okanagan Campus.
+              Please select your desired degree you wish to enroll in at the Univeristy of British Columbia Okanagan Campus.
               </p>
 
               {form} 
