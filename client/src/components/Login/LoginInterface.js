@@ -48,7 +48,6 @@ export class LoginInterface extends Component {
       
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-      console.log("hello");
     }
 
     return isValid;
