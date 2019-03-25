@@ -15,8 +15,8 @@ class StudentInfo extends Component {
     return (
       <div id="student-info">
         <div className="sidebar-info-area">
-          <h3 className="student-info-text">{this.props.user.name}</h3>
-          <h4 className="student-info-text">Current standing: {this.props.user.yearStanding}</h4>
+          <h3 className="student-info-text">{this.props.user.firstname}</h3>
+          <h4 className="student-info-text">Current standing: {this.props.user.standing}</h4>
           <div className="student-buttons-container">
             <button className="sidebar-button">Edit Personal Info</button>
             <button onClick={this.logout} className="sidebar-button">Log Out<FontAwesomeIcon icon="sign-out-alt" style={{ marginLeft: '0.5em' }}/></button>
