@@ -5,11 +5,6 @@ import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
-//import { Route, BrowserRouter as Router } from 'react-router-dom';
-//port Main from '../../containers/Main';
-//import Button from '../Button/button.js';
-
-
 export class LoginInterface extends Component {
  
   state = {
@@ -53,27 +48,7 @@ export class LoginInterface extends Component {
       
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-    }
-
-    if (rules.isEmail) {
-      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test(value) && isValid;
-      //console.log(isValid);
-      isValid === false ? this.setError("email", "Please insert a valid email address") : this.removeError("email");
-
-      if (isValid === true){
-        axios.get('api/users/email')
-          .then((email) => {
-            if (email > 0){
-            //email exisits
-              this.removeError("email");
-            } else {
-              //console.log ('email does not exist');
-              this.setError("email", "No account is registered with this email");
-            }
-          });
-      }
-        
+      console.log("hello");
     }
 
     return isValid;
@@ -107,13 +82,13 @@ export class LoginInterface extends Component {
       .catch( error => {
         this.setState( { loading: false } );
         if(error.response){
-        // console.log(error.response);
-          console.log("data::");
-          console.log(error.response.data);
-          console.log("status::");
-          console.log(error.response.status);
-          console.log("headers::");
-          console.log(error.response.headers);
+          console.log(error.response);
+        // console.log("data::");
+        //console.log(error.response.data);
+        //console.log("status::");
+        //console.log(error.response.status);
+        //console.log("headers::");
+        //console.log(error.response.headers);
         } else if (error.request){
           console.log('ERROR', error.message);
         }
