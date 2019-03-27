@@ -3,7 +3,7 @@ const db = require('../../../dbconnection');
 db.query = promisify(db.query);
 
 
-class User {
+module.exports = {
   async changePassword(id) {
     return db
       .query("UPDATE user SET password WHERE uid = ?", [id])
@@ -14,7 +14,7 @@ class User {
         throw err;
       });
 
-  }
+  },
   async updateUser(id, user) {
     return db.
       query("UPDATE user SET email = ?, firstname = ?, lastname = ? WHERE uid = ?", [user.email, user.firstname, user.lastname, id])
@@ -25,7 +25,7 @@ class User {
         throw err;
       });
 
-  }
+  },
 
   async checkUser(email) {
     let rows = [];
@@ -41,7 +41,7 @@ class User {
       return false;
     }
 
-  }
+  },
 
   async insertUser(newUser) {
     
@@ -53,7 +53,7 @@ class User {
       .catch(err => {
         throw err;
       });  
-  }
+  },
 
   async getUser(email) {
     let rows = [];
@@ -65,7 +65,7 @@ class User {
 
     return rows[0];
 
-  }
+  },
 
 
   async getUserById(id) {
@@ -78,7 +78,7 @@ class User {
 
     return rows[0];
 
-  }
+  },
 
   async insertCourse(course) {
     return db
@@ -90,7 +90,7 @@ class User {
       .catch(err => {
         throw err;
       });
-  }
+  },
 
   async getCourses(id) {
     let rows = [];
@@ -104,7 +104,4 @@ class User {
 
   }
 
-}
-
-module.exports = User;
-
+};

@@ -9,7 +9,7 @@
     "student-info planner"
     "plan-list planner"
     "note-area planner";
-  background-color: lightgray;
+  background-color: #1a191b;
   position: relative;
   color: #e4e4e4;
 }
@@ -38,6 +38,11 @@
 #note-area {
   grid-area: note-area;
   background-color: #1a191b;
+}
+
+.centered {
+  margin: auto auto;
+  text-align: center;
 }
 
 .sidebar-info-area {
@@ -124,4 +129,9 @@
 
 *:focus {
   outline: none;
+}
+
+h3 {
+  font-size: 1.25em;
+  font-weight: bold;
 }

@@ -1,14 +1,14 @@
 {
-  "name": "vcp",
-  "version": "0.1.0",
+  "name": "vcp-server",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "csv-parse": "^4.1.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
+    "csv-parse": "^4.1.0",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
     "express-session": "^1.15.6",
@@ -25,7 +25,9 @@
     "fix": "./node_modules/.bin/eslint --fix .",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "test": "./node_modules/.bin/mocha server/**/*.spec.js",
+    "test": "./node_modules/.bin/mocha server/**/*.spec.js && ( cd client && npm run test )",
+    "server-test": "./node_modules/.bin/mocha server/**/*.spec.js",
+    "client-test": "( cd client && npm run test )",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

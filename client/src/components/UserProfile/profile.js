@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../UserProfile/profile.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/input';
+import axios from 'axios';
 
 // NOTES:
 // Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
@@ -47,7 +48,9 @@ class profile extends Component {
           label: 'CHANGE PASSWORD',
           value: '',
           validation: {
-            required: true
+            required: true,
+            minLength: 5,
+            passDiff: true,
           },
           valid: false,
           inputElementTouched: false 
@@ -60,7 +63,9 @@ class profile extends Component {
           },
           value: '',
           validation: {
-            required: true
+            required: true,
+            minLength: 5,
+            passDiff: true,
           },
           valid: false,
           inputElementTouched: false 
@@ -85,19 +90,117 @@ class profile extends Component {
         },
       
       }, //end of profile menu
+
+      //error state (form validation)
+      errors:{
+        email: {
+          errors: {}
+        },
+        fName: {
+          errors: {}
+        },
+        lName: {
+          errors: {}
+        },
+        password: {
+          errors: {}
+        },
+        confirmPassword: {
+          errors: {}
+
+        },
+      },
       formIsValid: false,
       loading: false
     }
     
-    checkValidity(value, rules) {
+    checkValidity(value, rules, name, errorName) {
       let isValid = true;
-    
+      if(!rules){
+        return true;
+      }
+        
       if(rules.required){
         isValid = value.trim() !== '' && isValid;
+        //isValid === false ? this.addError("inputRequired", "All fields are required") : this.removeError("inputRequired");
+      } 
+  
+      if (rules.matches){
+        const needsToMatch = this.state.createAccountMenu[rules.matches].value;
+        const matches = value === needsToMatch; 
+        console.log(value);
+        console.log(needsToMatch);
+        isValid === !matches ? this.addError(name, "Passwords must match", 'match') : this.removeError(name, 'match');
       }
-    
+      
+      if (rules.minLength) {
+        isValid = value.length >= rules.minLength && isValid;
+        isValid === false ? this.addError(name, `${errorName} must be longer than 5 characters`, 'length') : this.removeError(name, 'length');
+      }
+  
+      if (rules.isEmail) {
+        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        isValid = pattern.test(value) && isValid;
+        //console.log(isValid);
+        isValid === false ? this.addError("email", "Please insert a valid email address", 'email') : this.removeError("email", 'email');
+  
+      }
+  
       return isValid;
     }
+
+    addError = (element, message, type) => {
+      //console.log("Setting error");
+      this.setState(prevState => {
+        let elementErrors = prevState.errors[element].errors;
+        elementErrors[type] = message;
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              errors: elementErrors
+            }
+          }
+        };
+      });
+    }
+    
+    removeError = (element, type) => {
+      this.setState(prevState => {
+        let elementErrors = prevState.errors[element].errors;
+        delete elementErrors[type];
+        return {
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            [element]: {
+              errors: elementErrors
+            }
+          }
+        };
+      });
+    }
+
+    getUserInfo = async() => {
+      const userID = sessionStorage.get('userId');
+      const userInfo = await axios.get(`/api/users/${userID}/userinfo`);
+      this.setState(prevState =>  {
+        return {
+          ...prevState, 
+          profileMenu: {
+            ...prevState.profileMenu,
+            fName: {...prevState.profileMenu.fName , value : userInfo.firstname },
+            lName: {...prevState.profileMenu.lName , value : userInfo.lastname },
+          }
+        };
+      });
+    }
+
+    async componentDidMount (){
+      this.getUserInfo();
+    }
+
       handler = ( event ) => {
         event.preventDefault();
         this.setState( { loading: true } );
@@ -107,12 +210,24 @@ class profile extends Component {
         for (let formElementIdentifier in this.state.profileMenu) {
           menuData[formElementIdentifier] = this.state.profileMenu[formElementIdentifier].value;
         }
+
+
+        axios.post( '/api/users', menuData )
+          .then( response => {
+            this.setState( { loading: false } );
+            //this.props.history.push('/');
+            console.log(response);
+          } )
+          .catch( error => {
+            this.setState( { loading: false } );
+            console.log(error);
+          } );
       }
     
       //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
       //IE. EMAIL AND PASSWORD.
       inputChangeHandler = (event, inputIdentifier) => {
-        console.log(event.target.value); //prints values to console
+        //console.log(event.target.value); //prints values to console
         const updatedProfileMenu = {
           ...this.state.profileMenu
         };
@@ -130,10 +245,9 @@ class profile extends Component {
           formIsValid = updatedProfileMenu[inputIdentifier].valid && formIsValid;
         }
         this.setState({profileMenu: updatedProfileMenu, formIsValid: formIsValid});
-       
       }
     
-      render(){
+      render() {
         const formElementsArray = [];
         for (let key in this.state.profileMenu) {
           formElementsArray.push({
@@ -141,9 +255,9 @@ class profile extends Component {
             config: this.state.profileMenu[key]
           });
         }
+
+        ///Response.data.user.email. -------------------------------------------------
         
-        //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-        //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
         let form = (
           <form onSubmit={this.handler}>
             {formElementsArray.map(formElement => (
@@ -173,7 +287,7 @@ class profile extends Component {
           //RETURN LOGIN MENU HERE
           <div>
             <div className="profile-menu">
-              <h1 className="yellow-title">Users Name </h1>
+              <h1 className="yellow-title">Profile </h1>
               {form} 
               
               

@@ -1,35 +1,66 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './PlanList.css';
+import NewPlanButton from '../Planner/NewPlanButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
-class PlannerList extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      favourites: ["BA Major in Comp Sci"],
-      plans: ["BSc Major in Comp Sci"]
-    };
-  }
-
-
+class PlanList extends Component {
   render() {
-    const listFavourites = this.state.favourites.map((name) => <li key={name}>{name}</li>);
-    const listPlans = this.state.plans.map((name) => <li key={name}>{name}</li>);
+    console.log({message: "PlanLists plans", plans: this.props.plans});
+
+    const favouritePlans = this.props.plans
+      .filter(plan => plan.isFavourite === true)
+      .map((plan) =>
+        <li
+          onClick={() => {this.props.loadPlan(plan.id);}}
+          className="plan-list-item favourite"
+          key={plan.id}
+        >
+          {plan.title}
+          <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
+            <FontAwesomeIcon icon="times" className="delete-button"/>
+          </div>
+        </li>);
+
+    const nonfavouritePlans = this.props.plans
+      .filter(plan => plan.isFavourite === false)
+      .map((plan) =>
+        <li
+          onClick={() => {this.props.loadPlan(plan.id);}}
+          className="plan-list-item favourite"
+          key={plan.id}
+        >
+          {plan.title}
+          <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
+            <FontAwesomeIcon icon="times" className="delete-button"/>
+          </div>
+        </li>);
+
+
     return (
       <div id="plan-list">
         <div className="sidebar-info-area">
-          <h3 className="sidebar-header">DEGREE PLANS</h3>
+          <h3 className="sidebar-header">Degree Plans</h3>
           <h4 className="sidebar-header">Favourites</h4>
           <ul>
-            {listFavourites}
+            {favouritePlans}
           </ul>
           <h4 className="sidebar-header">Plans</h4>
           <ul>
-            {listPlans}
+            {nonfavouritePlans}
           </ul>
+          <NewPlanButton onClick={this.props.newPlan} />
         </div>
       </div>
     );
   }
 }
 
-export default PlannerList;
+PlanList.propTypes = {
+  plans: PropTypes.array,
+  loadPlan: PropTypes.func.isRequired,
+  newPlan: PropTypes.func.isRequired,
+  deletePlan: PropTypes.func.isRequired
+};
+
+export default PlanList;
