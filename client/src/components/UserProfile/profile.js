@@ -183,8 +183,8 @@ class profile extends Component {
     }
 
     getUserInfo = async() => {
-      const userID = sessionStorage.get('userId');
-      const userInfo = await axios.get(`/api/users/${userID}/userinfo`);
+      const userID = sessionStorage.getItem('userId');
+      const userInfo = await axios.get(`/api/users/${userID}`);
       this.setState(prevState =>  {
         return {
           ...prevState, 

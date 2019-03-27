@@ -4,6 +4,12 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
+/**
+ * @route GET api/users/id
+ * @desc Get all user info
+ * @access Private
+ */ 
+
 router.get('/:id', async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
@@ -22,6 +28,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @route POST api/users/changePassword
+ * @desc Change a user password
+ * @access Private
+ */ 
+
 router.post('/:id/changePassword', async (req, res) => {
   const UserId = req.params.id;
   await User.changePassword(UserId)
@@ -32,6 +44,12 @@ router.post('/:id/changePassword', async (req, res) => {
       console.error("Couldn't change password", err);
     });
 });
+
+/**
+ * @route POST api/users/updateUserInfo
+ * @desc Change the user info 
+ * @access Private
+ */ 
 
 router.post('/:id/updateUserInfo', (req, res) => {
   const UserId = req.params.id;
@@ -166,53 +184,16 @@ router.post('/:id/coursehistory', async (req, res) => {
  */ 
 
 router.get('/:id/coursehistory', async (req, res) => {
-  let userId = 1;
+  let userId = req.params.id;
 
   if (await User.getCourses(userId) <= 0){
     console.log('no course history found for user');
     res.status(200).send('no course history found for user');
   } else {
-    const courses = await user.getCourses(userId); 
+    const courses = await User.getCourses(userId); 
     console.log(courses[0]);
     res.status(200).send({message: "fetching all user course history", course: courses});
   }
 });
-
-/**
- * @route GET api/users/userinfo
- * @desc Retreive all user information
- * @access Private
- */ 
-
-router.get('/:id/userinfo', async (req, res) => {
-  let userId = req.params.id;
-  const userInfo = await user.getUserById(userId); 
-  if (userInfo === undefined){
-    console.log('no user info found');
-    res.status(200).send('no info found for user');
-  } else {
-    console.log(userInfo);
-    res.status(200).send({message: "fetching all user info", user: userInfo});
-  }
-});
-
-/**
- * @route GET api/users/useremail
- * @desc Retreive status if user exists with email
- * @access Private
- */ 
-
-router.get('/:email/useremail', async (req, res) => {
-  let uEmail = req.params.email;
-  const userEmail = await user.checkUser(uEmail); 
-  if (userEmail === true){
-    console.log('User found!');
-    res.status(200).send('User found!');
-  } else {
-    console.log('no user found with email: ' + uEmail);
-    res.status(200).send('no user found with email: ' + uEmail);
-  }
-});
-
 
 module.exports = router;
