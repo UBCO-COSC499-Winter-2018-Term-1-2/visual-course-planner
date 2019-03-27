@@ -39,7 +39,7 @@ class profile extends Component {
           valid: false,
           inputElementTouched: false 
         },
-        newpassword: {
+        newPassword: {
           elementType: 'input',
           elementConfig: {
             type: 'text',
@@ -102,10 +102,10 @@ class profile extends Component {
         lName: {
           errors: {}
         },
-        password: {
+        newPassword: {
           errors: {}
         },
-        confirmPassword: {
+        confimNewPassword: {
           errors: {}
 
         },
@@ -183,7 +183,7 @@ class profile extends Component {
     }
 
     getUserInfo = async() => {
-      const userID = sessionStorage.get('userId');
+      const userID = sessionStorage.getItem('userId');
       const userInfo = await axios.get(`/api/users/${userID}/userinfo`);
       this.setState(prevState =>  {
         return {

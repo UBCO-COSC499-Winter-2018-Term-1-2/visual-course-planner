@@ -186,7 +186,7 @@ router.get('/:id/coursehistory', async (req, res) => {
 
 router.get('/:id/userinfo', async (req, res) => {
   let userId = req.params.id;
-  const userInfo = await user.getUserById(userId); 
+  const userInfo = await User.getUserById(userId); 
   if (userInfo === undefined){
     console.log('no user info found');
     res.status(200).send('no info found for user');
