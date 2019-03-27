@@ -41,7 +41,7 @@ class profile extends Component {
         newpassword: {
           elementType: 'input',
           elementConfig: {
-            type: 'text',
+            type: 'password',
             placeholder: '* New Password'
           },
           label: 'CHANGE PASSWORD',
@@ -55,7 +55,7 @@ class profile extends Component {
         confimNewPassword: {
           elementType: 'input',
           elementConfig: {
-            type: 'text',
+            type: 'password',
             placeholder: '* Confirm New Password'
           },
           value: '',
