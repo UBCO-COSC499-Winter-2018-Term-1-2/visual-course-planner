@@ -64,7 +64,7 @@ class Main extends Component {
   }
 
   createPlanHandler = () => {
-    this.props.history.push('/degree-year-selection');
+    this.props.history.push('/degree-selection');
   }
 
   updateWarnings = async () => {
