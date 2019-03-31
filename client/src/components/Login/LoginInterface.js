@@ -5,11 +5,6 @@ import { Link, withRouter } from 'react-router-dom';
 import Input from '../Input/input';
 import axios from 'axios';
 
-//import { Route, BrowserRouter as Router } from 'react-router-dom';
-//port Main from '../../containers/Main';
-//import Button from '../Button/button.js';
-
-
 export class LoginInterface extends Component {
  
   state = {
@@ -53,7 +48,7 @@ export class LoginInterface extends Component {
       
     if(rules.required){
       isValid = value.trim() !== '' && isValid;
-    } 
+    }
 
     return isValid;
   }
@@ -68,13 +63,19 @@ export class LoginInterface extends Component {
       loginData[formElementIdentifier] = this.state.loginMenu[formElementIdentifier].value;
     }
 
+
     axios.post( '/api/users/login', loginData )
       .then(response => {
         this.setState( { loading: false } );
         const user = response.data.user;
         if (user) {
+          console.log(user);
           sessionStorage.setItem("userId", user.id);
-          this.props.history.push("/main");
+          if (user.isAdmin) {
+            this.props.history.push("/admin");
+          } else {
+            this.props.history.push("/main");
+          }
         } else {
           console.log(response.data.message);
         }
@@ -82,13 +83,13 @@ export class LoginInterface extends Component {
       .catch( error => {
         this.setState( { loading: false } );
         if(error.response){
-        // console.log(error.response);
-          console.log("data::");
-          console.log(error.response.data);
-          console.log("status::");
-          console.log(error.response.status);
-          console.log("headers::");
-          console.log(error.response.headers);
+          console.log(error.response);
+        // console.log("data::");
+        //console.log(error.response.data);
+        //console.log("status::");
+        //console.log(error.response.status);
+        //console.log("headers::");
+        //console.log(error.response.headers);
         } else if (error.request){
           console.log('ERROR', error.message);
         }
