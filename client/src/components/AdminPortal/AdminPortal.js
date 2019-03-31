@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import './AdminPortal.css';
 import axios from 'axios';
 import StudentInfo from '../StudentInfo/StudentInfo';
+import Modal from 'react-modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ADMIN_COURSE_DOCUMENT = 'courses';
 const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
 
+Modal.setAppElement('#root');
 class AdminPortal extends Component {
 
   state = {
@@ -17,7 +20,8 @@ class AdminPortal extends Component {
     isNewDegree: "false",
     degreeName: "",
     specializationName: "",
-    degreeId: 1
+    degreeId: 1,
+    modalIsOpen: false
   };
 
   Progress = () => {
@@ -28,7 +32,8 @@ class AdminPortal extends Component {
     }
   }
 
-  submitFile = () => {
+  submitFile = (e) => {
+    e.preventDefault();
     let data = new FormData();
 
     if (this.state.selectedFile == null) {
@@ -66,8 +71,10 @@ class AdminPortal extends Component {
     axios
       .post('/api/admin/upload', data, {
         onUploadProgress: ProgressEvent => {
+          const percentLoaded = ProgressEvent.loaded / ProgressEvent.total * 100;
           this.setState({
-            loaded: (ProgressEvent.loaded / ProgressEvent.total * 100)
+            loaded: percentLoaded,
+            modalIsOpen: percentLoaded === 100
           });
         }
       })
@@ -127,16 +134,23 @@ class AdminPortal extends Component {
     });
   }
 
+  clearForm = () => {
+    this.setState({
+      selectedFile: null,
+      documentType: "courses"
+    });
+  }
+
+  closeModal = () => {
+    this.clearForm();
+    this.setState({modalIsOpen: false});
+  }
+
   componentDidMount = async () => {
     const userResponse = await axios.get('/api/users/' + sessionStorage.getItem('userId'));
     const degrees = await this.getDegrees();
 
     this.setState({user: userResponse.data, degrees});
-  }
-
-
-  async componentDidMount() {
-   
   }
 
   render() {
@@ -201,7 +215,7 @@ class AdminPortal extends Component {
             </div>
                     
             <div className="admin-submit-container admin-portal-element">
-              <button className="submit-file-btn" onClick={this.submitFile}>Upload</button>
+              <button type="submit" className="submit-file-btn" onClick={this.submitFile}>Upload</button>
               <p className="admin-submit-disclaimer-para">
                 Uploaded information affects students&#39; ability to create their course plan.
                 It is recommended to keep information up-to-date. 
@@ -209,6 +223,16 @@ class AdminPortal extends Component {
             </div>
           </form>
           
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onRequestClose={this.closeModal}
+            className="upload-successful-modal"
+            overlayClassName="upload-successful-modal-background"
+          >
+            <h2>File Upload Successful!</h2>
+            <FontAwesomeIcon icon="check" className="modal-icon"/>
+            <FontAwesomeIcon icon="times" className="modal-close" onClick={this.closeModal}/>
+          </Modal>
            
         </div>
         <div className="admin-body-column sidebar">

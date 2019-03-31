@@ -160,6 +160,56 @@
   display: flex;
 }
 
+/*
+ * Modal
+ */
+
+.modal-close {
+   position: absolute;
+   font-size: 1.5em;
+   right: 1em;
+   top: 1em;
+   padding: 0.5em 0.6em;
+   border-radius: 0.5em; 
+}
+
+.modal-close:hover {
+  background-color: #262427;
+  cursor: pointer;
+}
+
+.upload-successful-modal {
+  background-color: #333035;
+  text-align: center;
+  color: #e4e4e4;
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 25vh;
+  height: 50vh;
+  margin-bottom: 25vh;
+  border-radius: 1em;
+  padding: 2em;
+  position: relative;
+}
+
+.upload-successful-modal-background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5)
+}
+
+.modal-icon {
+  font-size: 10em;
+  margin-top: 0.2em;
+  color: #84bd00;
+  background-color: #201e21;
+  border-radius: 0.05em;
+  padding: 0.2em;
+}
+
 @media only screen and (max-width: 600px) {
     .admin-acc-logout-wrapper {
         position: relative;
