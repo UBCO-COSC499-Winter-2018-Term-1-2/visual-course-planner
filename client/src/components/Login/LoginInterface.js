@@ -84,12 +84,6 @@ export class LoginInterface extends Component {
         this.setState( { loading: false } );
         if(error.response){
           console.log(error.response);
-        // console.log("data::");
-        //console.log(error.response.data);
-        //console.log("status::");
-        //console.log(error.response.status);
-        //console.log("headers::");
-        //console.log(error.response.headers);
         } else if (error.request){
           console.log('ERROR', error.message);
         }
