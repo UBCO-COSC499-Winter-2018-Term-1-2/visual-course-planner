@@ -1,0 +1,21 @@
+#student-info.right button {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+#student-info.right {
+  text-align: right;
+}
+
+#student-info.left {
+  text-align: left;
+}
+
+#student-info.left button {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.student-info.icon {
+  margin-left: 0.5em;
+}

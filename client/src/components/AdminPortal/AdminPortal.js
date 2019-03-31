@@ -101,15 +101,6 @@ class AdminPortal extends Component {
     return degrees;
   }
 
-  async componentDidMount() {
-    this.getDegrees()
-      .then(degrees => {
-        this.setState({
-          degrees: degrees
-        });
-      });
-  }
-
   handleDegreeNameChange = (e) => {
     this.setState({
       degreeName: e.target.value
@@ -138,7 +129,14 @@ class AdminPortal extends Component {
 
   componentDidMount = async () => {
     const userResponse = await axios.get('/api/users/' + sessionStorage.getItem('userId'));
-    this.setState({user: userResponse.data});
+    const degrees = await this.getDegrees();
+
+    this.setState({user: userResponse.data, degrees});
+  }
+
+
+  async componentDidMount() {
+   
   }
 
   render() {
@@ -171,47 +169,52 @@ class AdminPortal extends Component {
 
     return (
       <div className="admin-portal-parent-wrapper">
-                
-        <StudentInfo user={this.state.user} align="right"/>
-                
-        <h1 className="admin-heading admin-portal-element">Admin Portal</h1>
-                
-        <div className="admin-body-wrapper">
+ 
+        <div className="admin-body-wrapper admin-body-column">
+          <h1 className="admin-heading admin-portal-element">Admin Portal</h1>
 
-          <div className="admin-body-description-container admin-portal-element">
-            <label className="choose-file-heading">choose your file</label>
-            <p className="admin-disclaimer-para">Please make sure file includes all the degree requirements for a specific 
-              and the current offered courses for the current year. 
-            </p>
-          </div>
+          <form>
+            <div className="admin-body-description-container admin-portal-element">
+              <label className="choose-file-heading">choose your file</label>
+              <p className="admin-disclaimer-para">Please make sure file includes all the degree requirements for a specific 
+                and the current offered courses for the current year. 
+              </p>
+            </div>
+                      
+            <div className="admin-uploadfile-container admin-portal-element">
+              <label id="choose-file-label" htmlFor="choose-file-btn">Choose File</label>
+              <input type="file" accept=".csv,text/csv" id="choose-file-btn" onChange={this.handleSelectedFile}/>
+              <this.Progress/>
+            </div>
+
+            <div className="admin-portal-element">
+              <p>Select document type: </p>
+              <div className="admin-radio-input">
+                <input type="radio" id="courses" name="document-type" value={ADMIN_COURSE_DOCUMENT}  onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_COURSE_DOCUMENT}/>
+                <label id="document-type-courses-label" className="admin-radio-label" htmlFor="courses">Courses Offered</label>
+              </div>
+              <div className="admin-radio-input">
+                <input type="radio" id="degree" name="document-type" value={ADMIN_SPECIALIZATION_DOCUMENT} onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT}/>
+                <label id="document-type-degree-label" htmlFor="degree" className="admin-radio-label">Specialization Requirements</label>
+                {this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT && specializationForm}
+              </div>
+            </div>
                     
-          <div className="admin-uploadfile-container admin-portal-element">
-            <label id="choose-file-label" htmlFor="choose-file-btn">Choose File</label>
-            <input type="file" accept=".csv,text/csv" id="choose-file-btn" onChange={this.handleSelectedFile}/>
-            <this.Progress/>
-          </div>
-
-          <div className="admin-portal-element">
-            <p>Select document type: </p>
-            <div className="admin-radio-input">
-              <input type="radio" id="courses" name="document-type" value={ADMIN_COURSE_DOCUMENT}  onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_COURSE_DOCUMENT}/>
-              <label id="document-type-courses-label" className="admin-radio-label" htmlFor="courses">Courses Offered</label>
+            <div className="admin-submit-container admin-portal-element">
+              <button className="submit-file-btn" onClick={this.submitFile}>Upload</button>
+              <p className="admin-submit-disclaimer-para">
+                Uploaded information affects students&#39; ability to create their course plan.
+                It is recommended to keep information up-to-date. 
+              </p>
             </div>
-            <div className="admin-radio-input">
-              <input type="radio" id="degree" name="document-type" value={ADMIN_SPECIALIZATION_DOCUMENT} onChange={this.handleChangeType} checked={this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT}/>
-              <label id="document-type-degree-label" htmlFor="degree" className="admin-radio-label">Specialization Requirements</label>
-              {this.state.documentType === ADMIN_SPECIALIZATION_DOCUMENT && specializationForm}
-            </div>
-          </div>
-                   
-          <div className="admin-submit-container admin-portal-element">
-            <button className="submit-file-btn" onClick={this.submitFile}>Upload</button>
-            <p className="admin-submit-disclaimer-para">
-              Uploaded information affects students&#39; ability to create their course plan.
-              It is recommended to keep information up-to-date. 
-            </p>
-          </div> 
+          </form>
+          
+           
         </div>
+        <div className="admin-body-column sidebar">
+          <StudentInfo user={this.state.user} align="right"/>
+        </div>
+
       </div>
     );
 

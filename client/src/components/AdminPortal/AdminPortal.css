@@ -146,6 +146,20 @@
   margin-top: 1em;
 }
 
+
+.admin-body-column.sidebar {
+  width: 17em;
+}
+
+.admin-body-column {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.admin-portal-parent-wrapper {
+  display: flex;
+}
+
 @media only screen and (max-width: 600px) {
     .admin-acc-logout-wrapper {
         position: relative;
