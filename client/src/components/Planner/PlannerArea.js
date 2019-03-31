@@ -262,14 +262,17 @@ class PlannerArea extends Component {
     this.trashDragCounter = 0;
     let incomingCourse = JSON.parse(e.dataTransfer.getData("course"));
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
-    const plan = { ...this.props.plan };
+    if (sourceTermId) {
+      const plan = { ...this.props.plan };
 
-    const courses = plan.terms.byId[sourceTermId].courses;
-    courses.splice(courses.indexOf(incomingCourse.id), 1);
-    delete plan.courses.byId[incomingCourse.id];
-    plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      const courses = plan.terms.byId[sourceTermId].courses;
+      courses.splice(courses.indexOf(incomingCourse.id), 1);
+      delete plan.courses.byId[incomingCourse.id];
+      plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      
+      this.props.updatePlan(plan);
+    }
     
-    this.props.updatePlan(plan);
     this.setState({
       trashColour: "white"
     });
@@ -305,6 +308,7 @@ class PlannerArea extends Component {
 
         <div className='floating-icon add-term' onClick={this.addTermToPlan}>
           <FontAwesomeIcon icon="plus-circle" />
+          <p>Add term</p>
         </div>
 
       </div>
