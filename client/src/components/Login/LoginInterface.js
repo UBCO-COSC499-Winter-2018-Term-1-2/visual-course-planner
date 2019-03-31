@@ -142,7 +142,7 @@ export class LoginInterface extends Component {
             />
           </div>  
         ))}
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Login</button>
+        <button type="button" className="defaultbtn" onClick={this.handler}>Login</button>
         <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>

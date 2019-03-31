@@ -267,7 +267,7 @@ render(){
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             name={formElement.config.name}
-            label={formElement.config.label} 
+            label={formElement.config.label}
 
           />
           {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
