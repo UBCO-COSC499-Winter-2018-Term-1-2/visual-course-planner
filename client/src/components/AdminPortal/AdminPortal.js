@@ -8,7 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ADMIN_COURSE_DOCUMENT = 'courses';
 const ADMIN_SPECIALIZATION_DOCUMENT = 'spec';
 
-Modal.setAppElement('#root');
+if (document.getElementById('root')) {
+  Modal.setAppElement('#root');
+}
 class AdminPortal extends Component {
 
   state = {
