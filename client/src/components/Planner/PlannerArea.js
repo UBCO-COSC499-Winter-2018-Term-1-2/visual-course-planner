@@ -10,15 +10,15 @@ import Arrow from 'react-dom-arrow';
 import ScrollButton from '../ScrollButton/ScrollButton';
 
 class PlannerArea extends Component {
-
   state = {
     trashColour: "white",
-    courseArrows: []
-  }
-   
+    courseArrows: [],
+    isHoveringTerms: false
+  };
+ 
   scrollRef = React.createRef();
 
-  tempcourseArrows = []
+  tempcourseArrows = [];
   
   generateCourseArrows = (plan) => {
     this.tempcourseArrows.length = 0;
@@ -231,6 +231,8 @@ class PlannerArea extends Component {
         onCourseDrop={this.onCourseDrop}
         onCourseDragStart={this.onCourseDragStart}
         removeTerm={this.removeTermFromPlan}
+        onMouseOver={this.showScrollButtons}
+        onMouseLeave={this.hideScrollButtons}
       />;
     });
     return (
@@ -339,12 +341,28 @@ class PlannerArea extends Component {
     
   }
 
+  
+  //
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
+  }
+  
+  //
+  showScrollButtons = () => {
+    if(!this.state.isHoveringTerms){
+      this.setState(prevState => ({
+        isHoveringTerms: !prevState.isHoveringTerms
+      }));
+    }
+  }
+
   // create scroll button onclick handler
-  scrollButtonClickHandler = (e, scrollRef, direction) => {
+  scrollButtonClickHandler = (direction) => {
     let scrollItem = this.scrollRef.current;
     let scrollDirection = direction;
 
     scrollDirection == "left" ? (scrollItem.scrollLeft -= 250) : (scrollItem.scrollLeft += 250); 
+    console.log("scrolling:" + scrollDirection);
   }
 
   scrollToRight = () => {
@@ -372,18 +390,6 @@ class PlannerArea extends Component {
           onCourseDragStart={this.onCourseDragStart.bind(this)}
         />
 
-        <div id="scroll-button-container">
-          <ScrollButton 
-            direction="left" 
-            scrollItem={this.scrollRef} 
-            onClick={this.scrollButtonClickHandler.bind(this)} />
-          
-          <ScrollButton 
-            direction="right" 
-            scrollItem={this.scrollRef} 
-            onClick={this.scrollButtonClickHandler.bind(this)}/>
-        </div>
-
         <WarningSnackbar
           showSnackbar={this.props.showSnackbar}
           closeSnackbar={this.props.closeSnackbar}
@@ -400,6 +406,22 @@ class PlannerArea extends Component {
           onDrop={this.onCourseDropTrash}
         >
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
+        </div>
+
+        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn-hide"}>
+          <ScrollButton 
+            direction="left" 
+            scrollItem={this.scrollRef}  
+            scrollClick={this.scrollButtonClickHandler}
+            onMouseOver={this.showScrollButtons} /> 
+        </div>
+
+        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn-hide"}>
+          <ScrollButton 
+            direction="right" 
+            scrollItem={this.scrollRef}  
+            scrollClick={this.scrollButtonClickHandler}
+            onMouseOver={this.showScrollButtons} />
         </div>
 
         <div className='floating-icon add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
