@@ -8,7 +8,8 @@ class ScrollButton extends Component {
     return(
       <button 
         className = {this.props.direction == "left" ? "left" : "right" }
-        onClick = {(e) => this.props.onClick(e, this.props.scrollItem, this.props.direction)}>
+        onClick = {() => {this.props.scrollClick(this.props.direction);}}
+        onMouseOver = {this.props.onMouseOver}>
         
         {this.props.direction === "left" ? "<" : ">"}
       
@@ -20,7 +21,8 @@ class ScrollButton extends Component {
 ScrollButton.propTypes = {
   direction: PropTypes.string.isRequired,
   scrollItem: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired
+  scrollClick: PropTypes.func.isRequired,
+  onMouseOver: PropTypes.func.isRequired
 };
 
 export default ScrollButton;
