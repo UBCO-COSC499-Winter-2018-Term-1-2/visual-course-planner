@@ -17,15 +17,18 @@ const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const expressValidator = require('express-validator');
+const morgan = require('morgan');
 
 
 const app = express();
 
-app.use(expressValidator());
 
+// Logging
+app.use(morgan("tiny"));
 // Express Middleware
 app.use(express.json());
 app.use(fileUpload());
+app.use(expressValidator());
 
 // Body ParserMiddleware
 app.use(bodyParser.json());

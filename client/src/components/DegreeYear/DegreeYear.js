@@ -91,11 +91,11 @@ class DegreeYear extends Component {
       });
   }
 
-  getSpecializations = async () => {
+  getSpecializations = async (degreeId) => {
     let specializations = [];
-    if (this.state.form.degree.value !== '') {
-      console.log("Getting specializations for : " + this.state.form.degree.value);
-      specializations = await axios.get('/api/specializations/' + this.state.form.degree.value)
+    if (degreeId !== '') {
+      console.log("Getting specializations for : " + degreeId);
+      specializations = await axios.get('/api/specializations/' + degreeId)
         .then(res => {
           return res.data;
         })
@@ -131,10 +131,14 @@ class DegreeYear extends Component {
   }
 
   componentWillUpdate =  async (nextProps, nextState) => {
-    console.log(nextState, this.state);
+    console.log({msg: "ComponentWillUpdate", currentState:this.state ,nextState: nextState});
     if (nextState.form.degree.value !== this.state.form.degree.value) {
-      let specializations = await this.getSpecializations();
+      console.log(`1Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
+
+      let specializations = await this.getSpecializations(nextState.form.degree.value);
+      console.log(`2Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
       specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
+      console.log(`3Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
 
       this.setState({
         ...nextState,
@@ -148,7 +152,8 @@ class DegreeYear extends Component {
                 { value: '', displayValue: "Choose major" },
                 ...specializations
               ]
-            }
+            },
+            value: ''
           }
         }
       });
@@ -156,6 +161,7 @@ class DegreeYear extends Component {
   }
 
   componentDidMount = async () => {
+    console.log("ComponentDidMount");
     let degrees = await this.getDegrees();
     degrees = degrees.map(degree => { return { value: degree.id, displayValue: degree.name};});
 
@@ -203,7 +209,7 @@ class DegreeYear extends Component {
         ))}
 
         <div className="btn-div">
-          <button type="submit" className="green-borderbtn">Submit</button> 
+          <button type="submit" className="green-borderbtn" disabled={!this.state.formIsValid}>Submit</button> 
         </div>
 
       </form>
