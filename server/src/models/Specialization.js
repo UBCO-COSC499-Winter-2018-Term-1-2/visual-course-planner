@@ -15,6 +15,11 @@ module.exports = {
     return results.insertId;
   },
 
+  async getSpecializationsForDegree(id) {
+    const results = await db.query("SELECT * FROM specialization WHERE id = ?", [id]);
+    return results;
+  },
+
   async createSpecializationRequirement(requirementObj, specId) {
     console.log("Creating req object: " + JSON.stringify(requirementObj));
     // make transaction

@@ -34,7 +34,7 @@ class DegreeYear extends Component {
         validation: {
           required: true
         },
-        label: 'SPECIALIZATIONxw',
+        label: 'SPECIALIZATION',
         value: '',
         valid: true,
         inputElementTouched: false 
@@ -82,16 +82,6 @@ class DegreeYear extends Component {
     
   }
 
-  handleDeselect(index) {
-    var selectedDegrees = this.state.selectedDegrees.slice();
-    selectedDegrees.splice(index, 1);
-    this.setState({selectedDegrees});
-  }
-
-  handleSelectionChange = (selectedDegrees) => {
-    this.setState({selectedDegrees});
-  }
-
   getDegrees = async () => {
     return await axios.get('/api/degrees')
       .then(response => { return response.data; })
@@ -99,6 +89,23 @@ class DegreeYear extends Component {
         console.error(error);
         return [];
       });
+  }
+
+  getSpecializations = async () => {
+    let specializations = [];
+    if (this.state.form.degree.value !== '') {
+      console.log("Getting specializations for : " + this.state.form.degree.value);
+      specializations = await axios.get('/api/specializations/' + this.state.form.degree.value)
+        .then(res => {
+          return res.data;
+        })
+        .catch(err => {
+          console.error(err);
+          return [];
+        });
+    }
+    
+    return specializations;
   }
 
   submitDegreeInformation = async (e) => {
@@ -109,7 +116,7 @@ class DegreeYear extends Component {
       formData.append(formElementIdentifier, this.state.form[formElementIdentifier].value);
     }
     formData.append("userId", userId);
-    formData.append("degreeId", this.state.form.degree.value);
+    formData.append("specializationId", this.state.form.specialization.value);
     console.log({"submitting info": formData});
 
     const planId = await axios.post(`/api/plans/new`, formData)
@@ -123,9 +130,35 @@ class DegreeYear extends Component {
     this.props.history.push({ pathname: '/main', state: { newPlan: planId }});
   }
 
+  componentWillUpdate =  async (nextProps, nextState) => {
+    console.log(nextState, this.state);
+    if (nextState.form.degree.value !== this.state.form.degree.value) {
+      let specializations = await this.getSpecializations();
+      specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
+
+      this.setState({
+        ...nextState,
+        form: {
+          ...nextState.form,
+          
+          specialization: {
+            ...nextState.form.specialization,
+            elementConfig: {
+              options: [
+                { value: '', displayValue: "Choose major" },
+                ...specializations
+              ]
+            }
+          }
+        }
+      });
+    }
+  }
+
   componentDidMount = async () => {
     let degrees = await this.getDegrees();
     degrees = degrees.map(degree => { return { value: degree.id, displayValue: degree.name};});
+
     this.setState(prevState => {
       return {
         ...prevState,
@@ -140,14 +173,12 @@ class DegreeYear extends Component {
               ]
             }
           }
-        }	        
+        }
       };	
     });
   }
 
   render(){
-
-    //FORM::
     const formElementsArray = [];
     for (let key in this.state.form) {
       formElementsArray.push({
@@ -156,10 +187,7 @@ class DegreeYear extends Component {
       });
     }
 
-    
-    //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-    //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-    let form = (
+    const form = (
       <form onSubmit={this.submitDegreeInformation}>
         {formElementsArray.map(formElement => (
           <Input 
@@ -174,7 +202,6 @@ class DegreeYear extends Component {
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
 
-
         <div className="btn-div">
           <button type="submit" className="green-borderbtn">Submit</button> 
         </div>
@@ -183,8 +210,6 @@ class DegreeYear extends Component {
     );
 
     return(
-
-      //RETURN FORM (CURRENT STANDING YEAR)
       <div>
         <div className="degree-year-menu">
           <h1 className="yellow-title">Degree Selection </h1>
@@ -198,8 +223,6 @@ class DegreeYear extends Component {
           
         </div> 
       </div>
-
-
     );
   }
 }
