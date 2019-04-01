@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './DegreeYear.css';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -14,13 +14,27 @@ class DegreeYear extends Component {
         elementConfig: {
           options:[
             {value: '', displayValue: 'Choose degree'},
-
           ]
         },
         validation: {
           required: true
         },
         label: 'DESIRED DEGREE',
+        value: '',
+        valid: true,
+        inputElementTouched: false 
+      },
+      specialization: {
+        elementType: 'select',
+        elementConfig: {
+          options:[
+            {value: '', displayValue: 'Choose major'},
+          ]
+        },
+        validation: {
+          required: true
+        },
+        label: 'SPECIALIZATIONxw',
         value: '',
         valid: true,
         inputElementTouched: false 

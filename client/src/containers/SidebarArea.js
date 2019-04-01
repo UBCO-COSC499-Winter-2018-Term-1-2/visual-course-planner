@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 
 class SidebarArea extends Component {
 
-
   render () {
-
-
     return (
       <div className="sidebar-info-area">
         {this.props.children}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../UserProfile/profile.css';
+import '../UserProfile/Profile.css';
 import { Link } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import axios from 'axios';
 
 // NOTES:

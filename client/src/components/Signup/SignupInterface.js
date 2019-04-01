@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
 import { Link, withRouter } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import { PropTypes } from 'prop-types';
 import axios from 'axios';
 
