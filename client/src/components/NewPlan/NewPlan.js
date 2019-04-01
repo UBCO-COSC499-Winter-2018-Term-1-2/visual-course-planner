@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './DegreeYear.css';
+import './NewPlan.css';
 import Input from '../Input/Input';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-class DegreeYear extends Component {
+class NewPlanInterface extends Component {
 
   //FORM INITIAL SETUP ::
   state = {
@@ -233,9 +233,9 @@ class DegreeYear extends Component {
   }
 }
 
-DegreeYear.propTypes = {
+NewPlanInterface.propTypes = {
   history: PropTypes.object.isRequired
 };
     
   
-export default DegreeYear;
+export default NewPlanInterface;
