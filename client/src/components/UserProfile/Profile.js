@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import '../UserProfile/profile.css';
+import '../UserProfile/Profile.css';
 import { Link } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import axios from 'axios';
 
 // NOTES:
 // Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
 //correct formatting
 
-class profile extends Component {
+class Profile extends Component {
 
     state = {
       profileMenu: {
@@ -300,4 +300,4 @@ class profile extends Component {
 }
     
   
-export default profile;
+export default Profile;

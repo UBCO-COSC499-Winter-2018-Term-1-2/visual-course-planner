@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import axios from 'axios';
 
 export class LoginInterface extends Component {

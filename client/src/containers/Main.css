@@ -42,6 +42,10 @@
   border-bottom: lightgrey 1px solid;
 }
 
+.sidebar-header {
+  margin-top: 0;
+}
+
 .sidebar-info-area > * {
   min-width: 130px;
   display: block;
@@ -79,6 +83,8 @@
   cursor: pointer;
   color: #84bd00;
   font-size: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .sidebar-button:focus {

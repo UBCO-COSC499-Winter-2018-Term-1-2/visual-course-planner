@@ -217,21 +217,25 @@ class PlannerArea extends Component {
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
     const plan = { ...this.props.plan };
 
-    if (!sourceTermId) {
-      console.log("Adding course to plan", incomingCourse);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
-      plan.courses.allIds.push(incomingCourse.id.toString());
-      plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
-      delete incomingCourse.id;
-    } else {
-      console.log("Moving course already in plan", incomingCourse);
-      const courses = plan.terms.byId[sourceTermId].courses;
-      courses.splice(courses.indexOf(incomingCourse.id), 1);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
-      console.log("Moved Course: " + JSON.stringify(incomingCourse));
+    if (plan.term.byId[targetTermId].courses.indexOf(incomingCourse.id) === -1) {
+      if (!sourceTermId) {
+        console.log("Adding course to plan", incomingCourse);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
+        plan.courses.allIds.push(incomingCourse.id.toString());
+        plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+        delete incomingCourse.id;
+      } else {
+        console.log("Moving course already in plan", incomingCourse);
+        const courses = plan.terms.byId[sourceTermId].courses;
+        courses.splice(courses.indexOf(incomingCourse.id), 1);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
+        console.log("Moved Course: " + JSON.stringify(incomingCourse));
+      }
+      this.props.updatePlan(plan);
+
     }
 
-    this.props.updatePlan(plan);
+
   }
 
   onCourseDragEnterTrash = (e) => {
