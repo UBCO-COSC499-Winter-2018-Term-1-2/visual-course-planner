@@ -39,3 +39,23 @@
   top: 1em;
   right: 2em;
 }
+
+.scroll-btn-hide{
+  display: none;
+}
+
+.scroll-btn{
+  position: absolute;
+  z-index: 1;
+  max-width: 5em;
+  height: 1.5em;
+  top: 50%;
+}
+
+.scroll-btn.right{
+  right: 2em;
+}
+
+.scroll-btn.left{
+  left: 2em;
+}
