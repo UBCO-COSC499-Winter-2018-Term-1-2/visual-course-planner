@@ -20,7 +20,7 @@ class ConfirmEmail extends Component {
 } //end of class 
 
 ConfirmEmail.propTypes = {
-  toggleMenu: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func,
   history: PropTypes.object
 };
 

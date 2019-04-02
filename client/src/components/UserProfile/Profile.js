@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import '../UserProfile/profile.css';
+import './Profile.css';
 import { Link } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import axios from 'axios';
 
 // NOTES:
 // Must change form so every element is not required other than matching input element (ie. newpassword + renter New Password)
 //correct formatting
 
-class profile extends Component {
+class Profile extends Component {
 
     state = {
       profileMenu: {
@@ -268,7 +268,7 @@ class profile extends Component {
                 elementConfig={formElement.config.elementConfig}
                 value={formElement.config.value}
                 invalid={!formElement.config.valid} //config is referring to all elements next to a state (ie. email validation, valid, type etc)
-                shouldBeValidated={formElement.config.validation}
+                shouldBeValidated={formElement.config.validation.required}
                 inputElementTouched={formElement.config.inputElementTouched}
                 changed={(event) => this.inputChangeHandler(event, formElement.id)} />
             ))}
@@ -300,4 +300,4 @@ class profile extends Component {
 }
     
   
-export default profile;
+export default Profile;

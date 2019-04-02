@@ -78,14 +78,9 @@ a:hover {
 
 }
 
-.deafultbtn:hover {
+.defaultbtn:hover {
     background-color: #84bd00; 
     color: black;
-}
-
-.deafultbtn:disabled{
-    cursor: not-allowed;
-
 }
 
 .btn-div{

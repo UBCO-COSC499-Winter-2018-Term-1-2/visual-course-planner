@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './LoginInterface.css';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import axios from 'axios';
 
 export class LoginInterface extends Component {
@@ -67,27 +67,23 @@ export class LoginInterface extends Component {
     axios.post( '/api/users/login', loginData )
       .then(response => {
         this.setState( { loading: false } );
-        console.log("no errors::");
         const user = response.data.user;
-        console.log(user);
-        sessionStorage.setItem("userId", user.id);
-        console.log(sessionStorage.getItem("userId"));
-        if (user.isAdmin)
-          this.props.history.push("/admin");
-        else
-          this.props.history.push("/main");
-
+        if (user) {
+          console.log(user);
+          sessionStorage.setItem("userId", user.id);
+          if (user.isAdmin) {
+            this.props.history.push("/admin");
+          } else {
+            this.props.history.push("/main");
+          }
+        } else {
+          console.log(response.data.message);
+        }
       })
       .catch( error => {
         this.setState( { loading: false } );
         if(error.response){
           console.log(error.response);
-        // console.log("data::");
-        //console.log(error.response.data);
-        //console.log("status::");
-        //console.log(error.response.status);
-        //console.log("headers::");
-        //console.log(error.response.headers);
         } else if (error.request){
           console.log('ERROR', error.message);
         }
@@ -146,7 +142,7 @@ export class LoginInterface extends Component {
             />
           </div>  
         ))}
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Login</button>
+        <button type="button" className="defaultbtn" onClick={this.handler}>Login</button>
         <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>
