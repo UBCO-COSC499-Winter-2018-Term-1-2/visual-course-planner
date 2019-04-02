@@ -217,7 +217,7 @@ class PlannerArea extends Component {
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
     const plan = { ...this.props.plan };
 
-    if (plan.term.byId[targetTermId].courses.indexOf(incomingCourse.id) === -1) {
+    if (plan.terms.byId[targetTermId].courses.indexOf(incomingCourse.id) === -1) {
       if (!sourceTermId) {
         console.log("Adding course to plan", incomingCourse);
         plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
