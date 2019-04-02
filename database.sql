@@ -97,7 +97,8 @@ CREATE TABLE user (
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
-  standing  INT DEFAULT 0
+  standing  INT DEFAULT 0,
+  confirmed BOOLEAN DEFAULT false
 );
 
 CREATE TABLE plan (
