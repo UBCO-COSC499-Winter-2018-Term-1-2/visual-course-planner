@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../UserProfile/Profile.css';
+import './Profile.css';
 import { Link } from 'react-router-dom';
 import Input from '../Input/Input';
 import axios from 'axios';
