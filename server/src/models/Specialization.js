@@ -16,7 +16,7 @@ module.exports = {
   },
 
   async getSpecializationsForDegree(id) {
-    const results = await db.query("SELECT * FROM specialization WHERE id = ?", [id]);
+    const results = await db.query("SELECT * FROM specialization WHERE did = ?", [id]);
     return results;
   },
 
