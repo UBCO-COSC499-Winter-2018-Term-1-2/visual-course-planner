@@ -131,7 +131,9 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', (req, res, next) => {
   console.log(req.body);
-   if (req.body.confirmed == 1){
+  // uid = req.body.id;
+  // let user = await User.getUserById(uid);
+  //  if (user.confirmed == 1){
   passport.authenticate('local', (err, user, info) => {
     console.log("info", info);
     if (err) {
@@ -139,12 +141,12 @@ router.post('/login', (req, res, next) => {
     }
     res.send({...info, user});
   })(req, res, next);
-}else{
-  // need some sort of reroutng here to take the user to the verify page
-  console.log('The user is not verified. Please verify your email');
-  res.status(500).send('The user is not verified. Please verify your email');
-  //send out another email maybe? or create a link to send one out? so we would have to make a new token and replace the old one in the DB
-}
+// }else{
+//   // need some sort of reroutng here to take the user to the verify page
+//   console.log('The user is not verified. Please verify your email');
+//   res.status(500).send('The user is not verified. Please verify your email');
+//   //send out another email maybe? or create a link to send one out? so we would have to make a new token and replace the old one in the DB
+// }
   
 });
 
