@@ -98,7 +98,8 @@ CREATE TABLE user (
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
   standing  INT DEFAULT 0,
-  confirmed BOOLEAN DEFAULT false
+  confirmed BOOLEAN DEFAULT false,
+  authToken VARCHAR(40)
 );
 
 CREATE TABLE plan (

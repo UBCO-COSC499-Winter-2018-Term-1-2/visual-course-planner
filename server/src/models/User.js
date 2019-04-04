@@ -102,6 +102,17 @@ module.exports = {
 
     return rows;
 
+  },
+
+
+  async verifyUser(id) {
+    return db.query("UPDATE user SET confirmed = TRUE WHERE id = ?", [id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 
 };

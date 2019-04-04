@@ -19,7 +19,8 @@
     "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "randomstring": "^1.1.5"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",

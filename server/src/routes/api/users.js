@@ -4,6 +4,7 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const mail = require('../../services/EmailService');
+const randomstring = require('randomstring');
 
 router.get('/:id', async (req, res) => {
   const userId = parseInt(req.params.id);
@@ -86,7 +87,8 @@ router.post('/signup', async (req, res) => {
             console.log(err);
           }
 
-          //create the JWT web token here
+          //create the token here and store in DB
+           const token = randomstring.generate();
 
           const hashPassword = hash;
           var newUser = {     
@@ -96,15 +98,17 @@ router.post('/signup', async (req, res) => {
             lastname: req.body.lName,
             isAdmin: false,
             standing: 0,
-            confirmed: false
+            confirmed: false,
+            authToken: token
           };
           
           try{
             const userId = await User.insertUser(newUser);
             console.log("User was created: " + userId);
             res.status(200).send({userId, email: newUser.email});
-            //send in the JWT token here so u can add it to the link? 
-            mail.sendEmail(newUser.email);
+
+            //send in the token here to add to the link? 
+            mail.sendEmail(newUser.email,token);
             console.log("The user: " + newUser.email + " was sent a verification email.");
           }
           catch(err) {
@@ -127,6 +131,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', (req, res, next) => {
   console.log(req.body);
+   if (req.body.confirmed == 1){
   passport.authenticate('local', (err, user, info) => {
     console.log("info", info);
     if (err) {
@@ -134,6 +139,12 @@ router.post('/login', (req, res, next) => {
     }
     res.send({...info, user});
   })(req, res, next);
+}else{
+  // need some sort of reroutng here to take the user to the verify page
+  console.log('The user is not verified. Please verify your email');
+  res.status(500).send('The user is not verified. Please verify your email');
+  //send out another email maybe? or create a link to send one out? so we would have to make a new token and replace the old one in the DB
+}
   
 });
 
@@ -184,11 +195,50 @@ router.get('/:id/coursehistory', async (req, res) => {
   }
 });
 
-router.post('/emailVerification', async (req, res) => {
-  let swag = 'herrajluhano@gmail.com'
+/**
+ * @route POST api/users/emailVerification
+ * @desc Replace existing verification token with new token for authentication and send out email
+ * @access Private
+ */ 
 
-  mail.sendEmail(swag);
+router.post('/:id/emailToken', async (req, res) => {
+  let userId = req.body.uid;
+  let user = await User.getUserById(userId);
+
+  const token = randomstring.generate();
+  //create another token here and replace the one in DB
+
+  mail.sendEmail(email);
 
 });
+
+router.post('/:uid/:token/emailVerification', async (req, res) => {
+  let token = req.body.token;
+  let userId = req.body.uid;
+  // this route checks the two tokens and changes the DB accordingly
+  let user = await User.getUserById(userId);
+  if(token === user.authtoken){
+    console.log("The tokens match! User authenticated");
+    await User.verifyUser(userId);
+  }else{
+    console.log("The user could not be verified.");
+
+    mail.sendEmail(email);
+
+  }
+
+});
+
+router.post('/tutti', async (req, res) => {
+  
+  const token = randomstring.generate();
+  res.status(200).send(await User.verifyUser(2));
+
+
+
+});
+
+
+
 
 module.exports = router;
