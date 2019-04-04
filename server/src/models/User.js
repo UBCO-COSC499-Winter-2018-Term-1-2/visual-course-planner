@@ -113,6 +113,16 @@ module.exports = {
       .catch(err => {
         throw err;
       });
+  },
+
+  async updateUserToken(id,token) {
+    return db.query("UPDATE user SET authToken = ? WHERE id = ?", [token, id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 
 };
