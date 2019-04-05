@@ -50,6 +50,7 @@
   max-width: 5em;
   height: 1.5em;
   top: 50%;
+  opacity: 0.5;
 }
 
 .scroll-btn.right{
