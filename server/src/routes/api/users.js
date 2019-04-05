@@ -124,14 +124,15 @@ router.post('/signup', async (req, res) => {
 
 /**
  * @route POST api/users/login
- * @desc authenticate a user
+ * @desc authenticate a user for login
  * @access Private
  */ 
 
 router.post('/login', async (req, res, next) => {
   console.log(req.body);
-  uid = req.body.id;
-  let user = await User.getUserById(uid);
+  let email = req.body.email;
+  let user = await User.getUser(email);
+  console.log(user.confirmed);
    if (user.confirmed == 1){
   passport.authenticate('local', (err, user, info) => {
     console.log("info", info);
@@ -207,9 +208,11 @@ router.post('/:id/emailToken', async (req, res) => {
   let user = await User.getUserById(userId);
 
   const token = mail.generateEmailToken();
-  if(user.confirmed == FALSE){
+  if(user.confirmed == 0){
     await User.updateUserToken(userId, token);
     mail.sendEmail(user.email, token, userId);
+    console.log("The user: " + user.email + " is sent another email. The old link is no longer valid");
+    res.status(200).send("The user: " + user.email + " is sent another email. The old link is no longer valid");
   }else{
     console.log("The user: " + user.email + " is already verified.");
     res.status(200).send("The user: " + user.email + " is already verified.");
@@ -225,9 +228,9 @@ router.post('/:id/emailToken', async (req, res) => {
 router.post('emailVerification/:uid/:token/', async (req, res) => {
   let token = req.body.token;
   let userId = req.body.uid;
-  
   let user = await User.getUserById(userId);
-  if(token === user.authtoken){
+  
+  if(token === user.authToken){
     console.log("The tokens match! User authenticated");
     res.status(200).send("The tokens match! User authenticated");
     await User.verifyUser(userId);
@@ -236,17 +239,6 @@ router.post('emailVerification/:uid/:token/', async (req, res) => {
     res.status(200).send("The user: " + user.email + " could not be verified.");
   }
 });
-
-router.post('/tutti', async (req, res) => {
-  
-  const token = randomstring.generate();
-  res.status(200).send(await User.verifyUser(2));
-
-
-
-});
-
-
 
 
 module.exports = router;

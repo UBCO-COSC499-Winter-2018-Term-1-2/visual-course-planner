@@ -106,7 +106,7 @@ module.exports = {
 
 
   async verifyUser(id) {
-    return db.query("UPDATE user SET confirmed = TRUE WHERE id = ?", [id])
+    return db.query("UPDATE user SET confirmed = TRUE, authToken = NULL WHERE id = ?", [id])
       .then(rows => {
         return rows;
       })
