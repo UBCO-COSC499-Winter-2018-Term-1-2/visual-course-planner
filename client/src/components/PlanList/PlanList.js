@@ -39,18 +39,16 @@ class PlanList extends Component {
 
     return (
       <div id="plan-list">
-        <div className="sidebar-info-area">
-          <h3 className="sidebar-header">Degree Plans</h3>
-          <h4 className="sidebar-header">Favourites</h4>
-          <ul>
-            {favouritePlans}
-          </ul>
-          <h4 className="sidebar-header">Plans</h4>
-          <ul>
-            {nonfavouritePlans}
-          </ul>
-          <NewPlanButton onClick={this.props.newPlan} />
-        </div>
+        <h3 className="sidebar-header">Degree Plans</h3>
+        <h4 className="sidebar-header">Favourites</h4>
+        <ul>
+          {favouritePlans}
+        </ul>
+        <h4 className="sidebar-header">Plans</h4>
+        <ul>
+          {nonfavouritePlans}
+        </ul>
+        <NewPlanButton onClick={this.props.newPlan} />
       </div>
     );
   }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './DegreeYear.css';
-import Input from '../Input/input';
+import './NewPlan.css';
+import Input from '../Input/Input';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-class DegreeYear extends Component {
+class NewPlanInterface extends Component {
 
   //FORM INITIAL SETUP ::
   state = {
@@ -14,13 +14,27 @@ class DegreeYear extends Component {
         elementConfig: {
           options:[
             {value: '', displayValue: 'Choose degree'},
-
           ]
         },
         validation: {
           required: true
         },
         label: 'DESIRED DEGREE',
+        value: '',
+        valid: true,
+        inputElementTouched: false 
+      },
+      specialization: {
+        elementType: 'select',
+        elementConfig: {
+          options:[
+            {value: '', displayValue: 'Choose major'},
+          ]
+        },
+        validation: {
+          required: true
+        },
+        label: 'SPECIALIZATION',
         value: '',
         valid: true,
         inputElementTouched: false 
@@ -68,16 +82,6 @@ class DegreeYear extends Component {
     
   }
 
-  handleDeselect(index) {
-    var selectedDegrees = this.state.selectedDegrees.slice();
-    selectedDegrees.splice(index, 1);
-    this.setState({selectedDegrees});
-  }
-
-  handleSelectionChange = (selectedDegrees) => {
-    this.setState({selectedDegrees});
-  }
-
   getDegrees = async () => {
     return await axios.get('/api/degrees')
       .then(response => { return response.data; })
@@ -85,6 +89,23 @@ class DegreeYear extends Component {
         console.error(error);
         return [];
       });
+  }
+
+  getSpecializations = async (degreeId) => {
+    let specializations = [];
+    if (degreeId !== '') {
+      console.log("Getting specializations for : " + degreeId);
+      specializations = await axios.get('/api/specializations/' + degreeId)
+        .then(res => {
+          return res.data;
+        })
+        .catch(err => {
+          console.error(err);
+          return [];
+        });
+    }
+    
+    return specializations;
   }
 
   submitDegreeInformation = async (e) => {
@@ -95,6 +116,7 @@ class DegreeYear extends Component {
       formData.append(formElementIdentifier, this.state.form[formElementIdentifier].value);
     }
     formData.append("userId", userId);
+    formData.append("specializationId", this.state.form.specialization.value);
     console.log({"submitting info": formData});
 
     const planId = await axios.post(`/api/plans/new`, formData)
@@ -108,9 +130,41 @@ class DegreeYear extends Component {
     this.props.history.push({ pathname: '/main', state: { newPlan: planId }});
   }
 
+  componentWillUpdate =  async (nextProps, nextState) => {
+    console.log({msg: "ComponentWillUpdate", currentState:this.state ,nextState: nextState});
+    if (nextState.form.degree.value !== this.state.form.degree.value) {
+      console.log(`1Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
+
+      let specializations = await this.getSpecializations(nextState.form.degree.value);
+      console.log(`2Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
+      specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
+      console.log(`3Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
+
+      this.setState({
+        ...nextState,
+        form: {
+          ...nextState.form,
+          
+          specialization: {
+            ...nextState.form.specialization,
+            elementConfig: {
+              options: [
+                { value: '', displayValue: "Choose major" },
+                ...specializations
+              ]
+            },
+            value: ''
+          }
+        }
+      });
+    }
+  }
+
   componentDidMount = async () => {
+    console.log("ComponentDidMount");
     let degrees = await this.getDegrees();
     degrees = degrees.map(degree => { return { value: degree.id, displayValue: degree.name};});
+
     this.setState(prevState => {
       return {
         ...prevState,
@@ -125,14 +179,12 @@ class DegreeYear extends Component {
               ]
             }
           }
-        }	        
+        }
       };	
     });
   }
 
   render(){
-
-    //FORM::
     const formElementsArray = [];
     for (let key in this.state.form) {
       formElementsArray.push({
@@ -141,10 +193,7 @@ class DegreeYear extends Component {
       });
     }
 
-    
-    //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
-    //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
-    let form = (
+    const form = (
       <form onSubmit={this.submitDegreeInformation}>
         {formElementsArray.map(formElement => (
           <Input 
@@ -159,17 +208,14 @@ class DegreeYear extends Component {
             changed={(event) => this.inputChangeHandler(event, formElement.id)} />
         ))}
 
-
         <div className="btn-div">
-          <button type="submit" className="green-borderbtn">Submit</button> 
+          <button type="submit" className="green-borderbtn" disabled={!this.state.formIsValid}>Submit</button> 
         </div>
 
       </form>
     );
 
     return(
-
-      //RETURN FORM (CURRENT STANDING YEAR)
       <div>
         <div className="degree-year-menu">
           <h1 className="yellow-title">Degree Selection </h1>
@@ -183,15 +229,13 @@ class DegreeYear extends Component {
           
         </div> 
       </div>
-
-
     );
   }
 }
 
-DegreeYear.propTypes = {
+NewPlanInterface.propTypes = {
   history: PropTypes.object.isRequired
 };
     
   
-export default DegreeYear;
+export default NewPlanInterface;

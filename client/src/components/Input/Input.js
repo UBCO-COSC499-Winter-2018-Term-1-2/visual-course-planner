@@ -1,5 +1,5 @@
 import React from 'react';
-import styling from '../Input/input.css';
+import styling from '../Input/Input.css';
 import PropTypes from 'prop-types';
 //import { config } from '@fortawesome/fontawesome-svg-core';
 

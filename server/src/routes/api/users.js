@@ -6,6 +6,12 @@ const passport = require('passport');
 const mail = require('../../services/EmailService');
 
 
+/**
+ * @route GET api/users/id
+ * @desc Get all user info
+ * @access Private
+ */ 
+
 router.get('/:id', async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
@@ -24,6 +30,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @route POST api/users/changePassword
+ * @desc Change a user password
+ * @access Private
+ */ 
+
 router.post('/:id/changePassword', async (req, res) => {
   const UserId = req.params.id;
   await User.changePassword(UserId)
@@ -34,6 +46,12 @@ router.post('/:id/changePassword', async (req, res) => {
       console.error("Couldn't change password", err);
     });
 });
+
+/**
+ * @route POST api/users/updateUserInfo
+ * @desc Change the user info 
+ * @access Private
+ */ 
 
 router.post('/:id/updateUserInfo', (req, res) => {
   const UserId = req.params.id;
@@ -192,8 +210,8 @@ router.get('/:id/coursehistory', async (req, res) => {
     res.status(200).send('no course history found for user');
   } else {
     const courses = await User.getCourses(userId); 
-    console.log(courses);
-    res.status(200).send("fetching all user courses: " + courses);
+    console.log(courses[0]);
+    res.status(200).send({message: "fetching all user course history", course: courses});
   }
 });
 

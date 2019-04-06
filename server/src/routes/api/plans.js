@@ -108,20 +108,24 @@ router.post('/:pid/user/:uid/favourite', (req, res) => {
 });
 
 router.post('/new', async (req, res) => {
+  console.log("Creating new plan");
   const userId = req.body.userId;
-  const degreeId = req.body.degreeId;
-  if (!degreeId) {
-    res.send("Need to set degreeId");
+  const specializationId = req.body.specializationId;
+  if (!specializationId) {
+    console.log("no degree id");
+    res.status(500).send("Need to set specializationId");
     return;
   }
 
   if (!userId) {
-    res.send("Need to set userId");
+    console.log("no user id");
+
+    res.status(500).send("Need to set userId");
     return;
   }
 
   try {
-    const planId = await Plan.createPlan(userId, "untitled", "", degreeId);
+    const planId = await Plan.createPlan(userId, "untitled", "", specializationId);
     res.status(200).send("Plan created: " + planId);
     console.log("Plan created: " + planId);
   } catch (e) {
