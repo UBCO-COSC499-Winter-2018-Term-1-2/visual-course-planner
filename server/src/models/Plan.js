@@ -8,7 +8,7 @@ module.exports = {
     return result.insertId;
   },
   async getPlan(pid) {
-    console.log("getting plan " + pid);
+    // console.log("getting plan " + pid);
     return db
       .query("SELECT id, time, title, description, isFavourite, sid FROM plan WHERE plan.id = ?", [pid])
       .then(rows => {
@@ -48,8 +48,8 @@ module.exports = {
       };
     });
   },
-  async setFavourite(pid, fav) {
-    return db.query("UPDATE plan SET isFavourite = ? WHERE id = ?", [fav, pid])
+  async setFavourite(pid, fav, uid) {
+    return db.query("UPDATE plan SET isFavourite = ? WHERE id = ? and uid = ?", [fav, pid, uid])
       .then(rows => {
         return rows;
       })
@@ -99,11 +99,11 @@ module.exports = {
       });
   },
   async setTerms(id, terms) {
-    console.log({["Deleting terms in " + id]: terms});
+    // console.log({["Deleting terms in " + id]: terms});
     await db.query("DELETE FROM plan_term WHERE pid = ?", [id]);
     const termObjs = terms.map(term => [id, term]);
     if (termObjs.length > 0) {
-      console.log({"TERM OBJECTS:":termObjs});
+      // console.log({"TERM OBJECTS:":termObjs});
       await db.query("INSERT INTO plan_term VALUES ?", [termObjs]);
     }
   },

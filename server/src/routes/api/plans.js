@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
     }));
 
     const terms = await Plan.getPlanTerms(planId);
-    console.log({"Loading terms": terms});
+    // console.log({"Loading terms": terms});
     const termIds = terms.map(term => term.tid.toString());
     const termsById = arrayToObject(terms.map(term => {
       return {
@@ -72,32 +72,33 @@ router.get('/:id', async (req, res) => {
       id: plan.id
     };
 
-    console.log({"Sending plan": formattedPlan});
+    // console.log({"Sending plan": formattedPlan});
     res.status(200).send(formattedPlan);
 
   } catch(e) {
-    console.error({"Couldn't retrieve plan": e});
+    // console.error({"Couldn't retrieve plan": e});
     res.status(500).send("Couldn't retrieve plan");
   }
 });
 
 router.get('/user/:id', async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
+  // console.log(userId);
   try {
     const plans = await Plan.getPlanList(userId);
-    console.log({"plans": plans});
+    // console.log({"plans": plans});
     res.send(plans);
   } catch(e) {
-    console.error({"Couldn't retrieve plan list": e });
+    // console.error({"Couldn't retrieve plan list": e });
     res.status(500).send({"Couldn't retrieve plan list": e });
   }
 });
 
-router.post('/:pid/user/:uid/favourite', (req, res) => {
+router.post('/:pid/user/:uid/favourite/:isFavourite', (req, res) => {
   const userId = req.params.uid;
   const planId = req.params.pid;
-  Plan.favouritePlan(planId, userId)
+  const isFavourite = req.params.isFavourite;
+  Plan.setFavourite(planId, isFavourite, userId)
     .then(data => {
       res.status(200).send(data);
     })

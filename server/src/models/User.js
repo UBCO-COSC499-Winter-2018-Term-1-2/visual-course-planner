@@ -47,7 +47,7 @@ module.exports = {
     
     return db.query("INSERT INTO user SET ?", newUser)
       .then(rows => {
-        console.log("user inserted", newUser);
+        // console.log("user inserted", newUser);
         return rows.insertId;
       })
       .catch(err => {
@@ -84,7 +84,7 @@ module.exports = {
     return db
       .query("INSERT INTO user_course_info SET ?", course)
       .then(rows => {
-        console.log("Course(s) succesfully inserted into db for user");
+        // console.log("Course(s) succesfully inserted into db for user");
         return rows.insertId;
       })
       .catch(err => {

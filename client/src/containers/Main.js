@@ -55,11 +55,14 @@ class Main extends Component {
         }
       };
     }, async () => {
-      await this.savePlan();
-      const newPlanList = await this.getPlanList(this.state.user.id);
-      console.log("New list of plans", newPlanList);
-  
-      this.setState({planList: newPlanList});
+      const favResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/user/${this.state.user.id}/favourite/${+ this.state.currentPlan.isFavourite}`);
+      if (favResponse.status === 200) {
+        const newPlanList = await this.getPlanList(this.state.user.id);
+        console.log("Favourited plan, retrieving new list of plans", newPlanList);
+    
+        this.setState({planList: newPlanList});
+      }
+      
     });
 
     
@@ -153,10 +156,6 @@ class Main extends Component {
     const planResponse = await axios.get(`/api/plans/user/${userId}`);
     const plans = planResponse.data;
     return plans;
-  }
-
-  componentDidUpdate = async () => {
-    await this.savePlan();
   }
 
   componentDidMount = async () => {

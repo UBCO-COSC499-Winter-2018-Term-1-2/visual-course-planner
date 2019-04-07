@@ -34,7 +34,6 @@ router.get('/', (req, res) => {
           coRequisites: course.coRequisites ? course.coRequisites.split(',') : []
         };
       });
-      console.log("GET api/courses", courses);
       res.send(courses);
     })
     .catch(err => {
