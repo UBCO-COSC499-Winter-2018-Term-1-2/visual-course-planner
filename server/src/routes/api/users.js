@@ -106,7 +106,7 @@ router.post('/signup', async (req, res) => {
           }
 
           //create the token here and store in DB
-           const token = mail.generateEmailToken();
+          const token = mail.generateEmailToken();
 
           const hashPassword = hash;
           var newUser = {     
@@ -151,20 +151,20 @@ router.post('/login', async (req, res, next) => {
   let email = req.body.email;
   let user = await User.getUser(email);
   console.log(user.confirmed);
-   if (user.confirmed == 1){
-  passport.authenticate('local', (err, user, info) => {
-    console.log("info", info);
-    if (err) {
-      console.error(err);
-    }
-    res.send({...info, user});
-  })(req, res, next);
- }else{
+  if (user.confirmed == 1){
+    passport.authenticate('local', (err, user, info) => {
+      console.log("info", info);
+      if (err) {
+        console.error(err);
+      }
+      res.send({...info, user});
+    })(req, res, next);
+  }else{
 
     console.log('The user: ' + user.email + ' is not verified. Please verify your email');
     res.status(200).send('The user: ' + user.email + ' is not verified. Please verify your email');
 
-   }
+  }
   
 });
 
