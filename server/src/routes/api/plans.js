@@ -94,6 +94,11 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+/**
+ * @route POST :pid/user/:uid/favourite/:isFavourite
+ * @desc Update the favourite status of a users plan
+ * @access Private
+ */
 router.post('/:pid/user/:uid/favourite/:isFavourite', (req, res) => {
   const userId = req.params.uid;
   const planId = req.params.pid;
@@ -108,6 +113,11 @@ router.post('/:pid/user/:uid/favourite/:isFavourite', (req, res) => {
     });
 });
 
+/**
+ * @route POST :pid/user/:uid/favourite/:isFavourite
+ * @desc Update the favourite status of a users plan
+ * @access Private
+ */
 router.post('/new', async (req, res) => {
   console.log("Creating new plan");
   const userId = req.body.userId;
@@ -145,6 +155,7 @@ router.get('/:id', (req, res) => {
     }
   });
 });
+
 
 router.post('/:id/save', async (req, res) => {
   const planId = req.params.id;
@@ -192,10 +203,18 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:id/name/:name', async (req, res) => {
   const planId = req.params.id;
-  const name = req.params.name;
+  const name = req.body.name;
   await Plan.setName(planId, name);
-  res.status(200).send("Plan " + planId + " updated name to " + name)
+  res.status(200).send("Plan " + planId + " updated name to " + name);
 
+});
+
+
+router.post('/:id/description', async (req, res) => {
+  const planId = req.params.id;
+  const desc = req.body.desc;
+  await Plan.saveNotes(planId, desc);
+  res.status(200).send("Plan " + planId + " updated desc to " + desc);
 });
 
 module.exports = router;

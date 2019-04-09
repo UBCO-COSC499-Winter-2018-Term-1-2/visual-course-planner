@@ -131,6 +131,7 @@ class Main extends Component {
     
   }
 
+  descTimeoutId
   onDescriptionChange = (e) => {
     const desc = e.target.value;
     this.setState(prevState => {
@@ -141,6 +142,13 @@ class Main extends Component {
           description: desc
         }
       };
+    });
+
+    if (this.descTimeoutId) {
+      clearTimeout(this.descTimeoutId);
+    }
+    this.descTimeoutId = setTimeout(async () => {
+      await axios.post(`/api/plans/${this.state.currentPlan.id}/description`, {desc: this.state.currentPlan.description});
     });
   }
 
