@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheck, faExclamationTriangle, faHeart, faPlus, faPlusCircle, faSignInAlt, faSignOutAlt, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import PlannerArea from '../components/Planner/PlannerArea';
-import StudentInfo from '../components/StudentInfo/StudentInfo';
-import PlanList from '../components/PlanList/PlanList';
-import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
+import React, { Component } from 'react';
+import IdleTimer from 'react-idle-timer';
 import BackdropButton from '../components/BackdropButton/BackdropButton';
-import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn'; 
+import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
+import NoteArea from '../components/Notes/NoteArea';
+import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn';
+import PlanList from '../components/PlanList/PlanList';
+import PlanName from '../components/PlanName/PlanName';
+import PlannerArea from '../components/Planner/PlannerArea';
+import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
+import StudentInfo from '../components/StudentInfo/StudentInfo';
 import WarningSummary from '../components/WarningSummary/WarningSummary';
 import './Main.css';
-import NoteArea from '../components/Notes/NoteArea';
-import SidebarArea from './SidebarArea';
 import Sidebar from './Sidebar';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import SidebarArea from './SidebarArea';
 
 // Font Awesome Icon Imports
 library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck);
@@ -31,6 +33,8 @@ class Main extends Component {
     warnings: [],
     planList: []
   }
+
+  planNameRef = null
 
   openCourseListSidebar = () => {
     this.setState({ isCourseListOpen : true });
@@ -210,6 +214,7 @@ class Main extends Component {
         
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
+            <PlanName ref={ref => {this.planNameRef = ref; console.log(ref);}} onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
             <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
             <OptimizeBtn click={this.optimizeHandler}/>
             <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />

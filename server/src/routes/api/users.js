@@ -16,7 +16,7 @@ router.get('/:id', async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await User.getUserById(userId);
-    console.log(user);
+    // console.log(user);
     res.status(200).send({
       firstname: user.firstname,
       lastname: user.lastname,
@@ -147,7 +147,7 @@ router.post('/signup', async (req, res) => {
  */ 
 
 router.post('/login', async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   let email = req.body.email;
   let user = await User.getUser(email);
   console.log(user.confirmed);
