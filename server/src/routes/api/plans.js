@@ -7,6 +7,11 @@ const arrayToObject = (array) => array.reduce((obj, item) => {
   return obj;
 }, {});
 
+/**
+ * @route GET api/plans/:id
+ * @desc Get all informattion about a plan
+ * @access Private
+ */
 router.get('/:id', async (req, res) => {
   const planId = req.params.id;
   try {
@@ -81,6 +86,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @route GET api/plans/user/:id
+ * @desc Get all of a users plans
+ * @access Private
+ */
 router.get('/user/:id', async (req, res) => {
   const userId = req.params.id;
   // console.log(userId);
@@ -95,7 +105,7 @@ router.get('/user/:id', async (req, res) => {
 });
 
 /**
- * @route POST :pid/user/:uid/favourite/:isFavourite
+ * @route POST api/plans/:pid/user/:uid/favourite/:isFavourite
  * @desc Update the favourite status of a users plan
  * @access Private
  */
@@ -145,18 +155,11 @@ router.post('/new', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
-  const UserId = req.params.id;
-  Plan.getNotes(UserId, (err, data) => {
-    if (err == null) {
-      res.send(data);
-    } else {
-      console.error("No notes");
-    }
-  });
-});
-
-
+/**
+ * @route POST api/plans/:id/save
+ * @desc Save a plan in the database
+ * @access Private
+ */
 router.post('/:id/save', async (req, res) => {
   const planId = req.params.id;
   const plan = req.body.plan;
@@ -194,6 +197,11 @@ router.post('/:id/save', async (req, res) => {
   }
 });
 
+/**
+ * @route DELETE api/plans/:id
+ * @desc Delete a plan
+ * @access Private
+ */
 router.delete('/:id', async (req, res) => {
   const planId = req.params.id;
 
@@ -201,6 +209,11 @@ router.delete('/:id', async (req, res) => {
   res.status(200).send("Plan " + planId + " was deleted");
 });
 
+/**
+ * @route POST api/plans/:id/name/:name
+ * @desc Update the name of a plan
+ * @access Private
+ */
 router.post('/:id/name/:name', async (req, res) => {
   const planId = req.params.id;
   const name = req.body.name;
@@ -209,7 +222,11 @@ router.post('/:id/name/:name', async (req, res) => {
 
 });
 
-
+/**
+ * @route POST api/plans/:id/name/:name
+ * @desc Update the description of a plan
+ * @access Private
+ */
 router.post('/:id/description', async (req, res) => {
   const planId = req.params.id;
   const desc = req.body.desc;
