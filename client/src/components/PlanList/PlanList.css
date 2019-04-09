@@ -13,3 +13,8 @@
 .plan-list-item {
   position: relative;
 }
+
+#plan-list h4 {
+  margin-bottom: 0.2em;
+  margin-top: 0.5em;
+}

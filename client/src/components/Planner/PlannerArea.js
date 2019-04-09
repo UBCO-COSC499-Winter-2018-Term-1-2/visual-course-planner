@@ -249,12 +249,14 @@ class PlannerArea extends Component {
     }
     // const term = this.props.plan.terms.byId[termId];
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   }
 
   //drag start event handler for course component - passed in as prop via Term
   onCourseDragStart = (e, course, sourceTerm) => {
     console.log("Setting course for drag" + JSON.stringify(course));
     e.dataTransfer.setData("course", JSON.stringify(course));
+    e.dataTransfer.effectAllowed = "move";
     if(sourceTerm) {
       e.dataTransfer.setData("sourceTermId", sourceTerm);
     }
@@ -273,18 +275,22 @@ class PlannerArea extends Component {
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
     const plan = { ...this.props.plan };
 
-    if (!sourceTermId) {
-      console.log("Adding course to plan", incomingCourse);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
-      plan.courses.allIds.push(incomingCourse.id.toString());
-      plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
-      delete incomingCourse.id;
-    } else {
-      console.log("Moving course already in plan", incomingCourse);
-      const courses = plan.terms.byId[sourceTermId].courses;
-      courses.splice(courses.indexOf(incomingCourse.id), 1);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
-      console.log("Moved Course: " + JSON.stringify(incomingCourse));
+    if (plan.terms.byId[targetTermId].courses.indexOf(incomingCourse.id) === -1) {
+      if (!sourceTermId) {
+        console.log("Adding course to plan", incomingCourse);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
+        plan.courses.allIds.push(incomingCourse.id.toString());
+        plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+        delete incomingCourse.id;
+      } else {
+        console.log("Moving course already in plan", incomingCourse);
+        const courses = plan.terms.byId[sourceTermId].courses;
+        courses.splice(courses.indexOf(incomingCourse.id), 1);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
+        console.log("Moved Course: " + JSON.stringify(incomingCourse));
+      }
+      this.props.updatePlan(plan);
+
     }
 
     this.props.updatePlan(plan);
@@ -323,14 +329,17 @@ class PlannerArea extends Component {
     this.trashDragCounter = 0;
     let incomingCourse = JSON.parse(e.dataTransfer.getData("course"));
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
-    const plan = { ...this.props.plan };
+    if (sourceTermId) {
+      const plan = { ...this.props.plan };
 
-    const courses = plan.terms.byId[sourceTermId].courses;
-    courses.splice(courses.indexOf(incomingCourse.id), 1);
-    delete plan.courses.byId[incomingCourse.id];
-    plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      const courses = plan.terms.byId[sourceTermId].courses;
+      courses.splice(courses.indexOf(incomingCourse.id), 1);
+      delete plan.courses.byId[incomingCourse.id];
+      plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      
+      this.props.updatePlan(plan);
+    }
     
-    this.props.updatePlan(plan);
     this.setState({
       trashColour: "white"
     });
@@ -426,6 +435,7 @@ class PlannerArea extends Component {
 
         <div className='floating-icon add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
           <FontAwesomeIcon icon="plus-circle" />
+          <p>Add term</p>
         </div>
 
       </div>

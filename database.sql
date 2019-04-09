@@ -308,5 +308,5 @@ INSERT INTO term (number, sid) VALUES (1, 1);
 INSERT INTO degree (name) VALUES ("Test degree");
 INSERT INTO specialization (name, did) VALUES ("Test spec", 1);
 
-INSERT INTO user (email, password, firstname, lastname) VALUES ("mackenziesalloum@gmail.com", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "test", "test");
+INSERT INTO user (email, password, firstname, lastname) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin");
 INSERT INTO plan (title, isFavourite, description, uid, sid) VALUES ("test plan", true, "test desc", 1, 1);

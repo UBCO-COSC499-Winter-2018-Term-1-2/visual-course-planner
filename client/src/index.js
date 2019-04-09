@@ -7,10 +7,10 @@ import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
 import Signup from './components/Signup/SignupInterface';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
-import UserProfile from "./components/UserProfile/profile";
+import UserProfile from "./components/UserProfile/Profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
 import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
-import DegreeYear from "./components/DegreeYear/DegreeYear";
+import NewPlan from "./components/NewPlan/NewPlan";
 
 const protectedComponent = (component) => {
   console.log("checking auth");
@@ -32,7 +32,7 @@ const routing = (
       <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
       <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
-      <Route path="/degree-selection" render={(props) => protectedComponent(<DegreeYear {...props}/>)} />
+      <Route path="/degree-selection" render={(props) => protectedComponent(<NewPlan {...props}/>)} />
       <Route path="/confirm-email" render={(props) => protectedComponent(<ConfirmEmail {...props}/>)} />
     </div>
   </Router>

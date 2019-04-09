@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../Login/LoginInterface.css';
 import { Link, withRouter } from 'react-router-dom';
-import Input from '../Input/input';
+import Input from '../Input/Input';
 import { PropTypes } from 'prop-types';
 import axios from 'axios';
 
@@ -267,7 +267,7 @@ render(){
             inputElementTouched={formElement.config.inputElementTouched}
             changed={(event) => this.inputChangeHandler(event, formElement.id)} 
             name={formElement.config.name}
-            label={formElement.config.label} 
+            label={formElement.config.label}
 
           />
           {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
