@@ -3,7 +3,6 @@ import { faCheck, faExclamationTriangle, faHeart, faPlus, faPlusCircle, faSignIn
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IdleTimer from 'react-idle-timer';
 import BackdropButton from '../components/BackdropButton/BackdropButton';
 import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
 import NoteArea from '../components/Notes/NoteArea';
@@ -31,7 +30,8 @@ class Main extends Component {
       standing: 0
     },
     warnings: [],
-    planList: []
+    planList: [],
+    saveTimeout: 1000
   }
 
   planNameRef = null
@@ -104,6 +104,7 @@ class Main extends Component {
     this.setState({ currentPlan: plan }, this.updateWarnings);
   }
 
+  nameTimeoutId
   onNameChange = (e) => {
     const name = e.target.value;
     this.setState(prevState => {
@@ -115,6 +116,19 @@ class Main extends Component {
         }
       };
     });
+    if (this.nameTimeoutId) {
+      clearTimeout(this.nameTimeoutId);
+    }
+    this.nameTimeoutId = setTimeout(async () => {
+      const nameResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/name/${this.state.currentPlan.name}`);
+      if (nameResponse.status === 200) {
+        const newPlanList = await this.getPlanList(this.state.user.id);
+        console.log("Renamed plan, retrieving new list of plans", newPlanList);
+    
+        this.setState({planList: newPlanList});
+      }
+    }, this.state.saveTimeout);
+    
   }
 
   onDescriptionChange = (e) => {
@@ -214,7 +228,7 @@ class Main extends Component {
         
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
-            <PlanName ref={ref => {this.planNameRef = ref; console.log(ref);}} onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
+            <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
             <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
             <OptimizeBtn click={this.optimizeHandler}/>
             <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />

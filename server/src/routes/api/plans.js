@@ -190,4 +190,12 @@ router.delete('/:id', async (req, res) => {
   res.status(200).send("Plan " + planId + " was deleted");
 });
 
+router.post('/:id/name/:name', async (req, res) => {
+  const planId = req.params.id;
+  const name = req.params.name;
+  await Plan.setName(planId, name);
+  res.status(200).send("Plan " + planId + " updated name to " + name)
+
+});
+
 module.exports = router;
