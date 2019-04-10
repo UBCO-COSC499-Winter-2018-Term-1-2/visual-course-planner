@@ -4,12 +4,6 @@ import './PlanName.css';
 
 class PlanName extends Component {
 
-  // componentDidUpdate() {
-  //   if (this.nameInput) {
-  //     this.nameInput.focus();
-  //   }
-  // }
-
   render() {
     const heading = 
       <input 

@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PlanList extends Component {
   render() {
-    console.log({message: "PlanLists plans", plans: this.props.plans});
-
     const favouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === true)
       .map((plan) =>

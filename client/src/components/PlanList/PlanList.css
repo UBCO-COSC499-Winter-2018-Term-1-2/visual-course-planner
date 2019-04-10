@@ -8,6 +8,10 @@
 
 .plan-list-item {
   position: relative;
+  min-height: 1em;
+  min-width: 2em;
+  font-size: 1em;
+  max-height: 1em;
 }
 
 #plan-list h4 {
