@@ -108,11 +108,27 @@ module.exports = {
     }
   },
 
-  async removeCourses(pid) {
+  async removeAllCourses(pid) {
     await db.query("DELETE FROM plan_course WHERE pid = ?", [pid]);
+  },
+
+  async removeCourse(pid, cid) {
+    await db.query("DELETE FROM plan_course WHERE pid = ? AND cid = ?", [pid, cid]);
+  },
+
+  async addCourse(pid, cid) {
+    await db.query("INSERT INTO plan_course VALUES (?, ?)", [pid, cid]);
   },
 
   async deletePlan(pid) {
     await db.query("DELETE FROM plan WHERE id = ?", [pid]);
+  },
+
+  async addTerm(pid, tid) {
+    await db.query("INSERT INTO plan_term VALUES (?, ?)", [pid, tid]);
+  },
+
+  async removeTerm(pid, tid) {
+    await db.query("DELETE FROM plan_term WHERE pid = ? AND tid = ?", [pid, tid]);
   }
 };

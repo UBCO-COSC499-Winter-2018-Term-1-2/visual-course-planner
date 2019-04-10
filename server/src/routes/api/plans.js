@@ -70,7 +70,7 @@ router.get('/:id', async (req, res) => {
         byId: termsById,
         allIds: termIds
       },
-      name: plan.title,
+      name: plan.title ? plan.title : '',
       description: plan.description,
       specialization: plan.sid,
       isFavourite: plan.isFavourite === 1,
@@ -168,7 +168,7 @@ router.post('/:id/save', async (req, res) => {
   const name = plan.name;
 
   const courseIds = plan.courses.allIds;
-  Plan.removeCourses(planId);
+  Plan.removeAllCourses(planId);
   for (let courseId of courseIds) {
     console.log(courseId);
 
@@ -214,7 +214,7 @@ router.delete('/:id', async (req, res) => {
  * @desc Update the name of a plan
  * @access Private
  */
-router.post('/:id/name/:name', async (req, res) => {
+router.post('/:id/name', async (req, res) => {
   const planId = req.params.id;
   const name = req.body.name;
   await Plan.setName(planId, name);
@@ -232,6 +232,74 @@ router.post('/:id/description', async (req, res) => {
   const desc = req.body.desc;
   await Plan.saveNotes(planId, desc);
   res.status(200).send("Plan " + planId + " updated desc to " + desc);
+});
+
+/**
+ * @route POST api/plans/:id/course/:cid
+ * @desc Add course to plan
+ * @access Private
+ */
+router.post('/:id/course/:cid', async (req, res) => {
+  const planId = req.params.id;
+  const courseId = req.params.cid;
+  try {
+    await Plan.addCourse(planId, courseId);
+    res.status(200).send("Plan " + planId + " added course " + courseId);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Encountered an error while adding course.");
+  }
+});
+
+/**
+ * @route DELETE api/plans/:id/course/:cid
+ * @desc Remove course from plan
+ * @access Private
+ */
+router.delete('/:id/course/:cid', async (req, res) => {
+  const planId = req.params.id;
+  const courseId = req.params.cid;
+  try {
+    await Plan.removeCourse(planId, courseId);
+    res.status(200).send("Plan " + planId + " removed course " + courseId);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Encountered an error while removing course.");
+  }
+});
+
+/**
+ * @route POST api/plans/:id/term/:tid
+ * @desc Add term to plan
+ * @access Private
+ */
+router.post('/:id/term/:tid', async (req, res) => {
+  const planId = req.params.id;
+  const termId = req.params.tid;
+  try {
+    await Plan.addTerm(planId, termId);
+    res.status(200).send("Plan " + planId + " added term " + termId);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Encountered an error while adding term.");
+  }
+});
+
+/**
+ * @route DELETE api/plans/:id/term/:tid
+ * @desc Remove term from plan
+ * @access Private
+ */
+router.delete('/:id/term/:tid', async (req, res) => {
+  const planId = req.params.id;
+  const termId = req.params.tid;
+  try {
+    await Plan.removeTerm(planId, termId);
+    res.status(200).send("Plan " + planId + " removed term " + termId);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Encountered an error while removing term.");
+  }
 });
 
 module.exports = router;
