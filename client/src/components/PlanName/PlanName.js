@@ -25,8 +25,7 @@ class PlanName extends Component {
 
 PlanName.propTypes = {
   children: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  default: PropTypes.string.isRequired
+  onChange: PropTypes.func.isRequired
 };
 
 export default PlanName;
