@@ -97,7 +97,7 @@ CREATE TABLE user (
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
-  standing  INT DEFAULT 0,
+  standing  INT DEFAULT 1,
   confirmed BOOLEAN DEFAULT false,
   authToken VARCHAR(40)
 );
@@ -310,5 +310,5 @@ INSERT INTO term (number, sid) VALUES (1, 1);
 INSERT INTO degree (name) VALUES ("Test degree");
 INSERT INTO specialization (name, did) VALUES ("Test spec", 1);
 
-INSERT INTO user (email, password, firstname, lastname) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin");
+INSERT INTO user (email, password, firstname, lastname, confirmed) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin", 1);
 INSERT INTO plan (title, isFavourite, description, uid, sid) VALUES ("test plan", true, "test desc", 1, 1);
