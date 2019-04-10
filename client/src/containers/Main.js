@@ -106,7 +106,10 @@ class Main extends Component {
 
   nameTimeoutId
   onNameChange = (e) => {
-    const name = e.target.value;
+    let name = e.target.value;
+    if (!name) {
+      name = '';
+    }
     this.setState(prevState => {
       return {
         ...prevState,
@@ -120,7 +123,7 @@ class Main extends Component {
       clearTimeout(this.nameTimeoutId);
     }
     this.nameTimeoutId = setTimeout(async () => {
-      const nameResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/name/${this.state.currentPlan.name}`);
+      const nameResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/name`, {name: this.state.currentPlan.name});
       if (nameResponse.status === 200) {
         const newPlanList = await this.getPlanList(this.state.user.id);
         console.log("Renamed plan, retrieving new list of plans", newPlanList);

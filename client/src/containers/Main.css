@@ -6,7 +6,7 @@
   grid-template-rows: 1fr 1fr 6fr 4fr;
   grid-template-areas: 
     "sidebar planner-header"
-    "sidebar planner"
+    "sidebar planner-header"
     "sidebar planner"
     "sidebar planner";
   background-color: #1a191b;
