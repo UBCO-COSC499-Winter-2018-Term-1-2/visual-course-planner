@@ -144,7 +144,6 @@ class PlannerArea extends Component {
     axios.delete(`/api/plans/${plan.id}/term/${termId}`);
     delete plan.terms.byId[termId];
     plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
-    console.log("plan should not have " + termId, plan);
 
     this.props.updatePlan(plan);
   }

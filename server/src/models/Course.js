@@ -16,7 +16,7 @@ module.exports = {
 
   async getCourse(id) {
     db
-      .query("SELECT * FROM course_info WHERE course.id = ?", [id])
+      .query("SELECT * FROM course_info WHERE id = ?", [id])
       .then(rows => {
         return rows[0];
       })

@@ -255,7 +255,7 @@ render(){
   //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
   //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
   let form = (
-    <form>
+    <form onSubmit={this.handler}>
       {formElementsArray.map(formElement => (
         <div key={formElement.id}>
           <Input 
@@ -273,7 +273,7 @@ render(){
           {Object.keys(this.state.errors[formElement.id].errors).length > 0 && <p className ="warning-msg">{Object.values(this.state.errors[formElement.id].errors)[0]}</p> }
         </div>
       ))}
-      <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Create Account</button>
+      <button type="submit" className="defaultbtn" disabled={!this.state.formIsValid}>Create Account</button>
       <button type="button" className="open-diff-menubtn"><Link to = "/login">Login</Link></button>
 
     </form>

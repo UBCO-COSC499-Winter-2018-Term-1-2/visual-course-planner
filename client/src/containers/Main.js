@@ -73,7 +73,7 @@ class Main extends Component {
   }
 
   createPlanHandler = () => {
-    this.props.history.push('/degree-selection');
+    this.props.history.push('/new');
   }
 
   updateWarnings = async () => {
@@ -197,7 +197,6 @@ class Main extends Component {
     });
     const planList = await this.getPlanList(userId);
     this.setState({planList: planList});
-    console.log(this.props.history.location.state);
     if (this.props.history.location.state && this.props.history.location.state.newPlan) {
       console.log("loading new plan");
       this.loadPlan(this.props.history.location.state.newPlan);
@@ -216,7 +215,7 @@ class Main extends Component {
   }
 
   newPlan = async () => {
-    this.props.history.push('/degree-selection');
+    this.props.history.push('/new');
   }
 
 
