@@ -243,19 +243,24 @@ router.post('/:id/emailToken', async (req, res) => {
  * @access Private
  */ 
 
-router.post('emailVerification/:uid/:token/', async (req, res) => {
-  let token = req.body.token;
-  let userId = req.body.uid;
+router.post('/emailVerification/:uid/:token', async (req, res) => {
+  let token = req.params.token;
+  let userId = req.params.uid;
   let user = await User.getUserById(userId);
-  
-  if(token === user.authToken){
-    console.log("The tokens match! User authenticated");
-    res.status(200).send("The tokens match! User authenticated");
-    await User.verifyUser(userId);
-  }else{
-    console.log("The user: " + user.email + " could not be verified.");
-    res.status(200).send("The user: " + user.email + " could not be verified.");
+  console.log(user);
+  if (user) {
+    if(token === user.authToken){
+      console.log("The tokens match! User authenticated");
+      await User.verifyUser(userId);
+      res.status(200).send({message: "The tokens match! User authenticated", verified: true});
+    }else{
+      console.log({message: "The user: " + user.email + " could not be verified.", verified: false});
+      res.status(200).send({message: "The user: " + user.email + " could not be verified.", verified: false});
+    }
+  } else {
+    res.status(404).send("User not found");
   }
+  
 });
 
 

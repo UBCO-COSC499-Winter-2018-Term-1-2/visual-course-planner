@@ -187,7 +187,7 @@ class Main extends Component {
     return plans;
   }
 
-  componentDidMount = async () => {
+  componentWillMount = async () => {
     const userId = sessionStorage.getItem("userId");
     const userResponse = await axios.get(`/api/users/${userId}`);
     const user = userResponse.data;

@@ -33,7 +33,7 @@ const routing = (
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
       <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
       <Route path="/degree-selection" render={(props) => protectedComponent(<NewPlan {...props}/>)} />
-      <Route path="/confirm-email" render={(props) => protectedComponent(<ConfirmEmail {...props}/>)} />
+      <Route path="/confirm-email" render={(props) => <ConfirmEmail {...props}/>} />
     </div>
   </Router>
 );

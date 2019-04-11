@@ -66,6 +66,7 @@ class Profile extends Component {
           required: true,
           minLength: 5,
           passDiff: true,
+          matches: 'newPassword'
         },
         valid: false,
         inputElementTouched: false 
@@ -126,7 +127,7 @@ class Profile extends Component {
     } 
 
     if (rules.matches){
-      const needsToMatch = this.state.createAccountMenu[rules.matches].value;
+      const needsToMatch = this.state.profileMenu[rules.matches].value;
       const matches = value === needsToMatch; 
       console.log(value);
       console.log(needsToMatch);
@@ -151,6 +152,8 @@ class Profile extends Component {
 
   addError = (element, message, type) => {
     //console.log("Setting error");
+    console.log(element);
+
     this.setState(prevState => {
       let elementErrors = prevState.errors[element].errors;
       elementErrors[type] = message;
@@ -235,7 +238,7 @@ class Profile extends Component {
     };
     updatedMenuElement.value = event.target.value;
     //CHECKS IF EACH STATE HAS A VALUE
-    updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation);
+    updatedMenuElement.valid = this.checkValidity(updatedMenuElement.value, updatedMenuElement.validation, inputIdentifier, inputIdentifier);
     updatedMenuElement.inputElementTouched = true;
     updatedProfileMenu[inputIdentifier] = updatedMenuElement;
     
