@@ -192,6 +192,7 @@ router.post('/login', async (req, res, next) => {
       if (err) {
         console.error(err);
       }
+      delete user.password;
       res.send({...info, user});
     })(req, res, next);
   }else{
