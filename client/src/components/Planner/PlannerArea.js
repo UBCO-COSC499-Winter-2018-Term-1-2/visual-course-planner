@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Session from '../Session/Session';
-import axios from 'axios';
+import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import './PlannerArea.css';
 
 class PlannerArea extends Component {
@@ -42,6 +42,7 @@ class PlannerArea extends Component {
   }
 
   addTermToPlan = async () => {
+    // TODO: should be doing most logic in express, not client side
     console.log("Adding term to plan...");
     // set initial session to random one
     const plan = {...this.props.plan};
@@ -103,6 +104,7 @@ class PlannerArea extends Component {
     plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
     plan.terms.byId[nextTerm.id] = nextTerm;
     plan.terms.allIds.push(nextTerm.id);
+    axios.post(`/api/plans/${plan.id}/term/${nextTerm.id}`);
     console.log(plan);
     this.props.updatePlan(plan);
     console.log("Added term to plan");
@@ -116,7 +118,7 @@ class PlannerArea extends Component {
     const termSessionId = plan.terms.byId[termId].session;
     console.log({"removing ": {termId, termCourses, termSessionId}});
 
-    // Remove courses
+    // Remove courses in that term
     plan.courses.allIds = plan.courses.allIds.filter(id => termCourses.indexOf(id) === -1);
     const newCoursesById = plan.courses.byId;
     for (let course in termCourses) {
@@ -124,13 +126,12 @@ class PlannerArea extends Component {
     }
     plan.courses.byId = newCoursesById;
 
-    // Remove session
+    // Remove session if there was only one term
     const previousSession = { ...plan.sessions.byId[termSessionId]};
 
     if (previousSession.terms.length === 1) {
       delete plan.sessions.byId[termSessionId];
       plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== termSessionId);
-      
     } else {
       const newSessionTerms = [ ...previousSession.terms];
       
@@ -140,6 +141,7 @@ class PlannerArea extends Component {
     }
 
     // Remove term
+    axios.delete(`/api/plans/${plan.id}/term/${termId}`);
     delete plan.terms.byId[termId];
     plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
     console.log("plan should not have " + termId, plan);
@@ -163,7 +165,6 @@ class PlannerArea extends Component {
     if (!Object.keys(this.props.plan).length) {
       return;
     }
-    console.log(this.props.plan);
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
       const terms = session.terms.map(termId => {
@@ -223,8 +224,11 @@ class PlannerArea extends Component {
         plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
         plan.courses.allIds.push(incomingCourse.id.toString());
         plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+        // Send course to database
+        axios.post(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
         delete incomingCourse.id;
       } else {
+        // TODO: Moving course in plan, what does this do to the database? should be change the course id to the one thats offered in that term
         console.log("Moving course already in plan", incomingCourse);
         const courses = plan.terms.byId[sourceTermId].courses;
         courses.splice(courses.indexOf(incomingCourse.id), 1);
@@ -273,7 +277,7 @@ class PlannerArea extends Component {
       courses.splice(courses.indexOf(incomingCourse.id), 1);
       delete plan.courses.byId[incomingCourse.id];
       plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
-      
+      axios.delete(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
       this.props.updatePlan(plan);
     }
     
