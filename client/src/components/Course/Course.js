@@ -6,7 +6,7 @@ class Course extends Component{
   render(){
     return (
       <div 
-        className={this.props.type == "required" ? "course-required" : "course-elective"}
+        className={"course-elective"}
         draggable
         onDragStart={(e) => this.props.onDragStart(e, this.props.course, this.props.sourceTermId)}>
         <h5 className="course-code">{this.props.course.code}</h5>

@@ -71,11 +71,16 @@ export class LoginInterface extends Component {
         if (user) {
           console.log(user);
           sessionStorage.setItem("userId", user.id);
-          if (user.isAdmin) {
-            this.props.history.push("/admin");
+          if (user.confirmed) {
+            if (user.isAdmin) {
+              this.props.history.push("/admin");
+            } else {
+              this.props.history.push("/main");
+            }
           } else {
-            this.props.history.push("/main");
+            this.props.history.push("/confirm-email");
           }
+          
         } else {
           console.log(response.data.message);
         }
