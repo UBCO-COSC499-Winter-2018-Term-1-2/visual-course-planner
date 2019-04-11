@@ -261,11 +261,11 @@ class PlannerArea extends Component {
   
   //
   showScrollButtons = () => {
-    if(!this.state.isHoveringTerms){
-      this.setState(prevState => ({
-        isHoveringTerms: !prevState.isHoveringTerms
-      }));
-    }
+    this.setState({isHoveringTerms: true});
+  }
+
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
   }
 
   // create scroll button onclick handler
@@ -293,7 +293,7 @@ class PlannerArea extends Component {
   render() {
     
     return (
-      <div id="planner-area-container">
+      <div id="planner-area-container" onMouseOver={this.showScrollButtons} onMouseLeave={this.hideScrollButtons}>
         {this.renderTerms()}
 
         <CourseListSideBar 
@@ -320,20 +320,18 @@ class PlannerArea extends Component {
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn hide"}>
           <ScrollButton 
             direction="left" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} /> 
+            scrollClick={this.scrollButtonClickHandler} /> 
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn hide"}>
           <ScrollButton 
             direction="right" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} />
+            scrollClick={this.scrollButtonClickHandler} />
         </div>
  
       </div>
