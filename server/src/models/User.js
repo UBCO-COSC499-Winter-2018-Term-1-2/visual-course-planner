@@ -6,7 +6,7 @@ db.query = promisify(db.query);
 module.exports = {
   async changePassword(id) {
     return db
-      .query("UPDATE user SET password WHERE uid = ?", [id])
+      .query("UPDATE user SET password WHERE id = ?", [id])
       .then(rows => {
         return rows;
       })
@@ -17,7 +17,7 @@ module.exports = {
   },
   async updateUser(id, user) {
     return db.
-      query("UPDATE user SET email = ?, firstname = ?, lastname = ? WHERE uid = ?", [user.email, user.firstname, user.lastname, id])
+      query("UPDATE user SET firstname = ?, lastname = ? WHERE id = ?", [user.firstname, user.lastname, id])
       .then(rows => {
         return rows;
       })
@@ -25,6 +25,28 @@ module.exports = {
         throw err;
       });
 
+  },
+
+  async updateUserName(id, firstname, lastname) {
+    return db.
+      query("UPDATE user SET firstname = ?, lastname = ? WHERE id = ?", [firstname, lastname, id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
+  },
+
+  async updateUserNameAndPassword(id, firstname, lastname, password) {
+    return db.
+      query("UPDATE user SET firstname = ?, lastname = ?, password = ? WHERE id = ?", [firstname, lastname, password, id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
   },
 
   async checkUser(email) {

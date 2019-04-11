@@ -54,14 +54,47 @@ router.post('/:id/changePassword', async (req, res) => {
  */ 
 
 router.post('/:id/updateUserInfo', (req, res) => {
-  const UserId = req.params.id;
-  User.updateUser(UserId, (err, data) => {
-    if (err == null) {
-      res.send(data);
+  const userId = req.params.id;
+
+
+  req.checkBody('fName', 'Name is required').notEmpty();
+  req.checkBody('lName', 'Name is required').notEmpty();
+
+  console.log(req.body.newPassword !== '', req.body.newPassword, req.body.confirmNewPassword);
+  if (req.body.newPassword !== '' && req.body.newPassword) {
+    req.checkBody('newPassword', 'Minimum password length is 5 characters').isLength({ min: 5 });
+    req.checkBody('confirmNewPassword', 'Passwords do not match').equals(req.body.newPassword);
+  }
+
+
+  let errors = req.validationErrors();
+  if (errors) {
+    console.log(errors);
+    res.status(500).send(errors);
+  } else {
+
+    const firstname = req.body.fName;
+    const lastname = req.body.lName;
+    const password = req.body.newPassword;
+
+    if (password !== '' && password) {
+      bcrypt.genSalt(10, function(err, salt){
+        bcrypt.hash(password, salt, async function(err, hash){
+          if(err){
+            console.log(err);
+          }
+  
+          User.updateUserNameAndPassword(userId, firstname, lastname, hash);
+          res.status(200).send('Name and password were updated');
+  
+        });
+      });
     } else {
-      console.error("Couldn't change info");
+      User.updateUserName(userId, firstname, lastname);
+      res.status(200).send('Name was updated');
     }
-  });
+    
+  }
 });
 
 /**
@@ -83,6 +116,8 @@ router.post('/signup', async (req, res) => {
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
   req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('password', 'Minimum password length is 5 characters').isLength({ min: 5 });
+  req.checkBody('confirmPassword', 'Minimum password length is 5 characters').isLength({ min: 5 });
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
