@@ -1,103 +1,157 @@
-import React, { Component } from 'react';
-import PlannerArea from '../components/Planner/PlannerArea';
-import StudentInfo from '../components/StudentInfo/StudentInfo';
-import PlanList from '../components/PlanList/PlanList';
-import './Main.css';
-import NoteArea from '../components/Notes/NoteArea';
-import CourseListSideBar from '../components/CourseListSideBar/CourseListSideBar';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheck, faExclamationTriangle, faHeart, faPlus, faPlusCircle, faSignInAlt, faSignOutAlt, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import BackdropButton from '../components/BackdropButton/BackdropButton';
+import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
+import NoteArea from '../components/Notes/NoteArea';
+import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn';
+import PlanList from '../components/PlanList/PlanList';
+import PlanName from '../components/PlanName/PlanName';
+import PlannerArea from '../components/Planner/PlannerArea';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import Backdrop from '../components/Backdrop/Backdrop';
-import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import StudentInfo from '../components/StudentInfo/StudentInfo';
+import WarningSummary from '../components/WarningSummary/WarningSummary';
+import './Main.css';
+import Sidebar from './Sidebar';
+import SidebarArea from './SidebarArea';
 
 // Font Awesome Icon Imports
-library.add(faSignOutAlt);
-library.add(faHeart);
-library.add(faExclamationTriangle);
-library.add(faPlus);
-library.add(faTimes);
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck);
+
 class Main extends Component {
   state = {
-    drawerOpen : false,
+    isCourseListOpen: false,
     showSnackbar : false,
-    currentPlan: {
-      courses: [
-        {
-          code: "COSC 111",
-          standingRequirement: 0,
-          coRequisites: [],
-          preRequisites: [],
-          year: 2018,
-          session: "W",
-          term: 1
-        },
-        {
-          code: "COSC 121",
-          standingRequirement: 0,
-          coRequisites: [],
-          preRequisites: [ { code: "COSC 111" } ],
-          year: 2018,
-          session: "W",
-          term: 2
-        },
-        {
-          code: "COSC 341",
-          standingRequirement: 3,
-          coRequisites: [],
-          preRequisites: [],
-          year: 2019,
-          session: "W",
-          term: 2
-        }
-      ],
-      id: 0,
-      name: "My Plan",
-      specialization: {
-        id: 1,
-        name: "Major in Computer Science"
-      }
-    },
+    currentPlan: {},
     user: {
-      name: "Leonardo",
-      yearStanding: 1
+      name: "test",
+      standing: 0
     },
-    warnings: []
+    warnings: [],
+    planList: [],
+    saveTimeout: 1000
   }
 
-  toggleCourseListSidebarHandler = () => {
-    const isOpen = this.state.drawerOpen;
-    this.setState(
-      {drawerOpen : !isOpen}
-    );
+  planNameRef = null
+
+  openCourseListSidebar = () => {
+    this.setState({ isCourseListOpen : true });
   }
 
   closeCourseListSidebar = () => {
-    this.setState({drawerOpen: false});
-  };
+    this.setState({ isCourseListOpen: false });
+  }
 
   optimizeHandler = () => {
     console.log("Optimize button clicked");
     //optimize button logic goes here
   }
 
-  setNumberOfWarnings = (number) => {
-    this.setState({numberOfWarnings: number});
-  }
-
-  setWarnings = (warnings) => {
-    this.setState({
-      warnings: warnings
-    });
-  }
-
-  updatePlanCourses = (courses) => {
+  toggleFavourite = async () => {
     this.setState(prevState => {
       return {
+        ...prevState,
         currentPlan: {
           ...prevState.currentPlan,
-          courses: courses
+          isFavourite: !prevState.currentPlan.isFavourite
         }
       };
+    }, async () => {
+      const favResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/user/${this.state.user.id}/favourite/${+ this.state.currentPlan.isFavourite}`);
+      if (favResponse.status === 200) {
+        const newPlanList = await this.getPlanList(this.state.user.id);
+        console.log("Favourited plan, retrieving new list of plans", newPlanList);
+    
+        this.setState({planList: newPlanList});
+      }
+      
+    });
+
+    
+  }
+
+  createPlanHandler = () => {
+    this.props.history.push('/new');
+  }
+
+  updateWarnings = async () => {
+    let warnings = [];
+    try {
+      const response = await axios.post('api/warnings', 
+        {
+          plan: this.state.currentPlan,
+          user: this.state.user
+        },
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      warnings = response.data;
+    } catch(err) {
+      console.log(err);
+    }
+
+    console.log("setting warnings", warnings);
+    this.setState({warnings: warnings});
+  }
+
+  updatePlan = (plan) => {
+    console.log({message: "Updating plan",
+      "old plan": this.state.currentPlan,
+      "new plan": plan});
+    this.setState({ currentPlan: plan }, this.updateWarnings);
+  }
+
+  nameTimeoutId
+  onNameChange = (e) => {
+    let name = e.target.value;
+    if (!name) {
+      name = '';
+    }
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        currentPlan: {
+          ...prevState.currentPlan,
+          name: name
+        }
+      };
+    });
+    if (this.nameTimeoutId) {
+      clearTimeout(this.nameTimeoutId);
+    }
+    this.nameTimeoutId = setTimeout(async () => {
+      const nameResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/name`, {name: this.state.currentPlan.name});
+      if (nameResponse.status === 200) {
+        const newPlanList = await this.getPlanList(this.state.user.id);
+        console.log("Renamed plan, retrieving new list of plans", newPlanList);
+    
+        this.setState({planList: newPlanList});
+      }
+    }, this.state.saveTimeout);
+    
+  }
+
+  descTimeoutId
+  onDescriptionChange = (e) => {
+    const desc = e.target.value;
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        currentPlan: {
+          ...prevState.currentPlan,
+          description: desc
+        }
+      };
+    });
+
+    if (this.descTimeoutId) {
+      clearTimeout(this.descTimeoutId);
+    }
+    this.descTimeoutId = setTimeout(async () => {
+      await axios.post(`/api/plans/${this.state.currentPlan.id}/description`, {desc: this.state.currentPlan.description});
     });
   }
 
@@ -109,45 +163,119 @@ class Main extends Component {
     this.setState({ showSnackbar: false });
   }
 
-  render() {
-    let backdrop;
+  savePlan = async () => {
+    if (this.shouldRenderPlan()) {
+      console.log({"Saving current plan = ": this.state.currentPlan} );
+      const response = await axios.post(`/api/plans/${this.state.currentPlan.id}/save`, {plan: this.state.currentPlan});
+      console.log(response.data);
+    }
+  }
 
-    if(this.state.drawerOpen){
-      backdrop = <Backdrop click={this.closeCourseListSidebar}/>;
+  loadPlan = async (planId) => {
+    console.log(planId);
+    const response = await axios.get(`/api/plans/${planId}`);
+    const plan = response.data;
+    console.log("loading plan", plan);
+    if (plan) {
+      this.setState({currentPlan: plan});
+    }
+  }
+
+  getPlanList = async (userId) => {
+    const planResponse = await axios.get(`/api/plans/user/${userId}`);
+    const plans = planResponse.data;
+    return plans;
+  }
+
+  componentWillMount = async () => {
+    const userId = sessionStorage.getItem("userId");
+    const userResponse = await axios.get(`/api/users/${userId}`);
+    const user = userResponse.data;
+    console.log({"current user": user});
+    this.setState({
+      user: user
+    });
+    const planList = await this.getPlanList(userId);
+    this.setState({planList: planList});
+    if (this.props.history.location.state && this.props.history.location.state.newPlan) {
+      console.log("loading new plan");
+      this.loadPlan(this.props.history.location.state.newPlan);
+    } else {
+      if (planList.length > 0) {
+        await this.loadPlan(planList[0].id);
+      }
     }
 
+  }
+
+  shouldRenderPlan = () => {
+    if (Object.keys(this.state.currentPlan).length !== 0) {
+      return true;
+    }
+  }
+
+  newPlan = async () => {
+    this.props.history.push('/new');
+  }
+
+
+  deletePlan = async (id) => {
+    await axios.delete(`/api/plans/${id}`);
+    const newPlanList = await this.getPlanList(this.state.user.id);
+    console.log("New list of plans", newPlanList);
+
+    this.setState({planList: newPlanList}, async () => {
+      if (this.state.planList.length > 0) {
+        await this.loadPlan(this.state.planList[0].id);
+      }
+    });
+  }
+  
+  render() {
     return (
       <div id="main">
-        <StudentInfo user={this.state.user}/>
-        <PlanList/>
-        <NoteArea/>
-        <PlannerHeader
-          planName={this.state.currentPlan.name}
-          toggleSidebar={this.toggleCourseListSidebarHandler}
-          optimize={this.optimizeHandler}
-          showWarning={this.showSnackbar}
-          numberOfWarnings={this.state.warnings.length}
-          user={this.state.user}
-        />
-        <PlannerArea 
-          plan={this.state.currentPlan}
-          user={this.state.user}
-          updatePlanCourses={this.updatePlanCourses}
-          showSnackbar={this.state.showSnackbar}
-          closeSnackbar={this.closeSnackbar}
-          warnings={this.state.warnings}
-          setWarnings={this.setWarnings}
-        />
-       
-        {/*'courseTitle','courseInfo' should come from the database */}
-        <CourseListSideBar 
-          show={this.state.drawerOpen} 
-          close={this.closeCourseListSidebar}
-        />
-        {backdrop}
+        <Sidebar>
+          <SidebarArea>
+            <StudentInfo user={this.state.user}/>
+          </SidebarArea>
+          <SidebarArea>
+            <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
+          </SidebarArea>
+          {this.shouldRenderPlan() && 
+            <SidebarArea>
+              <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
+            </SidebarArea>}
+        </Sidebar>
+        
+        {this.shouldRenderPlan() &&
+          <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
+            <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
+            <div className="planner-header-wrapper" >
+              <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
+              <OptimizeBtn click={this.optimizeHandler}/>
+              <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
+              <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />  
+            </div>
+          </PlannerHeader>}
+        {this.shouldRenderPlan() &&
+          <PlannerArea
+            isCourseListOpen={this.state.isCourseListOpen}
+            closeCourseList={this.closeCourseListSidebar}
+            plan={this.state.currentPlan}
+            user={this.state.user}
+            updatePlan={this.updatePlan}
+            showSnackbar={this.state.showSnackbar}
+            closeSnackbar={this.closeSnackbar}
+            warnings={this.state.warnings}
+          />}
+        {!this.shouldRenderPlan() && <div className="centered">Create a plan to get started!</div>}
       </div>
     );
   }
 }
+
+Main.propTypes = {
+  history: PropTypes.object
+};
 
 export default Main;
