@@ -110,7 +110,7 @@ router.post('/signup', async (req, res) => {
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
-            standing: 0
+            standing: 1
           };
           
           try{

@@ -302,6 +302,13 @@ INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
 INSERT INTO course_info_requirement VALUES ("COSC 121", "COSC 111");
 INSERT INTO course_info_requirement VALUES ("COSC 222", "COSC 121");
 INSERT INTO course_info_requirement VALUES ("COSC 310", "COSC 222");
+INSERT INTO course_info_requirement VALUES ("COSC 304", "COSC 111");
+INSERT INTO course_info_requirement VALUES ("COSC 211", "COSC 121");
+INSERT INTO course_info_requirement VALUES ("MATH 221", "MATH 100");
+INSERT INTO course_info_requirement VALUES ("COSC 320", "MATH 221");
+INSERT INTO course_info_requirement VALUES ("COSC 320", "COSC 221");
+INSERT INTO course_info_requirement VALUES ("COSC 320", "COSC 222");
+
 
 INSERT INTO session (year, season) VALUES ("2018", "W");
 INSERT INTO term (number, sid) VALUES (1, 1);

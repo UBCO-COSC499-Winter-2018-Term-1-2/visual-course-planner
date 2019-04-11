@@ -14,10 +14,11 @@ import SidebarArea from './SidebarArea';
 import Sidebar from './Sidebar';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
-import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Font Awesome Icon Imports
-library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck);
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck, faAngleLeft, faAngleRight);
 
 class Main extends Component {
   state = {
@@ -155,6 +156,102 @@ class Main extends Component {
     return plans;
   }
 
+  getNextTerm(latestTerm, latestSession) {
+    let nextTermNumber;
+    let nextTermYear = latestSession.year;
+    let nextTermSeason = "W";
+
+    if (latestTerm.number === 1) {
+      nextTermNumber = 2;
+      nextTermSeason = latestSession.season;
+    } else {
+      if (latestSession.season == "W") {
+        nextTermYear = parseInt(latestSession.year) + 1;
+        nextTermSeason = "S";
+      }
+      nextTermNumber = 1;
+    }
+    
+    const nextTerm = {
+      coursesContained: [],
+      year: nextTermYear,
+      number: nextTermNumber,
+      season: nextTermSeason
+    };
+
+    return nextTerm;
+  }
+
+  addTermToPlan = async (cb) => {
+    console.log("Adding term to plan...");
+    // set initial session to random one
+    const plan = {...this.state.currentPlan};
+    let mostRecentSession = {};
+    let mostRecentSessionId = {};
+    let latestTerm = {};
+
+    if (plan.sessions.allIds.length === 0) {
+      mostRecentSession = await axios.get('/api/sessions/current');
+      mostRecentSession = mostRecentSession.data;
+      console.trace(mostRecentSession);
+      plan.sessions.byId[mostRecentSession.id] = mostRecentSession;
+      console.log('No sessions found adding current', mostRecentSession);
+      plan.sessions.allIds.push(mostRecentSession.id);
+      mostRecentSessionId = mostRecentSession.id;
+    } else {
+      mostRecentSessionId = plan.sessions.allIds[0];
+      for (const sessionId in plan.sessions.byId) {
+        const currentSession = plan.sessions.byId[sessionId];
+        const currentSessionDate = currentSession.year + currentSession.season;
+        const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+        console.log(mostRecentSession);
+        const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
+        console.log(currentSessionDate, mostRecentSessionDate);
+        if (currentSessionDate > mostRecentSessionDate) {
+          console.log("Earlier");
+          mostRecentSessionId = sessionId;
+        }
+      }
+      mostRecentSession = plan.sessions.byId[mostRecentSessionId];
+    }
+    
+    latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
+    let nextTermInfo = {};
+    if (latestTerm) {
+      nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
+    } else {
+      nextTermInfo.coursesContained = [];
+      nextTermInfo.year = mostRecentSession.year;
+      nextTermInfo.season = mostRecentSession.season;
+      nextTermInfo.number = 1;
+    }
+    console.log("Adding term: ", nextTermInfo);
+    let latestSession;
+    if (nextTermInfo.year !== mostRecentSession.year || nextTermInfo.season !== mostRecentSession.season) {
+      const latestSessionRequest = await axios.get(`/api/sessions?year=${nextTermInfo.year}&season=${nextTermInfo.season}`);
+      latestSession = latestSessionRequest.data;
+      plan.sessions.byId[latestSession.id] = latestSession;
+      console.log('need more session', latestSession);
+      plan.sessions.allIds.push(latestSession.id);
+    } else {
+      latestSession = mostRecentSession;
+      latestSession.id = mostRecentSessionId;
+      console.log('same session', latestSession);
+    }
+    console.log({"executing next term request": {latestSession, nextTermInfo}});
+    const nextTermRequest = await axios.get(`/api/terms?sessionId=${latestSession.id}&number=${nextTermInfo.number}`);
+    const nextTerm = nextTermRequest.data;
+    plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
+    plan.terms.byId[nextTerm.id] = nextTerm;
+    plan.terms.allIds.push(nextTerm.id);
+    console.log(plan);
+    this.updatePlan(plan);
+    console.log("Added term to plan");
+    if (cb) {
+      cb();
+    }
+  }
+
   componentDidUpdate = async () => {
     await this.savePlan();
   }
@@ -215,6 +312,10 @@ class Main extends Component {
             <OptimizeBtn click={this.optimizeHandler}/>
             <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
             <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />
+            <button className='add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
+              <FontAwesomeIcon icon="plus-circle" />
+              Add term 
+            </button>
           </PlannerHeader>}
         {this.shouldRenderPlan() &&
           <PlannerArea

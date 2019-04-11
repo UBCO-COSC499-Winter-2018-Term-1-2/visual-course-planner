@@ -1,17 +1,18 @@
 import React , {Component} from 'react';
 import './ScrollButton.css';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class ScrollButton extends Component {
 
   render(){
     return(
       <button 
-        className = {this.props.direction == "left" ? "left" : "right" }
+        className = {this.props.direction == "left" ? "scroll left" : "scroll right" }
         onClick = {() => {this.props.scrollClick(this.props.direction);}}
         onMouseOver = {this.props.onMouseOver}>
         
-        {this.props.direction === "left" ? "<" : ">"}
+        {this.props.direction === "left" ? <FontAwesomeIcon icon="angle-left" /> : <FontAwesomeIcon icon="angle-right"/>}
       
       </button>
     );
