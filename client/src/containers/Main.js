@@ -240,10 +240,12 @@ class Main extends Component {
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
             <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
-            <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
-            <OptimizeBtn click={this.optimizeHandler}/>
-            <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
-            <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />
+            <div className="planner-header-wrapper" >
+              <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
+              <OptimizeBtn click={this.optimizeHandler}/>
+              <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
+              <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />  
+            </div>
           </PlannerHeader>}
         {this.shouldRenderPlan() &&
           <PlannerArea

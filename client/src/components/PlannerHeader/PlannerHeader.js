@@ -7,9 +7,7 @@ class PlannerHeader extends Component {
   render() {
     return (
       <div id="planner-header">
-        <div className="planner-header-wrapper" >
-          {this.props.children}
-        </div>
+        {this.props.children}
       </div>
     );
   }
