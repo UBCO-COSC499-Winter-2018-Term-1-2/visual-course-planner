@@ -117,7 +117,6 @@ class PlannerArea extends Component {
     if (!Object.keys(this.props.plan).length) {
       return;
     }
-    console.log(this.props.plan);
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
       const terms = session.terms.map(termId => {
