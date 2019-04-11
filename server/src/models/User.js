@@ -102,6 +102,27 @@ module.exports = {
 
     return rows;
 
+  },
+
+
+  async verifyUser(id) {
+    return db.query("UPDATE user SET confirmed = TRUE, authToken = NULL WHERE id = ?", [id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
+  },
+
+  async updateUserToken(id,token) {
+    return db.query("UPDATE user SET authToken = ? WHERE id = ?", [token, id])
+      .then(rows => {
+        return rows;
+      })
+      .catch(err => {
+        throw err;
+      });
   }
 
 };
