@@ -119,26 +119,21 @@ class NewPlanInterface extends Component {
     formData.append("specializationId", this.state.form.specialization.value);
     console.log({"submitting info": formData});
 
-    const planId = await axios.post(`/api/plans/new`, formData)
-      .then(response => {
-        return response.data.insertId;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    let planId;
+    try {
+      const planResponse = await axios.post(`/api/plans/new`, formData);
+      planId = planResponse.data.planId;
+    } catch (e) {
+      console.error(e);
+    }
 
     this.props.history.push({ pathname: '/main', state: { newPlan: planId }});
   }
 
   componentWillUpdate =  async (nextProps, nextState) => {
-    console.log({msg: "ComponentWillUpdate", currentState:this.state ,nextState: nextState});
     if (nextState.form.degree.value !== this.state.form.degree.value) {
-      console.log(`1Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
-
       let specializations = await this.getSpecializations(nextState.form.degree.value);
-      console.log(`2Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
       specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
-      console.log(`3Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
 
       this.setState({
         ...nextState,

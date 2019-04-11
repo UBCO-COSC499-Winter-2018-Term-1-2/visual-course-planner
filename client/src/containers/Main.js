@@ -197,9 +197,16 @@ class Main extends Component {
     });
     const planList = await this.getPlanList(userId);
     this.setState({planList: planList});
-    if (planList.length > 0) {
-      await this.loadPlan(planList[0].id);
+    console.log(this.props.history.location.state);
+    if (this.props.history.location.state && this.props.history.location.state.newPlan) {
+      console.log("loading new plan");
+      this.loadPlan(this.props.history.location.state.newPlan);
+    } else {
+      if (planList.length > 0) {
+        await this.loadPlan(planList[0].id);
+      }
     }
+
   }
 
   shouldRenderPlan = () => {
@@ -218,7 +225,11 @@ class Main extends Component {
     const newPlanList = await this.getPlanList(this.state.user.id);
     console.log("New list of plans", newPlanList);
 
-    this.setState({planList: newPlanList});
+    this.setState({planList: newPlanList}, async () => {
+      if (this.state.planList.length > 0) {
+        await this.loadPlan(this.state.planList[0].id);
+      }
+    });
   }
   
   render() {

@@ -28,7 +28,7 @@ class PlanList extends Component {
           className="plan-list-item favourite"
           key={plan.id}
         >
-          {plan.title}
+          <p>{plan.title}</p>
           <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
             <FontAwesomeIcon icon="times" className="delete-button"/>
           </div>

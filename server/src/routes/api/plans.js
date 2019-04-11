@@ -147,7 +147,7 @@ router.post('/new', async (req, res) => {
 
   try {
     const planId = await Plan.createPlan(userId, "untitled", "", specializationId);
-    res.status(200).send("Plan created: " + planId);
+    res.status(200).send({message: "Plan created: " + planId, planId: planId});
     console.log("Plan created: " + planId);
   } catch (e) {
     res.status(500).send({"Error occured": e});
