@@ -30,7 +30,7 @@ app.use(fileUpload());
 app.use(expressValidator());
 
 // Body ParserMiddleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 //flash middleware
 app.use(cookieParser());
