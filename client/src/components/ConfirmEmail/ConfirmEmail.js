@@ -29,18 +29,24 @@ class ConfirmEmail extends Component {
   
   render(){
 
-    return(
-      <div className="menu">
-        {(!this.state.message &&
+    let message;
+
+    if (Object.keys(this.state.message).length === 0) {
+      message = 
         <div>
           <h1 className="login-heading">Registration Successful</h1>
           <p className='msg-text'>Thank you for registering with the Visual Course Planner!
             An email has been sent out to {this.props.history.location.state ? this.props.history.location.state.email : '' }</p>
           <p className='msg-text'>Please confirm your email to proceed.</p>
-        </div>) && <p>this.state.message</p>
-        }
-      </div> 
-
+        </div>;
+    } else {
+      message = <p>this.state.message</p>;
+    }
+    
+    return(
+      <div className="menu">
+        {message}
+      </div>
     );
   }
 } //end of class 
