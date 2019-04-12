@@ -26,12 +26,11 @@ const app = express();
 // Logging
 app.use(morgan("dev"));
 // Express Middleware
-app.use(express.json());
 app.use(fileUpload());
 app.use(expressValidator());
 
 // Body ParserMiddleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 //flash middleware
 app.use(cookieParser());
