@@ -26,7 +26,6 @@ const app = express();
 // Logging
 app.use(morgan("dev"));
 // Express Middleware
-app.use(express.json());
 app.use(fileUpload());
 app.use(expressValidator());
 
