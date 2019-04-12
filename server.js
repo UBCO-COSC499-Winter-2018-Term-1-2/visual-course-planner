@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const degrees = require('./server/src/routes/api/degrees');
@@ -9,7 +8,6 @@ const path = require('path');
 const fileUpload = require('express-fileupload');
 const users = require('./server/src/routes/api/users');
 const plans = require('./server/src/routes/api/plans');
-const notes = require('./server/src/routes/api/notes');
 
 
 const app = express();
@@ -26,7 +24,6 @@ app.use('/api/admin/upload', adminUpload);
 app.use('/api/warnings', warnings);
 app.use('/api/users', users );
 app.use('/api/plans', plans);
-app.use('/api/notes', notes);
 app.use('/api/degrees', degrees);
 app.use('/api/courses', courses);
 
