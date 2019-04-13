@@ -38,6 +38,7 @@ class ConfirmEmail extends Component {
           <p className='msg-text'>Thank you for registering with the Visual Course Planner!
             An email has been sent out to {this.props.history.location.state ? this.props.history.location.state.email : '' }</p>
           <p className='msg-text'>Please confirm your email to proceed.</p>
+          <p className='msg-text'><b>Note: if you think the email was not sent, try checking your spam/junk folder. Thanks!</b></p>
         </div>;
     } else {
       message = <p>this.state.message</p>;
