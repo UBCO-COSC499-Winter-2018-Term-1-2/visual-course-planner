@@ -24,19 +24,20 @@ testArray.forEach(element => {
         const objco = {
           coreq: [],
         };
+        const objpre = {
+          allOf: [],
+          oneOf: [],
+            
+        };
         if(coreq){
          
           coreq = coreq.match(/[a-zA-Z]{4} [0-9]{3,}/g);
           objco.coreq.push(coreq);
             
         }
-        const objpre = {
-          allOf: [],
-          oneOf: [],
-            
-        };
 
         if(prereq){
+          var prearray;
           prearray = prereq.split(" and ");
           prearray.forEach(prereq => {
             
@@ -47,19 +48,19 @@ testArray.forEach(element => {
             }else{
               standingreq = 1;
             }
-            startsWithOneOf = prereq.includes("One of" || "one of");
-            startsWithAllOf = prereq.includes("All of" || "all of");
+            var startsWithOneOf = prereq.includes("One of" || "one of");
+            var startsWithAllOf = prereq.includes("All of" || "all of");
 
         
             if(startsWithOneOf == true){
               prereq = prereq.match(/[a-zA-Z]{4} [0-9]{3,}/g);
               objpre.oneOf.push(prereq);
-              console.log(objpre);
+              //console.log(objpre);
             }
             if(startsWithAllOf == true){
               prereq = prereq.match(/[a-zA-Z]{4} [0-9]{3,}/g);
               objpre.allOf.push(prereq);
-              console.log(objpre);
+              //console.log(objpre);
             }
           });
         }
@@ -74,14 +75,18 @@ testArray.forEach(element => {
           coreq: objco,
         
         };
+        
         fullInfo.push(courseObj);
-        //console.log(courseObj);
-  
+        console.log(objpre);
             
       });
-      
-    }
+      //console.log(fullInfo);
+     
   
+      // module.exports.fullInfo; 
+      // module.exports.objpre;
+      // module.exports.objco;
+    }  
         
   });
 });

@@ -13,9 +13,10 @@ const CATEGORY_TYPE = require('../models/Specialization').CATEGORY_TYPE;
 
 function getStandingWarnings(user, course) {
   let warnings = [];
-  if (user.yearStanding < course.standingRequirement) {
+  console.log(user.standing, course.standingRequirement);
+  if (user.standing < course.standingRequirement) {
     warnings.push({
-      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.yearStanding}.`,
+      message: `${course.code} requires year ${course.standingRequirement}. Current standing: ${user.standing}.`,
       type: "standing"
     });
   }
@@ -25,19 +26,25 @@ function getStandingWarnings(user, course) {
 function getPrereqWarnings(plan, course) {
   let warnings = [];
   const requirements = course.preRequisites;
-  requirements.forEach(req => {
-    const planCourse = getPlanCourse(plan, req);
-    if (planCourse == null) {
+  requirements.forEach(reqCode => {
+    const req = getPlanCourse(plan, reqCode);
+    if (req == null) {
       warnings.push({
-        message: `${course.code} missing pre-requisite ${req.code}.`,
+        message: `${course.code} missing pre-requisite ${reqCode}.`,
         type: "prereq"
       });
     } else {
-      const reqYearTerm = planCourse.year.toString().concat(planCourse.term);
-      const courseYearTerm = course.year.toString().concat(course.term);
+      const reqTerm = plan.terms.byId[req.term];
+      const reqSession = plan.sessions.byId[reqTerm.session];
+      const reqYearTerm = reqSession.year + reqSession.season + reqTerm.number;
+
+      const courseTerm = plan.terms.byId[course.term];
+      const courseSession = plan.sessions.byId[courseTerm.session];
+      const courseYearTerm = courseSession.year + courseSession.season + courseTerm.number;
+
       if (reqYearTerm >= courseYearTerm) {
         warnings.push({
-          message: `${req.code} must be taken earlier than ${course.code}.`,
+          message: `${reqCode} must be taken earlier than ${course.code}.`,
           type: "prereq"
         });
       }
@@ -50,19 +57,25 @@ function getPrereqWarnings(plan, course) {
 function getCoreqWarnings(plan, course) {
   let warnings = [];
   const requirements = course.coRequisites;
-  requirements.forEach(req => {
-    const planCourse = getPlanCourse(plan, req);
-    if (planCourse == null) {
+  requirements.forEach(reqCode => {
+    const req = getPlanCourse(plan, reqCode);
+    if (req == null) {
       warnings.push({
-        message: `${course.code} missing co-requisite ${req.code}.`,
+        message: `${course.code} missing co-requisite ${reqCode}.`,
         type: "coreq"
       });
     } else {
-      const reqYearTerm = planCourse.year.concat(planCourse.term);
-      const courseYearTerm = course.year.concat(course.term);
+      const reqTerm = plan.terms.byId[req.term];
+      const reqSession = plan.sessions.byId[reqTerm.session];
+      const reqYearTerm = reqSession.year + reqSession.season + reqTerm.number;
+
+      const courseTerm = plan.terms.byId[course.term];
+      const courseSession = plan.sessions.byId[courseTerm.session];
+      const courseYearTerm = courseSession.year + courseSession.season + courseTerm.number;
+
       if (reqYearTerm > courseYearTerm) {
         warnings.push({
-          message: `${planCourse.code} needs to be in the same term as ${course.code}, or earlier.`,
+          message: `${req.code} needs to be in the same term as ${course.code}, or earlier.`,
           type: "coreq"
         });
       }
@@ -71,10 +84,11 @@ function getCoreqWarnings(plan, course) {
   return warnings;
 }
 
-function getPlanCourse(plan, course) {
-  for(let planCourse of plan.courses) {
-    if (planCourse.code == course.code) {
-      return planCourse;
+function getPlanCourse(plan, courseCode) {
+  for(let currentId of plan.courses.allIds) {
+    const course = plan.courses.byId[currentId];
+    if (course.code === courseCode) {
+      return course;
     }
   }
   return null;
@@ -87,7 +101,7 @@ function getSpecificCoursesSpecializationWarning(plan, requirement) {
   let warning = [];
   requirement.courses.split(',').map(course => course.trim()).forEach(reqCode => {
     /* Check for specific course requirement */
-    const planCourse = getPlanCourse(plan, {code: reqCode});
+    const planCourse = getPlanCourse(plan, reqCode);
     if (planCourse !== null) {
       creditsNeeded -= parseInt(planCourse.credits);
     }
@@ -96,7 +110,7 @@ function getSpecificCoursesSpecializationWarning(plan, requirement) {
   // TODO: notify which course is missing
   if (creditsNeeded > 0) {
     warning.push({
-      message: `Missing ${creditsNeeded} credits of ${requirement.courses}.`,
+      message: `Missing ${creditsNeeded} credits of:\n${requirement.courses}.`,
       type: "missingCredits"
     });
   }
@@ -108,8 +122,8 @@ function getCategorySpecializationWarning(plan, requirement) {
   let warnings = [];
   let creditsRemaining = parseInt(requirement.credits);
   let courseSet = new Set();
-  plan.courses.forEach(course => {
-    if (courseFitsCategoryRequirement(course, requirement)) {
+  plan.courses.allIds.map(id => plan.courses.byId[id]).forEach(course => {
+    if (courseFitsCategoryRequirement(course.code, requirement)) {
       if (!courseSet.has(course.code)) {
         creditsRemaining -= course.credits;
       }
@@ -119,7 +133,7 @@ function getCategorySpecializationWarning(plan, requirement) {
 
   if (creditsRemaining > 0) {
     warnings.push({
-      message: `Missing ${creditsRemaining} credits from ${requirement.category}.`,
+      message: `Missing ${creditsRemaining} credits from:\n${requirement.category}.`,
       type: 'specialization'
     });
   }
@@ -128,17 +142,17 @@ function getCategorySpecializationWarning(plan, requirement) {
 }
 
 // this is the order in which we check
-function courseFitsCategoryRequirement(course, requirement) {
+function courseFitsCategoryRequirement(courseCode, requirement) {
   if (requirement.type === CATEGORY_TYPE) {
     const words = requirement.category.split(" ");
 
     if (words[0] === "UPPER") {
       // is upper level
-      if (courseIsUpperLevel(course)) {
-        if (words[1] === course.code.split(' ')[0]){
+      if (courseIsUpperLevel(courseCode)) {
+        if (words[1] === courseCode.split(' ')[0]){
           // is a course code
           return true;
-        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(course.code.split(' ')[0])) {
+        } else if(areas.hasOwnProperty(words[1]) && areas[words[1]].codes.includes(courseCode.split(' ')[0])) {
           // is an area descriptor
           return true;
         } else if (words[1] === 'GENERAL') {
@@ -154,7 +168,7 @@ function courseFitsCategoryRequirement(course, requirement) {
     } else if (areas.hasOwnProperty(words[0])) {
       if (words.length === 1) {
         // is an single word area descriptor
-        if (areas[words[0]].codes.includes(course.code.split(' ')[0])) {
+        if (areas[words[0]].codes.includes(courseCode.split(' ')[0])) {
           return true;
         } else {
           return false;
@@ -167,7 +181,7 @@ function courseFitsCategoryRequirement(course, requirement) {
 
 
 function courseIsUpperLevel(course) {
-  return parseInt(course.code.split(' ')[1]) >= 300;
+  return parseInt(course.split(' ')[1]) >= 300;
 }
 
 
@@ -188,17 +202,19 @@ module.exports = {
 
   getWarnings: (plan, user, requirements) => {
     let warnings = [];
-    plan.courses.forEach(planCourse => {
+    plan.courses.allIds.forEach(courseId => {
+      const course = plan.courses.byId[courseId];
       warnings = warnings.concat(
-        getStandingWarnings(user, planCourse),
-        getCoreqWarnings(plan, planCourse),
-        getPrereqWarnings(plan, planCourse),
+        getStandingWarnings(user, course),
+        getCoreqWarnings(plan, course),
+        getPrereqWarnings(plan, course),
       );
     });
     warnings = warnings.concat(
       module.exports.getSpecializationWarnings(plan, requirements)
     );
-
+    
+    console.log(warnings);
     return warnings;
   },
 

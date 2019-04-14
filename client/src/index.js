@@ -1,27 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Redirect, BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Main from './containers/Main';
 import Login from './components/Login/LoginInterface';
-import CreateAccount from './components/Signup/CreateAccountMenu';
+import Signup from './components/Signup/SignupInterface';
 import AdminPortal from "./components/AdminPortal/AdminPortal";
-import UserProfile from "./components/UserProfile/profile";
+import UserProfile from "./components/UserProfile/Profile";
 import PreviousCourses from "./components/PreviousCourses/PreviousCourses";
-import DegreeYear from "./components/DegreeYear-NewUser/DegreeYear";
+import ConfirmEmail from "./components/ConfirmEmail/ConfirmEmail";
+import NewPlan from "./components/NewPlan/NewPlan";
+
+const protectedComponent = (component) => {
+  console.log("checking auth");
+  if (sessionStorage.getItem("userId")) {
+    return component;
+  }
+  return <Redirect to='/login'/>;
+};
+
 
 const routing = (
   <Router>
     <div>
       <Route exact path="/" component={Login} />
-      <Route path="/main" component={Main} />
+      <Route path="/main" render={(props) => protectedComponent(<Main {...props}/>)} />
       <Route path="/login" component={Login} />
-      <Route path="/create-account" component={CreateAccount} />
-      <Route path="/admin" component={AdminPortal} />
-      <Route path="/profile" component={UserProfile} />
-      <Route path="/course-history" component={PreviousCourses} />
-      <Route path="/degree-year-selection" component={DegreeYear} />
+
+      <Route path="/signup" component={Signup} />
+      <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
+      <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
+      <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
+      <Route path="/new" render={(props) => protectedComponent(<NewPlan {...props}/>)} />
+      <Route path="/confirm-email" render={(props) => <ConfirmEmail {...props}/>} />
     </div>
   </Router>
 );

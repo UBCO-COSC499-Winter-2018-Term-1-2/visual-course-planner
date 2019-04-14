@@ -6,9 +6,7 @@ describe("WarningService", () => {
 
   describe('#courseFitsCategoryRequirements', () => {
     it('should return false for not fitting upper area, wrong code', () => {
-      const course = {
-        code: "ENGL 341"
-      };
+      const course = "ENGL 341";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -22,9 +20,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting upper area, wrong level', () => {
-      const course = {
-        code: "MATH 241"
-      };
+      const course = "MATH 241";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -38,9 +34,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting upper area', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER SCIENCE',
@@ -54,9 +48,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting upper elective', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER GENERAL',
@@ -71,9 +63,7 @@ describe("WarningService", () => {
 
 
     it('should return true for fitting upper code', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'UPPER COSC',
@@ -87,9 +77,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting upper code', () => {
-      const course = {
-        code: "MATH 341"
-      };
+      const course = "MATH 341";
   
       const requirement = {
         category: 'UPPER COSC',
@@ -103,9 +91,7 @@ describe("WarningService", () => {
     });
 
     it('should return true for fitting area', () => {
-      const course = {
-        code: "COSC 341"
-      };
+      const course = "COSC 341";
   
       const requirement = {
         category: 'SCIENCE',
@@ -119,9 +105,7 @@ describe("WarningService", () => {
     });
 
     it('should return false for not fitting area', () => {
-      const course = {
-        code: "ENGL 341"
-      };
+      const course = "ENGL 341";
   
       const requirement = {
         category: 'SCIENCE',
@@ -141,20 +125,23 @@ describe("WarningService", () => {
     it("should return a prereq wrong term warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 1
+        standing: 1
       };
   
       let courseNoPrereq = {
         code: "COSC 121",
         standingRequirement: 0,
         coRequisites: [],
-        preRequisites: [ { code: "COSC 111" } ],
-        year: "2018",
-        term: "1"
+        preRequisites: [ "COSC 111" ],
       };
   
       let plan = {
-        courses: [courseNoPrereq]
+        courses: {
+          byId:{
+            "0": courseNoPrereq
+          },
+          allIds: ["0"]
+        } 
       };
   
       const expectedWarnings = [
@@ -172,7 +159,7 @@ describe("WarningService", () => {
     it("should return a standing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 2
+        standing: 2
       };
 
       let course = {
@@ -183,7 +170,12 @@ describe("WarningService", () => {
       };
 
       let plan = {
-        courses: []
+        courses: {
+          byId: {
+            '0': course
+          },
+          allIds: ['0']
+        }
       };
 
       const expectedWarnings = [
@@ -202,22 +194,25 @@ describe("WarningService", () => {
     it("should return a coreq missing warning when one exists", () => {
       let user = {
         name: "Test",
-        yearStanding: 3
+        standing: 3
       };
 
       let course = {
         code: "COSC 304",
         standingRequirement: 3,
-        coRequisites: [{
-          code: "COSC 360"
-        }],
+        coRequisites: [ "COSC 360" ],
         preRequisites: [],
         year: "2018",
         term: "1"
       };
 
       let plan = {
-        courses: [course]
+        courses: {
+          byId: {
+            '0': course
+          },
+          allIds: ['0']
+        }
       };
 
       const expectedWarnings = [
@@ -241,12 +236,10 @@ describe("WarningService", () => {
       let courseAdded = {
         code: "MATH 221",
         standingRequirement: 0,
-        coRequisites: [{
-          code: "MATH 101"
-        }],
+        coRequisites: [ "MATH 101" ],
         preRequisites: [],
         year: "2018",
-        term: "1"
+        term: "0"
       };
 
       let preExistingCourse = {
@@ -255,11 +248,42 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [],
         year: "2018",
-        term: "2"
+        term: "1"
       };
 
       let plan = {
-        courses: [courseAdded, preExistingCourse]
+        courses: {
+          byId: {
+            '0': courseAdded,
+            '1': preExistingCourse
+          },
+          allIds: ['0', '1']
+        },
+        terms: {
+          byId: {
+            '0': {
+              session: "0",
+              number: 1,
+              courses: [ "0" ]
+            },
+            '1': {
+              session: "0",
+              number: 2,
+              courses: [ '1' ]
+            },
+          },
+          allIds: ['0', '1']
+        },
+        sessions: {
+          byId: {
+            "0": {
+              year: "2018",
+              season: "W",
+              terms: [ "0", "1" ]
+            },
+          },
+          allIds: ['0']
+        }
       };
 
       const expectedWarnings = [
@@ -278,7 +302,10 @@ describe("WarningService", () => {
   describe("#getWarnings", () => {
     it("empty plan should return no warnings", () => {
       let plan = {
-        courses: []
+        courses: {
+          byId: {},
+          allIds: []
+        }
       };
 
       let user = {
@@ -303,20 +330,51 @@ describe("WarningService", () => {
         coRequisites: [],
         preRequisites: [],
         year: "2018",
-        term: "2"
+        term: "1"
       };
   
       let courseBeforePrereq = {
         code: "COSC 121",
         standingRequirement: 0,
         coRequisites: [],
-        preRequisites: [ { code: "COSC 111" } ],
+        preRequisites: [ "COSC 111" ],
         year: "2018",
-        term: "1"
+        term: "0"
       };
   
       let plan = {
-        courses: [courseBeforePrereq, preReqWrongTerm]
+        courses: {
+          byId: {
+            '0': preReqWrongTerm,
+            '1': courseBeforePrereq
+          },
+          allIds: ['0', '1']
+        },
+        terms: {
+          byId: {
+            '0': {
+              session: "0",
+              number: 1,
+              courses: [ "1" ]
+            },
+            '1': {
+              session: "0",
+              number: 2,
+              courses: [ '0' ]
+            },
+          },
+          allIds: ['0', '1']
+        },
+        sessions: {
+          byId: {
+            "0": {
+              year: "2018",
+              season: "W",
+              terms: [ '0', '1' ]
+            },
+          },
+          allIds: ['0']
+        }
       };
   
       const expectedWarnings = [
@@ -341,13 +399,18 @@ describe("WarningService", () => {
         code: "COSC 121",
         standingRequirement: 0,
         coRequisites: [],
-        preRequisites: [ { code: "COSC 111" } ],
+        preRequisites: [ "COSC 111" ],
         year: "2018",
         term: "1"
       };
   
       let plan = {
-        courses: [courseNoPrereq]
+        courses: {
+          byId: {
+            '0': courseNoPrereq
+          },
+          allIds: ['0']
+        }
       };
   
       const expectedWarnings = [
@@ -376,24 +439,28 @@ describe("WarningService", () => {
         }
       ];
 
+      const course = {
+        code: "COSC 111",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        term: "0",
+        credits: 3
+      };
+
       const plan = {
-        name: "Test Plan",
-        courses: [
-          {
-            code: "COSC 111",
-            standingRequirement: 0,
-            coRequisites: [],
-            preRequisites: [],
-            year: "2018",
-            term: "1",
-            credits: 3
-          }
-        ]
+        courses: {
+          byId: {
+            '0': course
+          },
+          allIds: ['0']
+        }
       };
 
       const expectedWarnings = [
         {
-          message: `Missing ${specializationRequirements[1].credits} credits of ${specializationRequirements[1].courses}.`,
+          message: `Missing ${specializationRequirements[1].credits} credits of:\n${specializationRequirements[1].courses}.`,
           type: "missingCredits"
         }
       ];
@@ -414,29 +481,35 @@ describe("WarningService", () => {
           credits: 3
         }
       ];
+      
+      const req1 = {
+        code: "COSC 111",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        term: "1",
+        credits: 3
+      };
+
+      const req2 = {
+        code: "MATH 100",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        term: "1",
+        credits: 3
+      };
 
       const plan = {
-        name: "Test Plan",
-        courses: [
-          {
-            code: "COSC 111",
-            standingRequirement: 0,
-            coRequisites: [],
-            preRequisites: [],
-            year: "2018",
-            term: "1",
-            credits: 3
+        courses: {
+          byId: {
+            '0': req1,
+            '1': req2
           },
-          {
-            code: "MATH 100",
-            standingRequirement: 0,
-            coRequisites: [],
-            preRequisites: [],
-            year: "2018",
-            term: "1",
-            credits: 3
-          }
-        ]
+          allIds: ['0', '1']
+        }
       };
 
       const expectedWarnings = [];
@@ -458,33 +531,39 @@ describe("WarningService", () => {
         }
       ];
 
+      const req1 = {
+        code: "COSC 111",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        term: "1",
+        credits: 3
+      };
+
+      const req2 = {
+        code: "MATH 100",
+        standingRequirement: 0,
+        coRequisites: [],
+        preRequisites: [],
+        year: "2018",
+        term: "1",
+        credits: 3
+      };
+
       const plan = {
-        name: "Test Plan",
-        courses: [
-          {
-            code: "COSC 111",
-            standingRequirement: 0,
-            coRequisites: [],
-            preRequisites: [],
-            year: "2018",
-            term: "1",
-            credits: 3
+        courses: {
+          byId: {
+            '0': req1,
+            '1': req2
           },
-          {
-            code: "MATH 100",
-            standingRequirement: 0,
-            coRequisites: [],
-            preRequisites: [],
-            year: "2018",
-            term: "1",
-            credits: 3
-          }
-        ]
+          allIds: ['0', '1']
+        }
       };
 
       const expectedWarnings = [
         {
-          message: `Missing 3 credits of ${specializationRequirements[1].courses}.`,
+          message: `Missing 3 credits of:\n${specializationRequirements[1].courses}.`,
           type: "missingCredits"
         }
       ];
