@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS plan_term;
 DROP TABLE IF EXISTS credit_requirement_course_info;
 DROP TABLE IF EXISTS exception_course_info;
 DROP TABLE IF EXISTS specialization_credit_requirement;
@@ -9,11 +10,12 @@ DROP TABLE IF EXISTS course_info_corequirement;
 DROP TABLE IF EXISTS specialization_course;
 DROP TABLE IF EXISTS plan_course;
 DROP TABLE IF EXISTS credit_requirement;
+DROP TABLE IF EXISTS user_course_info;
 DROP TABLE IF EXISTS term;
 DROP TABLE IF EXISTS session;
-DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS plan;
+DROP TABLE IF EXISTS specialization;
 DROP TABLE IF EXISTS degree;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS course_info;
@@ -83,9 +85,9 @@ CREATE TABLE exception_course_info (
 );
 
 CREATE TABLE session (
-  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  startYear CHAR(4),
-  season    CHAR(1)
+  id      INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  year    CHAR(4),
+  season  CHAR(1)
 );
 
 CREATE TABLE user (
@@ -95,32 +97,35 @@ CREATE TABLE user (
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
-  standing  INT
+  standing  INT DEFAULT 1,
+  confirmed BOOLEAN DEFAULT false,
+  authToken VARCHAR(40)
 );
 
 CREATE TABLE plan (
   id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(500),
   time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   description VARCHAR(500),
   isDefault   BOOLEAN DEFAULT false,
   isFavourite BOOLEAN DEFAULT false,
   uid         INT,
-  did         INT,
+  sid         INT,
 
   FOREIGN KEY (uid)
     REFERENCES user(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
   
-  FOREIGN KEY (did)
-    REFERENCES degree(id)
+  FOREIGN KEY (sid)
+    REFERENCES specialization(id)
     ON UPDATE CASCADE
     ON DELETE NO ACTION
 );
 
 CREATE TABLE term (
   id  INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  num INT,
+  number INT,
   sid INT,
 
   FOREIGN KEY (sid)
@@ -136,7 +141,7 @@ CREATE TABLE plan_course (
   FOREIGN KEY (pid)
     REFERENCES plan(id)
     ON UPDATE CASCADE
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
 
   FOREIGN KEY (cid)
     REFERENCES course(id)
@@ -229,36 +234,81 @@ CREATE TABLE credit_requirement_course_info (
   PRIMARY KEY (crid, cid)
 );
 
+CREATE TABLE user_course_info (
+  uid INT,
+  cid VARCHAR(9),
 
-INSERT INTO course_info (id) VALUES ("ENGL 112");
-INSERT INTO course_info (id) VALUES ("ENGL 114");
-INSERT INTO course_info (id) VALUES ("ENGL 113");
-INSERT INTO course_info (id) VALUES ("ENGL 150");
-INSERT INTO course_info (id) VALUES ("ENGL 151");
-INSERT INTO course_info (id) VALUES ("ENGL 153");
-INSERT INTO course_info (id) VALUES ("MATH 100");
-INSERT INTO course_info (id) VALUES ("MATH 101");
+  FOREIGN KEY (uid)
+    REFERENCES user(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
 
-INSERT INTO course_info (id) VALUES ("PHYS 111");
-INSERT INTO course_info (id) VALUES ("PHYS 112");
-INSERT INTO course_info (id) VALUES ("PHYS 102");
-INSERT INTO course_info (id) VALUES ("PHYS 121");
-INSERT INTO course_info (id) VALUES ("PHYS 122");
-INSERT INTO course_info (id) VALUES ("CHEM 111");
-INSERT INTO course_info (id) VALUES ("CHEM 121");
-INSERT INTO course_info (id) VALUES ("CHEM 113");
-INSERT INTO course_info (id) VALUES ("CHEM 123");
-INSERT INTO course_info (id) VALUES ("COSC 111");
-INSERT INTO course_info (id) VALUES ("COSC 123");
-INSERT INTO course_info (id) VALUES ("COSC 121");
-INSERT INTO course_info (id) VALUES ("COSC 211");
-INSERT INTO course_info (id) VALUES ("COSC 221");
-INSERT INTO course_info (id) VALUES ("COSC 222");
-INSERT INTO course_info (id) VALUES ("MATH 200");
-INSERT INTO course_info (id) VALUES ("MATH 221");
-INSERT INTO course_info (id) VALUES ("STAT 230");
-INSERT INTO course_info (id) VALUES ("COSC 304");
-INSERT INTO course_info (id) VALUES ("COSC 310");
-INSERT INTO course_info (id) VALUES ("COSC 320");
-INSERT INTO course_info (id) VALUES ("COSC 341");
-INSERT INTO course_info (id) VALUES ("PHIL 331");
+  FOREIGN KEY (cid)
+    REFERENCES course_info(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  PRIMARY KEY (uid, cid)
+);
+
+CREATE TABLE plan_term (
+  pid INT,
+  tid INT,
+
+  FOREIGN KEY (pid)
+    REFERENCES plan(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+  FOREIGN KEY (tid)
+    REFERENCES term(id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION,
+
+  PRIMARY KEY (pid, tid)
+);
+
+INSERT INTO course_info (id, credits) VALUES ("ENGL 112", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 114", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 113", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 150", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 151", 3);
+INSERT INTO course_info (id, credits) VALUES ("ENGL 153", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 100", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 101", 3);
+
+INSERT INTO course_info (id, credits) VALUES ("PHYS 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 112", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 102", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHYS 122", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 113", 3);
+INSERT INTO course_info (id, credits) VALUES ("CHEM 123", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 111", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 123", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 121", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 211", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 221", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 222", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 200", 3);
+INSERT INTO course_info (id, credits) VALUES ("MATH 221", 3);
+INSERT INTO course_info (id, credits) VALUES ("STAT 230", 3);
+INSERT INTO course_info (id, credits, standingRequirement) VALUES ("COSC 304", 3, 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 310", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 320", 3);
+INSERT INTO course_info (id, credits) VALUES ("COSC 341", 3);
+INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
+
+INSERT INTO course_info_requirement VALUES ("COSC 121", "COSC 111");
+INSERT INTO course_info_requirement VALUES ("COSC 222", "COSC 121");
+INSERT INTO course_info_requirement VALUES ("COSC 310", "COSC 222");
+
+INSERT INTO session (year, season) VALUES ("2018", "W");
+INSERT INTO term (number, sid) VALUES (1, 1);
+INSERT INTO degree (name) VALUES ("Test degree");
+INSERT INTO specialization (name, did) VALUES ("Test spec", 1);
+
+INSERT INTO user (email, password, firstname, lastname, confirmed) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin", 1);
+INSERT INTO plan (title, isFavourite, description, uid, sid) VALUES ("test plan", true, "test desc", 1, 1);

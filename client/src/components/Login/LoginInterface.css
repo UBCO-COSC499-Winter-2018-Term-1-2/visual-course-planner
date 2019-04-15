@@ -17,44 +17,9 @@ body{
     margin: 10% auto;   
 }
 
-/* .input-element{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 1em 0;
-    box-sizing: border-box;
-    font-size: 1em;
-    color: #9c9b9d;
-    background-color: #333035;
-    border: none;
-} */
 
 .input-element:focus{
     border: none;
-}
-
-.deafultbtn{
-    width: 50%;
-    padding: 1em 1em;
-    margin: 2em auto;
-    box-sizing: border-box;
-    font-size: 1em;
-    text-align: center;
-    color: #9c9b9d;
-    background-color: #333035;
-    border: none;
-    display: block;
-    cursor: pointer;
-
-}
-
-.deafultbtn:hover {
-    background-color: #84bd00; 
-    color: black;
-}
-
-.deafultbtn:disabled{
-    cursor: not-allowed;
-
 }
 
 /* THIS BTN IS TO OPEN DIFFERENT MENU THEN WHAT IS ACTIVE*/
@@ -69,11 +34,11 @@ body{
 
 a{
     color: #84bd00;
+    
 }
 a:hover {
     color: #afda77;
 }
-
 /* THIS BTN IS TO CREATE AN ACCOUNT FOR USER */
 .create-accountbtn{
     background:none;
@@ -96,6 +61,49 @@ a:hover {
     cursor: not-allowed;
 }
 
-/* .invalid{
-    border: 1px solid red;
-} */
+.defaultbtn{
+    /* width: 50%; */
+    padding: 1em 6em;
+    margin: 2em auto;
+    box-sizing: border-box;
+    font-size: 1em;
+    text-align: center;
+    color: #9c9b9d;
+    background-color: #333035;
+    border: none;
+    /* display: block; */
+    display: flex;
+    flex-direction: column-reverse;
+    cursor: pointer;
+
+}
+
+.defaultbtn:hover {
+    background-color: #84bd00; 
+    color: black;
+}
+
+.btn-div{
+    margin: 4em 0em;
+    display: flex;
+    flex-direction: row;
+    /* text-align: center;  */
+}
+
+.overlay {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+
+.warning-msg{
+    color:  white;
+    list-style-type: none;
+
+}
+

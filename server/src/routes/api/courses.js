@@ -27,6 +27,28 @@ router.get('/:id', (req, res) => {
 router.get('/', (req, res) => {
   Course.getCourses()
     .then(data => {
+      const courses = data.map(course => {
+        return {
+          ...course,
+          preRequisites: course.preRequisites ? course.preRequisites.split(',') : [],
+          coRequisites: course.coRequisites ? course.coRequisites.split(',') : []
+        };
+      });
+      res.send(courses);
+    })
+    .catch(err => {
+      console.error("Couldnt get courses: " + err);
+    });
+});
+
+/**
+ * @route GET api/courses/info
+ * @desc Get all course info
+ * @access Private
+ */
+router.get('/info', (req, res) => {
+  Course.getAllCourseInfo()
+    .then(data => {
       res.send(data);
     })
     .catch(err => {

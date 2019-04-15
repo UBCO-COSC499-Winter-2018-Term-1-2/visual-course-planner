@@ -1,8 +1,7 @@
 import React from 'react';
 import './CourseListSideBar.css';
 import CourseSearchBar from '../CourseSearchBar/CourseSearchBar';
-import CloseSideBarBtn from '../CloseSideBarBtn/CloseSideBarBtn';
-import CourseInfoDisplay from '../CourseInfoDisplay/CourseInfoDisplay';
+import Course from '../Course/Course';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -34,28 +33,38 @@ class CourseListSideBar extends React.Component {
 
   filterList = (e) => {
     let updatedList = this.state.courses;
-    updatedList = updatedList.filter(item =>
-      item.code.toLowerCase().search(e.target.value.toLowerCase()) !== -1 || item.startYear.concat(item.season).toLowerCase().search(e.target.value.toLowerCase()) !== -1
-    );
+    let searchString = e.target.value;
+    if (searchString === '') {
+      this.setState({filteredCourses: updatedList});
+      return;
+    }
+    updatedList = updatedList.filter(item => {
+      return item.code.toLowerCase().search(searchString.toLowerCase()) !== -1 || item.year.concat(item.season).toLowerCase().search(searchString.toLowerCase()) !== -1;
+    });
     this.setState({filteredCourses: updatedList});
   }
 
   render() {
-    console.log(this.state.courses);
     const courseList = this.state.filteredCourses.map(course => {
       return (
-        <CourseInfoDisplay
-          key={course.cid}
-          title={course.code}
-          info={course.description}
-          session={course.startYear.concat(course.season)}
+        <Course
+          key={course.id}
+          course={course}
+          type={"elective"}
+          onDragStart={(e, course) => {this.props.close(); this.props.onCourseDragStart(e, course);}}
         />
       );
     });
 
     return (
-      <div className={this.props.show ? 'side-drawer open' : 'side-drawer'}>
-        <CloseSideBarBtn click={this.props.close}/>
+      <div className={this.props.isOpen ? 'side-drawer open' : 'side-drawer'}>
+        <div className="closebtn-container">
+          <button 
+            className="close-sidebarbtn sidebar-button"
+            onClick={this.props.close}>
+              Close
+          </button>
+        </div>
           
         <CourseSearchBar onChange={this.filterList}/>
         <div className="sidebar-divider-container">
@@ -70,8 +79,9 @@ class CourseListSideBar extends React.Component {
 }
 
 CourseListSideBar.propTypes = {
-  show: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
+  onCourseDragStart: PropTypes.func.isRequired
 };
 
 export default CourseListSideBar;
