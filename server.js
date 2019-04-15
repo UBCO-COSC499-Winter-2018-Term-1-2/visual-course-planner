@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const users = require('./server/src/routes/api/users');
