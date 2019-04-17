@@ -1,33 +1,23 @@
 #plan-name-heading {
-  display: inline-block;
-  margin: 0;
+  display: block;
   border: 1px solid #1a191b;
   background-color: #1a191b;
-  padding: 0.135em 0.1em;
   font-size: 1.5em;
   font-weight: normal;
-  margin: 0;
-}
-
-input#plan-name-heading {
-  margin: 0;
-  display: block;
-  -webkit-appearance: none;
-  text-align: start;
+  min-width: 5em;
+  min-height: 1em;
   color: #e4e4e4;
-  border: 1px solid grey;
-  border-radius: 0.25em;
-  background-color: black;
-  box-sizing: border-box;
-  height: 1.5em;
-  font-weight: normal;
-  font-size: 1.5em;
-  font-family: Helvetica;
+  -webkit-appearance: none;
 }
 
-h3#plan-name-heading:hover {
-  border: 1px solid grey;
-  border-radius: 0.25em;
+#plan-name-heading:focus {
   background-color: black;
-  box-sizing: border-box;
+  border-radius: 0.25em;
+  border: 1px solid grey;
+}
+
+#plan-name-heading:hover {
+  background-color: black;
+  border-radius: 0.25em;
+  border: 1px solid grey;
 }

@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class PlanList extends Component {
   render() {
-    console.log({message: "PlanLists plans", plans: this.props.plans});
-
     const favouritePlans = this.props.plans
       .filter(plan => plan.isFavourite === true)
       .map((plan) =>
@@ -30,7 +28,7 @@ class PlanList extends Component {
           className="plan-list-item favourite"
           key={plan.id}
         >
-          {plan.title}
+          <p>{plan.title}</p>
           <div className="delete-button container" onClick={() => {this.props.deletePlan(plan.id);}} >
             <FontAwesomeIcon icon="times" className="delete-button"/>
           </div>
@@ -39,18 +37,16 @@ class PlanList extends Component {
 
     return (
       <div id="plan-list">
-        <div className="sidebar-info-area">
-          <h3 className="sidebar-header">Degree Plans</h3>
-          <h4 className="sidebar-header">Favourites</h4>
-          <ul>
-            {favouritePlans}
-          </ul>
-          <h4 className="sidebar-header">Plans</h4>
-          <ul>
-            {nonfavouritePlans}
-          </ul>
-          <NewPlanButton onClick={this.props.newPlan} />
-        </div>
+        <h3 className="sidebar-header">Degree Plans</h3>
+        <h4 className="sidebar-header">Favourites</h4>
+        <ul>
+          {favouritePlans}
+        </ul>
+        <h4 className="sidebar-header">Plans</h4>
+        <ul>
+          {nonfavouritePlans}
+        </ul>
+        <NewPlanButton onClick={this.props.newPlan} />
       </div>
     );
   }

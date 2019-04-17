@@ -3,12 +3,20 @@ const router = express.Router();
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const mail = require('../../services/EmailService');
+
+
+/**
+ * @route GET api/users/id
+ * @desc Get all user info
+ * @access Private
+ */ 
 
 router.get('/:id', async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await User.getUserById(userId);
-    console.log(user);
+    // console.log(user);
     res.status(200).send({
       firstname: user.firstname,
       lastname: user.lastname,
@@ -22,6 +30,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+/**
+ * @route POST api/users/changePassword
+ * @desc Change a user password
+ * @access Private
+ */ 
+
 router.post('/:id/changePassword', async (req, res) => {
   const UserId = req.params.id;
   await User.changePassword(UserId)
@@ -33,15 +47,54 @@ router.post('/:id/changePassword', async (req, res) => {
     });
 });
 
+/**
+ * @route POST api/users/updateUserInfo
+ * @desc Change the user info 
+ * @access Private
+ */ 
+
 router.post('/:id/updateUserInfo', (req, res) => {
-  const UserId = req.params.id;
-  User.updateUser(UserId, (err, data) => {
-    if (err == null) {
-      res.send(data);
+  const userId = req.params.id;
+
+
+  req.checkBody('fName', 'Name is required').notEmpty();
+  req.checkBody('lName', 'Name is required').notEmpty();
+
+  console.log(req.body.newPassword !== '', req.body.newPassword, req.body.confirmNewPassword);
+  if (req.body.newPassword !== '' && req.body.newPassword) {
+    req.checkBody('newPassword', 'Minimum password length is 5 characters').isLength({ min: 5 });
+    req.checkBody('confirmNewPassword', 'Passwords do not match').equals(req.body.newPassword);
+  }
+
+
+  let errors = req.validationErrors();
+  if (errors) {
+    console.log(errors);
+    res.status(500).send(errors);
+  } else {
+
+    const firstname = req.body.fName;
+    const lastname = req.body.lName;
+    const password = req.body.newPassword;
+
+    if (password !== '' && password) {
+      bcrypt.genSalt(10, function(err, salt){
+        bcrypt.hash(password, salt, async function(err, hash){
+          if(err){
+            console.log(err);
+          }
+  
+          User.updateUserNameAndPassword(userId, firstname, lastname, hash);
+          res.status(200).send('Name and password were updated');
+  
+        });
+      });
     } else {
-      console.error("Couldn't change info");
+      User.updateUserName(userId, firstname, lastname);
+      res.status(200).send('Name was updated');
     }
-  });
+    
+  }
 });
 
 /**
@@ -63,6 +116,8 @@ router.post('/signup', async (req, res) => {
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
   req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('password', 'Minimum password length is 5 characters').isLength({ min: 5 });
+  req.checkBody('confirmPassword', 'Minimum password length is 5 characters').isLength({ min: 5 });
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   let errors = req.validationErrors();
@@ -85,6 +140,9 @@ router.post('/signup', async (req, res) => {
             console.log(err);
           }
 
+          //create the token here and store in DB
+          const token = mail.generateEmailToken();
+
           const hashPassword = hash;
           var newUser = {     
             email: req.body.email,
@@ -92,13 +150,18 @@ router.post('/signup', async (req, res) => {
             firstname: req.body.fName,
             lastname: req.body.lName,
             isAdmin: false,
-            standing: 0
+            standing: 1,
+            confirmed: false,
+            authToken: token
           };
           
           try{
             const userId = await User.insertUser(newUser);
             console.log("User was created: " + userId);
             res.status(200).send({userId, email: newUser.email});
+            //Verification email being sent
+            mail.sendEmail(newUser.email, token, userId);
+            console.log("The user: " + newUser.email + " was sent a verification email.");
           }
           catch(err) {
             console.error("User was not created");
@@ -114,20 +177,30 @@ router.post('/signup', async (req, res) => {
 
 /**
  * @route POST api/users/login
- * @desc authenticate a user
+ * @desc authenticate a user for login
  * @access Private
  */ 
 
-router.post('/login', (req, res, next) => {
-  console.log('here now!');
-  console.log(req.body);
-  passport.authenticate('local', (err, user, info) => {
-    console.log("info", info);
-    if (err) {
-      console.error(err);
-    }
-    res.send({...info, user});
-  })(req, res, next);
+router.post('/login', async (req, res, next) => {
+  // console.log(req.body);
+  let email = req.body.email;
+  let user = await User.getUser(email);
+  console.log(user.confirmed);
+  if (user.confirmed == 1){
+    passport.authenticate('local', (err, user, info) => {
+      console.log("info", info);
+      if (err) {
+        console.error(err);
+      }
+      delete user.password;
+      res.send({...info, user});
+    })(req, res, next);
+  }else{
+
+    console.log('The user: ' + user.email + ' is not verified. Please verify your email');
+    res.status(200).send('The user: ' + user.email + ' is not verified. Please verify your email');
+
+  }
   
 });
 
@@ -175,20 +248,58 @@ router.get('/:id/coursehistory', async (req, res) => {
     res.status(200).send('no course history found for user');
   } else {
     const courses = await User.getCourses(userId); 
-    console.log(courses);
-    res.status(200).send("fetching all user courses: " + courses);
+    console.log(courses[0]);
+    res.status(200).send({message: "fetching all user course history", course: courses});
   }
 });
 
 /**
- * @route POST api/logout
- * @desc end the users session
+ * @route POST api/users/emailToken
+ * @desc Replace existing verification token with new token for authentication and send out email
  * @access Private
- */
+ */ 
 
-// router.post('/logout',redirectLogin, async (req, res) => {
+router.post('/:id/emailToken', async (req, res) => {
+  let userId = req.body.uid;
+  let user = await User.getUserById(userId);
 
-//   console.log(req.session);
-// });
+  const token = mail.generateEmailToken();
+  if(user.confirmed == 0){
+    await User.updateUserToken(userId, token);
+    mail.sendEmail(user.email, token, userId);
+    console.log("The user: " + user.email + " is sent another email. The old link is no longer valid");
+    res.status(200).send("The user: " + user.email + " is sent another email. The old link is no longer valid");
+  }else{
+    console.log("The user: " + user.email + " is already verified.");
+    res.status(200).send("The user: " + user.email + " is already verified.");
+  }
+});
+
+/**
+ * @route POST api/users/emailVerification
+ * @desc Authenticate the user token for verification
+ * @access Private
+ */ 
+
+router.post('/emailVerification/:uid/:token', async (req, res) => {
+  let token = req.params.token;
+  let userId = req.params.uid;
+  let user = await User.getUserById(userId);
+  console.log(user);
+  if (user) {
+    if(token === user.authToken){
+      console.log("The tokens match! User authenticated");
+      await User.verifyUser(userId);
+      res.status(200).send({message: "The tokens match! User authenticated", verified: true});
+    }else{
+      console.log({message: "The user: " + user.email + " could not be verified.", verified: false});
+      res.status(200).send({message: "The user: " + user.email + " could not be verified.", verified: false});
+    }
+  } else {
+    res.status(404).send("User not found");
+  }
+  
+});
+
 
 module.exports = router;
