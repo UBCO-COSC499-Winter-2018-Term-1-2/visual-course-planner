@@ -15,8 +15,9 @@ class BackdropButton extends Component {
             onClick={this.props.open}
             className="sidebar-button"
           >
-            Add Course
+        
             <FontAwesomeIcon icon="plus" style={{marginLeft: '0.5em'}}/>
+            Add Course
           </button>
         </div>
   

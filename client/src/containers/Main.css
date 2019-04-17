@@ -6,7 +6,11 @@
   grid-template-rows: 1fr 1fr 6fr 4fr;
   grid-template-areas: 
     "sidebar planner-header"
+<<<<<<< HEAD
     "sidebar planner-header"
+=======
+    "sidebar planner"
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
     "sidebar planner"
     "sidebar planner";
   background-color: #1a191b;
@@ -122,4 +126,13 @@
 h3 {
   font-size: 1.25em;
   font-weight: bold;
+}
+
+.add-term {
+  top: 1em;
+  right: 2em;
+  background: none;
+  border: none;
+  color: #84bd00;
+  font-size: 1em;
 }

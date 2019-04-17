@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Session from '../Session/Session';
+<<<<<<< HEAD
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
+=======
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 import './PlannerArea.css';
 import Arrow from 'react-dom-arrow';
 import ScrollButton from '../ScrollButton/ScrollButton';
@@ -50,19 +53,21 @@ class PlannerArea extends Component {
     return(this.state.courseArrows.map((arrow) => {
       console.log("gui");
       return(
-        <Arrow 
+        <Arrow
           key={arrow.fromSelector + 'to' + arrow.toSelector}
           fromSelector={arrow.fromSelector}
           fromSide={arrow.fromSide}
           toSelector={arrow.toSelector}
           toSide={arrow.toSide}
           color={arrow.color}
-          stroke={arrow.stroke}  />);
+          stroke={arrow.stroke}
+          className="arrow"  />);
     }));
   }
   
   trashDragCounter = 0; // Needed for trash drag n drop
 
+<<<<<<< HEAD
   getNextTerm(latestTerm, latestSession) {
     let nextTermNumber;
     let nextTermYear = latestSession.year;
@@ -161,6 +166,8 @@ class PlannerArea extends Component {
     // }
   }
 
+=======
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
   removeTermFromPlan = async (termId) => {
     const plan = { ...this.props.plan};
     console.log({plan});
@@ -281,11 +288,16 @@ class PlannerArea extends Component {
         plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
         plan.courses.allIds.push(incomingCourse.id.toString());
         plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+<<<<<<< HEAD
         // Send course to database
         axios.post(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
         delete incomingCourse.id;
       } else {
         // TODO: Moving course in plan, what does this do to the database? should be change the course id to the one thats offered in that term
+=======
+        delete incomingCourse.id;
+      } else {
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
         console.log("Moving course already in plan", incomingCourse);
         const courses = plan.terms.byId[sourceTermId].courses;
         courses.splice(courses.indexOf(incomingCourse.id), 1);
@@ -339,7 +351,11 @@ class PlannerArea extends Component {
       courses.splice(courses.indexOf(incomingCourse.id), 1);
       delete plan.courses.byId[incomingCourse.id];
       plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+<<<<<<< HEAD
       axios.delete(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
+=======
+      
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
       this.props.updatePlan(plan);
     }
     
@@ -361,11 +377,11 @@ class PlannerArea extends Component {
   
   //
   showScrollButtons = () => {
-    if(!this.state.isHoveringTerms){
-      this.setState(prevState => ({
-        isHoveringTerms: !prevState.isHoveringTerms
-      }));
-    }
+    this.setState({isHoveringTerms: true});
+  }
+
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
   }
 
   // create scroll button onclick handler
@@ -393,7 +409,7 @@ class PlannerArea extends Component {
   render() {
     
     return (
-      <div id="planner-area-container">
+      <div id="planner-area-container" onMouseOver={this.showScrollButtons} onMouseLeave={this.hideScrollButtons}>
         {this.renderTerms()}
 
         <CourseListSideBar 
@@ -420,27 +436,29 @@ class PlannerArea extends Component {
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn hide"}>
           <ScrollButton 
             direction="left" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} /> 
+            scrollClick={this.scrollButtonClickHandler} /> 
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn hide"}>
           <ScrollButton 
             direction="right" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} />
+            scrollClick={this.scrollButtonClickHandler} />
         </div>
+<<<<<<< HEAD
 
         <div className='floating-icon add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
           <FontAwesomeIcon icon="plus-circle" />
           <p>Add term</p>
         </div>
 
+=======
+ 
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
       </div>
     );
   }

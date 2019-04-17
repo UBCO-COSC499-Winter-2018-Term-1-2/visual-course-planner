@@ -24,7 +24,11 @@ const app = express();
 
 
 // Logging
+<<<<<<< HEAD
 app.use(morgan("dev"));
+=======
+app.use(morgan("tiny"));
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 // Express Middleware
 app.use(fileUpload());
 app.use(expressValidator());

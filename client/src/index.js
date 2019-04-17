@@ -32,8 +32,13 @@ const routing = (
       <Route path="/admin" render={(props) => protectedComponent(<AdminPortal {...props}/>)} />
       <Route path="/profile" render={(props) => protectedComponent(<UserProfile {...props}/>)} />
       <Route path="/course-history" render={(props) => protectedComponent(<PreviousCourses {...props}/>)} />
+<<<<<<< HEAD
       <Route path="/new" render={(props) => protectedComponent(<NewPlan {...props}/>)} />
       <Route path="/confirm-email" render={(props) => <ConfirmEmail {...props}/>} />
+=======
+      <Route path="/degree-selection" render={(props) => protectedComponent(<NewPlan {...props}/>)} />
+      <Route path="/confirm-email" render={(props) => protectedComponent(<ConfirmEmail {...props}/>)} />
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
     </div>
   </Router>
 );

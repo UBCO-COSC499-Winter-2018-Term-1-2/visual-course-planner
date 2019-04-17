@@ -153,6 +153,10 @@ router.post('/signup', async (req, res) => {
             standing: 1,
             confirmed: false,
             authToken: token
+<<<<<<< HEAD
+=======
+
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
           };
           
           try{
@@ -182,7 +186,11 @@ router.post('/signup', async (req, res) => {
  */ 
 
 router.post('/login', async (req, res, next) => {
+<<<<<<< HEAD
   // console.log(req.body);
+=======
+  console.log(req.body);
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
   let email = req.body.email;
   let user = await User.getUser(email);
   console.log(user.confirmed);
@@ -192,7 +200,10 @@ router.post('/login', async (req, res, next) => {
       if (err) {
         console.error(err);
       }
+<<<<<<< HEAD
       delete user.password;
+=======
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
       res.send({...info, user});
     })(req, res, next);
   }else{
@@ -250,10 +261,36 @@ router.get('/:id/coursehistory', async (req, res) => {
     const courses = await User.getCourses(userId); 
     console.log(courses[0]);
     res.status(200).send({message: "fetching all user course history", course: courses});
+<<<<<<< HEAD
+=======
   }
 });
 
 /**
+ * @route POST api/users/emailToken
+ * @desc Replace existing verification token with new token for authentication and send out email
+ * @access Private
+ */ 
+
+router.post('/:id/emailToken', async (req, res) => {
+  let userId = req.body.uid;
+  let user = await User.getUserById(userId);
+
+  const token = mail.generateEmailToken();
+  if(user.confirmed == 0){
+    await User.updateUserToken(userId, token);
+    mail.sendEmail(user.email, token, userId);
+    console.log("The user: " + user.email + " is sent another email. The old link is no longer valid");
+    res.status(200).send("The user: " + user.email + " is sent another email. The old link is no longer valid");
+  }else{
+    console.log("The user: " + user.email + " is already verified.");
+    res.status(200).send("The user: " + user.email + " is already verified.");
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
+  }
+});
+
+/**
+<<<<<<< HEAD
  * @route POST api/users/emailToken
  * @desc Replace existing verification token with new token for authentication and send out email
  * @access Private
@@ -299,6 +336,26 @@ router.post('/emailVerification/:uid/:token', async (req, res) => {
     res.status(404).send("User not found");
   }
   
+=======
+ * @route POST api/users/emailVerification
+ * @desc Authenticate the user token for verification
+ * @access Private
+ */ 
+
+router.post('emailVerification/:uid/:token/', async (req, res) => {
+  let token = req.body.token;
+  let userId = req.body.uid;
+  let user = await User.getUserById(userId);
+  
+  if(token === user.authToken){
+    console.log("The tokens match! User authenticated");
+    res.status(200).send("The tokens match! User authenticated");
+    await User.verifyUser(userId);
+  }else{
+    console.log("The user: " + user.email + " could not be verified.");
+    res.status(200).send("The user: " + user.email + " could not be verified.");
+  }
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 });
 
 

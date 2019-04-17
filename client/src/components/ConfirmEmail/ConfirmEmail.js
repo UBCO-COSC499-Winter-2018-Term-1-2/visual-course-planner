@@ -53,8 +53,12 @@ class ConfirmEmail extends Component {
 
 ConfirmEmail.propTypes = {
   toggleMenu: PropTypes.func,
+<<<<<<< HEAD
   history: PropTypes.object,
   match: PropTypes.object
+=======
+  history: PropTypes.object
+>>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 };
 
 export default ConfirmEmail;
