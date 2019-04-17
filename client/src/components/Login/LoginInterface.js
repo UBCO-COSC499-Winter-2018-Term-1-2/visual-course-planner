@@ -71,7 +71,6 @@ export class LoginInterface extends Component {
         if (user) {
           console.log(user);
           sessionStorage.setItem("userId", user.id);
-<<<<<<< HEAD
           if (user.confirmed) {
             if (user.isAdmin) {
               this.props.history.push("/admin");
@@ -82,13 +81,6 @@ export class LoginInterface extends Component {
             this.props.history.push("/confirm-email");
           }
           
-=======
-          if (user.isAdmin) {
-            this.props.history.push("/admin");
-          } else {
-            this.props.history.push("/main");
-          }
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
         } else {
           console.log(response.data.message);
         }
@@ -152,13 +144,8 @@ export class LoginInterface extends Component {
             />
           </div>  
         ))}
-<<<<<<< HEAD
         <button type="submit" className="defaultbtn" onClick={this.handler}>Login</button>
         <Link to = "/signup"><button type="button" className="open-diff-menubtn" >Create Account</button></Link>
-=======
-        <button type="button" className="defaultbtn" onClick={this.handler}>Login</button>
-        <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
         {/*    <Link to = "/main"> */}
       </form>
     );

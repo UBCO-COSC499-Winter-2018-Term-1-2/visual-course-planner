@@ -97,11 +97,7 @@ CREATE TABLE user (
   firstname VARCHAR(100),
   lastname  VARCHAR(100),
   isAdmin   BOOLEAN DEFAULT false,
-<<<<<<< HEAD
   standing  INT DEFAULT 1,
-=======
-  standing  INT DEFAULT 0,
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
   confirmed BOOLEAN DEFAULT false,
   authToken VARCHAR(40)
 );
@@ -308,22 +304,11 @@ INSERT INTO course_info (id, credits) VALUES ("PHIL 331", 3);
 INSERT INTO course_info_requirement VALUES ("COSC 121", "COSC 111");
 INSERT INTO course_info_requirement VALUES ("COSC 222", "COSC 121");
 INSERT INTO course_info_requirement VALUES ("COSC 310", "COSC 222");
-INSERT INTO course_info_requirement VALUES ("COSC 304", "COSC 111");
-INSERT INTO course_info_requirement VALUES ("COSC 211", "COSC 121");
-INSERT INTO course_info_requirement VALUES ("MATH 221", "MATH 100");
-INSERT INTO course_info_requirement VALUES ("COSC 320", "MATH 221");
-INSERT INTO course_info_requirement VALUES ("COSC 320", "COSC 221");
-INSERT INTO course_info_requirement VALUES ("COSC 320", "COSC 222");
-
 
 INSERT INTO session (year, season) VALUES ("2018", "W");
 INSERT INTO term (number, sid) VALUES (1, 1);
 INSERT INTO degree (name) VALUES ("Test degree");
 INSERT INTO specialization (name, did) VALUES ("Test spec", 1);
 
-<<<<<<< HEAD
 INSERT INTO user (email, password, firstname, lastname, confirmed) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin", 1);
-=======
-INSERT INTO user (email, password, firstname, lastname) VALUES ("admin", '$2a$10$J/4uY8XFoIvlvKUsfDJqDOFxJF2KHuEjRMgzcZ.lb.MtHpmEapUBi', "admin", "admin");
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 INSERT INTO plan (title, isFavourite, description, uid, sid) VALUES ("test plan", true, "test desc", 1, 1);

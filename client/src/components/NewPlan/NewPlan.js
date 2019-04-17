@@ -119,7 +119,6 @@ class NewPlanInterface extends Component {
     formData.append("specializationId", this.state.form.specialization.value);
     console.log({"submitting info": formData});
 
-<<<<<<< HEAD
     let planId;
     try {
       const planResponse = await axios.post(`/api/plans/new`, formData);
@@ -127,34 +126,14 @@ class NewPlanInterface extends Component {
     } catch (e) {
       console.error(e);
     }
-=======
-    const planId = await axios.post(`/api/plans/new`, formData)
-      .then(response => {
-        return response.data.insertId;
-      })
-      .catch(error => {
-        console.log(error);
-      });
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 
     this.props.history.push({ pathname: '/main', state: { newPlan: planId }});
   }
 
   componentWillUpdate =  async (nextProps, nextState) => {
-<<<<<<< HEAD
     if (nextState.form.degree.value !== this.state.form.degree.value) {
       let specializations = await this.getSpecializations(nextState.form.degree.value);
       specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
-=======
-    console.log({msg: "ComponentWillUpdate", currentState:this.state ,nextState: nextState});
-    if (nextState.form.degree.value !== this.state.form.degree.value) {
-      console.log(`1Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
-
-      let specializations = await this.getSpecializations(nextState.form.degree.value);
-      console.log(`2Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
-      specializations = specializations.map(specialization => { return { value: specialization.id, displayValue: specialization.name};});
-      console.log(`3Need to update specs, degrees are diff: ${this.state.form.degree.value} -> ${nextState.form.degree.value}`, specializations);
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 
       this.setState({
         ...nextState,

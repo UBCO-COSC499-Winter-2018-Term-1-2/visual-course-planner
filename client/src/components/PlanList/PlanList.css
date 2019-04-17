@@ -13,7 +13,6 @@
 
 .plan-list-item {
   position: relative;
-<<<<<<< HEAD
   min-height: 1em;
   min-width: 2em;
   max-width: 10em;
@@ -26,9 +25,6 @@
   max-height: 1em;
 }
 
-=======
-}
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
 
 #plan-list h4 {
   margin-bottom: 0.2em;

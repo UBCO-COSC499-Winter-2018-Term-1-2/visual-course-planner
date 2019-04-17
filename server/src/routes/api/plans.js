@@ -147,11 +147,7 @@ router.post('/new', async (req, res) => {
 
   try {
     const planId = await Plan.createPlan(userId, "untitled", "", specializationId);
-<<<<<<< HEAD
     res.status(200).send({message: "Plan created: " + planId, planId: planId});
-=======
-    res.status(200).send("Plan created: " + planId);
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
     console.log("Plan created: " + planId);
   } catch (e) {
     res.status(500).send({"Error occured": e});

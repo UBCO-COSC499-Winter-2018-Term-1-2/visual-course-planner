@@ -17,11 +17,7 @@
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "nodemailer": "^6.0.0",
-<<<<<<< HEAD
     "npm": "^6.9.0",
-=======
-    "npm": "^6.4.1",
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "randomstring": "^1.1.5"

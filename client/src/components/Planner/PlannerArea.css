@@ -33,16 +33,12 @@
   right: 2em;
 }
 
-/* .floating-icon.add-term {
+.floating-icon.add-term {
   top: 1em;
   right: 2em;
 }
-.floating-icon.add-term:hover p {
-  display: block;
 
-} */
-
-.scroll-btn.hide{
+.scroll-btn-hide{
   display: none;
 }
 
@@ -52,6 +48,7 @@
   max-width: 5em;
   height: 1.5em;
   top: 50%;
+  opacity: 0.5;
 }
 
 .scroll-btn.right{
@@ -61,20 +58,3 @@
 .scroll-btn.left{
   left: 2em;
 }
-<<<<<<< HEAD
-=======
-
-/* .add-term p {
-  position: absolute;
-  right: -2rem;
-  font-size: 1rem;
-  width: 5em;
-  display: none;
-  top: 1.5rem;
-} */
-
-
-.arrow {
-  z-index: 6;
-}
->>>>>>> c9c2572f803245e51f79ad3b248ef2ec0e0b04eb
