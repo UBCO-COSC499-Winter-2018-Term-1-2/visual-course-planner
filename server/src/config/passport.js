@@ -11,7 +11,7 @@ module.exports = function(passport){
   },
   async function(email, password, done){
 
-    // console.log(email, password);
+    console.log(email, password);
     // match email
     let userExists = false;
     try {
@@ -21,7 +21,7 @@ module.exports = function(passport){
       done("Error with db." + err);
     } 
     if (userExists === false) {
-      // console.log('no user found');
+      console.log('no user found');
       return done(null, false, {message: 'no user found'});
     } else {
       const loggedInUser = await User.getUser(email);
@@ -32,10 +32,10 @@ module.exports = function(passport){
         } 
 
         if (isMatch) {
-          // console.log('user matched');
+          console.log('user matched');
           return done(null, loggedInUser);
         } else {
-          // console.log('wrong password');
+          console.log('wrong password');
           return done(null, false, {message: 'Wrong password'});
         }
       });

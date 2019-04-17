@@ -33,14 +33,9 @@ class CourseListSideBar extends React.Component {
 
   filterList = (e) => {
     let updatedList = this.state.courses;
-    let searchString = e.target.value;
-    if (searchString === '') {
-      this.setState({filteredCourses: updatedList});
-      return;
-    }
-    updatedList = updatedList.filter(item => {
-      return item.code.toLowerCase().search(searchString.toLowerCase()) !== -1 || item.year.concat(item.season).toLowerCase().search(searchString.toLowerCase()) !== -1;
-    });
+    updatedList = updatedList.filter(item =>
+      item.code.toLowerCase().search(e.target.value.toLowerCase()) !== -1 || item.year.concat(item.season).toLowerCase().search(e.target.value.toLowerCase()) !== -1
+    );
     this.setState({filteredCourses: updatedList});
   }
 

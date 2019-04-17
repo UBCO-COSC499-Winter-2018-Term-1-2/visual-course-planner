@@ -1,24 +1,21 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck, faExclamationTriangle, faHeart, faPlus, faPlusCircle, faSignInAlt, faSignOutAlt, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import BackdropButton from '../components/BackdropButton/BackdropButton';
-import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
-import NoteArea from '../components/Notes/NoteArea';
-import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn';
-import PlanList from '../components/PlanList/PlanList';
-import PlanName from '../components/PlanName/PlanName';
 import PlannerArea from '../components/Planner/PlannerArea';
-import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
 import StudentInfo from '../components/StudentInfo/StudentInfo';
+import PlanList from '../components/PlanList/PlanList';
+import FavouriteBtn from '../components/FavouriteBtn/FavouriteBtn';
+import BackdropButton from '../components/BackdropButton/BackdropButton';
+import OptimizeBtn from '../components/OptimizeBtn/OptimizeBtn'; 
 import WarningSummary from '../components/WarningSummary/WarningSummary';
 import './Main.css';
-import Sidebar from './Sidebar';
-import SidebarArea from './SidebarArea';
+import NoteArea from '../components/Notes/NoteArea';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import PlannerHeader from '../components/PlannerHeader/PlannerHeader';
+import { faSignOutAlt, faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Font Awesome Icon Imports
-library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt, faCheck);
+library.add(faSignOutAlt,faHeart, faExclamationTriangle, faPlus, faTimes, faTrash, faPlusCircle, faSignInAlt);
 
 class Main extends Component {
   state = {
@@ -30,11 +27,8 @@ class Main extends Component {
       standing: 0
     },
     warnings: [],
-    planList: [],
-    saveTimeout: 1000
+    planList: []
   }
-
-  planNameRef = null
 
   openCourseListSidebar = () => {
     this.setState({ isCourseListOpen : true });
@@ -59,21 +53,18 @@ class Main extends Component {
         }
       };
     }, async () => {
-      const favResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/user/${this.state.user.id}/favourite/${+ this.state.currentPlan.isFavourite}`);
-      if (favResponse.status === 200) {
-        const newPlanList = await this.getPlanList(this.state.user.id);
-        console.log("Favourited plan, retrieving new list of plans", newPlanList);
-    
-        this.setState({planList: newPlanList});
-      }
-      
+      await this.savePlan();
+      const newPlanList = await this.getPlanList(this.state.user.id);
+      console.log("New list of plans", newPlanList);
+  
+      this.setState({planList: newPlanList});
     });
 
     
   }
 
   createPlanHandler = () => {
-    this.props.history.push('/new');
+    this.props.history.push('/degree-year-selection');
   }
 
   updateWarnings = async () => {
@@ -104,12 +95,8 @@ class Main extends Component {
     this.setState({ currentPlan: plan }, this.updateWarnings);
   }
 
-  nameTimeoutId
   onNameChange = (e) => {
-    let name = e.target.value;
-    if (!name) {
-      name = '';
-    }
+    const name = e.target.value;
     this.setState(prevState => {
       return {
         ...prevState,
@@ -119,22 +106,8 @@ class Main extends Component {
         }
       };
     });
-    if (this.nameTimeoutId) {
-      clearTimeout(this.nameTimeoutId);
-    }
-    this.nameTimeoutId = setTimeout(async () => {
-      const nameResponse = await axios.post(`/api/plans/${this.state.currentPlan.id}/name`, {name: this.state.currentPlan.name});
-      if (nameResponse.status === 200) {
-        const newPlanList = await this.getPlanList(this.state.user.id);
-        console.log("Renamed plan, retrieving new list of plans", newPlanList);
-    
-        this.setState({planList: newPlanList});
-      }
-    }, this.state.saveTimeout);
-    
   }
 
-  descTimeoutId
   onDescriptionChange = (e) => {
     const desc = e.target.value;
     this.setState(prevState => {
@@ -145,13 +118,6 @@ class Main extends Component {
           description: desc
         }
       };
-    });
-
-    if (this.descTimeoutId) {
-      clearTimeout(this.descTimeoutId);
-    }
-    this.descTimeoutId = setTimeout(async () => {
-      await axios.post(`/api/plans/${this.state.currentPlan.id}/description`, {desc: this.state.currentPlan.description});
     });
   }
 
@@ -187,7 +153,11 @@ class Main extends Component {
     return plans;
   }
 
-  componentWillMount = async () => {
+  componentDidUpdate = async () => {
+    await this.savePlan();
+  }
+
+  componentDidMount = async () => {
     const userId = sessionStorage.getItem("userId");
     const userResponse = await axios.get(`/api/users/${userId}`);
     const user = userResponse.data;
@@ -197,15 +167,9 @@ class Main extends Component {
     });
     const planList = await this.getPlanList(userId);
     this.setState({planList: planList});
-    if (this.props.history.location.state && this.props.history.location.state.newPlan) {
-      console.log("loading new plan");
-      this.loadPlan(this.props.history.location.state.newPlan);
-    } else {
-      if (planList.length > 0) {
-        await this.loadPlan(planList[0].id);
-      }
+    if (planList.length > 0) {
+      await this.loadPlan(planList[0].id);
     }
-
   }
 
   shouldRenderPlan = () => {
@@ -215,7 +179,7 @@ class Main extends Component {
   }
 
   newPlan = async () => {
-    this.props.history.push('/new');
+    this.props.history.push('/degree-year-selection');
   }
 
 
@@ -224,38 +188,20 @@ class Main extends Component {
     const newPlanList = await this.getPlanList(this.state.user.id);
     console.log("New list of plans", newPlanList);
 
-    this.setState({planList: newPlanList}, async () => {
-      if (this.state.planList.length > 0) {
-        await this.loadPlan(this.state.planList[0].id);
-      }
-    });
+    this.setState({planList: newPlanList});
   }
-  
   render() {
     return (
       <div id="main">
-        <Sidebar>
-          <SidebarArea>
-            <StudentInfo user={this.state.user}/>
-          </SidebarArea>
-          <SidebarArea>
-            <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
-          </SidebarArea>
-          {this.shouldRenderPlan() && 
-            <SidebarArea>
-              <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
-            </SidebarArea>}
-        </Sidebar>
-        
+        <StudentInfo user={this.state.user}/>
+        <PlanList plans={this.state.planList} loadPlan={this.loadPlan} newPlan={this.newPlan} deletePlan={this.deletePlan}/>
+        <NoteArea onChange={this.onDescriptionChange}>{this.state.currentPlan.description}</NoteArea>
         {this.shouldRenderPlan() &&
           <PlannerHeader onTitleChange={this.onNameChange} title={this.state.currentPlan.name}>
-            <PlanName onChange={this.onNameChange}>{this.state.currentPlan.name}</PlanName>
-            <div className="planner-header-wrapper" >
-              <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
-              <OptimizeBtn click={this.optimizeHandler}/>
-              <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
-              <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />  
-            </div>
+            <FavouriteBtn isFavourite={this.state.currentPlan.isFavourite} onClick={this.toggleFavourite}/>
+            <OptimizeBtn click={this.optimizeHandler}/>
+            <WarningSummary click={this.showSnackbar} numberOfWarnings={this.state.warnings.length} user={this.state.user} />
+            <BackdropButton open={this.openCourseListSidebar} close={this.closeCourseListSidebar} isOpen={this.state.isCourseListOpen} />
           </PlannerHeader>}
         {this.shouldRenderPlan() &&
           <PlannerArea

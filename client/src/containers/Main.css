@@ -5,10 +5,10 @@
   grid-template-columns: 1fr 4fr;
   grid-template-rows: 1fr 1fr 6fr 4fr;
   grid-template-areas: 
-    "sidebar planner-header"
-    "sidebar planner-header"
-    "sidebar planner"
-    "sidebar planner";
+    "student-info planner-header"
+    "student-info planner"
+    "plan-list planner"
+    "note-area planner";
   background-color: #1a191b;
   position: relative;
   color: #e4e4e4;
@@ -25,8 +25,19 @@
   background-color: #1a191b;
 }
 
-.sidebar {
-  grid-area: sidebar;
+#plan-list {
+  grid-area: plan-list;
+  background-color: #1a191b;
+}
+
+#student-info {
+  grid-area: student-info;
+  background-color: #1a191b;
+}
+
+#note-area {
+  grid-area: note-area;
+  background-color: #1a191b;
 }
 
 .centered {
@@ -40,10 +51,7 @@
   margin: 0 1em 0 1em;
   padding: 1em 0 1em 0;
   border-bottom: lightgrey 1px solid;
-}
-
-.sidebar-header {
-  margin-top: 0;
+  height: 100%;
 }
 
 .sidebar-info-area > * {
@@ -56,11 +64,11 @@
   color: #e4e4e4;
 }
 
-.sidebar > .sidebar-info-area:last-child {
+.sidebar-info-area-end {
   box-sizing: border-box;
   margin: 0 1em 0 1em;
   padding: 1em 0 1em 0;
-  border: none;
+  height: 100%;
 }
 
 .sidebar-header {
@@ -83,8 +91,6 @@
   cursor: pointer;
   color: #84bd00;
   font-size: 1em;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
 }
 
 .sidebar-button:focus {
@@ -99,11 +105,11 @@
   background-color: #262427;
   color: #e4e4e4;
   border: none;
-  height: 8em;
+  height: 71%;
   width: 100%;
   resize: none;
+  box-sizing: border-box;
   font-size: 1em;
-  font-family: inherit;
 }
 
 .focus-element:focus {
@@ -113,6 +119,12 @@
 
 .focus-element {
   box-sizing: border-box;
+}
+
+.student-buttons-container {
+  position: absolute;
+  /* min-width: 130px; */
+  bottom: 1em;
 }
 
 *:focus {

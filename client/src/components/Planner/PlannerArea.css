@@ -26,6 +26,8 @@
 .floating-icon {
   position: absolute;
   font-size: 2em;
+  z-index: 1
+
 }
 
 .floating-icon.remove-course {
