@@ -6,109 +6,65 @@ import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Session from '../Session/Session';
 import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import './PlannerArea.css';
+import Arrow from 'react-dom-arrow';
+import ScrollButton from '../ScrollButton/ScrollButton';
 
 class PlannerArea extends Component {
 
   state = {
-    trashColour: "white"
+    trashColour: "white",
+    courseArrows: [],
+    isHoveringTerms: false
   }
 
   trashDragCounter = 0; // Needed for trash drag n drop
 
-  getNextTerm(latestTerm, latestSession) {
-    let nextTermNumber;
-    let nextTermYear = latestSession.year;
-    let nextTermSeason = "W";
 
-    if (latestTerm.number === 1) {
-      nextTermNumber = 2;
-      nextTermSeason = latestSession.season;
-    } else {
-      if (latestSession.season == "W") {
-        nextTermYear = parseInt(latestSession.year) + 1;
-        nextTermSeason = "S";
-      }
-      nextTermNumber = 1;
-    }
-    
-    const nextTerm = {
-      coursesContained: [],
-      year: nextTermYear,
-      number: nextTermNumber,
-      season: nextTermSeason
-    };
+  scrollRef = React.createRef();
 
-    return nextTerm;
-  }
+  tempcourseArrows = [];
 
-  addTermToPlan = async () => {
-    // TODO: should be doing most logic in express, not client side
-    console.log("Adding term to plan...");
-    // set initial session to random one
-    const plan = {...this.props.plan};
-    let mostRecentSession = {};
-    let mostRecentSessionId = {};
-    let latestTerm = {};
+  generateCourseArrows = (plan) => {
+    this.tempcourseArrows.length = 0;
+    plan.terms.allIds.map(termId => plan.terms.byId[termId]).forEach((term) => {
+      term.courses.forEach(courseId => {
+        const course = plan.courses.byId[courseId];
+        console.log("Generating arrows for " + courseId);
+        course.preRequisites.forEach(preReqId => {
+          const preReqsIds = plan.courses.allIds.map(id => plan.courses.byId[id]).filter(course => course.code === preReqId);
 
-    if (plan.sessions.allIds.length === 0) {
-      mostRecentSession = await axios.get('/api/sessions/current');
-      mostRecentSession = mostRecentSession.data;
-      console.trace(mostRecentSession);
-      plan.sessions.byId[mostRecentSession.id] = mostRecentSession;
-      console.log('No sessions found adding current', mostRecentSession);
-      plan.sessions.allIds.push(mostRecentSession.id);
-      mostRecentSessionId = mostRecentSession.id;
-    } else {
-      mostRecentSessionId = plan.sessions.allIds[0];
-      for (const sessionId in plan.sessions.byId) {
-        const currentSession = plan.sessions.byId[sessionId];
-        const currentSessionDate = currentSession.year + currentSession.season;
-        const mostRecentSession = plan.sessions.byId[mostRecentSessionId];
-        console.log(mostRecentSession);
-        const mostRecentSessionDate = mostRecentSession.year + mostRecentSession.season;
-        console.log(currentSessionDate, mostRecentSessionDate);
-        if (currentSessionDate > mostRecentSessionDate) {
-          console.log("Earlier");
-          mostRecentSessionId = sessionId;
-        }
-      }
-      mostRecentSession = plan.sessions.byId[mostRecentSessionId];
-    }
-    
-    latestTerm = plan.terms.byId[plan.sessions.byId[mostRecentSessionId].terms[plan.sessions.byId[mostRecentSessionId].terms.length - 1]];
-    let nextTermInfo = {};
-    if (latestTerm) {
-      nextTermInfo = this.getNextTerm(latestTerm, mostRecentSession);
-    } else {
-      nextTermInfo.coursesContained = [];
-      nextTermInfo.year = mostRecentSession.year;
-      nextTermInfo.season = mostRecentSession.season;
-      nextTermInfo.number = 1;
-    }
-    console.log("Adding term: ", nextTermInfo);
-    let latestSession;
-    if (nextTermInfo.year !== mostRecentSession.year || nextTermInfo.season !== mostRecentSession.season) {
-      const latestSessionRequest = await axios.get(`/api/sessions?year=${nextTermInfo.year}&season=${nextTermInfo.season}`);
-      latestSession = latestSessionRequest.data;
-      plan.sessions.byId[latestSession.id] = latestSession;
-      console.log('need more session', latestSession);
-      plan.sessions.allIds.push(latestSession.id);
-    } else {
-      latestSession = mostRecentSession;
-      latestSession.id = mostRecentSessionId;
-      console.log('same session', latestSession);
-    }
-    console.log({"executing next term request": {latestSession, nextTermInfo}});
-    const nextTermRequest = await axios.get(`/api/terms?sessionId=${latestSession.id}&number=${nextTermInfo.number}`);
-    const nextTerm = nextTermRequest.data;
-    plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
-    plan.terms.byId[nextTerm.id] = nextTerm;
-    plan.terms.allIds.push(nextTerm.id);
-    axios.post(`/api/plans/${plan.id}/term/${nextTerm.id}`);
-    console.log(plan);
-    this.props.updatePlan(plan);
-    console.log("Added term to plan");
+          console.log("generating arrow for " + preReqId);
+          preReqsIds.forEach(preReqId => {
+            this.tempcourseArrows.push({
+              fromSelector: '#course' + preReqId.id,
+              fromSide: 'right',
+              toSelector: '#course' + courseId,
+              toSide: 'left',
+              color: 'white',
+              stroke: 2
+            });
+          });
+        });      
+      });
+    });
+  }	  
 
+
+  //render arrows
+  renderCourseArrows = () => {
+    return(this.state.courseArrows.map((arrow) => {
+      console.log("gui");
+      return(
+        <Arrow
+          key={arrow.fromSelector + 'to' + arrow.toSelector}
+          fromSelector={arrow.fromSelector}
+          fromSide={arrow.fromSide}
+          toSelector={arrow.toSelector}
+          toSide={arrow.toSide}
+          color={arrow.color}
+          stroke={arrow.stroke}
+          className="arrow"  />);
+    }));
   }
 
   removeTermFromPlan = async (termId) => {
@@ -118,7 +74,7 @@ class PlannerArea extends Component {
     const termSessionId = plan.terms.byId[termId].session;
     console.log({"removing ": {termId, termCourses, termSessionId}});
 
-    // Remove courses in that term
+    // Remove courses
     plan.courses.allIds = plan.courses.allIds.filter(id => termCourses.indexOf(id) === -1);
     const newCoursesById = plan.courses.byId;
     for (let course in termCourses) {
@@ -126,12 +82,13 @@ class PlannerArea extends Component {
     }
     plan.courses.byId = newCoursesById;
 
-    // Remove session if there was only one term
+    // Remove session
     const previousSession = { ...plan.sessions.byId[termSessionId]};
 
     if (previousSession.terms.length === 1) {
       delete plan.sessions.byId[termSessionId];
       plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== termSessionId);
+      
     } else {
       const newSessionTerms = [ ...previousSession.terms];
       
@@ -139,6 +96,7 @@ class PlannerArea extends Component {
       previousSession.terms = newSessionTerms;
       plan.sessions.byId[termSessionId] = previousSession;
     }
+
 
     // Remove term
     axios.delete(`/api/plans/${plan.id}/term/${termId}`);
@@ -181,10 +139,12 @@ class PlannerArea extends Component {
         onCourseDrop={this.onCourseDrop}
         onCourseDragStart={this.onCourseDragStart}
         removeTerm={this.removeTermFromPlan}
+        onMouseOver={this.showScrollButtons}
+        onMouseLeave={this.hideScrollButtons}
       />;
     });
     return (
-      <div className="session-container">
+      <div className="session-container" ref={this.scrollRef}>
         {sessions}
       </div>
     );
@@ -208,6 +168,11 @@ class PlannerArea extends Component {
     if(sourceTerm) {
       e.dataTransfer.setData("sourceTermId", sourceTerm);
     }
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
   }
 
   //on drop event handler for term component
@@ -238,6 +203,13 @@ class PlannerArea extends Component {
 
     }
 
+    this.props.updatePlan(plan);
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
+
 
   }
 
@@ -247,6 +219,10 @@ class PlannerArea extends Component {
     console.log("Enter trash");
     this.setState({
       trashColour: "#c5980f"
+    });
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
     });
   }
 
@@ -286,9 +262,43 @@ class PlannerArea extends Component {
     
   }
 
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
+  }
+
+  showScrollButtons = () => {
+    this.setState({isHoveringTerms: true});
+  }
+
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
+  }
+
+  // create scroll button onclick handler
+  scrollButtonClickHandler = (direction) => {
+    let scrollItem = this.scrollRef.current;
+    let scrollDirection = direction;
+
+    scrollDirection == "left" ? (scrollItem.scrollLeft -= 250) : (scrollItem.scrollLeft += 250); 
+    console.log("scrolling:" + scrollDirection);
+  }
+
+  scrollToRight = () => {
+    this.scrollRef.current.scrollLeft += 1000;
+  }
+
+  componentDidMount(){
+    this.generateCourseArrows(this.props.plan);
+    this.setState({courseArrows: this.tempcourseArrows}, () => {
+      var el = document.querySelector(".session-container");
+      el.dispatchEvent(new Event('scroll'));
+    });
+    console.log(this.scrollRef);
+  }
+
   render() {
     return (
-      <div id="planner-area-container">
+      <div id="planner-area-container" onMouseOver={this.showScrollButtons} onMouseLeave={this.hideScrollButtons}>
         {this.renderTerms()}
 
         <CourseListSideBar 
@@ -302,6 +312,8 @@ class PlannerArea extends Component {
           closeSnackbar={this.props.closeSnackbar}
           warnings={this.props.warnings}
         />
+        {this.renderCourseArrows()}
+
 
         <div
           className="floating-icon remove-course"
@@ -313,9 +325,18 @@ class PlannerArea extends Component {
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>
 
-        <div className='floating-icon add-term' onClick={this.addTermToPlan}>
-          <FontAwesomeIcon icon="plus-circle" />
-          <p>Add term</p>
+        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn hide"}>
+          <ScrollButton 
+            direction="left" 
+            scrollItem={this.scrollRef}  
+            scrollClick={this.scrollButtonClickHandler} /> 
+        </div>
+
+        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn hide"}>
+          <ScrollButton 
+            direction="right" 
+            scrollItem={this.scrollRef}  
+            scrollClick={this.scrollButtonClickHandler} />
         </div>
 
       </div>
