@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const adminUpload = require('./server/src/routes/api/admin/upload');
 const warnings = require('./server/src/routes/api/warnings');
 const users = require('./server/src/routes/api/users');
@@ -22,12 +21,13 @@ const app = express();
 
 app.use(expressValidator());
 
+// Logging
+app.use(morgan("dev"));
 // Express Middleware
-app.use(express.json());
 app.use(fileUpload());
 
 // Body ParserMiddleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 //flash middleware
 app.use(cookieParser());

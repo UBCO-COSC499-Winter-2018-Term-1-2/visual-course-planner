@@ -5,7 +5,7 @@ db.query = promisify(db.query);
 
 module.exports = {
   async insertCourse(code, termId) {
-    console.log("inserting " + code);
+    // console.log("inserting " + code);
     const results = await db.query("INSERT INTO course (code) VALUES (?)", [code, termId]);
     const courseId = results.insertId;
 
@@ -16,7 +16,7 @@ module.exports = {
 
   async getCourse(id) {
     db
-      .query("SELECT * FROM course_info WHERE course.id = ?", [id])
+      .query("SELECT * FROM course_info WHERE id = ?", [id])
       .then(rows => {
         return rows[0];
       })
@@ -41,7 +41,7 @@ module.exports = {
       GROUP BY course.id, session.year, session.season, term`);
 
 
-    console.log(courseInfoResults);
+    // console.log(courseInfoResults);
     return courseInfoResults;
   },
 

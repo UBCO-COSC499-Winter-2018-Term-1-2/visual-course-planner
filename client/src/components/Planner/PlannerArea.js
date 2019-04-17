@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import CourseListSideBar from '../CourseListSideBar/CourseListSideBar';
 import Session from '../Session/Session';
-import axios from 'axios';
+import WarningSnackbar from '../WarningSnackbar/WarningSnackbar';
 import './PlannerArea.css';
 import Arrow from 'react-dom-arrow';
 import ScrollButton from '../ScrollButton/ScrollButton';
@@ -50,14 +50,15 @@ class PlannerArea extends Component {
     return(this.state.courseArrows.map((arrow) => {
       console.log("gui");
       return(
-        <Arrow 
+        <Arrow
           key={arrow.fromSelector + 'to' + arrow.toSelector}
           fromSelector={arrow.fromSelector}
           fromSide={arrow.fromSide}
           toSelector={arrow.toSelector}
           toSide={arrow.toSide}
           color={arrow.color}
-          stroke={arrow.stroke}  />);
+          stroke={arrow.stroke}
+          className="arrow"  />);
     }));
   }
   
@@ -89,7 +90,8 @@ class PlannerArea extends Component {
     return nextTerm;
   }
 
-  addTermToPlan = async (cb) => {
+  addTermToPlan = async () => {
+    // TODO: should be doing most logic in express, not client side
     console.log("Adding term to plan...");
     // set initial session to random one
     const plan = {...this.props.plan};
@@ -151,12 +153,13 @@ class PlannerArea extends Component {
     plan.sessions.byId[latestSession.id].terms.push(nextTerm.id);
     plan.terms.byId[nextTerm.id] = nextTerm;
     plan.terms.allIds.push(nextTerm.id);
+    axios.post(`/api/plans/${plan.id}/term/${nextTerm.id}`);
     console.log(plan);
     this.props.updatePlan(plan);
     console.log("Added term to plan");
-    if (cb) {
-      cb();
-    }
+    // if (cb) {
+    //   cb();
+    // }
   }
 
   removeTermFromPlan = async (termId) => {
@@ -166,7 +169,7 @@ class PlannerArea extends Component {
     const termSessionId = plan.terms.byId[termId].session;
     console.log({"removing ": {termId, termCourses, termSessionId}});
 
-    // Remove courses
+    // Remove courses in that term
     plan.courses.allIds = plan.courses.allIds.filter(id => termCourses.indexOf(id) === -1);
     const newCoursesById = plan.courses.byId;
     for (let course in termCourses) {
@@ -174,13 +177,12 @@ class PlannerArea extends Component {
     }
     plan.courses.byId = newCoursesById;
 
-    // Remove session
+    // Remove session if there was only one term
     const previousSession = { ...plan.sessions.byId[termSessionId]};
 
     if (previousSession.terms.length === 1) {
       delete plan.sessions.byId[termSessionId];
       plan.sessions.allIds = plan.sessions.allIds.filter(id => id !== termSessionId);
-      
     } else {
       const newSessionTerms = [ ...previousSession.terms];
       
@@ -190,9 +192,9 @@ class PlannerArea extends Component {
     }
 
     // Remove term
+    axios.delete(`/api/plans/${plan.id}/term/${termId}`);
     delete plan.terms.byId[termId];
     plan.terms.allIds = plan.terms.allIds.filter(id => id !== termId);
-    console.log("plan should not have " + termId, plan);
 
     this.props.updatePlan(plan);
   }
@@ -213,7 +215,6 @@ class PlannerArea extends Component {
     if (!Object.keys(this.props.plan).length) {
       return;
     }
-    console.log(this.props.plan);
     const sessions = this.props.plan.sessions.allIds.map(sessionId => {
       const session = this.props.plan.sessions.byId[sessionId];
       const terms = session.terms.map(termId => {
@@ -249,12 +250,14 @@ class PlannerArea extends Component {
     }
     // const term = this.props.plan.terms.byId[termId];
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   }
 
   //drag start event handler for course component - passed in as prop via Term
   onCourseDragStart = (e, course, sourceTerm) => {
     console.log("Setting course for drag" + JSON.stringify(course));
     e.dataTransfer.setData("course", JSON.stringify(course));
+    e.dataTransfer.effectAllowed = "move";
     if(sourceTerm) {
       e.dataTransfer.setData("sourceTermId", sourceTerm);
     }
@@ -273,18 +276,25 @@ class PlannerArea extends Component {
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
     const plan = { ...this.props.plan };
 
-    if (!sourceTermId) {
-      console.log("Adding course to plan", incomingCourse);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
-      plan.courses.allIds.push(incomingCourse.id.toString());
-      plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
-      delete incomingCourse.id;
-    } else {
-      console.log("Moving course already in plan", incomingCourse);
-      const courses = plan.terms.byId[sourceTermId].courses;
-      courses.splice(courses.indexOf(incomingCourse.id), 1);
-      plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
-      console.log("Moved Course: " + JSON.stringify(incomingCourse));
+    if (plan.terms.byId[targetTermId].courses.indexOf(incomingCourse.id) === -1) {
+      if (!sourceTermId) {
+        console.log("Adding course to plan", incomingCourse);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id.toString());
+        plan.courses.allIds.push(incomingCourse.id.toString());
+        plan.courses.byId[incomingCourse.id.toString()] = incomingCourse;
+        // Send course to database
+        axios.post(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
+        delete incomingCourse.id;
+      } else {
+        // TODO: Moving course in plan, what does this do to the database? should be change the course id to the one thats offered in that term
+        console.log("Moving course already in plan", incomingCourse);
+        const courses = plan.terms.byId[sourceTermId].courses;
+        courses.splice(courses.indexOf(incomingCourse.id), 1);
+        plan.terms.byId[targetTermId].courses.push(incomingCourse.id);
+        console.log("Moved Course: " + JSON.stringify(incomingCourse));
+      }
+      this.props.updatePlan(plan);
+
     }
 
     this.props.updatePlan(plan);
@@ -323,14 +333,17 @@ class PlannerArea extends Component {
     this.trashDragCounter = 0;
     let incomingCourse = JSON.parse(e.dataTransfer.getData("course"));
     let sourceTermId = e.dataTransfer.getData("sourceTermId");
-    const plan = { ...this.props.plan };
+    if (sourceTermId) {
+      const plan = { ...this.props.plan };
 
-    const courses = plan.terms.byId[sourceTermId].courses;
-    courses.splice(courses.indexOf(incomingCourse.id), 1);
-    delete plan.courses.byId[incomingCourse.id];
-    plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      const courses = plan.terms.byId[sourceTermId].courses;
+      courses.splice(courses.indexOf(incomingCourse.id), 1);
+      delete plan.courses.byId[incomingCourse.id];
+      plan.courses.allIds.splice(plan.courses.allIds.indexOf(incomingCourse.id), 1);
+      axios.delete(`/api/plans/${plan.id}/course/${incomingCourse.id}`);
+      this.props.updatePlan(plan);
+    }
     
-    this.props.updatePlan(plan);
     this.setState({
       trashColour: "white"
     });
@@ -349,11 +362,11 @@ class PlannerArea extends Component {
   
   //
   showScrollButtons = () => {
-    if(!this.state.isHoveringTerms){
-      this.setState(prevState => ({
-        isHoveringTerms: !prevState.isHoveringTerms
-      }));
-    }
+    this.setState({isHoveringTerms: true});
+  }
+
+  hideScrollButtons = () => {
+    this.setState({isHoveringTerms: false});
   }
 
   // create scroll button onclick handler
@@ -381,7 +394,7 @@ class PlannerArea extends Component {
   render() {
     
     return (
-      <div id="planner-area-container">
+      <div id="planner-area-container" onMouseOver={this.showScrollButtons} onMouseLeave={this.hideScrollButtons}>
         {this.renderTerms()}
 
         <CourseListSideBar 
@@ -408,24 +421,23 @@ class PlannerArea extends Component {
           <FontAwesomeIcon icon="trash" style={{ color: this.state.trashColour }}/>
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn left" : "scroll-btn hide"}>
           <ScrollButton 
             direction="left" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} /> 
+            scrollClick={this.scrollButtonClickHandler} /> 
         </div>
 
-        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn-hide"}>
+        <div className={this.state.isHoveringTerms ? "scroll-btn right" : "scroll-btn hide"}>
           <ScrollButton 
             direction="right" 
             scrollItem={this.scrollRef}  
-            scrollClick={this.scrollButtonClickHandler}
-            onMouseOver={this.showScrollButtons} />
+            scrollClick={this.scrollButtonClickHandler} />
         </div>
 
         <div className='floating-icon add-term' onClick={() => {this.addTermToPlan(this.scrollToRight);}}>
           <FontAwesomeIcon icon="plus-circle" />
+          <p>Add term</p>
         </div>
 
       </div>

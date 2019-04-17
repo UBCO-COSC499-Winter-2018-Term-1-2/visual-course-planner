@@ -73,10 +73,22 @@ export class LoginInterface extends Component {
         this.setState( { loading: false } );
         console.log("no errors::");
         const user = response.data.user;
-        console.log(user);
-        sessionStorage.setItem("userId", user.id);
-        console.log(sessionStorage.getItem("userId"));
-        this.props.history.push("/main");
+        if (user) {
+          console.log(user);
+          sessionStorage.setItem("userId", user.id);
+          if (user.confirmed) {
+            if (user.isAdmin) {
+              this.props.history.push("/admin");
+            } else {
+              this.props.history.push("/main");
+            }
+          } else {
+            this.props.history.push("/confirm-email");
+          }
+          
+        } else {
+          console.log(response.data.message);
+        }
       })
       .catch( error => {
         this.setState( { loading: false } );
@@ -95,10 +107,7 @@ export class LoginInterface extends Component {
       } );
   }
 
-  //THIS COPIES THE (DEFAULT) LOGIN MENU, CREATES A 'NEW' ONE WITH VALUES THE USER INSERTED 
-  //IE. EMAIL AND PASSWORD.
   inputChangeHandler = (event, inputIdentifier) => {
-    console.log(event.target.value); //prints values to console
     const updatedloginMenu = {
       ...this.state.loginMenu
     };
@@ -131,7 +140,7 @@ export class LoginInterface extends Component {
     //THIS IS THE FORM THAT MADE WITH STYLING FROM INPUT.CSS + LOGININTERFACE.CSS
     //ALSO CALLS STATE FOR EACH VALUE IE. EMAIL AND PASSWORD
     let form = (
-      <form>
+      <form onSubmit={this.handler}>
         {formElementsArray.map(formElement => (
           <div key={formElement.id}>
             <Input 
@@ -146,8 +155,8 @@ export class LoginInterface extends Component {
             />
           </div>  
         ))}
-        <button type="button" className="defaultbtn" disabled={!this.state.formIsValid} onClick={this.handler}>Login</button>
-        <Link to = "/signup"><button className="open-diff-menubtn" >Create Account</button></Link>
+        <button type="submit" className="defaultbtn" onClick={this.handler}>Login</button>
+        <Link to = "/signup"><button type="button" className="open-diff-menubtn" >Create Account</button></Link>
         {/*    <Link to = "/main"> */}
       </form>
     );

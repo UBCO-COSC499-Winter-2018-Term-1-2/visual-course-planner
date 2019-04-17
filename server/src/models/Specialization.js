@@ -16,7 +16,7 @@ module.exports = {
   },
 
   async createSpecializationRequirement(requirementObj, specId) {
-    console.log("Creating req object: " + JSON.stringify(requirementObj));
+    // console.log("Creating req object: " + JSON.stringify(requirementObj));
     // make transaction
     const req = requirementObj.requirements;
     const credits = requirementObj.credits;
@@ -32,7 +32,7 @@ module.exports = {
         db.query("INSERT INTO credit_requirement_course_info (crid, cid) VALUES (?, ?)", [crid, course]);
       });
     } else if (req.type === CATEGORY_TYPE) {
-      console.log("Creating credit req: " + credits + " " + req.courses);
+      // console.log("Creating credit req: " + credits + " " + req.courses);
       const results = await db.query("INSERT INTO credit_requirement (credits, category) VALUES (?, ?)", [credits, req.courses]);
       await db.query("INSERT INTO specialization_credit_requirement (spid, crid) VALUES (?, ?)", [specId, results.insertId]);
 

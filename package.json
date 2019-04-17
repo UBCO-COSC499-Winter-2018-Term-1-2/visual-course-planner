@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "csv-parse": "^4.1.0",
@@ -15,10 +16,12 @@
     "express-validator": "^5.3.1",
     "i": "^0.3.6",
     "mysql": "^2.16.0",
-    "npm": "^6.4.1",
+    "npm": "^6.9.0",
+    "prop-types": "^15.6.2",
+    "request": "^2.88.0",
+    "nodemailer": "^6.0.0",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "prop-types": "^15.6.2"
+    "passport-local": "^1.0.0"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",

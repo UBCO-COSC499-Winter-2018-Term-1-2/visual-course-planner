@@ -5,10 +5,10 @@
   grid-template-columns: 1fr 4fr;
   grid-template-rows: 1fr 1fr 6fr 4fr;
   grid-template-areas: 
-    "student-info planner-header"
-    "student-info planner"
-    "plan-list planner"
-    "note-area planner";
+    "sidebar planner-header"
+    "sidebar planner-header"
+    "sidebar planner"
+    "sidebar planner";
   background-color: #1a191b;
   position: relative;
   color: #e4e4e4;

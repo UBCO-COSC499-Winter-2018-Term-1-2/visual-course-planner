@@ -71,7 +71,8 @@ class AdminPortal extends Component {
         }
       })
       .then(res => {
-        console.log(res.statusText);
+        console.log(res.data);
+        // console.log(res.statusText);
       });
   }
 
@@ -94,7 +95,7 @@ class AdminPortal extends Component {
       const res = await axios.get('/api/degrees');
       degrees = res.data;
     } catch(err) {
-      console.log("Error getting degrees in admin portal: " + err);
+      // console.log("Error getting degrees in admin portal: " + err);
     }
  
     return degrees;
@@ -129,7 +130,7 @@ class AdminPortal extends Component {
   }
 
   handleSpecName = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     this.setState({
       specializationName: e.target.value
     });
