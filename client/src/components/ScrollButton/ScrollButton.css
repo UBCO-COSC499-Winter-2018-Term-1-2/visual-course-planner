@@ -1,0 +1,10 @@
+.scroll.left, .scroll.right{
+  background-color: #1a191b;
+  color: #e4e4e4;
+  border: none;
+  justify-items: center;
+  width: 100%;
+  font-size: 3em;
+  cursor: pointer;
+  padding: 1em 0.5em;
+}

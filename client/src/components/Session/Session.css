@@ -1,21 +1,32 @@
 .session {
   display: flex;
-  flex-direction: row;
   height: calc(100% - 4em);
 }
 
 .session-container {
-  position: relative;
+  /* position: relative; */
   display: flex;
-  overflow: auto;
-  height: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  max-width: 80vw;
 }
 
+.session-wrapper {
+  flex-direction: column;
+  min-width: 25%;
+  max-width: 25%;
+  z-index: 1;
+  margin: 0.5em;
+  height: 75vh;
+  display: flex;
+}
 .session-container > .session-wrapper:not(:last-child) {
+  z-index: 0;
   border-right: 2px solid grey;
 }
 
 .session > .term-container:not(:last-child) {
+  z-index: 0;
   border-right: 2px solid grey;
 }
 

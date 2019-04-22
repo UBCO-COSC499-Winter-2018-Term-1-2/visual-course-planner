@@ -48,6 +48,7 @@
     "react-dnd": "^7.0.2",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.6.3",
+    "react-dom-arrow": "^1.0.4",
     "react-filtered-multiselect": "^0.5.1",
     "react-modal": "^3.8.1",
     "react-router-dom": "^4.3.1",
