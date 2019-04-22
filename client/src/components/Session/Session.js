@@ -19,7 +19,9 @@ class Session extends Component {
       />;
     });
     return (
-      <div className="session-wrapper" >
+      <div className="session-wrapper" 
+        onMouseOver={this.props.onMouseOver} 
+        onMouseLeave={this.props.onMouseLeave} >
         <h4 className="main-column-header">{this.props.session.year + this.props.session.season}</h4>
         <div className="session">
           {terms}
@@ -35,7 +37,9 @@ Session.propTypes = {
   onCourseDragOver: PropTypes.func.isRequired,
   onCourseDragStart: PropTypes.func.isRequired,
   onCourseDrop: PropTypes.func.isRequired,
-  removeTerm: PropTypes.func.isRequired
+  removeTerm: PropTypes.func.isRequired,
+  onMouseOver: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func.isRequired
 };
 
 export default Session;
