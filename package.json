@@ -9,7 +9,7 @@
     "cheerio": "^1.0.0-rc.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
-    "csv-parse": "^4.4.6",
+    "csv-parse": "^4.6.5",
     "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
     "express-session": "^1.15.6",
